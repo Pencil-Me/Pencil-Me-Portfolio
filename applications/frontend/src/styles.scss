@@ -1,0 +1,59 @@
+/* You can add global styles to this file, and also import other style files */
+
+// Include any default variable overrides here (though functions won't be available)
+$primary: #c50000;
+$primary-hover: #fa0000;
+$secondary: #460000;
+$secondary-hover: #7a0000;
+//$success: #198754;
+//$info: #0dcaf0;
+//$warning: #ffc107;
+//$danger: #dc3545;
+//$light: #f8f9fa;
+//$dark: #212529;
+
+$body-bg: #efefef;
+$body-color: #1A1A1AFF;
+
+:root {
+  --pm-primary: #{$primary};
+  --pm-primary-hover: #{$primary-hover};
+  --pm-secondary: #{$secondary};
+  --pm-secondary-hover: #{$secondary-hover};
+}
+
+// Import Bootstrap functions, vars and mixins
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/mixins";
+
+// Bootstrap main import
+@import "bootstrap/scss/bootstrap";
+
+// Then add additional custom code here
+a {
+  color: $primary;
+  text-decoration: none;
+
+  &:hover {
+    color: $primary-hover;
+  }
+}
+
+//img reset
+img {
+  font-style: italic;
+
+  // image "lazyload" solution
+  // use style="background-image: url(lowres-source)" on the img
+  // header -> <link rel=preload as=image href='lowres-source' fetchpriority=heigh>
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  // used with shape-outside
+  shape-margin: 1rem;
+
+  max-width: 100%;
+  height: auto;
+  vertical-align: middle;
+}

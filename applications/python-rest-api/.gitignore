@@ -1,0 +1,4 @@
+venv/
+uploads/
+__pycache__/
+/source_code/configs/config.py

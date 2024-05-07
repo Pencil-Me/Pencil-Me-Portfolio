@@ -1,0 +1,4 @@
+/src/Inc/.env.dev
+/src/Inc/.env.prod
+/src/composer.lock
+/src/vendor/

@@ -1,0 +1,18 @@
+<header [ngClass]="{ 'fixed-header': sticky }">
+  <section class="header-content container">
+    <div class="logo">
+      <a [routerLink]="'/'">Pencil&Me</a>
+    </div>
+
+    <nav>
+      <div class="nav-mobile">
+        <a [routerLink]="'/'"><span></span></a>
+      </div>
+      <ul>
+        <li *ngFor="let item of navItems">
+          <a [routerLink]="item.target" class="nav-link">{{ item.label }}</a>
+        </li>
+      </ul>
+    </nav>
+  </section>
+</header>

@@ -1,0 +1,9 @@
+{
+  "singleQuote": true,
+  "printWidth": 140,
+
+  "importOrder": ["^@angular/(.*)$", "^rxjs/(.*)$", "<THIRD_PARTY_MODULES>", "^@gov/(.*)$", "^@core/(.*)$", "^@shared/(.*)$", "^[./]"],
+  "importOrderSeparation": true,
+  "importOrderParserPlugins": ["typescript", "decorators"],
+  "importOrderSortSpecifiers": true
+}

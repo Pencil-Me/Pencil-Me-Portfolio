@@ -1,0 +1,91 @@
+<section class="container section-container">
+  <div class="row">
+    <div class="col-12">
+      <h2>Ein bisschen über mich</h2>
+      <p>
+        Ich bin ein autodidaktischer <b>Web- und Mobile App Entwickler</b> mit Erfahrung in der Gestaltung neuer Features von der
+        Ideenfindung bis zur Produktion, Implementierung von Wireframes und Designabläufen in leistungsstarke Softwareanwendungen. Bei der
+        Erstellung wieder verwendbarem und effizienten Codes berücksichtige ich immer die Benutzererfahrung. Leidenschaftlich kombiniere ich
+        <b>gutes Design, Technologie und Innovation in all meinen Projekten</b>, die ich gerne von der ersten Idee bis zur finalen
+        Veröffentlichung begleite. In Projekten konzentiriere ich mich derzeit auf die <b>Frontend-Entwicklung</b>.
+      </p>
+    </div>
+
+    <div class="col-12">
+      <h4>Mein Hintergrund</h4>
+      <p>
+        Ich habe eine Leidenschaft für Technologie und einen starken Hintergrund in der Softwareentwicklung. Mit
+        <b>mehreren Dekaden Berufserfahrung</b>
+        habe ich meine Fähigkeiten in verschiedenen Programmiersprachen und Technologien verfeinert.
+      </p>
+      <p>
+        Ich bin <b>ein engagierter und kreativer Entwickler</b>, der es genießt, komplexe Probleme zu lösen und mit Teams
+        zusammenzuarbeiten, um hochwertige Lösungen zu liefern. Ich halte mich über die neuesten Branchentrends auf dem Laufenden und bin
+        immer begierig darauf, neue Technologien zu lernen. Derzeitiger Fokus liegt auf der
+        <b>praktischen Anwendung von DevOps, Machine Lerning und AI</b>.
+      </p>
+    </div>
+
+    <hr class="mt-5 mb-5" />
+
+    <div class="col-12 col-lg-4 col-md-4">
+      <h3>Worin ich gut bin</h3>
+      <ul>
+        <li *ngFor="let good of whatIAmGoodAt">
+          {{ good }}
+        </li>
+      </ul>
+    </div>
+
+    <div class="col-12 col-lg-4 col-md-4">
+      <h3>Techskills</h3>
+      <ul>
+        <li *ngFor="let skill of technicSkills">
+          {{ skill }}
+        </li>
+      </ul>
+    </div>
+
+    <div class="col-12 col-lg-4 col-md-4">
+      <h3>Softskills</h3>
+      <ul>
+        <li *ngFor="let skill of softSkills">
+          {{ skill }}
+        </li>
+      </ul>
+    </div>
+
+    <hr class="mt-5 mb-5" />
+
+    <div class="col-12 mb-5">
+      <h3>Aktuelle Technologie and Tool-Kenntnisse</h3>
+      <p>
+        Hier eine Liste der Technologien und Tools die ich über die Jahre benutzt habe und wann sie zuletzt produktiv genutzt wurden. Klicke
+        auf ein Technologie um die zugehörigen Projekte anzusehen.
+      </p>
+      <div class="row tech-card-container">
+        <div class="tech-card col-12 col-lg-3 col-md-4 col-sm-6 mt-4" *ngFor="let skill of skills">
+          <h4>{{ skill.title }}</h4>
+          <ul>
+            <li *ngFor="let data of skill.data">
+              <div>
+                {{ data.label }}
+                <span *ngIf="data.lastTouch"> - {{ data.lastTouch }}</span>
+              </div>
+              <div class="progress">
+                <div
+                  class="progress-bar"
+                  role="progressbar"
+                  [ngStyle]="{ width: data.percent + '%' }"
+                  aria-valuenow="0"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                ></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,62 @@
+<section class="container section-container">
+  <div class="row">
+    <h2>Projekte</h2>
+    <div class="col-12 container">
+      <p>Hier eine Liste der Projekte an denen ich über die Jahre teilgenommen habe.</p>
+      <div class="tech-group-container list-group list-group-flush list-group-horizontal mt-2 mb-4">
+        <button
+          type="button"
+          class="tech-item"
+          [ngClass]="{ 'tech-item_selected': filterTech.includes(tech.name) }"
+          (click)="filterProjectsBy(tech.name)"
+          *ngFor="let tech of techs"
+        >
+          {{ tech.name }}
+        </button>
+      </div>
+
+      <button *ngIf="filterTech.length > 0" type="button" class="btn btn-outline-secondary mb-4" (click)="resetFilterProjects()">
+        Filter entfernen
+      </button>
+
+      <div class="category-card-container">
+        <div class="category-card" *ngFor="let projectcategory of filteredProjectCategories">
+          <span class="category-card_title">{{ projectcategory.title }}</span>
+          <ul class="row project-list">
+            <li class="project-list_item col-12 col-xl-4 col-lg-6" *ngFor="let project of projectcategory.data">
+              <div
+                class="project-list_item_main-info"
+                [ngClass]="{ 'bottom-border': project.position || project.customer || project.location }"
+              >
+                <span class="project-list_item_main-info_label" (click)="openProject(project.id)">{{ project.label }}</span>
+                <ng-container *ngIf="project.position">
+                  <span class="project-list_item_main-info_position">{{ project.position }}</span>
+                </ng-container>
+                <ng-container *ngIf="project.customer">
+                  <span class="project-list_item_main-info_customer">{{ project.customer }}</span>
+                </ng-container>
+                <ng-container *ngIf="project.location">
+                  <span class="project-list_item_main-info_location">{{ project.location }}</span>
+                </ng-container>
+              </div>
+              <div class="project-list_item_dates" *ngIf="project.dates.length > 0">
+                <span class="project-list_item_dates_title">Dauer</span>
+                <div *ngFor="let date of project.dates">
+                  <span>{{ date.start_date }}</span> bis <span>{{ date.end_date }}</span>
+                </div>
+              </div>
+              <div class="project-list_item_tech" *ngIf="project.tech.length > 0">
+                <span class="project-list_item_tech_title">Verwendete Technologien</span>
+                <ul class="tech-container">
+                  <li [ngClass]="{ 'tech-container-li_selected': filterTech.includes(tech.name) }" *ngFor="let tech of project.tech">
+                    {{ tech.name }}
+                  </li>
+                </ul>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,94 @@
+version: '3'
+
+services:
+  frontend:
+    container_name: pm-frontend_angular
+    build:
+      context: ./applications/frontend
+      dockerfile: ./Dockerfile
+
+  backend:
+    container_name: pm-backend_vue
+    build:
+      context: ./applications/backend
+      dockerfile: ./Dockerfile
+
+  nginx:
+    container_name: pm-middlenginx
+    image: nginx:stable-alpine
+    expose:
+      - "80"
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx.middle.conf:/etc/nginx/conf.d/default.conf:rw
+
+  python_api:
+    depends_on:
+      - db
+    container_name: pm-api_python
+    build:
+      context: ./applications/python-rest-api
+      dockerfile: Dockerfile
+    volumes:
+      - ./applications/python-rest-api/source_code:/app
+    links:
+      - db
+    environment:
+      SQLALCHEMY_DATABASE_URI: 'mysql+pymysql://root:password@database:3306/testdb?charset=utf8mb4'
+
+  php_api:
+    depends_on:
+      - db
+    container_name: pm-api_php
+    build:
+      context: ./applications/php-rest-api
+      dockerfile: Dockerfile
+    links:
+      - db
+    ports:
+      - "3001:80"
+#    environment:
+#      - APPLICATION_ROOT=/api2
+    volumes:
+      - ./applications/php-rest-api/src:/var/www/html
+
+  php_mailer:
+    container_name: pm-mailer_php
+    build:
+      context: ./applications/php-mailer-api
+      dockerfile: Dockerfile
+    ports:
+      - "3002:80"
+#    environment:
+#      - APPLICATION_ROOT=/mailer
+    volumes:
+      - ./applications/php-mailer-api/src:/var/www/html
+
+  db:
+    container_name: pm-db
+    ports:
+      - "3306:3306"
+    build:
+      context: ./applications/db
+      dockerfile: Dockerfile
+    volumes:
+      - data:/var/lib/mysql
+
+  phpmyadmin:
+    depends_on:
+      - db
+    container_name: pm-phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    links:
+      - db
+    ports:
+      - "8000:80"
+    environment:
+      MYSQL_USER: user
+      MYSQL_PASSWORD: test
+      MYSQL_ROOT_PASSWORD: test
+
+volumes:
+  mysqldata: {}
+  data:

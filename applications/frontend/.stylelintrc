@@ -1,0 +1,14 @@
+{
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-config-sass-guidelines",
+    "stylelint-config-idiomatic-order"
+  ],
+  "rules": {
+    "order/properties-alphabetical-order": true,
+    "max-nesting-depth": 4,
+    "selector-max-compound-selectors": 5,
+    "import-notation": "string",
+    "no-invalid-position-at-import-rule": null
+  }
+}

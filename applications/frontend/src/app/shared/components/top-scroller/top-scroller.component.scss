@@ -1,0 +1,39 @@
+$top-scroller-backgroundcolor: #f00;
+$top-scroller-backgroundcolor-hover: #ff3737;
+$top-scroller-backgroundcolor-focus: #9f0000;
+$top-scroller-color: #fff;
+$top-scroller-color-hover: #fff;
+$top-scroller-color-focus: #9f0000;
+
+.scroll-top-container {
+  display: flex;
+  width: 2.5rem;
+  height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+
+  a {
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: $top-scroller-backgroundcolor;
+    color: $top-scroller-color;
+    transition: width .5s, height .5s, background .5s;
+
+    &:hover {
+      width: 2.1rem;
+      height: 2.1rem;
+      background: $top-scroller-backgroundcolor-hover;
+      color: $top-scroller-color-hover;
+    }
+
+    &:focus {
+      width: 1.8rem;
+      height: 1.8rem;
+      background: $top-scroller-backgroundcolor-focus;
+      color: $top-scroller-color-focus;
+      transition: width .1s, height .1s, background .25s;
+    }
+  }
+}

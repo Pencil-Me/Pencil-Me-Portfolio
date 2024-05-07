@@ -1,0 +1,33 @@
+pre {
+  margin: 0;
+  white-space: pre-wrap; /* Erlaubt den Zeilenumbruch */
+  font-family: var(--bs-body-font-family);
+  font-size: var(--bs-body-font-size);
+  font-weight: var(--bs-body-font-weight);
+  line-height: var(--bs-body-line-height);
+  color: var(--bs-body-color);
+  text-align: var(--bs-body-text-align);
+}
+.project-list_item_tech {
+
+  .project-list_item_tech_title {
+    font-weight: bold;
+  }
+  .tech-container {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0;
+    margin: 0 0 1rem;
+    list-style-type: none;
+    gap: .25rem .5rem;
+
+    li {
+      --border: #a9a9a9;
+      line-height: 1;
+      padding: 0.425rem .5rem;
+      border: 2px solid var(--border);
+      border-radius: 10ch;
+      white-space: nowrap;
+    }
+  }
+}

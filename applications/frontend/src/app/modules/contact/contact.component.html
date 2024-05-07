@@ -1,0 +1,85 @@
+<section class="container section-container">
+  <h1 class="text-gray-900 text-3xl mb-4 font-medium title-font">Kontakt</h1>
+
+  <div *ngIf="emailIsSend" class="container mt-5">
+    <div class="row">
+      <div class="col-md-6 offset-md-3">
+        <div class="card">
+          <div class="card-body">
+            <h1 class="text-center mb-4">Erfolgreich gesendet!</h1>
+            <p class="text-center">Vielen Dank für Ihre Nachricht. Wir haben Ihre Anfrage erhalten und werden uns bald mit Ihnen in Verbindung setzen.</p>
+            <div class="text-center mt-4">
+              <a routerLink="/" class="btn btn-primary">Zurück zur Startseite</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <form *ngIf="!emailIsSend"  [formGroup]="form" (ngSubmit)="send()" class="flex flex-col w-full mt-8">
+    <div
+      class="form-group has-validation mb-4"
+      [ngClass]="{
+        'was-validated': form.controls['name'].invalid && (form.controls['name'].dirty || form.controls['name'].touched),
+        'needs-validation': !(form.controls['name'].invalid && (form.controls['name'].dirty || form.controls['name'].touched))
+      }"
+    >
+      <label for="name" class="leading-7 text-sm text-gray-600">Dein Name</label>
+      <input required formControlName="name" type="text" id="name" name="name" class="form-control" />
+
+      <div class="invalid-feedback" *ngIf="form.controls['name'].invalid && (form.controls['name'].dirty || form.controls['name'].touched)">
+        <div *ngIf="form.controls['name'].errors && form.controls['name'].errors['required']">Name is required</div>
+        <div *ngIf="form.controls['name'].errors && form.controls['name'].errors['pattern']">Invalid name format</div>
+      </div>
+    </div>
+    <div
+      class="form-group has-validation mb-4"
+      [ngClass]="{
+        'was-validated': form.controls['email'].invalid && (form.controls['email'].dirty || form.controls['email'].touched),
+        'needs-validation': !(form.controls['email'].invalid && (form.controls['email'].dirty || form.controls['email'].touched))
+      }"
+    >
+      <label for="email" class="leading-7 text-sm text-gray-600">Deine Email</label>
+      <input required formControlName="email" type="email" id="email" name="email" class="form-control" />
+
+      <div
+        class="invalid-feedback"
+        *ngIf="form.controls['email'].invalid && (form.controls['email'].dirty || form.controls['email'].touched)"
+      >
+        <div *ngIf="form.controls['email'].errors && form.controls['email'].errors['required']">Email is required</div>
+        <div *ngIf="form.controls['email'].errors && form.controls['email'].errors['email']">Invalid email format</div>
+      </div>
+    </div>
+    <div
+      class="form-group has-validation mb-4"
+      [ngClass]="{
+        'was-validated': form.controls['message'].invalid && (form.controls['message'].dirty || form.controls['message'].touched),
+        'needs-validation': !(form.controls['message'].invalid && (form.controls['message'].dirty || form.controls['message'].touched))
+      }"
+    >
+      <label for="message" class="leading-7 text-sm text-gray-600">Deine Nachricht</label>
+      <textarea required formControlName="message" id="message" name="message" class="form-control"></textarea>
+
+      <div
+        class="invalid-feedback"
+        *ngIf="form.controls['message'].invalid && (form.controls['message'].dirty || form.controls['message'].touched)"
+      >
+        <div *ngIf="form.controls['message'].errors && form.controls['message'].errors['required']">Message is required</div>
+        <div *ngIf="form.controls['message'].errors && form.controls['message'].errors['pattern']">Invalid Message format</div>
+      </div>
+    </div>
+
+    <input
+      type="checkbox"
+      formControlName="contactByFax"
+      name="contact_me_by_fax_only"
+      value="1"
+      style="display: none !important"
+      tabindex="-1"
+      autocomplete="off"
+    />
+
+    <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Senden</button>
+  </form>
+</section>

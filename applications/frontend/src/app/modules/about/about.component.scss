@@ -1,0 +1,31 @@
+.section-container {
+  padding-top: 2rem;
+  padding-bottom: 5rem;
+}
+
+.tech-card-container {
+  .tech-card {
+    margin-bottom: 2rem;
+  }
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+
+    li {
+      width: 100%;
+      margin-bottom: .5rem;
+
+      .progress {
+        background: #d5d5d5;
+
+        .progress-bar {
+          background-color: var(--pm-primary);
+        }
+      }
+    }
+  }
+}

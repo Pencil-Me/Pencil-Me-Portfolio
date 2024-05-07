@@ -1,0 +1,100 @@
+$content-width: 1000px;
+$breakpoint: 799px;
+$nav-height: 3.5rem;
+$nav-background: #180000;
+$nav-font-color: #fff;
+$link-hover-color: var(--pm-primary-hover);
+
+header {
+  display: block;
+  width: 100%;
+  height: $nav-height * 1.5;
+  background: $nav-background;
+}
+
+.fixed-header {
+  background: rgba($nav-background, .55);
+  position: fixed;
+  height: $nav-height;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 999;
+
+  .header-content nav .nav-link:hover {
+    background: rgba($nav-background, .75);
+  }
+
+  .header-content .logo {
+    line-height: $nav-height;
+  }
+
+  .header-content nav {
+    height: $nav-height;
+  }
+
+  .header-content nav .nav-link {
+    line-height: $nav-height;
+
+    &:hover {
+      background: rgba(darken($nav-background, 0.75), .75);
+    }
+  }
+}
+
+.header-content .logo {
+  float: left;
+  font-size: 1.4em;
+  line-height: $nav-height * 1.5;
+  text-transform: uppercase;
+
+  a,
+  a:visited {
+    color: $nav-font-color;
+    text-decoration: none;
+  }
+}
+
+.header-content nav {
+  height: $nav-height * 1.5;
+  float: right;
+
+  ul {
+    display: flex;
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+
+    li {
+      position: relative;
+      display: inline;
+
+      &::before {
+        position: absolute;
+        bottom: 0;
+        width: 0;
+        height: 5px;
+        background-color: $link-hover-color;
+        content: "";
+        transition: 300ms;
+      }
+
+      &:hover::before {
+        width: 70%;
+      }
+    }
+  }
+
+  .nav-link {
+    display: block;
+    padding: 0 1rem;
+    color: $nav-font-color;
+    line-height: $nav-height * 1.5;
+    text-decoration: none;
+
+    &:hover {
+      background-color: darken($nav-background, 0.75);
+      color: $link-hover-color;
+    }
+  }
+}
