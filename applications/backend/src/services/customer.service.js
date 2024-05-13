@@ -1,10 +1,9 @@
 import axios from 'axios'
-import authHeader from './auth-header'
 
 const API_URL = import.meta.env.VITE_API_URL
 const API_KEY = import.meta.env.VITE_API_KEY
 
-class TechStacksService {
+class CustomerService {
   axiosInstance = axios.create({
     baseURL: API_URL,
     headers: {
@@ -52,4 +51,4 @@ class TechStacksService {
   }
 }
 
-export default new TechStacksService()
+export default new CustomerService()

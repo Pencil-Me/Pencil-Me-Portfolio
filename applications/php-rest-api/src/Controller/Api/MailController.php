@@ -25,7 +25,7 @@ class MailController extends BaseController
                 $this->sendMethodNotAllowedResponse();
             }
 
-            $honeyPotValueIsSet = $payloadData['contactByFax'] ?? false;
+            $honeyPotValueIsSet = $_POST['contactByFax'] ?? false;
             if ($honeyPotValueIsSet) {
                 // If any of the required parameters are missing, return an error response
                 $this->sendOutput(
