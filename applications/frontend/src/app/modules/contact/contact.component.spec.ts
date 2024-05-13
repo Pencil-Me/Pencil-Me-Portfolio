@@ -10,8 +10,8 @@ describe('ContactComponent', () => {
   let apiClientService: jasmine.SpyObj<ApiClientService>;
 
   beforeEach(async () => {
-    const apiClientSpy = jasmine.createSpyObj('ApiClientService', ['put']);
-    apiClientSpy.put.and.returnValue(of({}));
+    const apiClientSpy = jasmine.createSpyObj('ApiClientService', ['post']);
+    apiClientSpy.post.and.returnValue(of({}));
 
     await TestBed.configureTestingModule({
       imports: [ContactComponent, ReactiveFormsModule],
@@ -54,7 +54,7 @@ describe('ContactComponent', () => {
     expect(component.form.controls['message'].invalid).toBeTruthy();
 
     // Ensure the API client service method was not called
-    expect(apiClientService.put).not.toHaveBeenCalled();
+    expect(apiClientService.post).not.toHaveBeenCalled();
   });
 
   it('should call the API client service method when form is submitted with valid data', () => {
@@ -69,7 +69,7 @@ describe('ContactComponent', () => {
     component.send();
 
     // Check if the API client service method was called with the correct arguments
-    expect(apiClientService.put).toHaveBeenCalledWith('send_email', {
+    expect(apiClientService.post).toHaveBeenCalledWith('send_email', {
       name: 'John Doe',
       email: 'john@example.com',
       message: 'Test message',

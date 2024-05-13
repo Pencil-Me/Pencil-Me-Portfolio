@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { ApiClientService } from './api-client.service';
 
+const toUrlEncoded = (obj: { [key: string]: string | number }) => Object.keys(obj).map(k => encodeURIComponent(k) + '=' + encodeURIComponent(obj[k])).join('&');
 describe('ApiClientService', () => {
   let service: ApiClientService;
   let httpMock: HttpTestingController;
@@ -31,7 +32,7 @@ describe('ApiClientService', () => {
       expect(response).toEqual(testData);
     });
 
-    const req = httpMock.expectOne('http://localhost:8080/api/test');
+    const req = httpMock.expectOne('https://api.pencil-me.eu/index.php/test');
     expect(req.request.method).toBe('GET');
     expect(req.request.headers.get('API-Key')).toBe('apikey123');
     req.flush(testData);
@@ -46,10 +47,10 @@ describe('ApiClientService', () => {
       expect(response).toEqual(testData);
     });
 
-    const req = httpMock.expectOne('http://localhost:8080/api/test');
+    const req = httpMock.expectOne('https://api.pencil-me.eu/index.php/test');
     expect(req.request.method).toBe('POST');
     expect(req.request.headers.get('API-Key')).toBe('apikey123');
-    expect(req.request.body).toEqual(postData);
+    expect(req.request.body).toEqual(toUrlEncoded(postData));
     req.flush(testData);
   });
 
@@ -62,7 +63,7 @@ describe('ApiClientService', () => {
       expect(response).toEqual(testData);
     });
 
-    const req = httpMock.expectOne('http://localhost:8080/api/test');
+    const req = httpMock.expectOne('https://api.pencil-me.eu/index.php/test');
     expect(req.request.method).toBe('PUT');
     expect(req.request.headers.get('API-Key')).toBe('apikey123');
     expect(req.request.body).toEqual(putData);
@@ -77,7 +78,7 @@ describe('ApiClientService', () => {
       expect(response).toEqual(testData);
     });
 
-    const req = httpMock.expectOne('http://localhost:8080/api/test');
+    const req = httpMock.expectOne('https://api.pencil-me.eu/index.php/test');
     expect(req.request.method).toBe('DELETE');
     expect(req.request.headers.get('API-Key')).toBe('apikey123');
     req.flush(testData);
