@@ -5,96 +5,123 @@ $nav-background: #180000;
 $nav-font-color: #fff;
 $link-hover-color: var(--pm-primary-hover);
 
+.header-buffer {
+  height: $nav-height * 1.5;
+  display: block;
+  position: relative;
+}
+
 header {
   display: block;
   width: 100%;
-  height: $nav-height * 1.5;
   background: $nav-background;
-}
-
-.fixed-header {
-  background: rgba($nav-background, .55);
   position: fixed;
-  height: $nav-height;
-  top: 0;
-  right: 0;
-  left: 0;
   z-index: 999;
+  top: 0;
 
-  .header-content nav .nav-link:hover {
+  &.fixed-header {
     background: rgba($nav-background, .75);
-  }
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 999;
+    backdrop-filter: blur(5px);
 
-  .header-content .logo {
-    line-height: $nav-height;
-  }
-
-  .header-content nav {
-    height: $nav-height;
-  }
-
-  .header-content nav .nav-link {
-    line-height: $nav-height;
-
-    &:hover {
-      background: rgba(darken($nav-background, 0.75), .75);
+    .header-content nav .nav-link:hover {
+      background: rgba($nav-background, .75);
     }
-  }
-}
 
-.header-content .logo {
-  float: left;
-  font-size: 1.4em;
-  line-height: $nav-height * 1.5;
-  text-transform: uppercase;
+    .header-content .logo {
+      line-height: $nav-height;
+    }
 
-  a,
-  a:visited {
-    color: $nav-font-color;
-    text-decoration: none;
-  }
-}
+    .header-content nav {
+      height: $nav-height;
+    }
 
-.header-content nav {
-  height: $nav-height * 1.5;
-  float: right;
+    .header-content nav .nav-link {
+      line-height: $nav-height;
 
-  ul {
-    display: flex;
-    padding: 0;
-    margin: 0;
-    list-style-type: none;
-
-    li {
-      position: relative;
-      display: inline;
-
-      &::before {
-        position: absolute;
-        bottom: 0;
-        width: 0;
-        height: 5px;
-        background-color: $link-hover-color;
-        content: "";
-        transition: 300ms;
-      }
-
-      &:hover::before {
-        width: 70%;
+      &:hover {
+        background: rgba(darken($nav-background, 0.75), .75);
       }
     }
   }
 
-  .nav-link {
-    display: block;
+  .header-content {
     padding: 0 1rem;
-    color: $nav-font-color;
-    line-height: $nav-height * 1.5;
-    text-decoration: none;
 
-    &:hover {
-      background-color: darken($nav-background, 0.75);
-      color: $link-hover-color;
+    .logo {
+      float: left;
+      font-size: 1.4em;
+      line-height: $nav-height * 1.5;
+      text-transform: uppercase;
+
+      a,
+      a:visited {
+        color: $nav-font-color;
+        text-decoration: none;
+      }
+    }
+
+    .navbar-toggler {
+      color: $nav-font-color;
+      border: none;
+      outline: none;
+    }
+
+    nav {
+      height: $nav-height * 1.5;
+      flex-direction: row-reverse;
+
+      &.collapse.show {
+        height: auto;
+        width: 100%;
+      }
+
+      ul {
+        display: flex;
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+
+        li {
+          position: relative;
+          display: inline;
+
+          &::before {
+            position: absolute;
+            bottom: 0;
+            width: 0;
+            height: 5px;
+            background-color: $link-hover-color;
+            content: "";
+            transition: 300ms;
+          }
+
+          &:hover:not(.active)::before {
+            width: 70%;
+          }
+
+          .nav-link {
+            display: block;
+            padding: 0 1rem;
+            color: $nav-font-color;
+            line-height: $nav-height * 1.5;
+            text-decoration: none;
+          }
+
+          &.active .nav-link {
+            color: $link-hover-color;
+            cursor: default;
+          }
+
+          &:not(.active) .nav-link:hover {
+            background-color: darken($nav-background, 0.75);
+            color: $link-hover-color;
+          }
+        }
+      }
     }
   }
 }

@@ -29,7 +29,7 @@ export class BasicComponent {
   @HostListener('window:scroll', [])
   onWindowScroll() {
     const windowScrollPosition = window.scrollY;
-    let  distanceToBottom = document.body.scrollHeight - (window.innerHeight + window.scrollY);
+    let distanceToBottom = document.body.scrollHeight - (window.innerHeight + window.scrollY);
 
     // Wenn distanceToBottom negativ ist, setzen wir es auf einen Mindestwert von 0
     if (distanceToBottom < 0) distanceToBottom = 0;

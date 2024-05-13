@@ -1,17 +1,30 @@
+<div class="header-buffer"></div>
 <header [ngClass]="{ 'fixed-header': sticky }">
-  <section class="header-content container">
+  <section class="header-content navbar navbar-expand-md container">
     <div class="logo">
       <a [routerLink]="'/'">Pencil&Me</a>
     </div>
 
-    <nav>
-      <div class="nav-mobile">
-        <a [routerLink]="'/'"><span></span></a>
-      </div>
-      <ul>
-        <li *ngFor="let item of navItems">
-          <a [routerLink]="item.target" class="nav-link">{{ item.label }}</a>
-        </li>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-toggle="collapse"
+      data-target="#navbarColor03"
+      aria-controls="navbarColor03"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+      (click)="isCollapsed = !isCollapsed"
+    >
+      <fa-icon [icon]="faBars" size="lg"></fa-icon>
+    </button>
+
+    <nav id="navbarColor03" class="collapse navbar-collapse" [ngbCollapse]="isCollapsed">
+      <ul class="navbar-nav mr-auto">
+        <ng-container *ngFor="let item of navItems; index as i">
+          <li class="nav-item" [routerLinkActive]="['active']">
+            <a [routerLink]="item.target" class="nav-link">{{ item.label }}</a>
+          </li>
+        </ng-container>
       </ul>
     </nav>
   </section>

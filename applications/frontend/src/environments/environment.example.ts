@@ -2,5 +2,5 @@
 export const environment = {
   production: true,
   API_KEY: 'XXXXXXX_SECRET_KEY',
-  API_BASE_URL: 'XXXXXXX_API_BASE_URL'
+  API_BASE_URL: 'XXXXXXX_API_BASE_URL',
 };
