@@ -1,17 +1,16 @@
 import { TestBed } from '@angular/core/testing';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
-import { of } from 'rxjs';
 import { AppState } from '@app/state';
-import { TECHSTACKDATASTATE } from '@app/state/knowledge/knowledge.models';
+import { CUSTOMERSDATASTATE, TECHSTACKDATASTATE } from '@app/state/knowledge/knowledge.models';
 import { fromKnowledge } from '@app/state/knowledge';
 import { HomeService } from './home.service';
+import { ITechCategories } from '@modules/home/home.models';
 
 describe('HomeService', () => {
   let service: HomeService;
   let store: MockStore<AppState>;
 
-  const initialState = {
-    // Initialize the necessary properties in the store state
+  const initialState: AppState = {
     knowledge: {
       techStack: {
         error: null,
@@ -23,9 +22,24 @@ describe('HomeService', () => {
         loadStatus: 'PENDING',
         data: [],
       },
-      customers: {
-        error: null,
+      selectedProject: {
         loadStatus: 'PENDING',
+        error: null,
+        data: {
+          uuid: '',
+          type: '',
+          name: '',
+          dates: [],
+          customers: undefined,
+          location: undefined,
+          position: undefined,
+          content: undefined,
+          tech: [],
+        },
+      },
+      customers: {
+        loadStatus: 'PENDING',
+        error: null,
         data: [],
       },
     },
@@ -38,7 +52,7 @@ describe('HomeService', () => {
       ],
     });
     store = TestBed.inject(MockStore);
-    spyOn(store, 'dispatch');
+    spyOn(store, 'dispatch').and.callThrough();
     service = TestBed.inject(HomeService);
   });
 
@@ -46,29 +60,91 @@ describe('HomeService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should dispatch GetTechstack action', () => {
+  it('should dispatch GetTechstack and GetCustomers actions on initialization', () => {
     expect(store.dispatch).toHaveBeenCalledWith(fromKnowledge.actions.GetTechstack());
-  });
-
-  it('should subscribe to techstack store and update tech$ behavior subject', () => {
-    const techData: TECHSTACKDATASTATE = { error: null, loadStatus: 'PENDING', data: [] };
-    spyOn(store, 'select').and.returnValue(of(techData));
-
-    service.storeTech$.subscribe((data) => {
-      expect(data).toEqual(techData);
-    });
-  });
-
-  it('should dispatch GetCustomers action', () => {
     expect(store.dispatch).toHaveBeenCalledWith(fromKnowledge.actions.GetCustomers());
   });
 
-  it('should subscribe to customers store and update customers$ behavior subject', () => {
-    const customerData: TECHSTACKDATASTATE = { error: null, loadStatus: 'PENDING', data: [] };
-    spyOn(store, 'select').and.returnValue(of(customerData));
+  it('should update tech$ with sorted and filtered tech stack data', (done) => {
+    const techstackState: TECHSTACKDATASTATE = {
+      data: [
+        {
+          name: 'FETech1',
+          project_count: 5,
+          last_usage_date: new Date('2022-01-01'),
+          type: 'FEDEV',
+          expertise_level: 80,
+          flag_important: false,
+        },
+        {
+          name: 'FETech2',
+          project_count: 4,
+          last_usage_date: new Date('2023-01-01'),
+          type: 'FEDEV',
+          expertise_level: 85,
+          flag_important: false,
+        },
+        {
+          name: 'BETech1',
+          project_count: 10,
+          last_usage_date: new Date('2021-01-01'),
+          type: 'BEDEV',
+          expertise_level: 80,
+          flag_important: false,
+        },
+      ],
+      loadStatus: 'COMPLETED',
+      error: null,
+    };
 
-    service.storeTech$.subscribe((data) => {
-      expect(data).toEqual(customerData);
+    // Update the store state directly
+    store.setState({
+      ...initialState,
+      knowledge: {
+        ...initialState.knowledge,
+        techStack: techstackState,
+      },
+    });
+
+    service.tech$.subscribe((tech: ITechCategories[]) => {
+      if (tech.length > 0) {
+        expect(tech.length).toBe(2);
+        expect(tech[0].title).toBe('Backend Development');
+        expect(tech[0].data[0].label).toBe('BETech1');
+        expect(tech[1].title).toBe('Frontend Development');
+        expect(tech[1].data[0].label).toBe('FETech1');
+        expect(tech[1].data[1].label).toBe('FETech2');
+        done();
+      }
+    });
+  });
+
+  it('should update customers$ with filtered customer data', (done) => {
+    const customersState: CUSTOMERSDATASTATE = {
+      data: [
+        { name: 'Customer1', last_used_date: new Date('2023-01-01'), location: 'TEST' },
+        { name: 'Customer2', last_used_date: new Date('2015-01-01'), location: 'TEST' },
+      ],
+      loadStatus: 'COMPLETED',
+      error: null,
+    };
+
+    // Update the store state directly
+    store.setState({
+      ...initialState,
+      knowledge: {
+        ...initialState.knowledge,
+        customers: customersState,
+      },
+    });
+
+    service.customers$.subscribe((customers: string[]) => {
+      if (customers.length > 0) {
+        expect(customers.length).toBe(1);
+        expect(customers).toContain('Customer1');
+        expect(customers).not.toContain('Customer2');
+        done();
+      }
     });
   });
 });
