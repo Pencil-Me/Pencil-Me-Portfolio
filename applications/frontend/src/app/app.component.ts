@@ -8,6 +8,4 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule, RouterOutlet],
   template: '<router-outlet></router-outlet>',
 })
-export class AppComponent {
-  title = 'frontend';
-}
+export class AppComponent {}

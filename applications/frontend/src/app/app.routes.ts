@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { BasicComponent } from '@layout/basic/basic.component';
 
+// Route configurations for the application
 export const routes: Routes = [
   {
     path: '',
@@ -19,10 +20,6 @@ export const routes: Routes = [
         path: 'about',
         loadComponent: () => import('@modules/about/about.component').then((c) => c.AboutComponent),
       },
-      // {
-      //   path: 'cv',
-      //   loadComponent: () => import('@modules/cv/cv.component').then((c) => c.CvComponent),
-      // },
       {
         path: 'projects',
         loadComponent: () => import('@modules/projects/projects.component').then((c) => c.ProjectsComponent),
@@ -43,3 +40,11 @@ export const routes: Routes = [
     ],
   },
 ];
+
+/**
+ * This module defines the main routes for the application.
+ * - The default route redirects to 'home'.
+ * - Each route lazily loads its associated component.
+ * - The 'projects/:id' route displays project details based on the project ID.
+ * - The wildcard route '**' redirects to the 'error' module for undefined paths.
+ */
