@@ -11,11 +11,11 @@ import { appEffects, appStore } from '@app/state';
 // Configuration for the Angular application
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes),       // Provides routing configuration
-    provideHttpClient(),         // Provides HTTP client for making API calls
-    provideStore(appStore),      // Provides NgRx store for state management
-    provideEffects(appEffects),  // Provides NgRx effects for handling side effects
-    provideClientHydration()     // Provides client-side hydration for server-side rendering
+    provideRouter(routes), // Provides routing configuration
+    provideHttpClient(), // Provides HTTP client for making API calls
+    provideStore(appStore), // Provides NgRx store for state management
+    provideEffects(appEffects), // Provides NgRx effects for handling side effects
+    provideClientHydration(), // Provides client-side hydration for server-side rendering
   ],
 };
 
