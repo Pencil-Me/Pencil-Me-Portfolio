@@ -13,10 +13,8 @@ describe('NotFoundErrorComponent', () => {
 
     await TestBed.configureTestingModule({
       declarations: [NotFoundErrorComponent],
-      providers: [
-        { provide: Router, useValue: routerSpy }
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
+      providers: [{ provide: Router, useValue: routerSpy }],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   });
 
