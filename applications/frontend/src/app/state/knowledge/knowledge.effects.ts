@@ -16,8 +16,8 @@ export class KnowledgeEffects {
   /**
    * Effect to fetch techstack data.
    */
-  getTechstackDataEffect$: Observable<Action> = createEffect(() =>
-    this.actions$.pipe(
+  getTechstackDataEffect$: Observable<Action> = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromKnowledge.actions.GetTechstack, fromKnowledge.actions.GetProjectServiceData),
       mergeMap(() =>
         this.knowledgeService.getTechstack().pipe(
@@ -26,14 +26,14 @@ export class KnowledgeEffects {
         ),
       ),
       take(1),
-    ),
-  );
+    );
+  });
 
   /**
    * Effect to fetch projects data.
    */
-  getProjectsDataEffect$: Observable<Action> = createEffect(() =>
-    this.actions$.pipe(
+  getProjectsDataEffect$: Observable<Action> = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromKnowledge.actions.GetProjects, fromKnowledge.actions.GetProjectServiceData),
       mergeMap(() =>
         this.knowledgeService.getProjects().pipe(
@@ -42,14 +42,14 @@ export class KnowledgeEffects {
         ),
       ),
       take(1),
-    ),
-  );
+    );
+  });
 
   /**
    * Effect to fetch project data.
    */
-  getProjectDataEffect$: Observable<Action> = createEffect(() =>
-    this.actions$.pipe(
+  getProjectDataEffect$: Observable<Action> = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromKnowledge.actions.GetProject),
       mergeMap((arg) =>
         this.knowledgeService.getProject(arg.id).pipe(
@@ -57,14 +57,14 @@ export class KnowledgeEffects {
           catchError((error) => of(fromKnowledge.actions.GetProjectFailure({ error }))),
         ),
       ),
-    ),
-  );
+    );
+  });
 
   /**
    * Effect to fetch customers data.
    */
-  getCustomersDataEffect$: Observable<Action> = createEffect(() =>
-    this.actions$.pipe(
+  getCustomersDataEffect$: Observable<Action> = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromKnowledge.actions.GetCustomers),
       mergeMap(() =>
         this.knowledgeService.getCustomers().pipe(
@@ -73,6 +73,6 @@ export class KnowledgeEffects {
         ),
       ),
       take(1),
-    ),
-  );
+    );
+  });
 }
