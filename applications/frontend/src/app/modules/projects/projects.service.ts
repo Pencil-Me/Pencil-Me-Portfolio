@@ -28,8 +28,10 @@ export class ProjectsService {
   readonly tech$ = this._tech$ as Observable<IProjectTech[]>;
 
   constructor(private readonly store: Store<AppState>) {
+    // Dispatching actions to fetch project data on initialization
     this.store.dispatch(fromKnowledge.actions.GetProjectServiceData());
 
+    // Subscribing to store observables to update local data
     this.storeProjects$.subscribe((e) => {
       const projects: IProjectsCategory[] = this.convertProjects(e.data ?? []);
       this._projects$.next(projects);
@@ -52,14 +54,18 @@ export class ProjectsService {
     });
   }
 
+  // Method to select a project by ID
   selectProject(id: string | undefined) {
     if (!id) {
+      // Resetting project state if ID is undefined
       this.store.dispatch(fromKnowledge.actions.ResetProject());
       return;
     }
+    // Dispatching action to get project data by ID
     this.store.dispatch(fromKnowledge.actions.GetProject({ id: id }));
   }
 
+  // Method to convert project data received from API into IProject format
   convertProject(project: PROJECT): IProject {
     return {
       id: project.uuid ?? '',
@@ -81,6 +87,8 @@ export class ProjectsService {
       tech: project.tech?.map((e) => ({ name: e.name, id: e.uuid })) ?? [],
     };
   }
+
+  // Method to convert projects data received from API into IProjectsCategory format
   convertProjects(simpProject: PROJECT[]): IProjectsCategory[] {
     const projects: IProjectsCategory[] = [];
     const orgProjects = [...simpProject];
@@ -119,6 +127,7 @@ export class ProjectsService {
       }
     });
 
+    // Sorting projects within each category based on end dates
     projects.forEach((e) => {
       e.data = this.sortProjects([...e.data]);
     });
@@ -126,6 +135,7 @@ export class ProjectsService {
     return projects;
   }
 
+  // Method to sort projects based on end dates
   sortProjects(simpProject: IProject[]): IProject[] {
     const projects = [...simpProject];
 
