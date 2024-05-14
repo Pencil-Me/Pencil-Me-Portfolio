@@ -8,7 +8,7 @@ import { NgForOf } from '@angular/common';
   standalone: true,
   imports: [TopScrollerComponent, RouterLink, NgForOf],
   templateUrl: './footer.component.html',
-  styleUrl: './footer.component.scss',
+  styleUrls: ['./footer.component.scss'],
 })
 export class FooterComponent {
   techStackForPortfolio: { name: string; version: string }[] = [
@@ -18,7 +18,11 @@ export class FooterComponent {
     { name: 'MySQL', version: '' },
     { name: 'PHP', version: 'v8.1' },
   ];
-  currentYear(): string {
+
+  /**
+   * Returns the current year as a string.
+   */
+  getCurrentYear(): string {
     return new Date().getFullYear().toString();
   }
 }

@@ -40,7 +40,7 @@ describe('FooterComponent', () => {
 
   it('function currentYear', () => {
     const currentYear = new Date().getFullYear().toString();
-    expect(component.currentYear()).toEqual(currentYear);
+    expect(component.getCurrentYear()).toEqual(currentYear);
   });
 
   it('should display the current year', () => {

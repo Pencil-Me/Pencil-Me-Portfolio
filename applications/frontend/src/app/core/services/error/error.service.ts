@@ -1,11 +1,3 @@
-/* ------------
-// Error Service
-// responsible of showing error to console or if there is
-// a error message for the user
-// ------------
-// Changelog:
-// ------------ */
-
 import { Injectable } from '@angular/core';
 
 export enum CustomErrorCodes {
@@ -62,25 +54,78 @@ export enum ClientError {
 export class ErrorService {
   constructor() {}
 
-  whichError(errorCode: number, errorMessage: string) {
+  /**
+   * Handles error based on the provided error code and message.
+   * @param errorCode - The error code to handle.
+   * @param errorMessage - The error message to display.
+   */
+  handleError(errorCode: number, errorMessage: string) {
     switch (errorCode) {
       case CustomErrorCodes.UN_KNOWN:
+        this.handleUnknownError(errorMessage);
         break;
       case ClientError.HTTP_400_BAD_REQUEST:
+        this.handleBadRequest(errorMessage);
         break;
       default:
-        alert('Unknown Error Code: ' + errorCode);
+        this.handleUnknownErrorCode(errorCode);
         break;
     }
   }
 
-  userNotification(notificationCode: number, notification: string) {
+  /**
+   * Displays a notification based on the provided notification code and message.
+   * @param notificationCode - The notification code to handle.
+   * @param notification - The notification message to display.
+   */
+  handleNotification(notificationCode: number, notification: string) {
     switch (notificationCode) {
       case SuccessCodes.HTTP_200_OK:
+        this.handleSuccessNotification(notification);
         break;
       default:
-        alert('Unknown Success Action: ' + notificationCode);
+        this.handleUnknownNotificationCode(notificationCode);
         break;
     }
+  }
+
+  /**
+   * Handles unknown error by displaying an alert with the error message.
+   * @param errorMessage - The error message to display.
+   */
+  private handleUnknownError(errorMessage: string) {
+    alert('Unknown Error: ' + errorMessage);
+  }
+
+  /**
+   * Handles bad request error by displaying an alert with the error message.
+   * @param errorMessage - The error message to display.
+   */
+  private handleBadRequest(errorMessage: string) {
+    alert('Bad Request: ' + errorMessage);
+  }
+
+  /**
+   * Handles unknown error code by displaying an alert with the error code.
+   * @param errorCode - The unknown error code to handle.
+   */
+  private handleUnknownErrorCode(errorCode: number) {
+    alert('Unknown Error Code: ' + errorCode);
+  }
+
+  /**
+   * Handles success notification by displaying an alert with the notification message.
+   * @param notification - The success notification message to display.
+   */
+  private handleSuccessNotification(notification: string) {
+    alert('Success: ' + notification);
+  }
+
+  /**
+   * Handles unknown notification code by displaying an alert with the notification code.
+   * @param notificationCode - The unknown notification code to handle.
+   */
+  private handleUnknownNotificationCode(notificationCode: number) {
+    alert('Unknown Success Action: ' + notificationCode);
   }
 }

@@ -26,17 +26,45 @@ import { NgClass, NgIf } from '@angular/common';
 export class BasicComponent {
   showScrollToTop = false;
 
+  /**
+   * HostListener to monitor the scroll event and update the visibility of the "scroll to top" button.
+   */
   @HostListener('window:scroll', [])
   onWindowScroll() {
-    const windowScrollPosition = window.scrollY;
-    let distanceToBottom = document.body.scrollHeight - (window.innerHeight + window.scrollY);
+    this.updateScrollToTopVisibility();
+  }
 
-    // Wenn distanceToBottom negativ ist, setzen wir es auf einen Mindestwert von 0
+  /**
+   * Called when a route is deactivated to smoothly scroll the window to the top.
+   */
+  onDeactivate() {
+    this.scrollToTop();
+  }
+
+  /**
+   * Updates the visibility of the "scroll to top" button based on the window's scroll position.
+   */
+  private updateScrollToTopVisibility() {
+    const windowScrollPosition = window.scrollY;
+    let distanceToBottom = this.calculateDistanceToBottom();
+
+    // Ensure distanceToBottom is non-negative
     if (distanceToBottom < 0) distanceToBottom = 0;
 
     this.showScrollToTop = windowScrollPosition > 200 && distanceToBottom > 400;
   }
-  onDeactivate() {
+
+  /**
+   * Calculates the distance from the bottom of the document to the bottom of the visible window.
+   */
+  private calculateDistanceToBottom(): number {
+    return document.body.scrollHeight - (window.innerHeight + window.scrollY);
+  }
+
+  /**
+   * Smoothly scrolls the window to the top.
+   */
+  private scrollToTop() {
     window.scrollTo({
       top: 0,
       behavior: 'smooth',
