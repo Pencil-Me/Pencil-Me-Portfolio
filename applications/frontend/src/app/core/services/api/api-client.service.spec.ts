@@ -2,7 +2,10 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { ApiClientService } from './api-client.service';
 
-const toUrlEncoded = (obj: { [key: string]: string | number }) => Object.keys(obj).map(k => encodeURIComponent(k) + '=' + encodeURIComponent(obj[k])).join('&');
+const toUrlEncoded = (obj: { [key: string]: string | number }) =>
+  Object.keys(obj)
+    .map((k) => encodeURIComponent(k) + '=' + encodeURIComponent(obj[k]))
+    .join('&');
 describe('ApiClientService', () => {
   let service: ApiClientService;
   let httpMock: HttpTestingController;

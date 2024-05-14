@@ -2,11 +2,11 @@ import { TestBed } from '@angular/core/testing';
 
 import { AboutService } from './about.service';
 import { of } from 'rxjs';
-import {TECHSTACK, TECHSTACKDATASTATE} from '@app/state/knowledge/knowledge.models';
+import { TECHSTACK, TECHSTACKDATASTATE } from '@app/state/knowledge/knowledge.models';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { AppState } from '@app/state';
 import { fromKnowledge } from '@app/state/knowledge';
-import {ITechCategory} from "@modules/about/about.models";
+import { ITechCategory } from '@modules/about/about.models';
 
 describe('AboutService', () => {
   let service: AboutService;
@@ -114,20 +114,20 @@ describe('AboutService', () => {
               label: 'Angular',
               percent: 70,
               lastTouch: '2023',
-              project_count: 5
+              project_count: 5,
             },
             {
               label: 'Vue',
               percent: 90,
               lastTouch: '2023',
-              project_count: 6
+              project_count: 6,
             },
             {
               label: 'Bootstrap',
               percent: 90,
               lastTouch: '2021',
-              project_count: 10
-            }
+              project_count: 10,
+            },
           ],
         },
         {
@@ -137,10 +137,10 @@ describe('AboutService', () => {
               label: 'PHP',
               percent: 85,
               lastTouch: '2024',
-              project_count: 2
-            }
+              project_count: 2,
+            },
           ],
-        }
+        },
       ];
 
       const toTest: ITechCategory[] = service.convertAndSortTechStack(simpTech);
