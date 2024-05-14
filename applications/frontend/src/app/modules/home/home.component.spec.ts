@@ -38,4 +38,38 @@ describe('HomeComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  describe('typeWriter', () => {
+    it('should add characters to currentRoleVisual', () => {
+      component.currentRole = 'Test';
+      component.currentRoleVisual = '';
+      component.typewriterConfig.positionIndex = 0;
+
+      component.typeWriter.add();
+
+      expect(component.currentRoleVisual).toEqual('T');
+    });
+
+    it('should remove characters from currentRoleVisual', () => {
+      component.currentRole = 'Test';
+      component.currentRoleVisual = 'Test';
+      component.typewriterConfig.positionIndex = 3;
+
+      component.typeWriter.remove();
+
+      expect(component.currentRoleVisual).toEqual('Tes');
+    });
+
+    it('should select next role', () => {
+      spyOn(component.typeWriter, 'getRandomRole').and.returnValue('New Role');
+
+      component.currentRole = 'Test';
+      component.currentRoleVisual = 'Test';
+
+      component.typeWriter.selectNext();
+
+      expect(component.currentRole).toEqual('New Role');
+      expect(component.currentRoleVisual).toEqual('N');
+    });
+  });
 });
