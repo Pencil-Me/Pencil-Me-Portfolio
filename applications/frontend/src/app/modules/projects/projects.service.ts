@@ -59,6 +59,7 @@ export class ProjectsService {
     }
     this.store.dispatch(fromKnowledge.actions.GetProject({ id: id }));
   }
+
   convertProject(project: PROJECT): IProject {
     return {
       id: project.uuid ?? '',

@@ -42,24 +42,26 @@ export type CUSTOMER = {
   location: string;
   last_used_date: Date;
 };
+export type DATE = {
+  start_date: Date;
+  end_date: Date;
+};
+export type TECH = {
+  uuid: string;
+  expertise_level: string;
+  name: string;
+  type: string;
+};
 export type PROJECT = {
   uuid: string;
   type: PROJECTTITLE;
   name: string;
-  dates: {
-    start_date: Date;
-    end_date: Date;
-  }[];
+  dates: DATE[];
   customers?: CUSTOMER[];
   location?: string;
   position?: string;
   content?: string;
-  tech: {
-    uuid: string;
-    expertise_level: string;
-    name: string;
-    type: string;
-  }[];
+  tech: TECH[];
 };
 export type PROJECTDATASTATE = {
   loadStatus: 'PENDING' | 'LOADING' | 'COMPLETED';
