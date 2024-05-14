@@ -3,6 +3,8 @@ import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { fromKnowledge } from '@app/state/knowledge/index';
 import { catchError, map, mergeMap, of, take } from 'rxjs';
 import { KnowledgeService } from '@app/state/knowledge/knowledge.service';
+import { Observable } from 'rxjs';
+import { Action } from '@ngrx/store';
 
 @Injectable()
 export class KnowledgeEffects {
@@ -11,70 +13,66 @@ export class KnowledgeEffects {
     private knowledgeService: KnowledgeService,
   ) {}
 
-  getTechstackDataEffect$ = createEffect(() => {
-    return this.actions$.pipe(
+  /**
+   * Effect to fetch techstack data.
+   */
+  getTechstackDataEffect$: Observable<Action> = createEffect(() =>
+    this.actions$.pipe(
       ofType(fromKnowledge.actions.GetTechstack, fromKnowledge.actions.GetProjectServiceData),
-      mergeMap(() => {
-        return this.knowledgeService.getTechstack().pipe(
-          map((res) => {
-            return fromKnowledge.actions.GetTechstackSuccess({
-              data: res,
-            });
-          }),
-          catchError((error) => of(fromKnowledge.actions.GetTechstackFailure({ error: error }))),
-        );
-      }),
+      mergeMap(() =>
+        this.knowledgeService.getTechstack().pipe(
+          map((res) => fromKnowledge.actions.GetTechstackSuccess({ data: res })),
+          catchError((error) => of(fromKnowledge.actions.GetTechstackFailure({ error }))),
+        ),
+      ),
       take(1),
-    );
-  });
+    ),
+  );
 
-  getProjectsDataEffect$ = createEffect(() => {
-    return this.actions$.pipe(
+  /**
+   * Effect to fetch projects data.
+   */
+  getProjectsDataEffect$: Observable<Action> = createEffect(() =>
+    this.actions$.pipe(
       ofType(fromKnowledge.actions.GetProjects, fromKnowledge.actions.GetProjectServiceData),
-      mergeMap(() => {
-        return this.knowledgeService.getProjects().pipe(
-          map((res) => {
-            return fromKnowledge.actions.GetProjectsSuccess({
-              data: res,
-            });
-          }),
-          catchError((error) => of(fromKnowledge.actions.GetProjectsFailure({ error: error }))),
-        );
-      }),
+      mergeMap(() =>
+        this.knowledgeService.getProjects().pipe(
+          map((res) => fromKnowledge.actions.GetProjectsSuccess({ data: res })),
+          catchError((error) => of(fromKnowledge.actions.GetProjectsFailure({ error }))),
+        ),
+      ),
       take(1),
-    );
-  });
+    ),
+  );
 
-  getProjectDataEffect$ = createEffect(() => {
-    return this.actions$.pipe(
+  /**
+   * Effect to fetch project data.
+   */
+  getProjectDataEffect$: Observable<Action> = createEffect(() =>
+    this.actions$.pipe(
       ofType(fromKnowledge.actions.GetProject),
-      mergeMap((arg) => {
-        return this.knowledgeService.getProject(arg.id).pipe(
-          map((res) => {
-            return fromKnowledge.actions.GetProjectSuccess({
-              data: res,
-            });
-          }),
-          catchError((error) => of(fromKnowledge.actions.GetProjectFailure({ error: error }))),
-        );
-      }),
-    );
-  });
+      mergeMap((arg) =>
+        this.knowledgeService.getProject(arg.id).pipe(
+          map((res) => fromKnowledge.actions.GetProjectSuccess({ data: res })),
+          catchError((error) => of(fromKnowledge.actions.GetProjectFailure({ error }))),
+        ),
+      ),
+    ),
+  );
 
-  getCustomersDataEffect$ = createEffect(() => {
-    return this.actions$.pipe(
+  /**
+   * Effect to fetch customers data.
+   */
+  getCustomersDataEffect$: Observable<Action> = createEffect(() =>
+    this.actions$.pipe(
       ofType(fromKnowledge.actions.GetCustomers),
-      mergeMap(() => {
-        return this.knowledgeService.getCustomers().pipe(
-          map((res) => {
-            return fromKnowledge.actions.GetCustomersSuccess({
-              data: res,
-            });
-          }),
-          catchError((error) => of(fromKnowledge.actions.GetCustomersFailure({ error: error }))),
-        );
-      }),
+      mergeMap(() =>
+        this.knowledgeService.getCustomers().pipe(
+          map((res) => fromKnowledge.actions.GetCustomersSuccess({ data: res })),
+          catchError((error) => of(fromKnowledge.actions.GetCustomersFailure({ error }))),
+        ),
+      ),
       take(1),
-    );
-  });
+    ),
+  );
 }

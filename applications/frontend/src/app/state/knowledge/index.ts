@@ -1,6 +1,7 @@
 import { knowledgeReducers } from './knowledge.reducer';
 import { KnowledgeEffects } from './knowledge.effects';
 import {
+  // Importing action creators
   GetProjects,
   GetProjectsFailure,
   GetProjectsSuccess,
@@ -16,9 +17,18 @@ import {
   GetCustomersSuccess,
   GetCustomersFailure,
 } from './knowledge.actions';
-import { selectProjectsState, selectProjectState, selectTechstackState, selectCustomersState } from './knowledge.selectors';
 
+import {
+  // Importing selector functions
+  selectProjectsState,
+  selectProjectState,
+  selectTechstackState,
+  selectCustomersState,
+} from './knowledge.selectors';
+
+// Bundle of knowledge-related actions, selectors, reducers, and effects
 export const fromKnowledge = {
+  // Exporting action creators
   actions: {
     GetTechstack,
     GetTechstackSuccess,
@@ -35,12 +45,18 @@ export const fromKnowledge = {
     GetCustomersSuccess,
     GetCustomersFailure,
   },
+
+  // Exporting selector functions
   selectors: {
     selectProjectsState,
     selectProjectState,
     selectTechstackState,
     selectCustomersState,
   },
+
+  // Exporting knowledge reducers
   reducers: knowledgeReducers,
+
+  // Exporting knowledge effects
   KnowledgeEffects,
 };

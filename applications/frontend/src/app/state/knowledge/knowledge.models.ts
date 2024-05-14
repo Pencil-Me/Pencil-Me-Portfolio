@@ -1,3 +1,6 @@
+/**
+ * Type definition for the title of a tech stack item.
+ */
 export type TECHTITLE =
   | ''
   | 'FEDEV'
@@ -13,6 +16,10 @@ export type TECHTITLE =
   | 'MISC'
   | 'DESIGN'
   | 'LANG';
+
+/**
+ * Type definition for the title of a project item.
+ */
 export type PROJECTTITLE =
   | ''
   | 'FEDEV'
@@ -29,6 +36,9 @@ export type PROJECTTITLE =
   | 'DESIGN'
   | 'LANG';
 
+/**
+ * Type definition for a tech stack item.
+ */
 export type TECHSTACK = {
   type: TECHTITLE;
   name: string;
@@ -37,21 +47,37 @@ export type TECHSTACK = {
   flag_important: boolean;
   project_count: number;
 };
+
+/**
+ * Type definition for a customer item.
+ */
 export type CUSTOMER = {
   name: string;
   location: string;
   last_used_date: Date;
 };
+
+/**
+ * Type definition for a date range.
+ */
 export type DATE = {
   start_date: Date;
   end_date: Date;
 };
+
+/**
+ * Type definition for a tech item.
+ */
 export type TECH = {
   uuid: string;
   expertise_level: string;
   name: string;
   type: string;
 };
+
+/**
+ * Type definition for a project item.
+ */
 export type PROJECT = {
   uuid: string;
   type: PROJECTTITLE;
@@ -63,26 +89,48 @@ export type PROJECT = {
   content?: string;
   tech: TECH[];
 };
-export type PROJECTDATASTATE = {
+
+/**
+ * Type definition for the state of a single data object.
+ */
+export type DATASTATE<T> = {
   loadStatus: 'PENDING' | 'LOADING' | 'COMPLETED';
   error: object | string | null;
-  data: PROJECT;
+  data: T;
 };
-export type PROJECTSDATASTATE = {
+
+/**
+ * Type definition for the state of multiple data objects.
+ */
+export type MULTIDATASTATE<T> = {
   loadStatus: 'PENDING' | 'LOADING' | 'COMPLETED';
   error: object | string | null;
-  data: PROJECT[];
+  data: T[];
 };
-export type CUSTOMERSDATASTATE = {
-  loadStatus: 'PENDING' | 'LOADING' | 'COMPLETED';
-  error: object | string | null;
-  data: CUSTOMER[];
-};
-export type TECHSTACKDATASTATE = {
-  loadStatus: 'PENDING' | 'LOADING' | 'COMPLETED';
-  error: object | string | null;
-  data: TECHSTACK[];
-};
+
+/**
+ * Type definition for the state of a single project.
+ */
+export type PROJECTDATASTATE = DATASTATE<PROJECT>;
+
+/**
+ * Type definition for the state of multiple projects.
+ */
+export type PROJECTSDATASTATE = MULTIDATASTATE<PROJECT>;
+
+/**
+ * Type definition for the state of customer data.
+ */
+export type CUSTOMERSDATASTATE = MULTIDATASTATE<CUSTOMER>;
+
+/**
+ * Type definition for the state of tech stack data.
+ */
+export type TECHSTACKDATASTATE = MULTIDATASTATE<TECHSTACK>;
+
+/**
+ * Type definition for the overall state of knowledge-related data.
+ */
 export type KNOWLEDGESTATE = {
   techStack: TECHSTACKDATASTATE;
   projects: PROJECTSDATASTATE;

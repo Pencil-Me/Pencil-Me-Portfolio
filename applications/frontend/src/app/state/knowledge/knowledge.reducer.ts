@@ -3,6 +3,9 @@ import { immerOn } from 'ngrx-immer/store';
 import * as actions from './knowledge.actions';
 import { KNOWLEDGESTATE, PROJECT } from '@app/state/knowledge/knowledge.models';
 
+/**
+ * Titles for different sections of the tech stack.
+ */
 export const TechStackTitle = {
   FEDEV: 'Frontend Development',
   BEDEV: 'Backend Development',
@@ -19,12 +22,18 @@ export const TechStackTitle = {
   LANG: 'Spoken Languages',
 } as { [key: string]: string };
 
+/**
+ * Titles for different project categories.
+ */
 export const ProjectTitle = {
   CUST: 'Projekte als Auftragnehmer',
   PRIV: 'Direktkunden und Private Projekte',
   FEST: 'Festanstellungen',
 } as { [key: string]: string };
 
+/**
+ * Initial state for the knowledge feature.
+ */
 export const initialState: KNOWLEDGESTATE = {
   techStack: {
     loadStatus: 'PENDING',
@@ -48,8 +57,14 @@ export const initialState: KNOWLEDGESTATE = {
   },
 };
 
+/**
+ * Reducer function for the knowledge feature.
+ * Handles actions and updates the state accordingly.
+ */
 export const knowledgeReducers = createReducer(
   initialState,
+
+  // Projects actions
   immerOn(actions.GetProjects, (state) => {
     state.projects.loadStatus = 'LOADING';
   }),
@@ -62,6 +77,8 @@ export const knowledgeReducers = createReducer(
     state.projects.loadStatus = 'COMPLETED';
     state.projects.error = action.error;
   }),
+
+  // Single project actions
   immerOn(actions.GetProject, (state) => {
     state.selectedProject.loadStatus = 'LOADING';
   }),
@@ -79,6 +96,8 @@ export const knowledgeReducers = createReducer(
     state.selectedProject.loadStatus = 'COMPLETED';
     state.selectedProject.error = action.error;
   }),
+
+  // Tech stack actions
   immerOn(actions.GetTechstack, (state) => {
     state.techStack.loadStatus = 'LOADING';
   }),
@@ -91,6 +110,8 @@ export const knowledgeReducers = createReducer(
     state.techStack.loadStatus = 'COMPLETED';
     state.techStack.error = action.error;
   }),
+
+  // Customers actions
   immerOn(actions.GetCustomers, (state) => {
     state.customers.loadStatus = 'LOADING';
   }),
