@@ -8,7 +8,3 @@ export interface ITechCategories {
   title: string;
   data: ISimpTech[];
 }
-
-export interface ICustomer {
-  label: string;
-}
