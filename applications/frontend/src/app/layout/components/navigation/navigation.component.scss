@@ -39,7 +39,7 @@ header {
       height: $nav-height;
     }
 
-    .header-content nav .nav-link {
+    .header-content nav ul li .nav-link {
       line-height: $nav-height;
 
       &:hover {
