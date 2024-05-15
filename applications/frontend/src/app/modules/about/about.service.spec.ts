@@ -143,7 +143,7 @@ describe('AboutService', () => {
         },
       ];
 
-      const toTest: ITechCategory[] = service.convertAndSortTechStack(simpTech);
+      const toTest: ITechCategory[] = service['convertAndSortTechStack'](simpTech);
 
       expect(toTest).toEqual(expectedResult); // Make sure the result matches the expected result
     });

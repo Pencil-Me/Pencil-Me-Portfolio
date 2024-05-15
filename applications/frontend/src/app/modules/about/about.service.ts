@@ -18,47 +18,95 @@ export class AboutService {
   readonly tech$ = this._tech$ as Observable<ITechCategory[]>;
 
   constructor(private readonly store: Store<AppState>) {
+    this.initializeTechStack();
+  }
+
+  /**
+   * Initializes the tech stack by dispatching the action and subscribing to the store observable.
+   */
+  private initializeTechStack(): void {
     this.store.dispatch(fromKnowledge.actions.GetTechstack());
-    this.store$.subscribe((e) => {
-      const tech: ITechCategory[] = this.convertAndSortTechStack(e.data ?? []);
-      this._tech$.next(tech);
+    this.store$.subscribe((techStackState) => {
+      const techCategories = this.convertAndSortTechStack(techStackState.data ?? []);
+      this._tech$.next(techCategories);
     });
   }
 
-  convertAndSortTechStack(simpTech: TECHSTACK[]): ITechCategory[] {
-    const tech: ITechCategory[] = [];
+  /**
+   * Converts and sorts the given tech stack data into categorized and sorted tech data.
+   * @param techStack The tech stack data to convert and sort.
+   * @returns An array of categorized and sorted tech data.
+   */
+  protected convertAndSortTechStack(techStack: TECHSTACK[]): ITechCategory[] {
+    const techCategories: ITechCategory[] = [];
 
-    simpTech.forEach((item: TECHSTACK) => {
-      const givenDate = item.last_usage_date ? new Date(item.last_usage_date) : new Date();
-      if (new Date().getFullYear() - 5 > givenDate.getFullYear()) return;
-      const objectDataToPush: ITech = {
-        label: item.name,
-        percent: item.expertise_level,
-        lastTouch: givenDate.getFullYear().toString(),
-        project_count: item.project_count ?? 0,
-      };
-      const itemTitle = TechStackTitle[item.type];
-      const obj = tech.find((x) => x.title === itemTitle);
-      const index = obj ? tech.indexOf(obj) : -1;
-
-      if (index !== -1) {
-        tech[index].data.push(objectDataToPush);
-      } else {
-        tech.push({
-          title: itemTitle,
-          data: [objectDataToPush],
-        });
-      }
+    techStack.forEach((techItem) => {
+      this.addTechItemToCategories(techCategories, techItem);
     });
 
-    tech.forEach((item) => {
-      item.data.sort((a, b) => {
-        const lastTouchA = a.lastTouch ?? 0;
-        const lastTouchB = b.lastTouch ?? 0;
-        return lastTouchB > lastTouchA ? 1 : lastTouchB < lastTouchA ? -1 : 0;
+    this.sortTechCategories(techCategories);
+
+    return techCategories;
+  }
+
+  /**
+   * Adds a tech item to the appropriate category in the tech categories array.
+   * @param techCategories The array of tech categories.
+   * @param techItem The tech item to add.
+   */
+  private addTechItemToCategories(techCategories: ITechCategory[], techItem: TECHSTACK): void {
+    const lastUsageDate = techItem.last_usage_date ? new Date(techItem.last_usage_date) : new Date();
+    if (this.isOutdatedTech(lastUsageDate)) return;
+
+    const techData: ITech = {
+      label: techItem.name,
+      percent: techItem.expertise_level,
+      lastTouch: lastUsageDate.getFullYear().toString(),
+      project_count: techItem.project_count ?? 0,
+    };
+
+    const categoryTitle = TechStackTitle[techItem.type];
+    const category = techCategories.find((category) => category.title === categoryTitle);
+
+    if (category) {
+      category.data.push(techData);
+    } else {
+      techCategories.push({
+        title: categoryTitle,
+        data: [techData],
       });
-    });
+    }
+  }
 
-    return tech;
+  /**
+   * Checks if a tech item is outdated.
+   * @param lastUsageDate The last usage date of the tech item.
+   * @returns A boolean indicating whether the tech item is outdated.
+   */
+  private isOutdatedTech(lastUsageDate: Date): boolean {
+    const currentYear = new Date().getFullYear();
+    return currentYear - lastUsageDate.getFullYear() > 5;
+  }
+
+  /**
+   * Sorts the tech items within each tech category by their last touch date.
+   * @param techCategories The array of tech categories to sort.
+   */
+  private sortTechCategories(techCategories: ITechCategory[]): void {
+    techCategories.forEach((category) => {
+      category.data.sort((a, b) => this.compareLastTouchDates(a.lastTouch, b.lastTouch));
+    });
+  }
+
+  /**
+   * Compares two last touch dates.
+   * @param lastTouchA The first last touch date.
+   * @param lastTouchB The second last touch date.
+   * @returns A number indicating the order of the two dates.
+   */
+  private compareLastTouchDates(lastTouchA: string = '', lastTouchB: string = ''): number {
+    const yearA = parseInt(lastTouchA, 10);
+    const yearB = parseInt(lastTouchB, 10);
+    return yearB - yearA;
   }
 }
