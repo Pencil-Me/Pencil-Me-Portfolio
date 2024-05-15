@@ -6,8 +6,19 @@ import { NotFoundErrorComponent } from './components/not-found-error/not-found-e
 import { ErrorRoutingModule } from './error-routing.module';
 import { ErrorComponent } from './layout/error.component';
 
+/**
+ * The ErrorModule is responsible for providing components and routing
+ * related to error handling in the application.
+ */
 @NgModule({
-  declarations: [ErrorComponent, ForbiddenErrorComponent, NotFoundErrorComponent],
-  imports: [CommonModule, ErrorRoutingModule],
+  declarations: [
+    ErrorComponent,
+    ForbiddenErrorComponent,
+    NotFoundErrorComponent
+  ],
+  imports: [
+    CommonModule,
+    ErrorRoutingModule
+  ],
 })
 export class ErrorModule {}

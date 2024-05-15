@@ -5,7 +5,10 @@ import { ForbiddenErrorComponent } from '@modules/error/components/forbidden-err
 import { NotFoundErrorComponent } from '@modules/error/components/not-found-error/not-found-error.component';
 import { ErrorComponent } from '@modules/error/layout/error.component';
 
-const routes: Routes = [
+/**
+ * Defines the routes for the Error module.
+ */
+const errorRoutes: Routes = [
   {
     path: '',
     component: ErrorComponent,
@@ -24,8 +27,12 @@ const routes: Routes = [
   },
 ];
 
+/**
+ * The ErrorRoutingModule is responsible for providing the routing configuration
+ * for the Error module.
+ */
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
+  imports: [RouterModule.forChild(errorRoutes)],
   exports: [RouterModule],
 })
 export class ErrorRoutingModule {}
