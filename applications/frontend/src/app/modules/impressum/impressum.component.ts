@@ -3,24 +3,20 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-impressum',
   standalone: true,
-  imports: [],
   templateUrl: './impressum.component.html',
-  styleUrl: './impressum.component.scss',
+  styleUrls: ['./impressum.component.scss'],
 })
 export class ImpressumComponent {
   email: string = 'info@pencil-me.de';
   encryptedEmail: string = this.encryptEmail(this.email);
 
-  encryptEmail(email: string): string {
-    return email
-      .split('')
-      .map((char) => {
-        if (char === '@') {
-          return '[at]';
-        } else {
-          return char;
-        }
-      })
-      .join('');
+  /**
+   * Encrypts the email address by replacing '@' with '[at]'.
+   * This is a simple obfuscation technique to prevent spam bots from harvesting the email address.
+   * @param email - The email address to be encrypted.
+   * @returns The encrypted email address.
+   */
+  private encryptEmail(email: string): string {
+    return email.replace('@', '[at]');
   }
 }
