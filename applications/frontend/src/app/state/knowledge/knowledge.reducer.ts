@@ -1,7 +1,7 @@
 import { createReducer } from '@ngrx/store';
 import { immerOn } from 'ngrx-immer/store';
 import * as actions from './knowledge.actions';
-import { KNOWLEDGESTATE, PROJECT } from '@app/state/knowledge/knowledge.models';
+import { CUSTOMER, KNOWLEDGESTATE, PROJECT, TECHSTACK } from '@app/state/knowledge/knowledge.models';
 
 /**
  * Titles for different sections of the tech stack.
@@ -104,7 +104,7 @@ export const knowledgeReducers = createReducer(
   immerOn(actions.GetTechstackSuccess, (state, action) => {
     state.techStack.loadStatus = 'COMPLETED';
     state.techStack.error = null;
-    state.techStack.data = action.data;
+    state.techStack.data = convertTechstackDataToType(action.data);
   }),
   immerOn(actions.GetTechstackFailure, (state, action) => {
     state.techStack.loadStatus = 'COMPLETED';
@@ -118,10 +118,33 @@ export const knowledgeReducers = createReducer(
   immerOn(actions.GetCustomersSuccess, (state, action) => {
     state.customers.loadStatus = 'COMPLETED';
     state.customers.error = null;
-    state.customers.data = action.data;
+    state.customers.data = convertCustomersDataToType(action.data);
   }),
   immerOn(actions.GetCustomersFailure, (state, action) => {
     state.customers.loadStatus = 'COMPLETED';
     state.customers.error = action.error;
   }),
 );
+
+function convertCustomersDataToType(data: CUSTOMER[]): CUSTOMER[] {
+  return data.map(
+    (e: CUSTOMER): CUSTOMER => ({
+      name: e.name,
+      location: e.location,
+      last_used_date: new Date(e.last_used_date),
+    }),
+  );
+}
+
+function convertTechstackDataToType(data: TECHSTACK[]): TECHSTACK[] {
+  return data.map(
+    (e: TECHSTACK): TECHSTACK => ({
+      type: e.type,
+      name: e.name,
+      expertise_level: e.expertise_level,
+      last_usage_date: e.last_usage_date ? new Date(e.last_usage_date) : undefined,
+      flag_important: e.flag_important,
+      project_count: e.project_count,
+    }),
+  );
+}

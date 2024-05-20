@@ -57,10 +57,7 @@ class ProjectsController extends BaseController
             ];
 
             // Send successful response
-            $this->sendOutput(
-                json_encode($formatedProjectsData),
-                200
-            );
+            $this->sendSuccessResponse($formatedProjectsData);
         } catch (\Throwable $exception) {
             // Handle exceptions
             $this->sendOutput(

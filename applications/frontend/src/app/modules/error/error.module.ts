@@ -11,14 +11,7 @@ import { ErrorComponent } from './layout/error.component';
  * related to error handling in the application.
  */
 @NgModule({
-  declarations: [
-    ErrorComponent,
-    ForbiddenErrorComponent,
-    NotFoundErrorComponent
-  ],
-  imports: [
-    CommonModule,
-    ErrorRoutingModule
-  ],
+  declarations: [ErrorComponent, ForbiddenErrorComponent, NotFoundErrorComponent],
+  imports: [CommonModule, ErrorRoutingModule],
 })
 export class ErrorModule {}

@@ -26,6 +26,7 @@ export class AboutComponent {
     'Erfahrung in deutsch- und englischsprachigen Teams',
     'Refactoring',
     'Konzeption, Design und Umsetzung von Frontend-Architekturen',
+    'nachhaltige Software-Entwicklung',
   ];
 
   whatIAmGoodAt = [
