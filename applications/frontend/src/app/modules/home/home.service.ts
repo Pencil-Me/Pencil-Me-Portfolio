@@ -43,7 +43,7 @@ export class HomeService {
    */
   private processTechStack(techStack: TECHSTACK[]): ITechCategories[] {
     const tech: ITechCategories[] = [];
-    const sortedTech = techStack.sort((a, b) => Number(b.project_count) - Number(a.project_count));
+    const sortedTech = [...techStack].sort((a, b) => Number(b.project_count) - Number(a.project_count));
 
     sortedTech.forEach((item: TECHSTACK) => {
       if (item.project_count > 0 && this.isRecentUsage(item.last_usage_date)) {
