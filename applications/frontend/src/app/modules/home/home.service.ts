@@ -17,8 +17,8 @@ export class HomeService {
 
   private _tech$ = new BehaviorSubject<ITechCategories[]>([]);
   readonly tech$ = this._tech$ as Observable<ITechCategories[]>;
-  private _customers$ = new BehaviorSubject<string[]>([]);
-  readonly customers$ = this._customers$ as Observable<string[]>;
+  private _customers$ = new BehaviorSubject<{ url: string; alt: string }[]>([]);
+  readonly customers$ = this._customers$ as Observable<{ url: string; alt: string }[]>;
 
   constructor(private readonly store: Store<AppState>) {
     this.initializeTechStack();
@@ -100,9 +100,19 @@ export class HomeService {
    */
   private initializeCustomers(): void {
     this.store.dispatch(fromKnowledge.actions.GetCustomers());
-    this.storeCustomers$.subscribe((e) => {
-      const customers = this.processCustomers(e.data ?? []);
-      this._customers$.next(customers);
+    this.storeCustomers$.subscribe(() => {
+      // const customers = this.processCustomers(e.data ?? []);
+      const customerImgs: { url: string; alt: string }[] = [
+        { url: './assets/logos/arvato.png', alt: 'arvato Bertelsmann' },
+        { url: './assets/logos/dermalog.png', alt: 'Dermalog' },
+        { url: './assets/logos/fest.png', alt: 'FEST GmbH' },
+        { url: './assets/logos/udg.png', alt: 'UDG' },
+        { url: './assets/logos/HDI.png', alt: 'HDI' },
+        { url: './assets/logos/objektkultur.png', alt: 'ObjektKultur' },
+        { url: './assets/logos/healthag.png', alt: 'Health AG' },
+        { url: './assets/logos/auto1.png', alt: 'Auto1.com' },
+      ];
+      this._customers$.next(customerImgs);
     });
   }
 

@@ -1,14 +1,16 @@
-import { AsyncPipe, JsonPipe, NgForOf } from '@angular/common';
+import { AsyncPipe, JsonPipe, NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HomeService } from '@modules/home/home.service';
 import { RouterLink } from '@angular/router';
 import { ITechCategories } from '@modules/home/home.models';
+import { CountUpDirective } from '@shared/directives/count-up.directive';
+import { TrackVisibilityDirective } from '@shared/directives/track-visibility.directive';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [NgForOf, AsyncPipe, RouterLink, JsonPipe],
+  imports: [NgForOf, AsyncPipe, RouterLink, JsonPipe, NgOptimizedImage, CountUpDirective, TrackVisibilityDirective, NgIf],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
@@ -16,7 +18,7 @@ export class HomeComponent {
   private homeService = inject(HomeService);
 
   techStack$: Observable<ITechCategories[]> = this.homeService.tech$;
-  customers$: Observable<string[]> = this.homeService.customers$;
+  customers$: Observable<{ url: string; alt: string }[]> = this.homeService.customers$;
 
   roles = [
     'Frontend-Developer',
@@ -36,11 +38,20 @@ export class HomeComponent {
     positionIndex: 0,
   };
   techStack: ITechCategories[] = [];
-  customers: string[] = [];
+  customers: { url: string; alt: string }[] = [];
+  counter = {
+    years: 20,
+    projects: 90,
+    customers: 80,
+  };
 
   constructor() {
     this.subscribeToObservables();
     this.startTypeWriter();
+  }
+  containerIsVisible: boolean = false;
+  test(a: boolean) {
+    if (a) this.containerIsVisible = true;
   }
 
   /**

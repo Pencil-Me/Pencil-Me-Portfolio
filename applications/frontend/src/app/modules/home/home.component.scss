@@ -2,7 +2,9 @@ $content-width: 1000px;
 
 .hero {
   display: flex;
-  min-height: 60vh;
+  min-height: fit-content;
+  height: 100vh;
+  max-height: 800px;
   align-items: center;
   justify-content: center;
   background: rgb(36,0,0);
@@ -10,31 +12,172 @@ $content-width: 1000px;
   background-size: cover;
   color: #cba0a0;
 
-  .hero-container > .hero-content {
-    display: inline-block;
-    max-width: 800px;
+  .hero-container {
+    > .hero-content {
+      display: inline-block;
+      max-width: 800px;
+    }
   }
 }
 
-.customers-container {
-  background-color: rgb(23 23 23 / var(--tw-bg-opacity));
-  color: white;
+.statistics-container {
+  background: linear-gradient(319deg, rgb(14, 0, 0) 0%, rgb(38, 8, 8) 67%, rgb(19, 13, 0) 96%);
+  color: #b5b5b5;
 
   --tw-bg-opacity: 1;
+  padding: 2rem 0;
+
+  .list-group.list-group-horizontal {
+    justify-content: space-between;
+
+    @media (max-width: 731px) {
+      flex-direction: column;
+    }
+  }
 
   .list-group-item {
     color: inherit;
     background-color: transparent;
     border: none;
+    display: flex;
+    align-items: center;
+
+    .domain {
+      width: 6rem;
+      line-height: 1.15rem;
+
+      b {
+        font-size: 1.5rem;
+      }
+    }
+
+    .counter {
+      font-size: 4rem;
+      line-height: 1.5rem;
+      font-weight: bolder;
+
+      &:after {
+        content: '+';
+        font-size: 2rem;
+        margin-right: .25rem;
+        position: relative;
+        bottom: .25rem;
+      }
+    }
+  }
+}
+
+.customers-container {
+  background: linear-gradient(319deg, rgb(14, 0, 0) 0%, rgb(23, 12, 12) 96%);
+  color: white;
+
+  --tw-bg-opacity: 1;
+  padding: 2rem 0;
+  overflow: hidden;
+  box-sizing: content-box;
+
+  .mask {
+    max-width: 1500px;
+    margin: 0 auto;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #fff 20%, #fff 80%, transparent);
+  }
+
+  .ticker {
+    --time: 20s;
+    position: relative;
+    display: flex;
+    width: 100%;
+    max-width: 1500px;
+    margin: 0 auto;
+    overflow: hidden;
+
+    ul {
+      white-space: nowrap;
+      animation: scroll var(--time) linear infinite;
+      animation-delay: calc(var(--time) * -1);
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      opacity: .75;
+
+      &:nth-child(2) {
+        animation: scroll2 var(--time) linear infinite;
+        animation-delay: calc(var(--time) / -2);
+      }
+
+      li {
+        padding-left: 3rem;
+
+        img {
+          width: 120px;
+          height: 100%;
+          aspect-ratio: 2/1;
+        }
+      }
+    }
+  }
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(100%);
+  }
+
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes scroll2 {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-200%);
   }
 }
 
 .tech-container {
+  .tech-category-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: start;
+    gap: 1rem;
+
+    @media only screen and (min-width:576px) {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    @media only screen and (min-width:768px) {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    @media only screen and (min-width:992px) {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    @media only screen and (min-width:1200px) {
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+  }
+
+  .tech-category-item {
+    border: 1px solid rgba(91,39,39,.25);
+    padding: 1rem;
+    border-radius: 1rem;
+  }
+  .list-group {
+    border-top: 1px solid rgba(91,39,39,.25);
+    padding-top: .75rem;
+  }
+
   .list-group-item {
     padding-left: .75rem;
     padding-right: .75rem;
-    margin-right: 1rem;
-    margin-bottom: 1rem;
+    margin-right: .25rem;
+    margin-bottom: .5rem;
   }
 }
 
@@ -43,9 +186,22 @@ $content-width: 1000px;
   gap: 1rem;
 }
 
+.short-about-me {
+  background: linear-gradient(319deg, rgb(224, 224, 224) 0%, rgb(255, 255, 255) 67%, rgb(218, 218, 218) 96%);
+}
+
+.tech-container {
+  background: linear-gradient(319deg, rgb(224, 224, 224) 0%, rgb(255, 255, 255) 67%, rgb(218, 218, 218) 96%);
+}
+
 .section-container {
   padding-top: 5rem;
   padding-bottom: 5rem;
+
+  h2 {
+    font-size: 3rem;
+    text-transform: uppercase;
+  }
 }
 
 .color {

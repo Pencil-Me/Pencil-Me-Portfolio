@@ -1,0 +1,25 @@
+html {
+  box-sizing: border-box;
+  background: white;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+img {
+  font-style: italic;
+
+  // image "lazyload" solution
+  // use style="background-image: url(lowres-source)" on the img
+  // header -> <link rel=preload as=image href='lowres-source' fetchpriority=heigh>
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  // used with shape-outside
+  shape-margin: 1rem;
+
+  //max-width: 100%;
+  height: auto;
+  vertical-align: middle;
+}

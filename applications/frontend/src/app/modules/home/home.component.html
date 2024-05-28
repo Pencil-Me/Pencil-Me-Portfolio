@@ -1,12 +1,13 @@
-<script src="../about/about.models.ts"></script>
 <section class="hero">
   <div class="hero-container container">
     <div class="hero-content">
       <h1>
         Hi, ich bin Johannes Kromer <br />
-        <span class="color"
-          >ein <span class="role-typscripter">{{ currentRoleVisual }}</span></span
-        ><br /><span>aus Berlin</span>
+        <span class="color">
+          ein
+          <span class="role-typscripter">{{ currentRoleVisual }}</span> </span
+        ><br />
+        <span>aus Berlin</span>
       </h1>
       <p>Seit zwanzig Jahren arbeite ich Solo und in verschiedensten Teams als Entwickler und Designer.</p>
       <div class="btn-container">
@@ -16,42 +17,73 @@
   </div>
 </section>
 
-<section class="customers-container">
-  <div class="container section-container">
-    <ul class="list-group list-group-horizontal flex-wrap">
-      <li class="list-group-item" *ngFor="let customer of customers">
-        {{ customer }}
+<section class="statistics-container" appTrackVisibility (visibile)="test($event)">
+  <div class="container">
+    <ul *ngIf="containerIsVisible" class="list-group list-group-horizontal">
+      <li class="list-group-item">
+        <div class="counter" [appCountUp]="counter.years" [duration]="4000">0</div>
+        <div class="domain"><b>Jahre</b> Erfahrung</div>
+      </li>
+      <li class="list-group-item">
+        <div class="counter" [appCountUp]="counter.projects" [duration]="2000">0</div>
+        <div class="domain">erfolgreiche <b>Projekte</b></div>
+      </li>
+      <li class="list-group-item">
+        <div class="counter" [appCountUp]="counter.customers" [duration]="3000">0</div>
+        <div class="domain">zufriedene <b>Kunden</b></div>
       </li>
     </ul>
   </div>
 </section>
 
-<section class="container section-container">
-  <h2>Über mich</h2>
-  <p>
-    Ich programmiere seit dem ich meinen ersten Computer hatte, ein Sinclair ZX Spectrum (ja ich bin alt). Seit den Anfängen von AngularJS
-    liegt meinem Schwerpunkt auf Javascript-Single-Page-Applications und Styleguide-zentrierte-Frontend-Architekturen. Ich habe an großen
-    Systemen mitgebaut und mag die Vorstellung, dass mein Code den Arbeitsalltag anderer Menschen verbessert.
-  </p>
-  <p>Weitere Interessen: Volleyball, Kochen, Rollenspiel, Musik</p>
-  <button type="button" class="mt-3 btn btn-outline-secondary" [routerLink]="'/about'">Mehr über mich</button>
+<section class="short-about-me">
+  <div class="container section-container">
+    <h2>Über mich</h2>
+    <p>
+      Ich programmiere seit dem ich meinen ersten Computer hatte, ein Sinclair ZX Spectrum (ja ich bin alt). Seit den Anfängen von AngularJS
+      liegt meinem Schwerpunkt auf Javascript-Single-Page-Applications und Styleguide-zentrierte-Frontend-Architekturen. Ich habe an großen
+      Systemen mitgebaut und mag die Vorstellung, dass mein Code den Arbeitsalltag anderer Menschen verbessert.
+    </p>
+    <p>Weitere Interessen: Volleyball, Kochen, Rollenspiel, Musik</p>
+    <button type="button" class="mt-3 btn btn-outline-secondary" [routerLink]="'/about'">Mehr über mich</button>
+  </div>
 </section>
 
-<hr />
-
-<section class="container section-container tech-container">
-  <h2>Technologien und Tools</h2>
-  <p>
-    Mit einer Kombination aus modernsten Technologien und zuverlässiger Open-Source-Software erstelle ich benutzerorientierte,
-    leistungsstarke Apps und Websites für Smartphones, Tablets und Desktops. Hier eine Liste der Technologien die ich zuletzt benutzt habe.
-  </p>
-  <div *ngFor="let techCategory of techStack">
-    <h4>{{ techCategory.title }}</h4>
-    <div class="list-group list-group-flush list-group-horizontal flex-wrap">
-      <span class="list-group-item badge text-bg-secondary rounded-pill" *ngFor="let tech of techCategory.data">
-        {{ tech.label }}
-      </span>
+<section class="customers-container">
+  <div class="mask">
+    <div class="ticker">
+      <ul>
+        <li *ngFor="let customer of customers">
+          <img [ngSrc]="customer.url" [alt]="customer.alt" [width]="709" [height]="354" [priority]="true" />
+        </li>
+      </ul>
+      <ul>
+        <li *ngFor="let customer of customers">
+          <img [ngSrc]="customer.url" [alt]="customer.alt" [width]="709" [height]="354" [priority]="true" />
+        </li>
+      </ul>
     </div>
   </div>
-  <button type="button" class="mt-4 btn btn-outline-secondary" [routerLink]="'/projects'">Alle Projekte</button>
+</section>
+
+<section class="tech-container">
+  <div class="container section-container">
+    <h2>Technologien und Tools</h2>
+    <p>
+      Mit einer Kombination aus modernsten Technologien und zuverlässiger Open-Source-Software erstelle ich benutzerorientierte,
+      leistungsstarke Apps und Websites für Smartphones, Tablets und Desktops. Hier eine Liste der Technologien die ich zuletzt benutzt
+      habe.
+    </p>
+    <div class="tech-category-container">
+      <div class="tech-category-item" *ngFor="let techCategory of techStack">
+        <h4>{{ techCategory.title }}</h4>
+        <div class="list-group list-group-flush list-group-horizontal flex-wrap">
+          <span class="list-group-item badge text-bg-secondary rounded-pill" *ngFor="let tech of techCategory.data">
+            {{ tech.label }}
+          </span>
+        </div>
+      </div>
+    </div>
+    <button type="button" class="mt-4 btn btn-outline-secondary" [routerLink]="'/projects'">Alle Projekte</button>
+  </div>
 </section>

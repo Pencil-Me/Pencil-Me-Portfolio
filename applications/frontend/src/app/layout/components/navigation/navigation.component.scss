@@ -4,24 +4,23 @@ $nav-height: 3.5rem;
 $nav-background: #180000;
 $nav-font-color: #fff;
 $link-hover-color: var(--pm-primary-hover);
+$link-active-bg: var(--pm-primary);
 
 .header-buffer {
   height: $nav-height * 1.5;
   display: block;
-  position: relative;
 }
 
 header {
   display: block;
   width: 100%;
   background: $nav-background;
-  position: fixed;
-  z-index: 999;
+  position: absolute;
   top: 0;
 
   &.fixed-header {
     background: rgba($nav-background, .75);
-    top: 0;
+    position: fixed;
     right: 0;
     left: 0;
     z-index: 999;
@@ -32,7 +31,8 @@ header {
     }
 
     .header-content .logo {
-      line-height: $nav-height;
+      height: $nav-height;
+      font-size: 1rem;
     }
 
     .header-content nav {
@@ -41,7 +41,9 @@ header {
 
     .header-content nav ul li .nav-link {
       line-height: $nav-height;
+    }
 
+    .header-content nav ul li:not(.active) .nav-link {
       &:hover {
         background: rgba(darken($nav-background, 0.75), .75);
       }
@@ -50,15 +52,32 @@ header {
 
   .header-content {
     padding: 0 1rem;
+    display: flex;
 
     .logo {
       float: left;
-      font-size: 1.4em;
-      line-height: $nav-height * 1.5;
+      font-size: 1.4rem;
+      height: $nav-height * 1.5;
       text-transform: uppercase;
+      position: relative;
+
+      span {
+        letter-spacing: 0.1em;
+        word-spacing: 0.5em;
+        display: block;
+        font-size: .472em;
+        line-height: .95em;
+        opacity: .5;
+      }
 
       a,
       a:visited {
+        height: 2rem;
+        line-height: 1.2rem;
+        position: absolute;
+        top: 50%;
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
         color: $nav-font-color;
         text-decoration: none;
       }
@@ -112,7 +131,7 @@ header {
           }
 
           &.active .nav-link {
-            color: $link-hover-color;
+            background: $link-active-bg;
             cursor: default;
           }
 
