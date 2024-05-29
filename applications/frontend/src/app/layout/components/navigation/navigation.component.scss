@@ -56,25 +56,25 @@ header {
 
     .logo {
       float: left;
-      font-size: 1.8rem;
-      height: $nav-height * 1.5;
+      font-size: 2.25rem;
       text-transform: uppercase;
       position: relative;
+      height: $nav-height * 1.5;
+      line-height: 1em;
 
       span {
+        border-top: 1px solid rgba(255,255,255,1);
         letter-spacing: 0.1em;
         word-spacing: 0.5em;
         display: block;
-        font-size: .48em;
-        line-height: 1.5em;
+        font-size: .455em;
+        line-height: .85em;
         opacity: .5;
         white-space: nowrap;
       }
 
       a,
       a:visited {
-        height: 2rem;
-        line-height: 1.2rem;
         position: absolute;
         top: 50%;
         -ms-transform: translateY(-50%);
