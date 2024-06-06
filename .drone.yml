@@ -1,0 +1,11 @@
+kind: pipeline
+type: docker
+name: default
+
+steps:
+  - name: test
+    image: node:18
+    commands:
+      - cd applications/frontend
+      - npm install
+      - npm run ci-test
