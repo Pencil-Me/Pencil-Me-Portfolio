@@ -64,7 +64,7 @@
         auf ein Technologie um die zugehörigen Projekte anzusehen.
       </p>
       <div class="row tech-card-container">
-        <div class="tech-card col-12 col-lg-3 col-md-4 col-sm-6 mt-4" *ngFor="let skill of skills">
+        <div class="tech-card col-12 col-lg-4 col-md-6 col-sm-12 mt-4" *ngFor="let skill of skills">
           <h4>{{ skill.title }}</h4>
           <ul>
             <li *ngFor="let data of skill.data">
@@ -72,9 +72,9 @@
                 {{ data.label }}
               </div>
               <div class="tech_info-box">
-                <div *ngIf="data.project_count" class="tech_project-count">Projekte: {{ data.project_count }}</div>
-                <div *ngIf="data.project_years" class="tech_year-count">Erfahrung: {{ years(data.project_years) }}</div>
-                <div *ngIf="data.lastTouch" class="tech_last-touch">Zuletzt: {{ data.lastTouch }}</div>
+                <div *ngIf="data.project_count" class="tech_project-count">Projekte: <span>{{ data.project_count }}</span></div>
+                <div *ngIf="data.project_years" class="tech_year-count">Erfahrung: <span>{{ years(data.project_years) }}</span></div>
+                <div *ngIf="data.lastTouch" class="tech_last-touch">Zuletzt: <span>{{ data.lastTouch }}</span></div>
               </div>
             </li>
           </ul>
