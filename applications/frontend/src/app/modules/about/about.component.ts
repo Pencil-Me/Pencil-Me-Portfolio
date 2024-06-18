@@ -46,6 +46,13 @@ export class AboutComponent {
     this.subscribeToSkills();
   }
 
+  years(data: number = 0): string {
+    let returnValue = (Math.round(data) > 1) ? `${Math.round(data)}+ Jahre` : `${Math.round(data)}+ Jahr`;
+    if (Math.round(data) <= 0) returnValue = `${data * 12} Monate`
+    if (data * 12 <= 0) return ''
+    return returnValue;
+  }
+
   /**
    * Subscribes to the skills observable from the AboutService
    * and updates the local skills array when new data is emitted.

@@ -68,19 +68,13 @@
           <h4>{{ skill.title }}</h4>
           <ul>
             <li *ngFor="let data of skill.data">
-              <div>
+              <div class="tech_name">
                 {{ data.label }}
-                <span *ngIf="data.lastTouch"> - {{ data.lastTouch }}</span>
               </div>
-              <div class="progress">
-                <div
-                  class="progress-bar"
-                  role="progressbar"
-                  [ngStyle]="{ width: data.percent + '%' }"
-                  aria-valuenow="0"
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                ></div>
+              <div class="tech_info-box">
+                <div *ngIf="data.project_count" class="tech_project-count">Projekte: {{ data.project_count }}</div>
+                <div *ngIf="data.project_years" class="tech_year-count">Erfahrung: {{ years(data.project_years) }}</div>
+                <div *ngIf="data.lastTouch" class="tech_last-touch">Zuletzt: {{ data.lastTouch }}</div>
               </div>
             </li>
           </ul>

@@ -18,12 +18,21 @@
     li {
       width: 100%;
       margin-bottom: .5rem;
+      display: grid;
+      grid-template-columns: 10rem 1fr;
 
-      .progress {
-        background: #d5d5d5;
+      .tech_name {
+        color: var(--pm-primary);
+      }
+      .tech_info-box {
 
-        .progress-bar {
-          background-color: var(--pm-primary);
+        .tech_project-count {
+        }
+
+        .tech_year-count {
+        }
+
+        .tech_last-touch {
         }
       }
     }
