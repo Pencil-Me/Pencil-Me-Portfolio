@@ -62,7 +62,7 @@ export class HomeService {
    */
   private isRecentUsage(lastUsageDate?: Date): boolean {
     const usageDate = lastUsageDate ?? new Date();
-    return new Date().getFullYear() - usageDate.getFullYear() <= 3;
+    return new Date().getFullYear() - usageDate.getFullYear() <= 5;
   }
 
   /**

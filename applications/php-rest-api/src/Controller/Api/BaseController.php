@@ -85,7 +85,7 @@ class BaseController
         $queryParams = $this->getQueryStringParams();
 
         // set default limit
-        $limit = 50;
+        $limit = 100;
 
         // Check if limit parameter is provided in the query string
         if (isset($queryParams['limit']) && $queryParams['limit']) {

@@ -56,7 +56,6 @@ export class AboutService {
    */
   private addTechItemToCategories(techCategories: ITechCategory[], techItem: TECHSTACK): void {
     const lastUsageDate = techItem.last_usage_date ? new Date(techItem.last_usage_date) : new Date();
-    if (this.isOutdatedTech(lastUsageDate)) return;
 
     let monthSum = 0;
 
@@ -101,6 +100,8 @@ export class AboutService {
       project_years: monthSum / 12,
     };
 
+    if (this.isOutdatedTech(lastUsageDate)) return;
+
     const categoryTitle = TechStackTitle[techItem.type];
     const category = techCategories.find((category) => category.title === categoryTitle);
 
@@ -121,7 +122,7 @@ export class AboutService {
    */
   private isOutdatedTech(lastUsageDate: Date): boolean {
     const currentYear = new Date().getFullYear();
-    return currentYear - lastUsageDate.getFullYear() > 5;
+    return currentYear - lastUsageDate.getFullYear() > 7;
   }
 
   /**
