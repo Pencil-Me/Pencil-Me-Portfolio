@@ -46,6 +46,7 @@ export type TECHSTACK = {
   last_usage_date?: Date;
   flag_important: boolean;
   project_count: number;
+  project_dates: DATE[];
 };
 
 /**

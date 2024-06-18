@@ -17,6 +17,7 @@ header {
   background: $nav-background;
   position: absolute;
   top: 0;
+  z-index: 1;
 
   &.fixed-header {
     background: rgba($nav-background, .75);

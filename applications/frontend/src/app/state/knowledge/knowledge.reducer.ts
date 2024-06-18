@@ -145,6 +145,7 @@ function convertTechstackDataToType(data: TECHSTACK[]): TECHSTACK[] {
       last_usage_date: e.last_usage_date ? new Date(e.last_usage_date) : undefined,
       flag_important: e.flag_important,
       project_count: e.project_count,
+      project_dates: e.project_dates,
     }),
   );
 }

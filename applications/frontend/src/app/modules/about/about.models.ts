@@ -3,6 +3,7 @@ export interface ITech {
   percent: number;
   lastTouch?: string;
   project_count?: number;
+  project_years?: number;
 }
 export interface ITechCategory {
   title: string;

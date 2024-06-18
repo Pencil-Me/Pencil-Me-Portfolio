@@ -81,7 +81,6 @@ export class ContactComponent {
    * @param {any} data The response data.
    */
   private handleSuccess(data: any): void {
-    console.log(data);
     this.emailIsSend = true;
     this.form.reset();
   }

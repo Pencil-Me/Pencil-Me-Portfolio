@@ -210,7 +210,13 @@ export default {
         </div>
       </div>
       <div class="mb-4">
-        <textarea-input :label="'content'" v-model="currentProject.content" />
+        <textarea-input :label="'contentshort'" v-model="currentProject.contentshort" />
+      </div>
+      <div class="mb-4">
+        <textarea-input :label="'contentlong'" v-model="currentProject.contentlong" />
+      </div>
+      <div class="mb-4">
+        <textarea-input :label="'contentold'" v-model="currentProject.content" />
       </div>
 
       <div class="mb-6">

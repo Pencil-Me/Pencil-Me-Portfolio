@@ -154,7 +154,7 @@ class ProjectsController extends BaseController
     {
         $datesModel = new DatesModel();
         // Implement logic to retrieve dates per project
-        return $datesModel->getDatesPerProject($projectUuid);
+        return $datesModel->getDatesPerProject([$projectUuid]);
     }
 
     /**

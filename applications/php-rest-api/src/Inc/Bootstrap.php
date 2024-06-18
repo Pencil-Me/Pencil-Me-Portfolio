@@ -17,17 +17,19 @@ class Bootstrap
         // Define project root path
         define("PROJECT_ROOT_PATH", __DIR__ . "/../");
 
-        // Include necessary files
+        // Include config and cors files
         require_once PROJECT_ROOT_PATH . "/Inc/Config.php";
         require_once PROJECT_ROOT_PATH . "/Inc/Cors.php";
+
+        // Set CORS headers
+        self::setCorsHeaders(Config::getAllowedOrigins());
+
+        // Include other necessary files
         require_once PROJECT_ROOT_PATH . "/Inc/Router.php";
         require_once PROJECT_ROOT_PATH . "/Controller/Api/BaseController.php";
         require_once PROJECT_ROOT_PATH . "/Model/ProjectsModel.php";
         require_once PROJECT_ROOT_PATH . "/Model/TechstackModel.php";
         require_once PROJECT_ROOT_PATH . "/Model/CustomersModel.php";
-
-        // Set CORS headers
-        self::setCorsHeaders(Config::getAllowedOrigins());
     }
 
     /**

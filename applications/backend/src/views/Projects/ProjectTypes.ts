@@ -19,6 +19,8 @@ export type ProjectType = {
   position: string
   customer: string
   location: string
+  contentshort: string
+  contentlong: string
   content: string
   type: string
   customers: Customer[]

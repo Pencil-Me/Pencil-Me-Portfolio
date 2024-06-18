@@ -30,7 +30,6 @@ export default {
       this.$router.push({ name: 'TechStackList' })
     },
     deleteEvent(techStack: TechStackType) {
-      console.log()
       this.deleteTechStack(techStack)
       this.$router.push({ name: 'TechStackList' })
     },

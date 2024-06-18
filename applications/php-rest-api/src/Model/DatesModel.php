@@ -19,19 +19,22 @@ class DatesModel extends DatabaseModel
      * @return array The array of formatted date data.
      * @throws Exception If an error occurs during the database operation.
      */
-    public function getDatesPerProject(string $projectUuid): array
+    public function getDatesPerProject(array $projectUuids): array
     {
         try {
             // Check if project UUIDs are provided
-            if (empty($projectUuid)) {
+            if (empty($projectUuids)) {
                 throw new Exception("Project UUID is empty");
             }
 
+            // Create placeholders for the UUIDs in the SQL query
+            $placeholders = implode(', ', array_fill(0, count($projectUuids), 'UUID_TO_BIN(?)'));
+
             // Build the SQL query
-            $datesQuery = "SELECT start_date, end_date FROM project_dates WHERE project_id=UUID_TO_BIN('$projectUuid')";
+            $datesQuery = "SELECT start_date, end_date FROM project_dates WHERE project_id IN ($placeholders)";
 
             // Execute the SQL query and replace the placeholders with the UUIDs
-            $datesResults = $this->fetchAll($datesQuery);
+            $datesResults = $this->fetchAll($datesQuery, $projectUuids);
 
             // Format the results according to the expected output format
             $formattedResults = [];

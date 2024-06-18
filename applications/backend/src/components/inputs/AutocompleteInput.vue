@@ -116,7 +116,6 @@ export default {
     setResult(result) {
       this.searchTerm = result.label
       this.selectedValue = result.value
-      console.log('setResult', result)
 
       this.isOpen = false
 
@@ -133,7 +132,6 @@ export default {
         // this.isOpen = false
         // this.$emit('update:modelValue', this.results[0].value)
       }
-      console.log('onChange', event)
     },
     onInput(event) {
       this.searchTerm = event.target.value

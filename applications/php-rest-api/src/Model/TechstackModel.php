@@ -70,7 +70,7 @@ class TechstackModel extends DatabaseModel
             // Define the SQL query to retrieve techstack information with associated data
             $query = "
                 SELECT
-                    BIN_TO_UUID(t.uuid) as uuid,
+                    BIN_TO_UUID(t.uuid) AS uuid,
                     t.name,
                     (
                         SELECT
@@ -78,8 +78,8 @@ class TechstackModel extends DatabaseModel
                         FROM
                             techstack_type tt
                         WHERE
-                            id=t.type
-                    ) as type,
+                            id = t.type
+                    ) AS type,
                     t.expertise_level,
                     t.flag_important,
                     (
@@ -88,18 +88,19 @@ class TechstackModel extends DatabaseModel
                         FROM
                             project_dates p
                         JOIN
-                            project_techstack pt ON p.project_id = pt.project_id
+                            project_techstack pt2 ON p.project_id = pt2.project_id
                         WHERE
-                            pt.techstack_id = t.uuid
+                            pt2.techstack_id = t.uuid
                     ) AS last_usage_date,
-                    COUNT(DISTINCT pt.project_id) AS project_count
+                    COUNT(DISTINCT pt.project_id) AS project_count,
+                    GROUP_CONCAT(DISTINCT BIN_TO_UUID(pt.project_id)) as project_uuids
                 FROM
                     techstack t
                 LEFT JOIN
                     project_techstack pt ON t.uuid = pt.techstack_id
                 GROUP BY
                     t.uuid, t.name, type, t.expertise_level, t.flag_important
-                LIMIT :limit
+                LIMIT :limit;
             ";
 
             // Define the parameters for the query
