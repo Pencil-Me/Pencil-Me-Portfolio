@@ -72,9 +72,15 @@
                 {{ data.label }}
               </div>
               <div class="tech_info-box">
-                <div *ngIf="data.project_count" class="tech_project-count">Projekte: <span>{{ data.project_count }}</span></div>
-                <div *ngIf="data.project_years" class="tech_year-count">Erfahrung: <span>{{ years(data.project_years) }}</span></div>
-                <div *ngIf="data.lastTouch" class="tech_last-touch">Zuletzt: <span>{{ data.lastTouch }}</span></div>
+                <div *ngIf="data.project_count" class="tech_project-count">
+                  Projekte: <span>{{ data.project_count }}</span>
+                </div>
+                <div *ngIf="data.project_years" class="tech_year-count">
+                  Erfahrung: <span>{{ years(data.project_years) }}</span>
+                </div>
+                <div *ngIf="data.lastTouch" class="tech_last-touch">
+                  Zuletzt: <span>{{ data.lastTouch }}</span>
+                </div>
               </div>
             </li>
           </ul>

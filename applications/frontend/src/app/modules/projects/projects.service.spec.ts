@@ -56,6 +56,7 @@ describe('ProjectsService', () => {
     expertise_level: 80,
     flag_important: false,
     project_count: 5,
+    project_dates: [],
   };
   const mockTechstackData: TECHSTACKDATASTATE = {
     ...stateBasics,
@@ -140,6 +141,7 @@ describe('ProjectsService', () => {
           type: 'FEDEV',
           expertise_level: 80,
           flag_important: false,
+          project_dates: [],
         },
         {
           name: 'FETech2',
@@ -148,6 +150,7 @@ describe('ProjectsService', () => {
           type: 'FEDEV',
           expertise_level: 85,
           flag_important: false,
+          project_dates: [],
         },
         {
           name: 'BETech1',
@@ -156,6 +159,7 @@ describe('ProjectsService', () => {
           type: 'BEDEV',
           expertise_level: 80,
           flag_important: false,
+          project_dates: [],
         },
       ],
       loadStatus: 'COMPLETED',

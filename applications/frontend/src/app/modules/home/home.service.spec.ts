@@ -75,6 +75,7 @@ describe('HomeService', () => {
           type: 'FEDEV',
           expertise_level: 80,
           flag_important: false,
+          project_dates: [],
         },
         {
           name: 'FETech2',
@@ -83,6 +84,7 @@ describe('HomeService', () => {
           type: 'FEDEV',
           expertise_level: 85,
           flag_important: false,
+          project_dates: [],
         },
         {
           name: 'BETech1',
@@ -91,6 +93,7 @@ describe('HomeService', () => {
           type: 'BEDEV',
           expertise_level: 80,
           flag_important: false,
+          project_dates: [],
         },
       ],
       loadStatus: 'COMPLETED',
@@ -138,11 +141,10 @@ describe('HomeService', () => {
       },
     });
 
-    service.customers$.subscribe((customers: string[]) => {
+    service.customers$.subscribe((customers: { url: string; alt: string }[]) => {
       if (customers.length > 0) {
-        expect(customers.length).toBe(1);
-        expect(customers).toContain('Customer1');
-        expect(customers).not.toContain('Customer2');
+        expect(customers.length).toBe(8);
+        expect(customers).toContain(jasmine.objectContaining({ url: './assets/logos/arvato.png', alt: 'arvato Bertelsmann' }));
         done();
       }
     });

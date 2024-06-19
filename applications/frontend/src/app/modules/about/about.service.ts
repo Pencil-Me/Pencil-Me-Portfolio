@@ -63,33 +63,39 @@ export class AboutService {
     let currentEndDate: Date = new Date('01.01.1900');
 
     const techItemDates = [...techItem.project_dates];
-    const sorted = techItemDates
-      .sort((a, b) => {
-        let aEndDate: number = new Date('01.01.1900').getTime();
-        let bEndDate: number = new Date('01.01.1900').getTime();
+    const sorted = techItemDates.sort((a, b) => {
+      let aEndDate: number = new Date('01.01.1900').getTime();
+      let bEndDate: number = new Date('01.01.1900').getTime();
 
-        if (!a.start_date) aEndDate = new Date().getTime();
-        if (new Date(a.start_date).getTime() > aEndDate) aEndDate = new Date(a.start_date).getTime();
+      if (!a.start_date) aEndDate = new Date().getTime();
+      if (new Date(a.start_date).getTime() > aEndDate) aEndDate = new Date(a.start_date).getTime();
 
-        if (!b.start_date) bEndDate = new Date().getTime();
-        if (new Date(b.start_date).getTime() > bEndDate) bEndDate = new Date(b.start_date).getTime();
+      if (!b.start_date) bEndDate = new Date().getTime();
+      if (new Date(b.start_date).getTime() > bEndDate) bEndDate = new Date(b.start_date).getTime();
 
-        return aEndDate - bEndDate;
-      })
-    sorted.forEach(date => {
+      return aEndDate - bEndDate;
+    });
+    sorted.forEach((date) => {
       if (currentStartDate.getTime() === new Date('01.01.1900').getTime()) currentStartDate = new Date(date.start_date);
-      if (currentEndDate.getTime() === new Date('01.01.1900').getTime()) currentEndDate = date.end_date ? new Date(date.end_date) : new Date();
+      if (currentEndDate.getTime() === new Date('01.01.1900').getTime())
+        currentEndDate = date.end_date ? new Date(date.end_date) : new Date();
 
       if (currentEndDate.getTime() < new Date(date.start_date).getTime()) {
-        monthSum += Math.max(0, (currentEndDate.getFullYear() - currentStartDate.getFullYear()) * 12 - currentStartDate.getMonth() + currentEndDate.getMonth());
+        monthSum += Math.max(
+          0,
+          (currentEndDate.getFullYear() - currentStartDate.getFullYear()) * 12 - currentStartDate.getMonth() + currentEndDate.getMonth(),
+        );
         currentStartDate = new Date(date.start_date);
       }
       if (currentEndDate.getTime() < new Date(date.end_date).getTime()) currentEndDate = new Date(date.end_date) ?? new Date();
-    })
+    });
 
     if (currentStartDate.getTime() != new Date('01.01.1900').getTime()) {
       if (currentEndDate.getTime() === new Date('01.01.1900').getTime()) currentEndDate = new Date();
-      monthSum += Math.max(0, (currentEndDate.getFullYear() - currentStartDate.getFullYear()) * 12 - currentStartDate.getMonth() + currentEndDate.getMonth());
+      monthSum += Math.max(
+        0,
+        (currentEndDate.getFullYear() - currentStartDate.getFullYear()) * 12 - currentStartDate.getMonth() + currentEndDate.getMonth(),
+      );
     }
 
     const techData: ITech = {

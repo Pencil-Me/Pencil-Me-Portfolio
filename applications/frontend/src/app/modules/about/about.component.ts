@@ -47,9 +47,9 @@ export class AboutComponent {
   }
 
   years(data: number = 0): string {
-    let returnValue = (Math.round(data) > 1) ? `${Math.round(data)}+ Jahre` : `${Math.round(data)}+ Jahr`;
-    if (Math.round(data) <= 0) returnValue = `${data * 12} Monate`
-    if (data * 12 <= 0) return ''
+    let returnValue = Math.round(data) > 1 ? `${Math.round(data)}+ Jahre` : `${Math.round(data)}+ Jahr`;
+    if (Math.round(data) <= 0) returnValue = `${data * 12} Monate`;
+    if (data * 12 <= 0) return '';
     return returnValue;
   }
 

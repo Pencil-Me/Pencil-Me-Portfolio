@@ -27,6 +27,7 @@ describe('KnowledgeService', () => {
       last_usage_date: new Date('2023-02-05'),
       flag_important: false,
       project_count: 5,
+      project_dates: [],
     };
     const techstack: TECHSTACK[] = [{ ...techstackBasic }];
     apiClientService.get.and.returnValue(of(techstack));

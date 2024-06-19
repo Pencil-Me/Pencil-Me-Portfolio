@@ -35,6 +35,7 @@ describe('KnowledgeEffects', () => {
           last_usage_date: new Date('2023-02-05'),
           flag_important: false,
           project_count: 5,
+          project_dates: [],
         },
       ];
       const action = fromKnowledge.actions.GetTechstack();

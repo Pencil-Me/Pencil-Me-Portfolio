@@ -71,6 +71,7 @@ describe('AboutService', () => {
           last_usage_date: new Date('2023-02-05'),
           flag_important: false,
           project_count: 5,
+          project_dates: [],
         },
         {
           type: 'FEDEV',
@@ -79,6 +80,7 @@ describe('AboutService', () => {
           last_usage_date: new Date('2023-02-05'),
           flag_important: false,
           project_count: 6,
+          project_dates: [],
         },
         {
           type: 'BEDEV',
@@ -87,6 +89,7 @@ describe('AboutService', () => {
           last_usage_date: new Date('2024-02-05'),
           flag_important: false,
           project_count: 2,
+          project_dates: [],
         },
         {
           type: 'BEDEV',
@@ -95,6 +98,7 @@ describe('AboutService', () => {
           last_usage_date: new Date('2015-02-05'),
           flag_important: false,
           project_count: 2,
+          project_dates: [],
         },
         {
           type: 'FEDEV',
@@ -103,6 +107,7 @@ describe('AboutService', () => {
           last_usage_date: new Date('2021-02-05'),
           flag_important: false,
           project_count: 10,
+          project_dates: [],
         },
       ];
 

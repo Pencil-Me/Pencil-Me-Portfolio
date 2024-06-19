@@ -99,7 +99,7 @@ export class ProjectsService {
         label: item.name,
         position: item.position?.replace(/\//g, ' / ') ?? '',
         content: item.content ?? '',
-        customer: item.customers?.map((e) => (e.name.replace('&amp;', '&'))).join(', ') ?? '',
+        customer: item.customers?.map((e) => e.name.replace('&amp;', '&')).join(', ') ?? '',
         location:
           item.customers
             ?.map((e) => e.location)
