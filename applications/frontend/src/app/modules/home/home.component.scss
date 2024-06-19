@@ -2,20 +2,131 @@ $content-width: 1000px;
 
 .hero {
   display: flex;
+  position: relative;
   min-height: fit-content;
   height: 100vh;
   max-height: 800px;
   align-items: center;
   justify-content: center;
   background: rgb(36,0,0);
-  background: linear-gradient(319deg, rgba(36,0,0,1) 0%, rgba(56,6,6,1) 67%, rgba(91,39,39,1) 96%);
-  background-size: cover;
+  z-index: 1;
   color: #cba0a0;
+  overflow: hidden;
+
+  .hero-background {
+    background: radial-gradient(farthest-corner at top, rgb(108, 41, 41), rgba(56, 6, 6, 1), rgb(28, 4, 4));
+    filter: blur(50px);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    animation: bg 10s alternate infinite both;
+
+    @keyframes bg {
+      from {
+        background-position: 100%;
+        background-size: 50%;
+      }
+      to {
+        background-position: -100%;
+        background-size: 150%;
+      }
+    }
+
+    .animated_blob {
+      border-radius: 50%;
+      position: absolute;
+
+      &._1 {
+        top: 20%;
+        width: 40%;
+        animation: ap-1 7s alternate infinite both cubic-bezier(1,0.1,0.58,1);
+        background: radial-gradient(rgb(63, 9, 9), rgb(33, 3, 3));
+        z-index: 0;
+      }
+      &._2 {
+        height: 30%;
+        width: 30%;
+        animation: ap-2 9s alternate infinite both;
+        background: radial-gradient(rgb(80, 31, 31), rgb(108, 41, 41));
+        z-index: 1;
+      }
+      &._3 {
+        animation: ap-3 10s alternate infinite both;
+        background: radial-gradient(rgb(108, 41, 41), rgb(79, 20, 20));
+        z-index: 2;
+      }
+      @keyframes ap-1 {
+        from {
+          left: calc(-1 * random(51) / 2) + px;
+          height: 60%;
+        }
+        to {
+          left: random(2) * 40%;
+          height: 40%;
+        }
+      }
+      @keyframes ap-2 {
+        from {
+          opacity: .25;
+          left: random(50) - 16%;
+          top: random(2) - 54%;
+        }
+        to {
+          opacity: 1;
+          left:  random(2) * 54%;
+          top: random(10) * 8%;
+        }
+      }
+      @keyframes ap-3 {
+        from {
+          opacity: 1;
+          width: 60%;
+          height: 70%;
+          left: random(20) * 10%;
+          top: random(4) * 4%;
+        }
+        to {
+          width: 80%;
+          height: 40%;
+          opacity: .25;
+          left: random(5) * 4%;
+          top: (random(10) + 70%);
+        }
+      }
+    }
+
+    //&:after {
+    //  content: '';
+    //  position: absolute;
+    //  top: 0;
+    //  left: 0;
+    //  right: 0;
+    //  bottom: 0;
+    //  background: linear-gradient(233deg, rgba(36, 0, 0, 1), rgba(56, 6, 6, 1), rgb(138, 40, 40), rgba(91, 39, 39, 1));
+    //  background-size: cover;
+    //  background-blend-mode: hard-light;
+    //  -webkit-animation: hue-rotate 3s linear infinite;
+    //  animation: hue-rotate 3s linear infinite;
+    //  z-index: -1;
+    //}
+  }
 
   .hero-container {
     > .hero-content {
       display: inline-block;
       max-width: 800px;
+    }
+  }
+
+  @keyframes hue-rotate {
+    from {
+      filter: hue-rotate(0);
+    }
+    to {
+      filter: hue-rotate(80deg);
     }
   }
 }
