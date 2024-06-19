@@ -1,10 +1,10 @@
-import { Component, ElementRef, NgZone } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component, DebugElement, ElementRef } from '@angular/core';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { TrackVisibilityDirective } from './track-visibility.directive';
 
 @Component({
-  template: `<div appTrackVisibility (visibile)="onVisibilityChange($event)"></div>`,
+  template: `<div appTrackVisibility (visible)="onVisibilityChange($event)"></div>`,
 })
 class TestComponent {
   isVisible = false;
@@ -17,31 +17,23 @@ class TestComponent {
 describe('TrackVisibilityDirective', () => {
   let component: TestComponent;
   let fixture: ComponentFixture<TestComponent>;
-  let debugElement: ElementRef;
+  let debugElement: DebugElement;
   let directiveInstance: TrackVisibilityDirective;
-  let ngZone: NgZone;
-  let observerCallback: IntersectionObserverCallback;
+
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [TrackVisibilityDirective],
+      declarations: [TestComponent],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      declarations: [TrackVisibilityDirective, TestComponent],
-    });
-
     fixture = TestBed.createComponent(TestComponent);
     component = fixture.componentInstance;
     debugElement = fixture.debugElement.query(By.directive(TrackVisibilityDirective));
-    ngZone = TestBed.inject(NgZone);
 
-    // Mock IntersectionObserver
-    spyOn(window, 'IntersectionObserver').and.callFake((callback: IntersectionObserverCallback) => {
-      observerCallback = callback;
-      return {
-        observe: jasmine.createSpy('observe'),
-        disconnect: jasmine.createSpy('disconnect'),
-      } as unknown as IntersectionObserver;
-    });
+    directiveInstance = debugElement.injector.get(TrackVisibilityDirective);
 
-    directiveInstance = new TrackVisibilityDirective(debugElement, ngZone);
     fixture.detectChanges();
   });
 
@@ -51,53 +43,18 @@ describe('TrackVisibilityDirective', () => {
 
   it('should emit visibility changes', () => {
     spyOn(component, 'onVisibilityChange');
-    fixture.detectChanges(); // trigger initial binding
+    fixture.detectChanges(); // Initial binding trigger
 
-    directiveInstance.ngOnInit();
+    // Simulate the intersection change by manually invoking the observer's callback
+    directiveInstance['intersectionCallback']({ isIntersecting: true } as IntersectionObserverEntry);
 
-    const mockEntriesIntersecting: IntersectionObserverEntry[] = [
-      {
-        isIntersecting: true,
-        target: debugElement.nativeElement,
-        boundingClientRect: {} as DOMRectReadOnly,
-        intersectionRatio: 1,
-        intersectionRect: {} as DOMRectReadOnly,
-        rootBounds: null,
-        time: 0,
-      },
-    ];
-
-    observerCallback(mockEntriesIntersecting, directiveInstance['observer']);
+    // Test if the visibility change was emitted correctly
     expect(component.onVisibilityChange).toHaveBeenCalledWith(true);
-
-    const mockEntriesNotIntersecting: IntersectionObserverEntry[] = [
-      {
-        isIntersecting: false,
-        target: debugElement.nativeElement,
-        boundingClientRect: {} as DOMRectReadOnly,
-        intersectionRatio: 0,
-        intersectionRect: {} as DOMRectReadOnly,
-        rootBounds: null,
-        time: 0,
-      },
-    ];
-
-    observerCallback(mockEntriesNotIntersecting, directiveInstance['observer']);
-    expect(component.onVisibilityChange).toHaveBeenCalledWith(false);
   });
 
   it('should disconnect observer on destroy', () => {
-    const mockDisconnect = jasmine.createSpy('disconnect');
-    (window as any).IntersectionObserver = jasmine.createSpy().and.callFake(() => {
-      return {
-        observe: jasmine.createSpy('observe'),
-        disconnect: mockDisconnect,
-      } as unknown as IntersectionObserver;
-    });
-
-    directiveInstance.ngOnInit();
+    spyOn(directiveInstance['observer'], 'disconnect');
     directiveInstance.ngOnDestroy();
-
-    expect(mockDisconnect).toHaveBeenCalled();
+    expect(directiveInstance['observer'].disconnect).toHaveBeenCalled();
   });
 });

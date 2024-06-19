@@ -20,8 +20,7 @@ const easeOutQuad = (x: number): number => x * (2 - x);
 
 @Directive({
   selector: '[appCountUp]',
-  providers: [Destroy],
-  standalone: true, // Indicating that the directive is standalone
+  standalone: true,
 })
 export class CountUpDirective implements OnInit {
   private readonly count$ = new BehaviorSubject(0);
@@ -29,22 +28,14 @@ export class CountUpDirective implements OnInit {
 
   private readonly currentCount$ = combineLatest([this.count$, this.duration$]).pipe(
     switchMap(([count, duration]) => {
-      // get the time when animation is triggered
       const startTime = animationFrameScheduler.now();
 
       return interval(0, animationFrameScheduler).pipe(
-        // calculate elapsed time
         map(() => animationFrameScheduler.now() - startTime),
-        // calculate progress
         map((elapsedTime) => elapsedTime / duration),
-        // complete when progress is greater than 1
         takeWhile((progress) => progress <= 1),
-        // apply quadratic ease-out
-        // for faster start and slower end of counting
         map(easeOutQuad),
-        // calculate current count
         map((progress) => Math.round(progress * count)),
-        // make sure that last emitted value is count
         endWith(count),
         distinctUntilChanged(),
       );
@@ -64,7 +55,6 @@ export class CountUpDirective implements OnInit {
   constructor(
     private readonly elementRef: ElementRef,
     private readonly renderer: Renderer2,
-    private readonly destroy$: Destroy,
   ) {}
 
   ngOnInit(): void {
@@ -72,7 +62,7 @@ export class CountUpDirective implements OnInit {
   }
 
   private displayCurrentCount(): void {
-    this.currentCount$.pipe(takeUntil(this.destroy$)).subscribe((currentCount) => {
+    this.currentCount$.subscribe((currentCount) => {
       this.renderer.setProperty(this.elementRef.nativeElement, 'innerHTML', currentCount);
     });
   }
