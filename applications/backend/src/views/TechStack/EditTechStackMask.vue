@@ -4,7 +4,7 @@ import TextInput from '@/components/inputs/TextInput.vue'
 import { mapActions, mapGetters } from 'vuex'
 import SelectInput from '@/components/inputs/SelectInput.vue'
 import type { PropType } from 'vue'
-import type { TechStackType } from '@/views/TechStack/TechStackTypes'
+import type { TTechStack } from '@/views/TechStack/TechStackTypes'
 
 export default {
   components: {
@@ -20,7 +20,7 @@ export default {
   },
   props: {
     currentTechStack: {
-      type: Object as PropType<TechStackType>,
+      type: Object as PropType<TTechStack>,
       required: true
     },
     debug: {

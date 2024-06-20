@@ -8,7 +8,7 @@ import { mapActions, mapGetters } from 'vuex'
 import CardModal from '@/views/CardModal.vue'
 import AddTechStack from '@/views/TechStack/AddTechStack.vue'
 import AutocompleteInput from '@/components/inputs/AutocompleteInput.vue'
-import { type CustomerType } from '@/views/Customers/CustomerTypes'
+import { type TCustomer } from '@/views/Customers/CustomerTypes'
 import type { PropType } from 'vue'
 
 export default {
@@ -25,7 +25,7 @@ export default {
   data() {},
   props: {
     currentCustomer: {
-      type: Object as PropType<CustomerType>,
+      type: Object as PropType<TCustomer>,
       required: true
     },
     debug: {

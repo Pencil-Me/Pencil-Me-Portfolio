@@ -2,7 +2,7 @@
 import LoadingBar from '@/components/LoadingBar.vue'
 import { mapActions, mapGetters } from 'vuex'
 import EditCustomerMask from '@/views/Customers/EditCustomerMask.vue'
-import type { CustomerType } from '@/views/Customers/CustomerTypes'
+import type { TCustomer } from '@/views/Customers/CustomerTypes'
 
 export default {
   components: {
@@ -21,7 +21,7 @@ export default {
         id: this.currentCustomer.id,
         name: this.currentCustomer.name,
         location: this.currentCustomer.location
-      } as CustomerType
+      } as TCustomer
     }
   },
   props: ['id'],

@@ -8,7 +8,7 @@ import { mapActions, mapGetters } from 'vuex'
 import CardModal from '@/views/CardModal.vue'
 import AddTechStack from '@/views/TechStack/AddTechStack.vue'
 import AutocompleteInput from '@/components/inputs/AutocompleteInput.vue'
-import { type ProjectType } from '@/views/Projects/ProjectTypes'
+import { type TProject } from '@/views/Projects/ProjectTypes'
 import type { PropType } from 'vue'
 
 export default {
@@ -29,12 +29,16 @@ export default {
       techstack_id: '',
       customer_id: '',
       techToAdd: '',
-      showingModal: false
+      showingModal: false,
+      yes_no_options: [
+        { label: 'no', value: 1 },
+        { label: 'yes', value: 0 }
+      ]
     }
   },
   props: {
     currentProject: {
-      type: Object as PropType<ProjectType>,
+      type: Object as PropType<TProject>,
       required: true
     },
     debug: {
@@ -160,6 +164,9 @@ export default {
     <div v-if="debug">currentProject: {{ currentProject }}<br /></div>
     <form class="container mx-auto px-4 mt-12 mb-12">
       <div class="mb-4">
+        <select-input :label="'show'" v-model="currentProject.show" :options="yes_no_options" />
+      </div>
+      <div class="mb-4">
         <select-input :label="'type'" v-model="currentProject.type" :options="project_options" />
       </div>
       <div class="mb-4">
@@ -210,10 +217,10 @@ export default {
         </div>
       </div>
       <div class="mb-4">
-        <textarea-input :label="'contentshort'" v-model="currentProject.contentshort" />
+        <textarea-input :label="'contentshort'" v-model="currentProject.content_short" />
       </div>
       <div class="mb-4">
-        <textarea-input :label="'contentlong'" v-model="currentProject.contentlong" />
+        <textarea-input :label="'contentlong'" v-model="currentProject.content_long" />
       </div>
       <div class="mb-4">
         <textarea-input :label="'contentold'" v-model="currentProject.content" />

@@ -1,7 +1,7 @@
 <script lang="ts">
 import { mapActions } from 'vuex'
 import EditCustomerMask from '@/views/Customers/EditCustomerMask.vue'
-import type { CustomerType } from '@/views/Customers/CustomerTypes'
+import type { TCustomer } from '@/views/Customers/CustomerTypes'
 
 export default {
   components: {
@@ -13,7 +13,7 @@ export default {
       customer: {
         name: '',
         location: ''
-      } as CustomerType
+      } as TCustomer
     }
   },
   created() {},

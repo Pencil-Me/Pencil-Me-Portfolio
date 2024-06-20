@@ -22,6 +22,13 @@
   </div>
 </template>
 
+<style>
+textarea {
+  height: 7rem;
+  padding: .25rem;
+}
+</style>
+
 <script>
 export default {
   name: 'CustomInput',

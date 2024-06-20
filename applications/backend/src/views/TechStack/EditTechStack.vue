@@ -1,6 +1,6 @@
 <script lang="ts">
 import { mapActions, mapGetters } from 'vuex'
-import type { TechStackType } from '@/views/TechStack/TechStackTypes'
+import type { TTechStack } from '@/views/TechStack/TechStackTypes'
 import EditTechStackMask from '@/views/TechStack/EditTechStackMask.vue'
 
 export default {
@@ -25,11 +25,11 @@ export default {
   methods: {
     ...mapActions(['setCurrentTechStackItem', 'updateTechStack', 'deleteTechStack']),
 
-    submitEvent(techStack: TechStackType) {
+    submitEvent(techStack: TTechStack) {
       this.updateTechStack(techStack)
       this.$router.push({ name: 'TechStackList' })
     },
-    deleteEvent(techStack: TechStackType) {
+    deleteEvent(techStack: TTechStack) {
       this.deleteTechStack(techStack)
       this.$router.push({ name: 'TechStackList' })
     },

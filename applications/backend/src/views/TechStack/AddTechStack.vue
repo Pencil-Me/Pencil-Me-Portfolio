@@ -1,6 +1,6 @@
 <script lang="ts">
 import EditTechStackMask from '@/views/TechStack/EditTechStackMask.vue'
-import type { TechStackType } from '@/views/TechStack/TechStackTypes'
+import type { TTechStack } from '@/views/TechStack/TechStackTypes'
 
 export default {
   components: { EditTechStackMask },
@@ -10,13 +10,13 @@ export default {
         name: '',
         type: '',
         expertise_level: ''
-      } as TechStackType
+      } as TTechStack
     }
   },
   computed: {},
   created() {},
   methods: {
-    submitTechStack(techStack: TechStackType) {
+    submitTechStack(techStack: TTechStack) {
       if (techStack.name != '' && techStack.type != '' && techStack.expertise_level != '') {
         this.$store.dispatch('addTechStack', techStack)
 
