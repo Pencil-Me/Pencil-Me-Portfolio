@@ -106,7 +106,7 @@ export default createStore({
       const cleanedObj = []
       for (let i = 0; i < payload.length; i++) {
         cleanedObj.push({
-          id: payload[i].uuid,
+          id: payload[i].id,
           name: payload[i].name,
           type: payload[i].type,
           expertise_level: payload[i].expertise_level,
@@ -145,7 +145,7 @@ export default createStore({
 
     setCurrentTechStackItem(state, payload) {
       state.currentTechStack = {
-        id: payload.uuid,
+        id: payload.id,
         name: payload.name,
         type: payload.type,
         expertise_level: payload.expertise_level,
@@ -161,7 +161,7 @@ export default createStore({
 
       for (let i = 0; i < payload.length; i++) {
         cleanedObj.push({
-          id: payload[i].uuid,
+          id: payload[i].id,
           name: payload[i].name,
           location: payload[i].location
         })
@@ -179,7 +179,7 @@ export default createStore({
         const cleanedTechObj = []
         for (let j = 0; j < tech.length; j++) {
           cleanedTechObj.push({
-            id: tech[j].uuid,
+            id: tech[j].id,
             name: tech[j].name ?? '',
             type: tech[j].type ?? '',
             expertise_level: tech[j].expertise_level ?? '',
@@ -190,7 +190,7 @@ export default createStore({
         }
 
         cleanedObj.push({
-          id: payload[i].uuid,
+          id: payload[i].id,
           name: payload[i].name,
           type: payload[i].type,
           position: payload[i].position,
@@ -228,7 +228,7 @@ export default createStore({
 
     setCurrentCustomerItem(state, payload) {
       state.currentCustomer = {
-        id: payload.uuid ?? '',
+        id: payload.id ?? '',
         name: payload.name ?? '',
         location: payload.location ?? ''
       }
@@ -242,7 +242,7 @@ export default createStore({
 
       for (let j = 0; j < tech.length; j++) {
         cleanedTechObj.push({
-          id: tech[j].uuid,
+          id: tech[j].id,
           name: tech[j].name ?? '',
           type: tech[j].type ?? '',
           expertise_level: tech[j].expertise_level ?? '',
@@ -256,13 +256,13 @@ export default createStore({
 
       for (let j = 0; j < customers.length; j++) {
         cleanedCustomersObj.push({
-          id: customers[j].uuid,
+          id: customers[j].id,
           name: customers[j].name ?? ''
         })
       }
 
       state.currentProject = {
-        id: payload.uuid,
+        id: payload.id,
         name: payload.name,
         type: payload.type,
         position: payload.position,

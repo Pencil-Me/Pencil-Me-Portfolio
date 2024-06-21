@@ -24,7 +24,9 @@ class ProjectsService {
       this.axiosInstance
         .get('project_types')
         .then((response: { data: IProjectType[] }) => {
-          return response.data.map(e => convertIProjectTypeToTProjectType(e))
+          const returnObj = response.data.map(e => convertIProjectTypeToTProjectType(e))
+          console.log(returnObj)
+          return returnObj
         })
   }
 

@@ -1,14 +1,14 @@
 export interface ICustomer {
-  id?: string
+  uuid: string
   name?: string
   location?: string
 }
-export type TCustomer = Required<Omit<ICustomer, 'id'>> & {
+export type TCustomer = Required<Omit<ICustomer, 'uuid'>> & {
   id?: string
 }
 export function convertICustomerToTCustomer(payload: ICustomer): TCustomer {
   return {
-    id: payload.id,
+    id: payload.uuid,
     name: payload.name ?? '',
     location: payload.location ?? '',
   }

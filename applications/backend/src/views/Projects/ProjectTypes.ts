@@ -10,46 +10,52 @@ export function convertIDatesToTDates(payload: IDates): TDates {
   }
 }
 export interface ITech {
-  id?: string
+  uuid: string
   name?: string
   type?: string
   expertise_level?: string
 }
-export type TTech = Required<ITech>
+export type TTech = Required<Omit<ITech, 'uuid'>> & {
+  id?: string
+}
 export function convertITechToTTech(payload: ITech): TTech {
   return {
-    id: payload.id ?? '',
+    id: payload.uuid ?? '',
     name: payload.name ?? '',
     type: payload.type ?? '',
     expertise_level: payload.expertise_level ?? '',
   }
 }
 export interface ICustomer {
-  id: string
+  uuid: string
   name: string
   location: string
 }
-export type TCustomer = Required<ICustomer>
+export type TCustomer = Required<Omit<ICustomer, 'uuid'>> & {
+  id?: string
+}
 export function convertICustomerToTCustomer(payload: ICustomer): TCustomer {
   return {
-    id: payload.id ?? '',
+    id: payload.uuid ?? '',
     name: payload.name ?? '',
     location: payload.location ?? '',
   }
 }
 export interface IProjectType {
-  id?: string;
+  uuid: string;
   type?: string;
 }
-export type TProjectType = Required<IProjectType>
+export type TProjectType = Required<Omit<IProjectType, 'uuid'>> & {
+  id?: string
+}
 export function convertIProjectTypeToTProjectType(payload: IProjectType): TProjectType {
   return {
-    id: payload.id ?? '',
+    id: payload.uuid ?? '',
     type: payload.type ?? '',
   }
 }
 export interface IProject {
-  id?: string
+  uuid: string;
   name?: string
   position?: string
   customer?: string
@@ -63,7 +69,7 @@ export interface IProject {
   tech?: ITech[]
   show?: boolean
 }
-export type TProject = Required<Omit<IProject, 'id'|'customers'|'dates'|'tech'>> & {
+export type TProject = Required<Omit<IProject, 'uuid'|'customers'|'dates'|'tech'>> & {
   id?: string
   customers: TCustomer[]
   dates: TDates[]
@@ -71,7 +77,7 @@ export type TProject = Required<Omit<IProject, 'id'|'customers'|'dates'|'tech'>>
 }
 export function convertIProjectToTProject(payload: IProject): TProject {
   return {
-    id: payload.id,
+    id: payload.uuid,
     name: payload.name ?? '',
     show: !!payload.show,
     position: payload.position ?? '',
