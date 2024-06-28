@@ -127,7 +127,7 @@ class TechStackRepository():
         update_techstack = techstack_helper.update_techstack(update_techstack.to_dict())
         affected_rows = update_techstack['affected_rows']
 
-        logging.debug('Result: %s', affected_rows)
+        # logging.debug('Result: %s', affected_rows)
 
         if affected_rows > 0:
             response_data = {"message": "UPDATED_SUCCESSFULLY"}
@@ -147,7 +147,7 @@ class TechStackRepository():
 
         affected_rows = techstack_helper.delete_techstack(techstack_uuid)
 
-        logging.debug('Result techstacks: %s', affected_rows['techstack'])
+        # logging.debug('Result techstacks: %s', affected_rows['techstack'])
 
         if affected_rows["techstack"] > 0:
             response_data = {"message": "DELETED_SUCCESSFULLY"}

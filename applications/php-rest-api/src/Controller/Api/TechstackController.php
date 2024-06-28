@@ -33,7 +33,12 @@ class TechstackController extends BaseController
 
             foreach ($techstackData as &$techstack) {
                 // Add Dates
-                $techstack['dates'] = $this->getDatesPerTechstack($techstack['project_uuids']);
+                $techstackUUIDs = $techstackModel->getProjectsPerTechstacks($techstack['uuid'], $limit);
+                // Transform the results into a flat array
+                $flatTechstackUUIDsArray = array_map(function($row) {
+                    return $row['uuid'];
+                }, $techstackUUIDs);
+                $techstack['dates'] = $this->getDatesPerTechstack($flatTechstackUUIDsArray);
             }
 
             // Format the results according to the expected output format
@@ -66,10 +71,9 @@ class TechstackController extends BaseController
      * @return array Returns an array of date data.
      * @throws \Exception
      */
-    private function getDatesPerTechstack(string | null $projectUuidsString): array
+    private function getDatesPerTechstack(array | null $projectUuids): array
     {
-        if ($projectUuidsString == null) { return []; }
-        $projectUuids = explode(',', $projectUuidsString);
+        if ($projectUuids == null || empty($projectUuids)) { return []; }
 
         $datesModel = new DatesModel();
         // Implement logic to retrieve dates per project

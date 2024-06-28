@@ -6,7 +6,7 @@ import { fromKnowledge } from '@app/state/knowledge';
 import { AppState } from '@app/state';
 import { ITech, ITechCategory } from '@modules/about/about.models';
 import { selectTechstackState } from '@app/state/knowledge/knowledge.selectors';
-import { TECHSTACK, TECHSTACKDATASTATE } from '@app/state/knowledge/knowledge.models';
+import { DATE, TECHSTACK, TECHSTACKDATASTATE } from '@app/state/knowledge/knowledge.models';
 
 @Injectable({
   providedIn: 'root',
@@ -49,6 +49,56 @@ export class AboutService {
     return techCategories;
   }
 
+  countUsageTimeInMonth(dates: DATE[]): number {
+    if (dates.length === 0) return 0;
+
+    const today = new Date();
+
+    // Filter out entries with null start_date and set end_date to today if it is null
+    const filteredDates = dates
+      .filter((date) => date.start_date !== null)
+      .map((date) => ({
+        start_date: new Date(date.start_date),
+        end_date: date.end_date ? new Date(date.end_date) : today,
+      }));
+
+    if (filteredDates.length === 0) return 0;
+
+    // Sort dates by start_date
+    const sortedDates = filteredDates.sort((a, b) => a.start_date.getTime() - b.start_date.getTime());
+
+    const mergedPeriods: DATE[] = [];
+    let currentPeriod = sortedDates[0];
+
+    for (let i = 1; i < sortedDates.length; i++) {
+      const date = sortedDates[i];
+      if (date.start_date <= currentPeriod.end_date) {
+        // Extend the current period if overlapping
+        currentPeriod.end_date = new Date(Math.max(currentPeriod.end_date.getTime(), date.end_date.getTime()));
+      } else {
+        // Push the current period and start a new one
+        mergedPeriods.push(currentPeriod);
+        currentPeriod = date;
+      }
+    }
+    // Push the last period
+    mergedPeriods.push(currentPeriod);
+
+    // Calculate the total months
+    let totalMonths = 0;
+    mergedPeriods.forEach((period) => {
+      const start = period.start_date;
+      const end = period.end_date;
+
+      const yearsDifference = end.getFullYear() - start.getFullYear();
+      const monthsDifference = end.getMonth() - start.getMonth();
+
+      totalMonths += yearsDifference * 12 + monthsDifference + 1; // +1 to include the start month
+    });
+
+    return totalMonths;
+  }
+
   /**
    * Adds a tech item to the appropriate category in the tech categories array.
    * @param techCategories The array of tech categories.
@@ -57,56 +107,15 @@ export class AboutService {
   private addTechItemToCategories(techCategories: ITechCategory[], techItem: TECHSTACK): void {
     const lastUsageDate = techItem.last_usage_date ? new Date(techItem.last_usage_date) : new Date();
 
-    let monthSum = 0;
-
-    let currentStartDate: Date = new Date('01.01.1900');
-    let currentEndDate: Date = new Date('01.01.1900');
-
-    const techItemDates = [...techItem.project_dates];
-    const sorted = techItemDates.sort((a, b) => {
-      let aEndDate: number = new Date('01.01.1900').getTime();
-      let bEndDate: number = new Date('01.01.1900').getTime();
-
-      if (!a.start_date) aEndDate = new Date().getTime();
-      if (new Date(a.start_date).getTime() > aEndDate) aEndDate = new Date(a.start_date).getTime();
-
-      if (!b.start_date) bEndDate = new Date().getTime();
-      if (new Date(b.start_date).getTime() > bEndDate) bEndDate = new Date(b.start_date).getTime();
-
-      return aEndDate - bEndDate;
-    });
-    sorted.forEach((date) => {
-      if (currentStartDate.getTime() === new Date('01.01.1900').getTime()) currentStartDate = new Date(date.start_date);
-      if (currentEndDate.getTime() === new Date('01.01.1900').getTime())
-        currentEndDate = date.end_date ? new Date(date.end_date) : new Date();
-
-      if (currentEndDate.getTime() < new Date(date.start_date).getTime()) {
-        monthSum += Math.max(
-          0,
-          (currentEndDate.getFullYear() - currentStartDate.getFullYear()) * 12 - currentStartDate.getMonth() + currentEndDate.getMonth(),
-        );
-        currentStartDate = new Date(date.start_date);
-      }
-      if (currentEndDate.getTime() < new Date(date.end_date).getTime()) currentEndDate = new Date(date.end_date) ?? new Date();
-    });
-
-    if (currentStartDate.getTime() != new Date('01.01.1900').getTime()) {
-      if (currentEndDate.getTime() === new Date('01.01.1900').getTime()) currentEndDate = new Date();
-      monthSum += Math.max(
-        0,
-        (currentEndDate.getFullYear() - currentStartDate.getFullYear()) * 12 - currentStartDate.getMonth() + currentEndDate.getMonth(),
-      );
-    }
+    if (this.isOutdatedTech(lastUsageDate)) return;
 
     const techData: ITech = {
       label: techItem.name,
       percent: techItem.expertise_level,
       lastTouch: lastUsageDate.getFullYear().toString(),
       project_count: techItem.project_count ?? 0,
-      project_years: monthSum / 12,
+      project_years: this.countUsageTimeInMonth([...techItem.project_dates]) / 12,
     };
-
-    if (this.isOutdatedTech(lastUsageDate)) return;
 
     const categoryTitle = TechStackTitle[techItem.type];
     const category = techCategories.find((category) => category.title === categoryTitle);

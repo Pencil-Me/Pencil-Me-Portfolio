@@ -92,8 +92,7 @@ class TechstackModel extends DatabaseModel
                         WHERE
                             pt2.techstack_id = t.uuid
                     ) AS last_usage_date,
-                    COUNT(DISTINCT pt.project_id) AS project_count,
-                    GROUP_CONCAT(DISTINCT BIN_TO_UUID(pt.project_id)) as project_uuids
+                    COUNT(DISTINCT pt.project_id) AS project_count
                 FROM
                     techstack t
                 LEFT JOIN
@@ -114,7 +113,44 @@ class TechstackModel extends DatabaseModel
             error_log($e->getMessage());
 
             // Throw an exception to indicate failure
-            throw new Exception("Failed to retrieve customers per project");
+            throw new Exception("getTechstacks");
+        }
+    }
+
+
+    /**
+     * Retrieves techstack information from the database.
+     *
+     * @param int $limit The maximum number of techstacks to retrieve.
+     * @return array Returns an array containing techstack data.
+     * @throws Exception
+     */
+    public function getProjectsPerTechstacks(string $techstackUuid, int $limit): array
+    {
+        try {
+            // Define the SQL query to retrieve techstack information with associated data
+            $query = "
+                SELECT
+                    BIN_TO_UUID(pt.project_id) AS uuid
+                FROM
+                    project_techstack pt
+                WHERE
+                    pt.techstack_id = UUID_TO_BIN(:techstack_id)
+                LIMIT :limit;
+            ";
+
+            // Define the parameters for the query
+            $params = [":limit" => $limit, ":techstack_id" => $techstackUuid];
+            $paramTypes = [":limit" => PDO::PARAM_INT, ":techstack_id" => PDO::PARAM_STR];
+
+            // Execute the query and return the results
+            return $this->fetchAll($query, $params, $paramTypes);
+        } catch (Exception $e) {
+            // Log the error
+            error_log($e->getMessage());
+
+            // Throw an exception to indicate failure
+            throw new Exception("getProjectsPerTechstacks");
         }
     }
 }

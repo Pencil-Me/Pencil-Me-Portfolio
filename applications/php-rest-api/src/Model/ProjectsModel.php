@@ -101,6 +101,8 @@ class ProjectsModel extends DatabaseModel
                     project_techstack pt ON p.uuid = pt.project_id
                 LEFT JOIN
                     project_customer pc ON p.uuid = pc.project_id
+                WHERE
+                    p.public = 1
                 GROUP BY
                     p.uuid,
                     p.type,

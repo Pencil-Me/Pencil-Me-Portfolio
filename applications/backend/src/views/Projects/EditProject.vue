@@ -9,7 +9,7 @@ import CardModal from '@/views/CardModal.vue'
 import AddTechStack from '@/views/TechStack/AddTechStack.vue'
 import AutocompleteInput from '@/components/inputs/AutocompleteInput.vue'
 import EditProjectMask from '@/views/Projects/EditProjectMask.vue'
-import type {Customer, Dates, ProjectType, Tech} from '@/views/Projects/ProjectTypes'
+import { type TProject } from '@/views/Projects/ProjectTypes'
 
 export default {
   components: {
@@ -38,29 +38,18 @@ export default {
     ...mapGetters(['currentProject', 'isLoading']),
 
     project() {
-      return {
-        id: this.currentProject.id,
-        name: this.currentProject.name,
-        position: this.currentProject.position,
-        customer: this.currentProject.customer,
-        location: this.currentProject.location,
-        content: this.currentProject.content,
-        type: this.currentProject.type,
-        dates: this.currentProject.dates as Dates[],
-        tech: this.currentProject.tech as Tech[],
-        customers: this.currentProject.customers as Customer[]
-      } as ProjectType
+      return { ...this.currentProject }
     }
   },
   props: ['id'],
   methods: {
     ...mapActions(['setCurrentProjectItem', 'updateCurrentProject', 'deleteCurrentProject']),
 
-    submitEvent(project) {
+    submitEvent(project: TProject) {
       this.updateCurrentProject(project)
       this.$router.push({ name: 'ProjectList' })
     },
-    deleteEvent(project) {
+    deleteEvent(project: TProject) {
       this.deleteCurrentProject(project)
       this.$router.push({ name: 'ProjectList' })
     },
@@ -74,6 +63,7 @@ export default {
 <template>
   <edit-project-mask
     v-bind:current-project="project"
+    :debug="true"
     @delete-event="deleteEvent($event)"
     @submit-event="submitEvent($event)"
     @cancel-event="cancelEvent()"

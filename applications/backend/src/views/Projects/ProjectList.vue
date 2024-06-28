@@ -13,7 +13,7 @@
           Add Project
         </button>
       </div>
-      <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+      <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         <div class="mt-3" v-for="project in sortedProjects" :key="project.id">
           <ProjectCard :project="project" />
         </div>
@@ -44,7 +44,8 @@ export default {
             id: s.id,
             name: s.name,
             type: s.type,
-            position: s.position.replace( /\//g, ' / ' ),
+            show: s.show,
+            position: s.position.replace(/\//g, ' / '),
             customers: s.customers,
             location: s.location,
             dates:

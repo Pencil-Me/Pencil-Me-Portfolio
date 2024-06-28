@@ -15,7 +15,6 @@ describe('CountUpDirective', () => {
   let component: TestComponent;
   let fixture: ComponentFixture<TestComponent>;
   let debugElement: DebugElement;
-  let rendererSpy: jasmine.SpyObj<Renderer2>;
 
   beforeEach(waitForAsync(() => {
     const rendererMock = jasmine.createSpyObj('Renderer2', ['setProperty']);
@@ -29,7 +28,6 @@ describe('CountUpDirective', () => {
     fixture = TestBed.createComponent(TestComponent);
     component = fixture.componentInstance;
     debugElement = fixture.debugElement.query(By.directive(CountUpDirective));
-    rendererSpy = TestBed.inject(Renderer2) as jasmine.SpyObj<Renderer2>;
 
     fixture.detectChanges();
   }));

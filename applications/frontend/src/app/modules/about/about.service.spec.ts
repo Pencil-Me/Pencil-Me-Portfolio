@@ -120,21 +120,21 @@ describe('AboutService', () => {
               percent: 70,
               lastTouch: '2023',
               project_count: 5,
-              project_years: 0
+              project_years: 0,
             },
             {
               label: 'Vue',
               percent: 90,
               lastTouch: '2023',
               project_count: 6,
-              project_years: 0
+              project_years: 0,
             },
             {
               label: 'Bootstrap',
               percent: 90,
               lastTouch: '2021',
               project_count: 10,
-              project_years: 0
+              project_years: 0,
             },
           ],
         },
@@ -146,7 +146,7 @@ describe('AboutService', () => {
               percent: 85,
               lastTouch: '2024',
               project_count: 2,
-              project_years: 0
+              project_years: 0,
             },
           ],
         },

@@ -74,17 +74,17 @@ class CustomersRepository():
             return response
 
     def get_all_fe(self):
-        logging.debug('###### get_all_fe ########')
+        # logging.debug('###### get_all_fe ########')
 
         results = customer_helper.get_all_customers_fe()
-        logging.debug('results get_all_customers: %s', results)
+        # logging.debug('results get_all_customers: %s', results)
 
         if results is not None and len(results) > 0:
             return_object = [
                 Customer(result).to_disp()
                 for result in results
             ]
-            logging.debug('return_object: %s', return_object)
+            # logging.debug('return_object: %s', return_object)
 
             response = make_response(return_object)
             response.status_code = 200

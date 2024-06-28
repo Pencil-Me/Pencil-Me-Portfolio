@@ -27,7 +27,6 @@ import CustomerCard from '@/views/Customers/CustomerCard.vue'
 import { mapActions, mapGetters } from 'vuex'
 import LoadingBar from '@/components/LoadingBar.vue'
 import SelectInput from '@/components/inputs/SelectInput.vue'
-import formatDate from '@/composables/formatDate'
 
 export default {
   components: {
@@ -46,9 +45,9 @@ export default {
             location: s.location
           }))
           .sort((a, b) => {
-            // Only sort on type if not identical
-            if (a.name < b.name) return -1
-            if (a.name > b.name) return 1
+            // Only sort on name if not identical
+            if (a.name.toUpperCase() < b.name.toUpperCase()) return -1
+            if (a.name.toUpperCase() > b.name.toUpperCase()) return 1
             // Both idential, return 0
             return 0
           }) ?? []

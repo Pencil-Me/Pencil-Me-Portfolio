@@ -1,5 +1,5 @@
 export interface ITechStack {
-  uuid: string
+  uuid?: string
   name?: string
   type?: string
   expertise_level?: string
@@ -7,7 +7,7 @@ export interface ITechStack {
   flag_important?: boolean
   project_count?: string
 }
-export type TTechStack = Required<Omit<ITechStack, 'uuid'|'last_usage'|'project_count'>> & {
+export type TTechStack = Required<Omit<ITechStack, 'uuid' | 'last_usage' | 'project_count'>> & {
   id?: string
   last_usage?: string
   project_count?: string
@@ -20,19 +20,19 @@ export function convertITechStackToTTechStack(payload: ITechStack): TTechStack {
     expertise_level: payload.expertise_level ?? '',
     last_usage: payload.last_usage,
     flag_important: payload.flag_important ?? false,
-    project_count: payload.project_count,
+    project_count: payload.project_count
   }
 }
 export interface ITechStackTypes {
-  uuid: string;
-  type?: string;
+  id: string
+  type?: string
 }
 export type TTechStackTypes = Required<Omit<ITechStackTypes, 'uuid'>> & {
-  id?: string;
+  id?: string
 }
 export function convertITechStackTypesToTTechStackTypes(payload: ITechStackTypes): TTechStackTypes {
   return {
-    id: payload.uuid ?? '',
-    type: payload.type ?? '',
+    id: payload.id ?? '',
+    type: payload.type ?? ''
   }
 }

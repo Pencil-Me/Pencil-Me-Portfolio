@@ -17,6 +17,7 @@ class ProjectHelper(SqlBase):
                 BIN_TO_UUID(p.uuid) as uuid,
                 p.type,
                 p.name,
+                p.public,
                 p.location,
                 p.position,
                 p.content,
@@ -31,6 +32,7 @@ class ProjectHelper(SqlBase):
             GROUP BY
                 uuid,
                 p.type,
+                p.public,
                 p.name,
                 p.location,
                 p.position,
@@ -53,6 +55,7 @@ class ProjectHelper(SqlBase):
                     id=p.type
                 ) as type,
                 p.name,
+                p.public,
                 p.location,
                 p.position,
                 p.content,
@@ -131,6 +134,7 @@ class ProjectHelper(SqlBase):
                 p.id,
                 BIN_TO_UUID(p.uuid) as uuid,
                 p.name,
+                p.public,
                 p.location,
                 p.position,
                 p.content,
@@ -208,15 +212,17 @@ class ProjectHelper(SqlBase):
         return execute_result
 
     def insert_project_dates(self, data):
-        #logging.debug('###### insert_project_dates ########')
-        #logging.debug('data: %s', data)
+        # logging.debug('###### insert_project_dates ########')
+        # logging.debug('data: %s', data)
 
         if data is not None and len(data) <= 0:
             return 0
 
         project_id = data['uuid']
         dates = data['dates']
-        data_to_save = [{'project_id': project_id, 'start_date': date['start_date'], 'end_date': date['end_date']} for date in dates]
+        data_to_save = [{'project_id': project_id,
+                         'start_date': date['start_date'],
+                         'end_date': None if date['end_date'] == '' else date['end_date']} for date in dates]
 
         uuid_keys = ['project_id']
         table_name = 'project_dates'
@@ -258,7 +264,8 @@ class ProjectHelper(SqlBase):
             'location': data['location'],
             'position': data['position'],
             'content': data['content'],
-            'type': data['type']
+            'type': data['type'],
+            'public': data['public']
         }]
 
         uuid_keys = ['uuid']

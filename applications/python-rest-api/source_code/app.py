@@ -153,9 +153,9 @@ def get_techstack(id):
 @cross_origin()
 @protected_route('fe_key')
 def send_test_email():
-    logging.debug('###### send_test_email ########')
+    # logging.debug('###### send_test_email ########')
     data = request.get_json()
-    logging.debug('data: %s', data)
+    # logging.debug('data: %s', data)
 
     # Bedingung 2: Überprüfen, ob 'contactByFax' etwas anderes als null ist
     if data.get('contactByFax') is not None:

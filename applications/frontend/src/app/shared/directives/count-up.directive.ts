@@ -9,9 +9,7 @@ import {
   takeWhile,
   endWith,
   distinctUntilChanged,
-  takeUntil,
 } from 'rxjs';
-import { Destroy } from '@shared/injectable/destroy';
 
 /**
  * Quadratic Ease-Out Function: f(x) = x * (2 - x)

@@ -8,11 +8,11 @@ export class TrackVisibilityDirective implements OnInit, OnDestroy {
   private observer!: IntersectionObserver;
 
   @Output()
-  visible  = new EventEmitter<boolean>();
+  visible = new EventEmitter<boolean>();
 
   constructor(
     private el: ElementRef<HTMLElement>,
-    private ngZone: NgZone
+    private ngZone: NgZone,
   ) {}
 
   ngOnInit(): void {

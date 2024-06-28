@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db
--- Erstellungszeit: 30. Apr 2024 um 16:31
--- Server-Version: 8.3.0
+-- Erstellungszeit: 28. Jun 2024 um 12:11
+-- Server-Version: 8.4.0
 -- PHP-Version: 8.2.8
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -118,36 +118,42 @@ CREATE TABLE `projects` (
   `location` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
   `position` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
   `content` varchar(4000) DEFAULT NULL,
-  `type` int NOT NULL
+  `content_long` varchar(4000) DEFAULT NULL,
+  `content_short` varchar(4000) DEFAULT NULL,
+  `type` int NOT NULL,
+  `public` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Daten für Tabelle `projects`
 --
 
-INSERT INTO `projects` (`id`, `uuid`, `name`, `location`, `position`, `content`, `type`) VALUES
-(1, 0xaab5d5fd70c111e5a4fbb026b977eb28, 'NetworX, als zentrales Verwaltungstool für Internationale Programme', 'Hannover', 'Senior Frontend-Entwickler', '•Frontend-Entwicklung in Nx Monorepo\n•Planung und Testen zur Umstellung auf Angular 17\n•Schulung und Mentoring von internen Mitarbeitern\n•Unit Tests mit Jest, E2E-Tests mit Cypress\n•Arbeitsumgebung Octane, Azure und Deployment Kubernetes Cluster in Argo', 2),
-(2, 0xaab5d5fd70c111e5a4fbb026b977eb29, 'NetworX MVP, ein Data Intake Tool für Internationale Programme', 'Hannover', 'Senior Frontend-Entwickler', '•Frontend-Entwicklung auf Basis Angular 15 mit NgRx und PrimeNg\n•Customize PrimeNg components\n•Unit Tests mit Jest, E2E-Tests mit Cypress\n•Arbeitsumgebung Azure und Deployment Kubernetes Cluster in Argo', 2),
-(21, 0xa52fcc587c964c0aa5159a472aaab345, 'Weiterentwicklung eines Tools für Ratenzahlungsankauf', 'Hamburg', 'Frontendentwickler/Technical Lead Frontend', '•Frontendgestaltung und Entwicklung auf Basis Angular 13\n•Unit Testing, Automatisiertes Testing\n•Schulung von Mitarbeitern', 2),
-(22, 0xdf8ebb1e2c304b1dab168868868ecc25, 'Weiterentwicklung eines Tools für Immobilienmakler', 'Leipzig', 'Senior Frontendentwickler/Webdesigner', '•Frontendgestaltung und Entwicklung auf Basis AngularJS', 2),
-(23, 0x957e1a5a578d46aba430bb989748f060, 'Modernisierung der Social Media Plattform Sexdo', 'Berlin', 'Frontendentwickler/Webdesigner/Frontendarchitekt/Technical Lead Frontend', '•Architekturverantwortung des Frontends\n•Frontendgestaltung und Entwicklung auf Basis Vue 2.5\n•Support Backendentwicklung in Symphony\n•Support und Anleitung der Designabteilung in UI und UX', 2),
-(24, 0xf68b13fc790a4cc1a991ecef8ad1ffae, 'Weiterentwicklung Bordercontrol System für Thailand', 'Hamburg', 'Frontendentwickler/Webdesigner', '•Verschiedene Verbesserungen im Workflow, um Borderdocumente zu prozessieren\n•Refactor der Pipeline für Kamerastream und Gesichtserkennung\n•Support und Development für Offline-Mode in Vue', 2),
-(25, 0xe2ad0b428b40450096ac430098beec88, 'Weiterentwicklung Bordercontrol System für Kambodscha', 'Hamburg', 'Frontendentwickler/Webdesigner/Softwarearchitekt/Technical Lead', '•Verschiedene Verbesserungen im Workflow, um Borderdocumente zu prozessieren\n•Design und Implementierung eines Workflows, um mit der Datenbank von Interpol Borderdocumente zu checken, ob sie als lost or stolen gemeldet sind\n•Verbesserungen und Weiterentwicklungen im Reportingsystem\n•Entwicklungerpläne gestalten, Softwarearchitektur, Prozessoptimierung\n•Training und Schulung von Mitarbeitern\n•Kundenkontakt zur Featureentwicklung', 2),
-(26, 0x8957feab89b44defb7a9d28ad68f8a86, 'Weiterentwicklung eines Criminal Automatic Biometrical Identification Systems für Kroatien', 'Hamburg', 'Frontendentwickler/Webdesigner', '•Design und Entwicklung einer View für den Import von Latent-Karten\n•Entwicklung einer Deployment Pipeline mit APEX Nitro', 2),
-(27, 0xf00c0bc3da1045d3bf879759112652a0, 'Produktion-Manager direkt im Werk als AngularCLI Applikation', 'Bergisch Gladbach', 'Frontendentwickler/Webdesigner/Technischer Berater', '•Umsetzen von verschiedenen Screens in Angular inkl. Datenverknüpfung\n•Softwarearchitektur und Umsetzung in einer vielschichtigen Daten-Architektur Steuerung der Produktions-Anlage über Python-Schnittstelle via Weboberfläche\n•Darstellung der Werksanlage mit aktuellen Daten aus den anliegenden SPS', 2),
-(28, 0x7a3a6e89b5e64b209dc6ae9a91b1ea9e, 'Internes Showcase', 'Gütersloh', 'Frontendentwickler/Webdesigner/Technischer Berater', '•Erstellen von Mockups und Webdesign mit Entwicklung\n•Softwarearchitektur und Umsetzung eines Webshowcases basierend auf Java mit Spring und Timeleave und Webpack als Frontendbundler', 2),
-(29, 0xea9afeb1be7c4677800b213848df118c, 'Depotwechselservice', 'Gütersloh', 'Frontendentwickler/Webdesigner', '•Individualisierung des Frontends einer Webapplikation basierend auf einem\nC#-Framework für diverse Banken, Responsive für Desktop bis Mobile\n•Erstellen von Mockups für eine neue Webapplikation\n•Erstellen von diversen Landingpages für internen und externen Gebrauch\n•Erstellen von PDF-Formularen für die automatische Daten Befüllung', 2),
-(30, 0x02645043a6ec463ea9c02a3914acdbd8, 'Landingpages und HTML-Emails', 'Berlin', 'Frontendentwickler/Technischer Berater', '•Webentwicklung für Landingpages einer multilingualen Webapplikation, Entwicklung eines Grunt-Projektes zur modularen Erstellung von CSV-Dateien für den Upload, Responsive für Desktop bis Mobile\n•Bearbeitung und Weiterentwicklung eines Gulp-Projektes zur Generierung von adaptive und responsive HTML-Emails für die Marketingabteilung\n•Entwicklung einer PHP-API zur Verwaltung von Gemini-Kampagnen via OAuth2 mit einem CronJob', 2),
-(31, 0xa8fc46b2518447dfafdb754f274e61d3, 'Landingpages, API-Entwicklung und HTML-Emails', 'Berlin', 'Frontendentwickler', '•Webentwicklung für eine multilinguale Webapplikation (auch RTL-Umgebungen), Frontend-Entwicklung auf Basis einer internen CMS-Lösung, Responsive\n•Entwicklung von responsive HTML-Emails für CR und Marketingabteilung', 2),
-(32, 0xe04b1d855b8e4afea26932939b730d9d, 'Diverse Projekte', 'Wildau', 'Webdesigner und -entwickler', '•Corporate Design u.a. in Form von Logos, Briefpapier, Visitenkarten, Infomaterial\n•Verschiedene Webpages als Firmenauftritt, Visitenkarte oder Landingpages. Umgesetzt mit Drupal 6, Contao und hauseigener CMS-Lösung', 2),
-(33, 0x776b2d03c9ea4c4b95e9442f75c5be62, 'Spieleentwicklung in Unity', NULL, NULL, '•Lernprojekte für:\noSpiele-KI (von einfachen State-Machines zu Behaviour Trees und GOAP oder Utility AI und deren verschiedenen Kombinationen)\noSims-linke Smart Objects\noSimulierung von Ökosystemen\noAnimation', 3),
-(36, 0xa439bd5bad634e2191fb628413e79aad, 'Öffentlichkeitsarbeit für einen Verbund von Bildungseinrichtungen', 'Berlin', 'Leiter Öffentlichkeitsarbeit mit Personalverantwortung', '•	Projektmanagement für Marketing\n•	Design und Umsetzungen von Webseiten, Printmedien, Logodesign, Grafikdesign, allgemeine Werbemaßnahmen', 1),
-(38, 0x7680d3d650104a56b8f824753e496b2e, 'Webdesign und -entwicklung', 'Wildau', 'Leitender Mediendesigner mit Personalverantwortung', '•	Webdesign/-entwicklung, Printdesign, Logodesign, Grafikdesign', 1),
-(39, 0x89da80b4b3a74424b6ed367da4220dfc, 'Freelancer für verschiedene Direktkunden', 'Berlin', 'Fullstack-Entwickler und Designer', '•	Webdesign/-entwicklung, Printdesign, Logodesign, Grafikdesign', 1),
-(40, 0xf63782d3f3b041818416aeab1f10f7ac, 'HomeLab', NULL, NULL, '•	Lern-Plattform für DevOps, Infostructure as Code, Networking, Hypervisors, Virtualisierung und Container\n•	Laufende Applikationen u.a.:\no	Proxmox-Cluster\no	Pi-Hole mit Unbound als Docker\no	Microservice Webapplication in Docker\no	Homeassistent in Docker\no	Tmux mit Monerominer\no	GitLabs', 3),
-(41, 0x5e509e5fa25142f3aa46a35145de3eeb, 'Bandpage Hidden-Tracks', '', '', 'http://www.hiddentracks-berlin.de\n•	Webdesign und Entwicklung einer Vorstellungsseite für die Band Hidden Tracks\n•	Entwicklung einer Backend-API in PHP und MySQL', 3),
-(42, 0xceefd397b7614cd993c252af6bcc15bc, 'Kontowechselservice', 'Gütersloh', 'Frontendentwickler/Webdesigner/Technischer Berater', '•	Individualisierung des Frontends einer Webapplikation basierend auf einem C#-Framework für diverse Banken, Responsive für Desktop bis Mobile\n•	Erstellen von Mockups für eine neue Webapplikation\n•	Erstellen von diversen Landingpages für internen und externen Gebrauch\n•	Erstellen von PDF-Formularen für die automatische Daten Befüllung', 2),
-(43, 0x0d853adf7ff540b09d389c06d15250bf, 'Webapplikation für Porsche – Roboterkamerasteuerung via Webinterface', 'Hamburg', 'Frontendentwickler/Webdesign', '•	Webentwicklung eines Webspecials für Porsche, welches den exklusiven 911 vorstellen sollte sowie remote Roboterkameras steuern ließ\n•	Umsetzung der Steuerungs-UI sowie der Page selbst\n•	Aufbau der Basis der Remotesteuerung via Socket.io', 2);
+INSERT INTO `projects` (`id`, `uuid`, `name`, `location`, `position`, `content`, `content_long`, `content_short`, `type`, `public`) VALUES
+(1, 0xaab5d5fd70c111e5a4fbb026b977eb28, 'NetworX, als zentrales Verwaltungstool für Internationale Programme', 'Hannover', 'Senior Frontend-Entwickler', '•Frontend-Entwicklung in Nx Monorepo\n•Planung und Testen zur Umstellung auf Angular 17\n•Schulung und Mentoring von internen Mitarbeitern\n•Unit Tests mit Jest, E2E-Tests mit Cypress\n•Arbeitsumgebung Octane, Azure und Deployment Kubernetes Cluster in Argo', NULL, NULL, 2, 1),
+(2, 0xaab5d5fd70c111e5a4fbb026b977eb29, 'NetworX MVP, ein Data Intake Tool für Internationale Programme', 'Hannover', 'Senior Frontend-Entwickler', '•Frontend-Entwicklung auf Basis Angular 15 mit NgRx und PrimeNg\n•Customize PrimeNg components\n•Unit Tests mit Jest, E2E-Tests mit Cypress\n•Arbeitsumgebung Azure und Deployment Kubernetes Cluster in Argo', NULL, NULL, 2, 1),
+(21, 0xa52fcc587c964c0aa5159a472aaab345, 'Weiterentwicklung eines Tools für Ratenzahlungsankauf', 'Hamburg', 'Frontendentwickler/Technical Lead Frontend', '•Frontendgestaltung und Entwicklung auf Basis Angular 13\n•Unit Testing, Automatisiertes Testing\n•Schulung von Mitarbeitern', NULL, NULL, 2, 1),
+(22, 0xdf8ebb1e2c304b1dab168868868ecc25, 'Weiterentwicklung eines Tools für Immobilienmakler', 'Leipzig', 'Senior Frontendentwickler/Webdesigner', '•Frontendgestaltung und Entwicklung auf Basis AngularJS', NULL, NULL, 2, 1),
+(23, 0x957e1a5a578d46aba430bb989748f060, 'Modernisierung der Social Media Plattform Sexdo', 'Berlin', 'Frontendentwickler/Webdesigner/Frontendarchitekt/Technical Lead Frontend', '•Architekturverantwortung des Frontends\n•Frontendgestaltung und Entwicklung auf Basis Vue 2.5\n•Support Backendentwicklung in Symphony\n•Support und Anleitung der Designabteilung in UI und UX', NULL, NULL, 2, 1),
+(24, 0xf68b13fc790a4cc1a991ecef8ad1ffae, 'Weiterentwicklung Bordercontrol System für Thailand', 'Hamburg', 'Frontendentwickler/Webdesigner', '•Verschiedene Verbesserungen im Workflow, um Borderdocumente zu prozessieren\n•Refactor der Pipeline für Kamerastream und Gesichtserkennung\n•Support und Development für Offline-Mode in Vue', NULL, NULL, 2, 1),
+(25, 0xe2ad0b428b40450096ac430098beec88, 'Weiterentwicklung Bordercontrol System für Kambodscha', 'Hamburg', 'Frontendentwickler/Webdesigner/Softwarearchitekt/Technical Lead', '•Verschiedene Verbesserungen im Workflow, um Borderdocumente zu prozessieren\n•Design und Implementierung eines Workflows, um mit der Datenbank von Interpol Borderdocumente zu checken, ob sie als lost or stolen gemeldet sind\n•Verbesserungen und Weiterentwicklungen im Reportingsystem\n•Entwicklungerpläne gestalten, Softwarearchitektur, Prozessoptimierung\n•Training und Schulung von Mitarbeitern\n•Kundenkontakt zur Featureentwicklung', NULL, NULL, 2, 1),
+(26, 0x8957feab89b44defb7a9d28ad68f8a86, 'Weiterentwicklung eines Criminal Automatic Biometrical Identification Systems für Kroatien', 'Hamburg', 'Frontendentwickler/Webdesigner', '•Design und Entwicklung einer View für den Import von Latent-Karten\n•Entwicklung einer Deployment Pipeline mit APEX Nitro', NULL, NULL, 2, 1),
+(27, 0xf00c0bc3da1045d3bf879759112652a0, 'Produktion-Manager direkt im Werk als AngularCLI Applikation', 'Bergisch Gladbach', 'Frontendentwickler/Webdesigner/Technischer Berater', '•Umsetzen von verschiedenen Screens in Angular inkl. Datenverknüpfung\n•Softwarearchitektur und Umsetzung in einer vielschichtigen Daten-Architektur Steuerung der Produktions-Anlage über Python-Schnittstelle via Weboberfläche\n•Darstellung der Werksanlage mit aktuellen Daten aus den anliegenden SPS', NULL, NULL, 2, 1),
+(28, 0x7a3a6e89b5e64b209dc6ae9a91b1ea9e, 'Internes Showcase', 'Gütersloh', 'Frontendentwickler/Webdesigner/Technischer Berater', '•Erstellen von Mockups und Webdesign mit Entwicklung\n•Softwarearchitektur und Umsetzung eines Webshowcases basierend auf Java mit Spring und Timeleave und Webpack als Frontendbundler', NULL, NULL, 2, 1),
+(29, 0xea9afeb1be7c4677800b213848df118c, 'Depotwechselservice', 'Gütersloh', 'Frontendentwickler/Webdesigner', '•Individualisierung des Frontends einer Webapplikation basierend auf einem\nC#-Framework für diverse Banken, Responsive für Desktop bis Mobile\n•Erstellen von Mockups für eine neue Webapplikation\n•Erstellen von diversen Landingpages für internen und externen Gebrauch\n•Erstellen von PDF-Formularen für die automatische Daten Befüllung', NULL, NULL, 2, 1),
+(30, 0x02645043a6ec463ea9c02a3914acdbd8, 'Landingpages und HTML-Emails', 'Berlin', 'Frontendentwickler/Technischer Berater', '•Webentwicklung für Landingpages einer multilingualen Webapplikation, Entwicklung eines Grunt-Projektes zur modularen Erstellung von CSV-Dateien für den Upload, Responsive für Desktop bis Mobile\n•Bearbeitung und Weiterentwicklung eines Gulp-Projektes zur Generierung von adaptive und responsive HTML-Emails für die Marketingabteilung\n•Entwicklung einer PHP-API zur Verwaltung von Gemini-Kampagnen via OAuth2 mit einem CronJob', NULL, NULL, 2, 1),
+(31, 0xa8fc46b2518447dfafdb754f274e61d3, 'Landingpages, API-Entwicklung und HTML-Emails', 'Berlin', 'Frontendentwickler', '•Webentwicklung für eine multilinguale Webapplikation (auch RTL-Umgebungen), Frontend-Entwicklung auf Basis einer internen CMS-Lösung, Responsive\n•Entwicklung von responsive HTML-Emails für CR und Marketingabteilung', NULL, NULL, 2, 1),
+(32, 0xe04b1d855b8e4afea26932939b730d9d, 'Diverse Projekte', 'Wildau', 'Webdesigner und -entwickler', '•Corporate Design u.a. in Form von Logos, Briefpapier, Visitenkarten, Infomaterial\n•Verschiedene Webpages als Firmenauftritt, Visitenkarte oder Landingpages. Umgesetzt mit Drupal 6, Contao und hauseigener CMS-Lösung', NULL, NULL, 2, 0),
+(33, 0x776b2d03c9ea4c4b95e9442f75c5be62, 'Spieleentwicklung in Unity', '', '', '•Lernprojekte für:\noSpiele-KI (von einfachen State-Machines zu Behaviour Trees und GOAP oder Utility AI und deren verschiedenen Kombinationen)\noSims-linke Smart Objects\noSimulierung von Ökosystemen\noAnimation', NULL, NULL, 3, 1),
+(36, 0xa439bd5bad634e2191fb628413e79aad, 'Öffentlichkeitsarbeit für einen Verbund von Bildungseinrichtungen', 'Berlin', 'Leiter Öffentlichkeitsarbeit mit Personalverantwortung', '•	Projektmanagement für Marketing\n•	Design und Umsetzungen von Webseiten, Printmedien, Logodesign, Grafikdesign, allgemeine Werbemaßnahmen', NULL, NULL, 1, 1),
+(38, 0x7680d3d650104a56b8f824753e496b2e, 'Webdesign und -entwicklung', 'Wildau', 'Leitender Mediendesigner mit Personalverantwortung', '•	Webdesign/-entwicklung, Printdesign, Logodesign, Grafikdesign', NULL, NULL, 1, 1),
+(39, 0x89da80b4b3a74424b6ed367da4220dfc, 'Freelancer für verschiedene Direktkunden', 'Berlin', 'Fullstack-Entwickler und Designer', '•	Webdesign/-entwicklung, Printdesign, Logodesign, Grafikdesign', NULL, NULL, 1, 0),
+(40, 0xf63782d3f3b041818416aeab1f10f7ac, 'HomeLab', '', '', '•	Lern-Plattform für DevOps, Infostructure as Code, Networking, Hypervisors, Virtualisierung und Container\n•	Laufende Applikationen u.a.:\no	Proxmox-Cluster\no	Pi-Hole mit Unbound als Docker\no	Microservice Webapplication in Docker\no	Homeassistent in Docker\no	Tmux mit Monerominer\no	GitLabs', NULL, NULL, 3, 1),
+(41, 0x5e509e5fa25142f3aa46a35145de3eeb, 'Bandpage Hidden-Tracks', '', '', 'http://www.hiddentracks-berlin.de\n•	Webdesign und Entwicklung einer Vorstellungsseite für die Band Hidden Tracks\n•	Entwicklung einer Backend-API in PHP und MySQL', NULL, NULL, 3, 1),
+(42, 0xceefd397b7614cd993c252af6bcc15bc, 'Kontowechselservice', 'Gütersloh', 'Frontendentwickler/Webdesigner/Technischer Berater', '•	Individualisierung des Frontends einer Webapplikation basierend auf einem C#-Framework für diverse Banken, Responsive für Desktop bis Mobile\n•	Erstellen von Mockups für eine neue Webapplikation\n•	Erstellen von diversen Landingpages für internen und externen Gebrauch\n•	Erstellen von PDF-Formularen für die automatische Daten Befüllung', NULL, NULL, 2, 1),
+(43, 0x0d853adf7ff540b09d389c06d15250bf, 'Webapplikation für Porsche – Roboterkamerasteuerung via Webinterface', 'Hamburg', 'Frontendentwickler/Webdesign', '•	Webentwicklung eines Webspecials für Porsche, welches den exklusiven 911 vorstellen sollte sowie remote Roboterkameras steuern ließ\n•	Umsetzung der Steuerungs-UI sowie der Page selbst\n•	Aufbau der Basis der Remotesteuerung via Socket.io', NULL, NULL, 2, 1),
+(44, 0xf38e882709c04cd5a9e281deabb62897, 'Redesign und Relaunch der Bandpage Hidden Tracks', '', '', 'Aktualisierung der Bandpage auf moderne Technologien mit Neugestaltung von API, Frontend und Backend von Grund auf.', '', '', 3, 1),
+(45, 0x800f199b48d344ce9474df0b491c650c, 'Redesign und Relaunch Pencil&amp;Me Portfolio', '', '', 'Neuaufbau des Pencil&amp;Me Portfolios auf modernere Technologien mit Neugestaltung von API, Frontend und Backend von Grund auf.', '', '', 3, 0),
+(46, 0x4985ff3d0e03436c89039b8222d24c76, 'Diverse Werbemaßnahmen für Musiker und Bands', 'Berlin', 'Mediengestalter, Webdesigner und Webentwickler', 'Verantwortlich für Gestaltung und Umsetzung diverser Werbemaßnahmen und Webauftritten von Musikern und Bands.', '', '', 2, 1);
 
 -- --------------------------------------------------------
 
@@ -189,7 +195,10 @@ INSERT INTO `project_customer` (`id`, `project_id`, `customer_id`) VALUES
 (21, 0x5e509e5fa25142f3aa46a35145de3eeb, 0x6af66706514c4ed9b236fe6ab7dce4fc),
 (22, 0xe04b1d855b8e4afea26932939b730d9d, 0x624bf1692d75426db2bda02656c559ba),
 (23, 0xceefd397b7614cd993c252af6bcc15bc, 0xaaa417e0038842a483146a312035b860),
-(24, 0x0d853adf7ff540b09d389c06d15250bf, 0x4c0e5f7f80504734b6ae12971fc141c7);
+(24, 0x0d853adf7ff540b09d389c06d15250bf, 0x4c0e5f7f80504734b6ae12971fc141c7),
+(25, 0x4985ff3d0e03436c89039b8222d24c76, 0x704697ff613348acad115fa5439c27e7),
+(26, 0x4985ff3d0e03436c89039b8222d24c76, 0x50a5e6cd64364fc992d3f78ae400e9c6),
+(27, 0x4985ff3d0e03436c89039b8222d24c76, 0xb0bceb6e492a420a912de7eb89c12e38);
 
 -- --------------------------------------------------------
 
@@ -230,7 +239,10 @@ INSERT INTO `project_dates` (`id`, `project_id`, `start_date`, `end_date`) VALUE
 (20, 0x5e509e5fa25142f3aa46a35145de3eeb, '2018-01-01 00:00:00', '2019-12-30 00:00:00'),
 (21, 0xceefd397b7614cd993c252af6bcc15bc, '2016-04-01 00:00:00', '2017-02-25 00:00:00'),
 (22, 0xea9afeb1be7c4677800b213848df118c, '2017-02-01 00:00:00', '2017-05-25 00:00:00'),
-(23, 0x0d853adf7ff540b09d389c06d15250bf, '2017-04-01 00:00:00', '2017-05-30 00:00:00');
+(23, 0x0d853adf7ff540b09d389c06d15250bf, '2017-04-01 00:00:00', '2017-05-30 00:00:00'),
+(24, 0xf38e882709c04cd5a9e281deabb62897, '2024-04-01 00:00:00', '2024-06-30 00:00:00'),
+(25, 0x800f199b48d344ce9474df0b491c650c, '2024-04-01 00:00:00', '2024-06-30 00:00:00'),
+(26, 0x4985ff3d0e03436c89039b8222d24c76, '2012-02-01 00:00:00', '2013-12-30 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -447,7 +459,64 @@ INSERT INTO `project_techstack` (`id`, `project_id`, `techstack_id`) VALUES
 (217, 0x0d853adf7ff540b09d389c06d15250bf, 0xb9f16e33573a4a30be98d189d702d583),
 (218, 0x0d853adf7ff540b09d389c06d15250bf, 0xf206527b3a714a6fbfe58d0252cd47f5),
 (219, 0x0d853adf7ff540b09d389c06d15250bf, 0xe671c707baa640c49126d0f97564305f),
-(220, 0x0d853adf7ff540b09d389c06d15250bf, 0x26311862b80d4ea18437f77e3316f0b4);
+(220, 0x0d853adf7ff540b09d389c06d15250bf, 0x26311862b80d4ea18437f77e3316f0b4),
+(221, 0xa439bd5bad634e2191fb628413e79aad, 0xf48bec1cf44f4d7795a499e3aa9167a5),
+(222, 0xa439bd5bad634e2191fb628413e79aad, 0x38eec4bbe908475da73f47c3390be309),
+(223, 0xa439bd5bad634e2191fb628413e79aad, 0xe671c707baa640c49126d0f97564305f),
+(224, 0xa439bd5bad634e2191fb628413e79aad, 0x0b46a062140441d5be6c6766a99bfea9),
+(225, 0xa439bd5bad634e2191fb628413e79aad, 0x15e1c928ea5a4ee2844da5c8ec92e073),
+(226, 0x7680d3d650104a56b8f824753e496b2e, 0x23a6623c72ef48fbbae6b0a3e359f3af),
+(227, 0x7680d3d650104a56b8f824753e496b2e, 0xbf07cadf4ec64c7481a3b56e50074819),
+(228, 0x7680d3d650104a56b8f824753e496b2e, 0x0b46a062140441d5be6c6766a99bfea9),
+(229, 0x7680d3d650104a56b8f824753e496b2e, 0xf48bec1cf44f4d7795a499e3aa9167a5),
+(230, 0x7680d3d650104a56b8f824753e496b2e, 0xf206527b3a714a6fbfe58d0252cd47f5),
+(231, 0x7680d3d650104a56b8f824753e496b2e, 0xe671c707baa640c49126d0f97564305f),
+(232, 0x7680d3d650104a56b8f824753e496b2e, 0xe261b82f158940428e40ecfd6488b1df),
+(233, 0x7680d3d650104a56b8f824753e496b2e, 0x15e1c928ea5a4ee2844da5c8ec92e073),
+(234, 0xa439bd5bad634e2191fb628413e79aad, 0xe261b82f158940428e40ecfd6488b1df),
+(235, 0x89da80b4b3a74424b6ed367da4220dfc, 0x0b46a062140441d5be6c6766a99bfea9),
+(236, 0x89da80b4b3a74424b6ed367da4220dfc, 0x15e1c928ea5a4ee2844da5c8ec92e073),
+(237, 0xf38e882709c04cd5a9e281deabb62897, 0xf48bec1cf44f4d7795a499e3aa9167a5),
+(238, 0xf38e882709c04cd5a9e281deabb62897, 0x83acc5c0d110465dabe346e5352ac6cc),
+(239, 0xf38e882709c04cd5a9e281deabb62897, 0xaab5d5fd70c111e5a4fbb026b977eb20),
+(240, 0xf38e882709c04cd5a9e281deabb62897, 0x22c5f3c3eef04b0da57ab6716ab3e0f7),
+(241, 0xf38e882709c04cd5a9e281deabb62897, 0x38eec4bbe908475da73f47c3390be309),
+(242, 0xf38e882709c04cd5a9e281deabb62897, 0x15e1c928ea5a4ee2844da5c8ec92e073),
+(243, 0xf38e882709c04cd5a9e281deabb62897, 0x69b8a15864824bdf8e5ded562b999267),
+(244, 0xf38e882709c04cd5a9e281deabb62897, 0x0b46a062140441d5be6c6766a99bfea9),
+(245, 0xf38e882709c04cd5a9e281deabb62897, 0x13996ef521614e889a3d608f3af8ff7c),
+(246, 0xf38e882709c04cd5a9e281deabb62897, 0x678a888502fc4206ad8847013ef98aef),
+(247, 0xf38e882709c04cd5a9e281deabb62897, 0x7dcba7298c2c4543ae30619a6e86280c),
+(248, 0xf38e882709c04cd5a9e281deabb62897, 0xe7aebabdd4924490b067e2bbd3020832),
+(249, 0xf38e882709c04cd5a9e281deabb62897, 0xd9abad66b8fc494892530bb3b797f74b),
+(250, 0x800f199b48d344ce9474df0b491c650c, 0xb5f41b0e827944e6974f882bd696d227),
+(251, 0x800f199b48d344ce9474df0b491c650c, 0x22c5f3c3eef04b0da57ab6716ab3e0f7),
+(252, 0x800f199b48d344ce9474df0b491c650c, 0x38eec4bbe908475da73f47c3390be309),
+(253, 0x800f199b48d344ce9474df0b491c650c, 0x0b46a062140441d5be6c6766a99bfea9),
+(254, 0x800f199b48d344ce9474df0b491c650c, 0x3bf28f8e0566442ca24f0fb46491fe2f),
+(255, 0x800f199b48d344ce9474df0b491c650c, 0x678a888502fc4206ad8847013ef98aef),
+(256, 0x800f199b48d344ce9474df0b491c650c, 0xd9abad66b8fc494892530bb3b797f74b),
+(257, 0x800f199b48d344ce9474df0b491c650c, 0xc93e53fae1a7476199ef8d8ae195deaf),
+(258, 0x800f199b48d344ce9474df0b491c650c, 0x7dcba7298c2c4543ae30619a6e86280c),
+(259, 0x800f199b48d344ce9474df0b491c650c, 0xf48bec1cf44f4d7795a499e3aa9167a5),
+(260, 0x800f199b48d344ce9474df0b491c650c, 0xe7aebabdd4924490b067e2bbd3020832),
+(261, 0x800f199b48d344ce9474df0b491c650c, 0x374c1546b59a420f9b7dce9f1c82e428),
+(262, 0x800f199b48d344ce9474df0b491c650c, 0xaab5d5fd70c111e5a4fbb026b977eb20),
+(263, 0x800f199b48d344ce9474df0b491c650c, 0x15e1c928ea5a4ee2844da5c8ec92e073),
+(264, 0x800f199b48d344ce9474df0b491c650c, 0x69b8a15864824bdf8e5ded562b999267),
+(265, 0x800f199b48d344ce9474df0b491c650c, 0x13996ef521614e889a3d608f3af8ff7c),
+(266, 0x4985ff3d0e03436c89039b8222d24c76, 0xeeade68a080c4b36a3053cf35634f74f),
+(267, 0x4985ff3d0e03436c89039b8222d24c76, 0xe671c707baa640c49126d0f97564305f),
+(268, 0x4985ff3d0e03436c89039b8222d24c76, 0xe261b82f158940428e40ecfd6488b1df),
+(269, 0x4985ff3d0e03436c89039b8222d24c76, 0x15e1c928ea5a4ee2844da5c8ec92e073),
+(270, 0x4985ff3d0e03436c89039b8222d24c76, 0x0b46a062140441d5be6c6766a99bfea9),
+(271, 0x4985ff3d0e03436c89039b8222d24c76, 0xf206527b3a714a6fbfe58d0252cd47f5),
+(272, 0x4985ff3d0e03436c89039b8222d24c76, 0xf48bec1cf44f4d7795a499e3aa9167a5),
+(273, 0x4985ff3d0e03436c89039b8222d24c76, 0x23a6623c72ef48fbbae6b0a3e359f3af),
+(274, 0xa439bd5bad634e2191fb628413e79aad, 0x8d6ce3f3430a4309aedfcc8d13d3afe1),
+(275, 0xe2ad0b428b40450096ac430098beec88, 0xd9abad66b8fc494892530bb3b797f74b),
+(276, 0xf68b13fc790a4cc1a991ecef8ad1ffae, 0xa9ca144cc970406fac61f00a7e3d1013),
+(277, 0xe2ad0b428b40450096ac430098beec88, 0xa9ca144cc970406fac61f00a7e3d1013);
 
 -- --------------------------------------------------------
 
@@ -543,7 +612,11 @@ INSERT INTO `techstack` (`id`, `uuid`, `name`, `type`, `expertise_level`, `flag_
 (72, 0xeb2862032bcf4cc5807864afdcd994fc, 'Ansible', 6, 70, 0),
 (73, 0x9957764a613f4213965f6e7704793c54, 'Proxmox', 6, 70, 0),
 (74, 0x13996ef521614e889a3d608f3af8ff7c, 'Docker Compose', 6, 75, 0),
-(78, 0x0925f242b21846f8befee4ac3fc5c5fd, 'Unity', 11, 85, 0);
+(78, 0x0925f242b21846f8befee4ac3fc5c5fd, 'Unity', 11, 85, 0),
+(79, 0xd9abad66b8fc494892530bb3b797f74b, 'nginx', 6, 70, 0),
+(80, 0xc93e53fae1a7476199ef8d8ae195deaf, 'Flask', 4, 60, 0),
+(81, 0x8d6ce3f3430a4309aedfcc8d13d3afe1, 'Silverstripe CMS', 8, 50, 0),
+(82, 0xa9ca144cc970406fac61f00a7e3d1013, 'VMWare', 6, 70, 0);
 
 -- --------------------------------------------------------
 
@@ -642,25 +715,25 @@ ALTER TABLE `customers`
 -- AUTO_INCREMENT für Tabelle `projects`
 --
 ALTER TABLE `projects`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT für Tabelle `project_customer`
 --
 ALTER TABLE `project_customer`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT für Tabelle `project_dates`
 --
 ALTER TABLE `project_dates`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT für Tabelle `project_techstack`
 --
 ALTER TABLE `project_techstack`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=221;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=278;
 
 --
 -- AUTO_INCREMENT für Tabelle `project_type`
@@ -672,7 +745,7 @@ ALTER TABLE `project_type`
 -- AUTO_INCREMENT für Tabelle `techstack`
 --
 ALTER TABLE `techstack`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
 
 --
 -- AUTO_INCREMENT für Tabelle `techstack_type`

@@ -10,6 +10,7 @@ import AddTechStack from '@/views/TechStack/AddTechStack.vue'
 import AutocompleteInput from '@/components/inputs/AutocompleteInput.vue'
 import { type TProject } from '@/views/Projects/ProjectTypes'
 import type { PropType } from 'vue'
+import { async } from 'rxjs'
 
 export default {
   components: {
@@ -31,9 +32,10 @@ export default {
       techToAdd: '',
       showingModal: false,
       yes_no_options: [
-        { label: 'no', value: 1 },
-        { label: 'yes', value: 0 }
-      ]
+        { label: 'no', value: 0 },
+        { label: 'yes', value: 1 }
+      ],
+      mutableProject: {} as TProject
     }
   },
   props: {
@@ -47,18 +49,21 @@ export default {
       default: false
     }
   },
+  watch: {
+    currentProject: {
+      immediate: true,
+      handler(newProject) {
+        this.mutableProject = { ...newProject }
+      }
+    }
+  },
   created() {
     this.getAllProjectTypes()
     this.getAllTechStacks()
     this.getAllCustomers()
   },
   computed: {
-    ...mapGetters([
-      'techStackItems',
-      'customerItems',
-      'projectTypes',
-      'isLoading'
-    ]),
+    ...mapGetters(['techStackItems', 'customerItems', 'projectTypes', 'isLoading']),
     techstack_options() {
       return (
         this.techStackItems
@@ -81,6 +86,9 @@ export default {
   },
   emits: ['submitEvent', 'deleteEvent', 'cancelEvent'],
   methods: {
+    async() {
+      return async
+    },
     ...mapActions([
       'getAllProjectTypes',
       'getAllTechStacks',
@@ -90,10 +98,10 @@ export default {
       'deleteCurrentProject'
     ]),
     submitProject() {
-      this.$emit('submitEvent', this.currentProject)
+      this.$emit('submitEvent', this.mutableProject)
     },
     deleteProject() {
-      this.$emit('deleteEvent', this.currentProject)
+      this.$emit('deleteEvent', this.mutableProject)
     },
     cancelProject() {
       this.$emit('cancelEvent')
@@ -105,12 +113,12 @@ export default {
       this.showAddCustomer = true
     },
     removeStack(id: string) {
-      const index = this.currentProject.tech.findIndex((e) => e.id == id)
-      if (index > -1) this.currentProject.tech.splice(index, 1)
+      const index = this.mutableProject.tech.findIndex((e) => e.id == id)
+      if (index > -1) this.mutableProject.tech.splice(index, 1)
     },
     addStack(id: string | undefined) {
       if (id) {
-        this.currentProject.tech.push(
+        this.mutableProject.tech.push(
           this.techStackItems.filter((item) => {
             return item.id.indexOf(id) > -1
           })[0]
@@ -120,12 +128,12 @@ export default {
       }
     },
     removeCustomer(id: string) {
-      const index = this.currentProject.customers.findIndex((e) => e.id == id)
-      if (index > -1) this.currentProject.customers.splice(index, 1)
+      const index = this.mutableProject.customers.findIndex((e) => e.id == id)
+      if (index > -1) this.mutableProject.customers.splice(index, 1)
     },
     addCustomer(id: string | undefined) {
       if (id) {
-        this.currentProject.customers.push(
+        this.mutableProject.customers.push(
           this.customerItems.filter((item) => {
             return item.id.indexOf(id) > -1
           })[0]
@@ -135,13 +143,13 @@ export default {
       }
     },
     addDates() {
-      this.currentProject.dates.push({
+      this.mutableProject.dates.push({
         start_date: '',
         end_date: ''
       })
     },
-    removeDate(index) {
-      this.currentProject.dates.splice(index, 1)
+    removeDate(index: number) {
+      this.mutableProject.dates.splice(index, 1)
     },
     needNewEntry(event: string) {
       this.showingModal = true
@@ -161,29 +169,29 @@ export default {
   </card-modal>
 
   <div class="border-b border-gray-800">
-    <div v-if="debug">currentProject: {{ currentProject }}<br /></div>
+    <div v-if="debug">mutableProject: {{ mutableProject }}<br /></div>
     <form class="container mx-auto px-4 mt-12 mb-12">
       <div class="mb-4">
-        <select-input :label="'show'" v-model="currentProject.show" :options="yes_no_options" />
+        <select-input :label="'show'" v-model="mutableProject.show" :options="yes_no_options" />
       </div>
       <div class="mb-4">
-        <select-input :label="'type'" v-model="currentProject.type" :options="project_options" />
+        <select-input :label="'type'" v-model="mutableProject.type" :options="project_options" />
       </div>
       <div class="mb-4">
-        <text-input :label="'name'" v-model="currentProject.name" :required="true" />
+        <text-input :label="'name'" v-model="mutableProject.name" :required="true" />
       </div>
       <div class="mb-4">
-        <text-input :label="'position'" v-model="currentProject.position" :required="true" />
+        <text-input :label="'position'" v-model="mutableProject.position" :required="true" />
       </div>
       <div class="mb-4">
-        <text-input :label="'location'" v-model="currentProject.location" :required="true" />
+        <text-input :label="'location'" v-model="mutableProject.location" :required="true" />
       </div>
       <div class="flex flex-row md:items-center mb-4">
         <h3 class="md:w-4/12">dates</h3>
         <div class="md:w-8/12">
           <div
             class="grid gap-8 grid-cols-5"
-            v-for="(date, index) in currentProject.dates"
+            v-for="(date, index) in mutableProject.dates"
             :key="index"
           >
             <div class="col-span-2">
@@ -200,8 +208,8 @@ export default {
             </button>
           </div>
           <button
-            v-if="currentProject.dates.length > 0"
-            :disabled="!currentProject.dates[currentProject.dates.length - 1].start_date"
+            v-if="mutableProject.dates.length > 0"
+            :disabled="!mutableProject.dates[mutableProject.dates.length - 1].start_date"
             class="border border-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             @click="addDates()"
           >
@@ -217,21 +225,24 @@ export default {
         </div>
       </div>
       <div class="mb-4">
-        <textarea-input :label="'contentshort'" v-model="currentProject.content_short" />
+        <textarea-input :label="'contentshort'" v-model="mutableProject.content_short" />
       </div>
       <div class="mb-4">
-        <textarea-input :label="'contentlong'" v-model="currentProject.content_long" />
+        <textarea-input :label="'contentlong'" v-model="mutableProject.content_long" />
       </div>
       <div class="mb-4">
-        <textarea-input :label="'contentold'" v-model="currentProject.content" />
+        <textarea-input :label="'contentold'" v-model="mutableProject.content" />
       </div>
 
       <div class="mb-6">
         Customers
-        <ul v-if="currentProject.customers.length > 0" class="mb-10 ap-4 flex flex-row flex-wrap gap-8">
+        <ul
+          v-if="mutableProject.customers.length > 0"
+          class="mb-10 ap-4 flex flex-row flex-wrap gap-8"
+        >
           <li
             class="gap-4 items-center flex flex-row basis-1/6"
-            v-for="customer in currentProject.customers"
+            v-for="customer in mutableProject.customers"
             :key="customer.id"
           >
             <div class="inline-block basis-3/4">{{ customer.name }}</div>
@@ -260,7 +271,7 @@ export default {
               :options="customer_options"
               v-model="customer_id"
               :label="'select stack'"
-              @need-new-entry="needNewEntry($event)"
+              @need-new-entry="needNewEntry"
             />
             <button
               :disabled="!customer_id"
@@ -275,10 +286,10 @@ export default {
 
       <div class="mb-4">
         Techstack
-        <ul v-if="currentProject.tech.length > 0" class="mb-10 ap-4 flex flex-row flex-wrap gap-8">
+        <ul v-if="mutableProject.tech.length > 0" class="mb-10 ap-4 flex flex-row flex-wrap gap-8">
           <li
             class="gap-4 items-center flex flex-row basis-1/6"
-            v-for="tech in currentProject.tech"
+            v-for="tech in mutableProject.tech"
             :key="tech.id"
           >
             <div class="inline-block basis-3/4">{{ tech.name }}</div>
@@ -307,7 +318,7 @@ export default {
               :options="techstack_options"
               v-model="techstack_id"
               :label="'select stack'"
-              @need-new-entry="needNewEntry($event)"
+              @need-new-entry="needNewEntry"
             />
             <button
               :disabled="!techstack_id"
@@ -329,7 +340,7 @@ export default {
           Submit
         </button>
       </div>
-      <div v-if="currentProject.id" class="inline-block">
+      <div v-if="mutableProject.id" class="inline-block">
         <button
           class="border border-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           @click="deleteProject"

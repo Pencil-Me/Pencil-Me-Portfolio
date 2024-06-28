@@ -18,6 +18,11 @@ export default {
   computed: {
     ...mapGetters(['techStackTypes', 'isLoading'])
   },
+  data() {
+    return {
+      mutableTechStack: {} as TTechStack
+    }
+  },
   props: {
     currentTechStack: {
       type: Object as PropType<TTechStack>,
@@ -27,6 +32,14 @@ export default {
       type: Boolean,
       required: false,
       default: false
+    }
+  },
+  watch: {
+    currentTechStack: {
+      immediate: true,
+      handler(newTechStack) {
+        this.mutableTechStack = { ...newTechStack }
+      }
     }
   },
   emits: ['submitEvent', 'deleteEvent', 'cancelEvent'],

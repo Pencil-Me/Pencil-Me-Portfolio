@@ -115,7 +115,7 @@ class ProjectsRepository():
                 Project(result).to_disp()
                 for result in results
             ]
-            #logging.debug('return_object: %s', return_object)
+            # logging.debug('return_object: %s', return_object)
 
             response = make_response(return_object)
             response.status_code = 200
@@ -129,10 +129,10 @@ class ProjectsRepository():
             return response
 
     def get_all_fe(self):
-        logging.debug('###### get_all_fe ########')
+        # logging.debug('###### get_all_fe ########')
 
         results = project_helper.get_all_projects_fe()
-        logging.debug('results get_all_projects: %s', results)
+        # logging.debug('results get_all_projects: %s', results)
 
         if results is not None and len(results) > 0:
             for row in results:

@@ -40,11 +40,11 @@ export default {
         this.techStackItems
           .sort((a, b) => {
             // Only sort on type if not identical
-            if (a.type < b.type) return -1
-            if (a.type > b.type) return 1
+            // if (a.type < b.type) return -1
+            // if (a.type > b.type) return 1
             // Sort on name
-            if (a.name < b.name) return -1
-            if (a.name > b.name) return 1
+            if (a.name.toUpperCase() < b.name.toUpperCase()) return -1
+            if (a.name.toUpperCase() > b.name.toUpperCase()) return 1
             // Both idential, return 0
             return 0
           })

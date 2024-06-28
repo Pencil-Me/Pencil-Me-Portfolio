@@ -6,7 +6,7 @@ export default {
 </script>
 
 <template>
-  <div class="mt-2">
+  <div class="container mt-2" v-bind:class="{ 'is-public': project['show'] }">
     <router-link
       :to="{ name: 'EditProject', params: { id: project['id'] } }"
       class="mt-2 text-lg dark:hover:text-gray-300 hover:text-gray-500"
@@ -39,5 +39,11 @@ export default {
   content: ' - ';
   display: inline-block;
   margin: 0 0.5rem;
+}
+.container {
+  padding: 1rem;
+}
+.is-public {
+  border: 1px solid green;
 }
 </style>

@@ -1,7 +1,7 @@
 <script lang="ts">
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 import EditProjectMask from '@/views/Projects/EditProjectMask.vue'
-import {type Customer, type Dates, type ProjectType, type Tech} from '@/views/Projects/ProjectTypes'
+import { convertIProjectToTProject, type TProject } from '@/views/Projects/ProjectTypes'
 
 export default {
   components: {
@@ -10,27 +10,17 @@ export default {
   computed: {},
   data() {
     return {
-      project: {
-        name: '',
-        position: '',
-        customer: '',
-        location: '',
-        content: '',
-        type: '',
-        dates: [] as Dates[],
-        tech: [] as Tech[],
-        customers: [] as Customer[]
-      } as ProjectType,
+      project: convertIProjectToTProject({}),
       showAddStack: false,
-      techstack_id: '',
+      showingModal: false,
       techToAdd: '',
-      showingModal: false
+      techstack_id: ''
     }
   },
   created() {},
   methods: {
     ...mapActions([]),
-    submit(project) {
+    submit(project: TProject) {
       if (project.name != '' || !project.type) {
         this.$store.dispatch('addProject', project)
 
@@ -57,6 +47,7 @@ export default {
 <template>
   <edit-project-mask
     :current-project="project"
+    :debug="true"
     @cancel-event="cancelProject()"
     @submit-event="submit($event)"
   ></edit-project-mask>

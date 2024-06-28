@@ -10,6 +10,6 @@ export function convertICustomerToTCustomer(payload: ICustomer): TCustomer {
   return {
     id: payload.uuid,
     name: payload.name ?? '',
-    location: payload.location ?? '',
+    location: payload.location ?? ''
   }
 }

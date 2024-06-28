@@ -39,7 +39,7 @@ class SqlBase(object):
         else:
             data_items = data
 
-        logging.debug('data_items: %s', data_items)
+        # logging.debug('data_items: %s', data_items)
 
         # Durchlaufe die bereinigten Daten und füge sie zur Parameterliste und Platzhalterliste hinzu
         for data_item in data_items:
@@ -69,8 +69,8 @@ class SqlBase(object):
         fields = ', '.join(insert_params)
 
         query_insert = f"INSERT INTO {table_name} ({fields}) VALUES {placeholders}"
-        logging.debug('query_insert: %s', query_insert)
-        logging.debug('insert_values_data: %s', insert_values_data)
+        # logging.debug('query_insert: %s', query_insert)
+        # logging.debug('insert_values_data: %s', insert_values_data)
 
         execute_result = self.execute(query_insert, insert_values_data)
         #logging.debug('execute_result: %s', execute_result)
@@ -93,9 +93,9 @@ class SqlBase(object):
 
         # Durchlaufe die bereinigten Daten und füge sie zur Parameterliste und Platzhalterliste hinzu
         for data_item in data_items:
-            logging.debug('data_item: %s', data_item)
+            # logging.debug('data_item: %s', data_item)
             for key, value in data_item.items():
-                if key not in ignore_keys and value:
+                if key not in ignore_keys:
                     if value is not None:
                         if key in uuid_keys:
                             update_params.append(f"{key}=UUID_TO_BIN(%s)")
@@ -162,8 +162,8 @@ class SqlBase(object):
         placeholders_string = ' OR '.join(placeholders)
 
         query_delete = f"DELETE FROM {table_name} WHERE {placeholders_string}"
-        logging.debug('query_delete: %s', query_delete)
-        logging.debug('flat_values: %s', flat_values)
+        # logging.debug('query_delete: %s', query_delete)
+        # logging.debug('flat_values: %s', flat_values)
 
         execute_result = self.execute(query_delete, flat_values)
         #logging.debug('execute_result: %s', execute_result)
