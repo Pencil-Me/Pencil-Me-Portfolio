@@ -1,0 +1,32 @@
+# ===================================
+# Erstellt am: 01.07.2024, 14:02
+# Webseite: https://www.pencil-me.de
+# ===================================
+
+# ===================================
+# Folgende Seiten sollen nicht indexiert werden:
+# ===================================
+
+User-agent: *
+Crawl-delay: 5
+Disallow: /impressum/
+Disallow: /datenschutz/
+
+# ===================================
+# Schließe folgende Spider komplett aus:
+# ===================================
+
+User-agent: WebReaper
+User-agent: WebCopier
+User-agent: Offline Explorer
+User-agent: HTTrack
+User-agent: Microsoft.URL.Control
+User-agent: EmailCollector
+User-agent: penthesilea
+User-agent: CCBot
+User-agent: GPTBot
+User-agent: ChatGPT-User
+User-agent: Google-Extended
+User-agent: FacebookBot
+User-agent: Omgilibot
+Disallow: /

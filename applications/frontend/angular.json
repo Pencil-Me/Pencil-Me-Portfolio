@@ -25,8 +25,16 @@
             ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
-              "src/favicon.ico",
-              "src/assets"
+              {
+                "glob": "**/*",
+                "input": "src/assets/logos",
+                "output": "assets/logos"
+              },
+              {
+                "glob": "**/*",
+                "input": "src/assets/root",
+                "output": "."
+              }
             ],
             "styles": [
               "src/styles.scss"
@@ -90,7 +98,18 @@
             ],
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
-            "assets": ["src/favicon.ico", "src/assets"],
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "src/assets/logos",
+                "output": "assets/logos"
+              },
+              {
+                "glob": "**/*",
+                "input": "src/assets/root",
+                "output": "."
+              }
+            ],
             "styles": [
               "src/styles.scss"
             ],
