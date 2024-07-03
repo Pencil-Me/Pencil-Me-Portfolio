@@ -1,14 +1,14 @@
 # ===================================
-# Erstellt am: 01.07.2024, 14:02
 # Webseite: https://www.pencil-me.de
-# ===================================
-
-# ===================================
-# Folgende Seiten sollen nicht indexiert werden:
 # ===================================
 
 User-agent: *
 Crawl-delay: 5
+Sitemap: https://www.pencil-me.de/sitemap.xml
+
+# ===================================
+# Folgende Seiten sollen nicht indexiert werden:
+# ===================================
 Disallow: /impressum/
 Disallow: /datenschutz/
 
