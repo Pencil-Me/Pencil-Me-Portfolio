@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { BasicComponent } from '@layout/basic/basic.component';
-import {SeoGuard} from "@core/guards/seo.guard";
+import { SeoGuard } from '@core/guards/seo.guard';
 
 // Route configurations for the application
 export const routes: Routes = [
@@ -20,8 +20,8 @@ export const routes: Routes = [
           ogTitle: 'Home - Pencil&Me',
           ogDescription: 'Willkommen auf der Startseite von Pencil&Me. Hier finden Sie das Portfolio von Johannes Kromer.',
           ogUrl: 'https://www.pencil-me.de/home',
-          ogType: 'website'
-        }
+          ogType: 'website',
+        },
       },
       {
         path: 'contact',
@@ -34,8 +34,8 @@ export const routes: Routes = [
           ogTitle: 'Kontakt - Pencil&Me',
           ogDescription: 'Kontaktieren Sie Johannes Kromer, Freelance Frontend Developer bei Pencil&Me.',
           ogUrl: 'https://www.pencil-me.de/contact',
-          ogType: 'website'
-        }
+          ogType: 'website',
+        },
       },
       {
         path: 'about',
@@ -48,9 +48,8 @@ export const routes: Routes = [
           ogTitle: 'Über Uns - Pencil&Me',
           ogDescription: 'Erfahren Sie mehr über Johannes Kromer und Pencil&Me, sein Portfolio und seine Projekte.',
           ogUrl: 'https://www.pencil-me.de/about',
-          ogType: 'website'
-        }
-
+          ogType: 'website',
+        },
       },
       {
         path: 'projects',
@@ -63,8 +62,8 @@ export const routes: Routes = [
           ogTitle: 'Projekte - Pencil&Me',
           ogDescription: 'Entdecken Sie die Projekte von Johannes Kromer bei Pencil&Me.',
           ogUrl: 'https://www.pencil-me.de/projects',
-          ogType: 'website'
-        }
+          ogType: 'website',
+        },
       },
       {
         path: 'projects/:id',
@@ -73,6 +72,10 @@ export const routes: Routes = [
       {
         path: 'impressum',
         loadComponent: () => import('@modules/impressum/impressum.component').then((c) => c.ImpressumComponent),
+      },
+      {
+        path: 'datenschutz',
+        loadComponent: () => import('@modules/datenschutz/datenschutz.component').then((c) => c.DatenschutzComponent),
       },
       {
         path: 'error',

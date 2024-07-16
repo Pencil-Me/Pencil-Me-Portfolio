@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-impressum',
+  selector: 'app-datenschutz',
   standalone: true,
-  templateUrl: './impressum.component.html',
-  styleUrls: ['./impressum.component.scss'],
-  imports: [RouterLink],
+  imports: [],
+  templateUrl: './datenschutz.component.html',
+  styleUrl: './datenschutz.component.scss',
 })
-export class ImpressumComponent {
+export class DatenschutzComponent {
   email: string = 'info@pencil-me.de';
   encryptedEmail: string = this.encryptEmail(this.email);
 
