@@ -1,87 +1,593 @@
 <section class="container section-container">
   <h1 class="text-gray-900 text-3xl mb-4 font-medium title-font">Kontakt</h1>
 
-  <div *ngIf="emailIsSend" class="container mt-5">
-    <div class="row">
-      <div class="col-md-6 offset-md-3">
-        <div class="card">
-          <div class="card-body">
-            <h1 class="text-center mb-4">Erfolgreich gesendet!</h1>
-            <p class="text-center">
-              Vielen Dank für Ihre Nachricht. Wir haben Ihre Anfrage erhalten und werden uns bald mit Ihnen in Verbindung setzen.
-            </p>
-            <div class="text-center mt-4">
-              <a routerLink="/" class="btn btn-primary">Zurück zur Startseite</a>
+  <ng-container *ngIf="emailIsSend">
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col-md-6 offset-md-3">
+          <div class="card">
+            <div class="card-body">
+              <h1 class="text-center mb-4">Erfolgreich gesendet!</h1>
+              <p class="text-center">
+                Vielen Dank für Ihre Nachricht. Wir haben Ihre Anfrage erhalten und werden uns bald mit Ihnen in Verbindung setzen.
+              </p>
+              <div class="text-center mt-4">
+                <a routerLink="/" class="btn btn-primary">Zurück zur Startseite</a>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </ng-container>
 
-  <form *ngIf="!emailIsSend" [formGroup]="form" (ngSubmit)="send()" class="flex flex-col w-full mt-8">
-    <div
-      class="form-group has-validation mb-4"
-      [ngClass]="{
-        'was-validated': form.controls['name'].invalid && (form.controls['name'].dirty || form.controls['name'].touched),
-        'needs-validation': !(form.controls['name'].invalid && (form.controls['name'].dirty || form.controls['name'].touched))
-      }"
-    >
-      <label for="name" class="leading-7 text-sm text-gray-600">Dein Name</label>
-      <input required formControlName="name" type="text" id="name" name="name" class="form-control" />
+  <ng-container *ngIf="!emailIsSend">
+    <div class="row mt-5">
+      <div class="col-md-6">
+        <h3>Danke, dass du dir die Zeit genommen hast, mich zu kontaktieren. Wie kann ich dir heute helfen?</h3>
 
-      <div class="invalid-feedback" *ngIf="form.controls['name'].invalid && (form.controls['name'].dirty || form.controls['name'].touched)">
-        <div *ngIf="form.controls['name'].errors && form.controls['name'].errors['required']">Name is required</div>
-        <div *ngIf="form.controls['name'].errors && form.controls['name'].errors['pattern']">Invalid name format</div>
+        <p>Wähle aus</p>
+        <div class="d-flex flex-column mb-5">
+          <button (click)="contactForm = 'GENERALLY'" [ngClass]="{active:contactForm === 'GENERALLY'}" type="submit" class="btn btn-primary btn-lg mb-2">Allgemeiner Kontakt</button>
+          <button (click)="contactForm = 'PROJECT'" [ngClass]="{active:contactForm === 'PROJECT'}" type="submit" class="btn btn-primary btn-lg">Projektanfrage</button>
+        </div>
+
+        <p>
+          Alternativ kannst du mir eine E-Mail schreiben an:<br />
+          <a href="mailto:{{ email }}">{{ encryptedEmail }}</a>
+        </p>
+
+        <div class="btn-container">
+          <a routerLink="/" class="btn btn-outline-secondary btn-lg">Zurück zur Startseite</a>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <ng-container *ngIf="contactForm === 'GENERALLY'">
+          <form [formGroup]="generally_form" (ngSubmit)="generally_send()" class="row">
+            <div
+              class="form-group has-validation mb-4 col-md-6"
+              [ngClass]="{
+                'was-validated':
+                  generally_form.controls['generally_name'].invalid &&
+                  (generally_form.controls['generally_name'].dirty || generally_form.controls['generally_name'].touched),
+                'needs-validation': !(
+                  generally_form.controls['generally_name'].invalid &&
+                  (generally_form.controls['generally_name'].dirty || generally_form.controls['generally_name'].touched)
+                )
+              }"
+            >
+              <label for="generally_name" class="leading-7 text-sm text-gray-600">Dein Name <span>(*)</span></label>
+              <input required formControlName="generally_name" type="text" id="generally_name" name="generally_name" class="form-control" />
+
+              <div
+                class="invalid-feedback"
+                *ngIf="
+                  generally_form.controls['generally_name'].errors &&
+                  generally_form.controls['generally_name'].invalid &&
+                  (generally_form.controls['generally_name'].dirty || generally_form.controls['generally_name'].touched)
+                "
+              >
+                <div *ngIf="generally_form.controls['generally_name'].errors['required']">Name is required</div>
+                <div *ngIf="generally_form.controls['generally_name'].errors['pattern']">Invalid name format</div>
+              </div>
+            </div>
+            <div
+              class="form-group has-validation mb-4 col-md-6"
+              [ngClass]="{
+                'was-validated':
+                  generally_form.controls['generally_email'].invalid &&
+                  (generally_form.controls['generally_email'].dirty || generally_form.controls['generally_email'].touched),
+                'needs-validation': !(
+                  generally_form.controls['generally_email'].invalid &&
+                  (generally_form.controls['generally_email'].dirty || generally_form.controls['generally_email'].touched)
+                )
+              }"
+            >
+              <label for="generally_email" class="leading-7 text-sm text-gray-600">Deine Email <span>(*)</span></label>
+              <input
+                required
+                formControlName="generally_email"
+                type="email"
+                id="generally_email"
+                name="generally_email"
+                class="form-control"
+              />
+
+              <div
+                class="invalid-feedback"
+                *ngIf="
+                  generally_form.controls['generally_email'].errors &&
+                  generally_form.controls['generally_email'].invalid &&
+                  (generally_form.controls['generally_email'].dirty || generally_form.controls['generally_email'].touched)
+                "
+              >
+                <div *ngIf="generally_form.controls['generally_email'].errors['required']">Email is required</div>
+                <div *ngIf="generally_form.controls['generally_email'].errors['email']">Invalid email format</div>
+              </div>
+            </div>
+            <div
+              class="form-group has-validation mb-4"
+              [ngClass]="{
+                'was-validated':
+                  generally_form.controls['generally_message'].invalid &&
+                  (generally_form.controls['generally_message'].dirty || generally_form.controls['generally_message'].touched),
+                'needs-validation': !(
+                  generally_form.controls['generally_message'].invalid &&
+                  (generally_form.controls['generally_message'].dirty || generally_form.controls['generally_message'].touched)
+                )
+              }"
+            >
+              <label for="generally_message" class="leading-7 text-sm text-gray-600">Deine Nachricht <span>(*)</span></label>
+              <textarea
+                required
+                formControlName="generally_message"
+                id="generally_message"
+                name="generally_message"
+                class="form-control"
+              ></textarea>
+
+              <div
+                class="invalid-feedback"
+                *ngIf="
+                  generally_form.controls['generally_message'].errors &&
+                  generally_form.controls['generally_message'].invalid &&
+                  (generally_form.controls['generally_message'].dirty || generally_form.controls['generally_message'].touched)
+                "
+              >
+                <div *ngIf="generally_form.controls['generally_message'].errors['required']">Message is required</div>
+                <div *ngIf="generally_form.controls['generally_message'].errors['pattern']">Invalid Message format</div>
+              </div>
+            </div>
+
+            <input
+              type="checkbox"
+              formControlName="generally_contactByFax"
+              name="contact_me_by_fax_only"
+              value="1"
+              style="display: none !important"
+              tabindex="-1"
+              autocomplete="off"
+            />
+
+            <div
+              class="form-group has-validation mb-4"
+              [ngClass]="{
+                'was-validated':
+                  project_form.controls['project_yes'].invalid &&
+                  (project_form.controls['project_yes'].dirty || project_form.controls['project_yes'].touched),
+                'needs-validation': !(
+                  project_form.controls['project_yes'].invalid &&
+                  (project_form.controls['project_yes'].dirty || project_form.controls['project_yes'].touched)
+                )
+              }"
+            >
+              <input type="checkbox" formControlName="project_yes" id="project_yes" name="project_yes" value="1" autocomplete="off" />
+              <label for="project_yes" class="leading-7 text-sm text-gray-600">
+                <span>(*)</span> Ich stimme zu, dass meine Angaben aus dem Formular zur Beantwortung der Anfrage erhoben und verarbeitet
+                werden. Die Daten werden nach abgeschlossener Bearbeitung Ihrer Anfrage gelöscht. Sie können Ihre Einwilligung jederzeit für
+                die Zukunft per E-Mail an <a href="mailto:{{ email }}">{{ encryptedEmail }}</a> widerrufen. Detaillierte Informationen zum
+                Umgang mit Nutzerdaten finden Sie in unserer <a routerLink="/datenschutz">Datenschutzerklärung</a>.
+              </label>
+
+              <div
+                class="invalid-feedback"
+                *ngIf="
+                  project_form.controls['project_yes'].invalid &&
+                  (project_form.controls['project_yes'].dirty || project_form.controls['project_yes'].touched)
+                "
+              >
+                <div *ngIf="project_form.controls['project_yes'].errors && project_form.controls['project_yes'].errors['required']">
+                  Message is required
+                </div>
+                <div *ngIf="project_form.controls['project_yes'].errors && project_form.controls['project_yes'].errors['pattern']">
+                  Invalid Message format
+                </div>
+              </div>
+            </div>
+
+            <div class="btn-container">
+              <button (click)="contactForm = null" class="btn btn-outline-secondary btn-lg">Abbrechen</button>
+              <button type="submit" class="btn btn-primary btn-lg" [disabled]="generally_form.invalid">Senden</button>
+            </div>
+          </form>
+        </ng-container>
+
+        <ng-container *ngIf="contactForm === 'PROJECT'">
+          <form [formGroup]="project_form" (ngSubmit)="project_send()" class="row">
+            <h4>Kontaktdaten</h4>
+            <div
+              class="form-group has-validation mb-4 col-md-6"
+              [ngClass]="{
+                'was-validated':
+                  project_form.controls['project_company'].invalid &&
+                  (project_form.controls['project_company'].dirty || project_form.controls['project_company'].touched),
+                'needs-validation': !(
+                  project_form.controls['project_company'].invalid &&
+                  (project_form.controls['project_company'].dirty || project_form.controls['project_company'].touched)
+                )
+              }"
+            >
+              <label for="project_company" class="leading-7 text-sm text-gray-600">Unternehmen <span>(*)</span></label>
+              <input
+                required
+                formControlName="project_company"
+                type="text"
+                id="project_company"
+                name="project_company"
+                class="form-control"
+              />
+
+              <div
+                class="invalid-feedback"
+                *ngIf="
+                  project_form.controls['project_company'].invalid &&
+                  (project_form.controls['project_company'].dirty || project_form.controls['project_company'].touched)
+                "
+              >
+                <div *ngIf="project_form.controls['project_company'].errors && project_form.controls['project_company'].errors['required']">
+                  Name is required
+                </div>
+                <div *ngIf="project_form.controls['project_company'].errors && project_form.controls['project_company'].errors['pattern']">
+                  Invalid name format
+                </div>
+              </div>
+            </div>
+            <div
+              class="form-group has-validation mb-4 col-md-6"
+              [ngClass]="{
+                'was-validated':
+                  project_form.controls['project_contact_name'].invalid &&
+                  (project_form.controls['project_contact_name'].dirty || project_form.controls['project_contact_name'].touched),
+                'needs-validation': !(
+                  project_form.controls['project_contact_name'].invalid &&
+                  (project_form.controls['project_contact_name'].dirty || project_form.controls['project_contact_name'].touched)
+                )
+              }"
+            >
+              <label for="project_contact_name" class="leading-7 text-sm text-gray-600">Ansprechpartner <span>(*)</span></label>
+              <input
+                required
+                formControlName="project_contact_name"
+                type="text"
+                id="project_contact_name"
+                name="project_contact_name"
+                class="form-control"
+              />
+
+              <div
+                class="invalid-feedback"
+                *ngIf="
+                  project_form.controls['project_contact_name'].invalid &&
+                  (project_form.controls['project_contact_name'].dirty || project_form.controls['project_contact_name'].touched)
+                "
+              >
+                <div
+                  *ngIf="
+                    project_form.controls['project_contact_name'].errors && project_form.controls['project_contact_name'].errors['required']
+                  "
+                >
+                  Name is required
+                </div>
+                <div
+                  *ngIf="
+                    project_form.controls['project_contact_name'].errors && project_form.controls['project_contact_name'].errors['pattern']
+                  "
+                >
+                  Invalid name format
+                </div>
+              </div>
+            </div>
+            <div
+              class="form-group has-validation mb-4"
+              [ngClass]="{
+                'was-validated':
+                  project_form.controls['project_address'].invalid &&
+                  (project_form.controls['project_address'].dirty || project_form.controls['project_address'].touched),
+                'needs-validation': !(
+                  project_form.controls['project_address'].invalid &&
+                  (project_form.controls['project_address'].dirty || project_form.controls['project_address'].touched)
+                )
+              }"
+            >
+              <label for="project_address" class="leading-7 text-sm text-gray-600">Anschrift <span>(*)</span></label>
+              <textarea required formControlName="project_address" id="project_address" name="message" class="form-control"></textarea>
+
+              <div
+                class="invalid-feedback"
+                *ngIf="
+                  project_form.controls['project_address'].invalid &&
+                  (project_form.controls['project_address'].dirty || project_form.controls['project_address'].touched)
+                "
+              >
+                <div *ngIf="project_form.controls['project_address'].errors && project_form.controls['project_address'].errors['required']">
+                  Message is required
+                </div>
+                <div *ngIf="project_form.controls['project_address'].errors && project_form.controls['project_address'].errors['pattern']">
+                  Invalid Message format
+                </div>
+              </div>
+            </div>
+            <div
+              class="form-group has-validation mb-4 col-md-6"
+              [ngClass]="{
+                'was-validated':
+                  project_form.controls['project_phone'].invalid &&
+                  (project_form.controls['project_phone'].dirty || project_form.controls['project_phone'].touched),
+                'needs-validation': !(
+                  project_form.controls['project_phone'].invalid &&
+                  (project_form.controls['project_phone'].dirty || project_form.controls['project_phone'].touched)
+                )
+              }"
+            >
+              <label for="project_phone" class="leading-7 text-sm text-gray-600">Telefon</label>
+              <input required formControlName="project_phone" type="text" id="project_phone" name="project_phone" class="form-control" />
+
+              <div
+                class="invalid-feedback"
+                *ngIf="
+                  project_form.controls['project_phone'].invalid &&
+                  (project_form.controls['project_phone'].dirty || project_form.controls['project_phone'].touched)
+                "
+              >
+                <div *ngIf="project_form.controls['project_phone'].errors && project_form.controls['project_phone'].errors['required']">
+                  Name is required
+                </div>
+                <div *ngIf="project_form.controls['project_phone'].errors && project_form.controls['project_phone'].errors['pattern']">
+                  Invalid name format
+                </div>
+              </div>
+            </div>
+            <div
+              class="form-group has-validation mb-4 col-md-6"
+              [ngClass]="{
+                'was-validated':
+                  project_form.controls['project_email'].invalid &&
+                  (project_form.controls['project_email'].dirty || project_form.controls['project_email'].touched),
+                'needs-validation': !(
+                  project_form.controls['project_email'].invalid &&
+                  (project_form.controls['project_email'].dirty || project_form.controls['project_email'].touched)
+                )
+              }"
+            >
+              <label for="project_email" class="leading-7 text-sm text-gray-600">E-Mail <span>(*)</span></label>
+              <input required formControlName="project_email" type="text" id="project_email" name="project_email" class="form-control" />
+
+              <div
+                class="invalid-feedback"
+                *ngIf="
+                  project_form.controls['project_email'].invalid &&
+                  (project_form.controls['project_email'].dirty || project_form.controls['project_email'].touched)
+                "
+              >
+                <div *ngIf="project_form.controls['project_email'].errors && project_form.controls['project_email'].errors['required']">
+                  Name is required
+                </div>
+                <div *ngIf="project_form.controls['project_email'].errors && project_form.controls['project_email'].errors['pattern']">
+                  Invalid name format
+                </div>
+              </div>
+            </div>
+
+            <h4>Allgemeine Informationen zum Projekt</h4>
+            <div
+              class="form-group has-validation mb-4"
+              [ngClass]="{
+                'was-validated':
+                  project_form.controls['project_title'].invalid &&
+                  (project_form.controls['project_title'].dirty || project_form.controls['project_title'].touched),
+                'needs-validation': !(
+                  project_form.controls['project_title'].invalid &&
+                  (project_form.controls['project_title'].dirty || project_form.controls['project_title'].touched)
+                )
+              }"
+            >
+              <label for="project_title" class="leading-7 text-sm text-gray-600">Titel des Projekts <span>(*)</span></label>
+              <input required formControlName="project_title" type="email" id="project_title" name="project_title" class="form-control" />
+
+              <div
+                class="invalid-feedback"
+                *ngIf="
+                  project_form.controls['project_title'].invalid &&
+                  (project_form.controls['project_title'].dirty || project_form.controls['project_title'].touched)
+                "
+              >
+                <div *ngIf="project_form.controls['project_title'].errors && project_form.controls['project_title'].errors['required']">
+                  Email is required
+                </div>
+                <div *ngIf="project_form.controls['project_title'].errors && project_form.controls['project_title'].errors['email']">
+                  Invalid email format
+                </div>
+              </div>
+            </div>
+            <div
+              class="form-group has-validation mb-4"
+              [ngClass]="{
+                'was-validated':
+                  project_form.controls['project_timeline'].invalid &&
+                  (project_form.controls['project_timeline'].dirty || project_form.controls['project_title'].touched),
+                'needs-validation': !(
+                  project_form.controls['project_timeline'].invalid &&
+                  (project_form.controls['project_timeline'].dirty || project_form.controls['project_title'].touched)
+                )
+              }"
+            >
+              <label for="project_timeline" class="leading-7 text-sm text-gray-600"
+                >Welcher Zeitraum ist für das Projekt eingeplant? Gibt es eine Deadline? <span>(*)</span>
+              </label>
+              <input
+                required
+                formControlName="project_timeline"
+                type="email"
+                id="project_timeline"
+                name="project_timeline"
+                class="form-control"
+              />
+
+              <div
+                class="invalid-feedback"
+                *ngIf="
+                  project_form.controls['project_timeline'].invalid &&
+                  (project_form.controls['project_timeline'].dirty || project_form.controls['project_timeline'].touched)
+                "
+              >
+                <div
+                  *ngIf="project_form.controls['project_timeline'].errors && project_form.controls['project_timeline'].errors['required']"
+                >
+                  Email is required
+                </div>
+                <div *ngIf="project_form.controls['project_timeline'].errors && project_form.controls['project_timeline'].errors['email']">
+                  Invalid email format
+                </div>
+              </div>
+            </div>
+            <div
+              class="form-group has-validation mb-4"
+              [ngClass]="{
+                'was-validated':
+                  project_form.controls['project_description'].invalid &&
+                  (project_form.controls['project_description'].dirty || project_form.controls['project_description'].touched),
+                'needs-validation': !(
+                  project_form.controls['project_description'].invalid &&
+                  (project_form.controls['project_description'].dirty || project_form.controls['project_description'].touched)
+                )
+              }"
+            >
+              <label for="project_description" class="leading-7 text-sm text-gray-600"
+                >Beschreibe das Projekt stichpunktartig <span>(*)</span></label
+              >
+              <textarea
+                required
+                formControlName="project_description"
+                id="project_description"
+                name="project_description"
+                class="form-control"
+              ></textarea>
+
+              <div
+                class="invalid-feedback"
+                *ngIf="
+                  project_form.controls['project_description'].invalid &&
+                  (project_form.controls['project_description'].dirty || project_form.controls['project_description'].touched)
+                "
+              >
+                <div
+                  *ngIf="
+                    project_form.controls['project_description'].errors && project_form.controls['project_description'].errors['required']
+                  "
+                >
+                  Message is required
+                </div>
+                <div
+                  *ngIf="
+                    project_form.controls['project_description'].errors && project_form.controls['project_description'].errors['pattern']
+                  "
+                >
+                  Invalid Message format
+                </div>
+              </div>
+            </div>
+
+            <input
+              type="checkbox"
+              formControlName="project_contactByFax"
+              name="contact_me_by_fax_only"
+              value="1"
+              style="display: none !important"
+              tabindex="-1"
+              autocomplete="off"
+            />
+
+            <div
+              class="form-group has-validation mb-4"
+              [ngClass]="{
+                'was-validated':
+                  project_form.controls['project_yes'].invalid &&
+                  (project_form.controls['project_yes'].dirty || project_form.controls['project_yes'].touched),
+                'needs-validation': !(
+                  project_form.controls['project_yes'].invalid &&
+                  (project_form.controls['project_yes'].dirty || project_form.controls['project_yes'].touched)
+                )
+              }"
+            >
+              <input type="checkbox" formControlName="project_yes" id="project_yes" name="project_yes" value="1" autocomplete="off" />
+              <label for="project_yes" class="leading-7 text-sm text-gray-600">
+                <span>(*)</span> Ich stimme zu, dass meine Angaben aus dem Formular zur Beantwortung der Anfrage erhoben und verarbeitet
+                werden. Die Daten werden nach abgeschlossener Bearbeitung Ihrer Anfrage gelöscht. Sie können Ihre Einwilligung jederzeit für
+                die Zukunft per E-Mail an <a href="mailto:{{ email }}">{{ encryptedEmail }}</a> widerrufen. Detaillierte Informationen zum
+                Umgang mit Nutzerdaten finden Sie in unserer <a routerLink="/datenschutz">Datenschutzerklärung</a>.
+              </label>
+
+              <div
+                class="invalid-feedback"
+                *ngIf="
+                  project_form.controls['project_yes'].invalid &&
+                  (project_form.controls['project_yes'].dirty || project_form.controls['project_yes'].touched)
+                "
+              >
+                <div *ngIf="project_form.controls['project_yes'].errors && project_form.controls['project_yes'].errors['required']">
+                  Message is required
+                </div>
+                <div *ngIf="project_form.controls['project_yes'].errors && project_form.controls['project_yes'].errors['pattern']">
+                  Invalid Message format
+                </div>
+              </div>
+            </div>
+
+            <p>
+              Deine Anfrage ist kostenlos und wird verschlüsselt übermittelt. Du erhälsten eine Kopie an die oben angegebene E-Mail-Adresse.
+            </p>
+
+            <div class="btn-container">
+              <button (click)="contactForm = null" class="btn btn-outline-secondary btn-lg">Abbrechen</button>
+              <button type="submit" class="btn btn-primary btn-lg" [disabled]="project_form.invalid">Senden</button>
+            </div>
+          </form>
+        </ng-container>
       </div>
     </div>
-    <div
-      class="form-group has-validation mb-4"
-      [ngClass]="{
-        'was-validated': form.controls['email'].invalid && (form.controls['email'].dirty || form.controls['email'].touched),
-        'needs-validation': !(form.controls['email'].invalid && (form.controls['email'].dirty || form.controls['email'].touched))
-      }"
-    >
-      <label for="email" class="leading-7 text-sm text-gray-600">Deine Email</label>
-      <input required formControlName="email" type="email" id="email" name="email" class="form-control" />
-
-      <div
-        class="invalid-feedback"
-        *ngIf="form.controls['email'].invalid && (form.controls['email'].dirty || form.controls['email'].touched)"
-      >
-        <div *ngIf="form.controls['email'].errors && form.controls['email'].errors['required']">Email is required</div>
-        <div *ngIf="form.controls['email'].errors && form.controls['email'].errors['email']">Invalid email format</div>
-      </div>
-    </div>
-    <div
-      class="form-group has-validation mb-4"
-      [ngClass]="{
-        'was-validated': form.controls['message'].invalid && (form.controls['message'].dirty || form.controls['message'].touched),
-        'needs-validation': !(form.controls['message'].invalid && (form.controls['message'].dirty || form.controls['message'].touched))
-      }"
-    >
-      <label for="message" class="leading-7 text-sm text-gray-600">Deine Nachricht</label>
-      <textarea required formControlName="message" id="message" name="message" class="form-control"></textarea>
-
-      <div
-        class="invalid-feedback"
-        *ngIf="form.controls['message'].invalid && (form.controls['message'].dirty || form.controls['message'].touched)"
-      >
-        <div *ngIf="form.controls['message'].errors && form.controls['message'].errors['required']">Message is required</div>
-        <div *ngIf="form.controls['message'].errors && form.controls['message'].errors['pattern']">Invalid Message format</div>
-      </div>
-    </div>
-
-    <input
-      type="checkbox"
-      formControlName="contactByFax"
-      name="contact_me_by_fax_only"
-      value="1"
-      style="display: none !important"
-      tabindex="-1"
-      autocomplete="off"
-    />
-
-    <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Senden</button>
-  </form>
+  </ng-container>
 </section>
+
+<ng-template #textInput let-label="label" let-variable="variable" let-form="form">
+  <div
+    *ngIf="form.controls[variable]"
+    class="form-group has-validation mb-4 col-md-6"
+    [ngClass]="{
+      'was-validated': form.controls[variable].invalid && (form.controls[variable].dirty || form.controls[variable].touched),
+      'needs-validation': !(form.controls[variable].invalid && (form.controls[variable].dirty || form.controls[variable].touched))
+    }"
+  >
+    <label [for]="variable" class="leading-7 text-sm text-gray-600">{{ label }}</label>
+    <input required [formControlName]="variable" type="text" [id]="variable" [name]="variable" class="form-control" />
+
+    <div
+      class="invalid-feedback"
+      *ngIf="form.controls[variable].invalid && (form.controls[variable].dirty || form.controls[variable].touched)"
+    >
+      <div *ngIf="form.controls[variable].errors && form.controls[variable].errors['required']">Name is required</div>
+      <div *ngIf="form.controls[variable].errors && form.controls[variable].errors['pattern']">Invalid name format</div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #emailInput let-label="label" let-variable="variable" let-form="form">
+  <div
+    *ngIf="form.controls[variable]"
+    class="form-group has-validation mb-4 col-md-6"
+    [ngClass]="{
+      'was-validated': form.controls[variable].invalid && (form.controls[variable].dirty || form.controls[variable].touched),
+      'needs-validation': !(form.controls[variable].invalid && (form.controls[variable].dirty || form.controls[variable].touched))
+    }"
+  >
+    <label [for]="variable" class="leading-7 text-sm text-gray-600">{{ label }}</label>
+    <input required [formControlName]="variable" type="text" [id]="variable" [name]="variable" class="form-control" />
+
+    <div
+      class="invalid-feedback"
+      *ngIf="form.controls[variable].invalid && (form.controls[variable].dirty || form.controls[variable].touched)"
+    >
+      <div *ngIf="form.controls[variable].errors && form.controls[variable].errors['required']">Name is required</div>
+      <div *ngIf="form.controls[variable].errors && form.controls[variable].errors['pattern']">Invalid name format</div>
+    </div>
+  </div>
+</ng-template>
