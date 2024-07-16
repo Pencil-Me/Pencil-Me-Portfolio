@@ -3,15 +3,15 @@ import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angul
 import { Meta, Title } from '@angular/platform-browser';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SeoGuard implements CanActivate {
+  constructor(
+    private meta: Meta,
+    private title: Title,
+  ) {}
 
-  constructor(private meta: Meta, private title: Title) { }
-
-  canActivate(
-    next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): boolean {
+  canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     const routeData = next.data;
 
     const title = typeof routeData['title'] === 'function' ? routeData['title'](next) : routeData['title'];
