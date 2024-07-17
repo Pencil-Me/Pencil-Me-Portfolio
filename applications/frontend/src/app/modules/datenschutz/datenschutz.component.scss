@@ -7,4 +7,12 @@
     letter-spacing: -.045em;
     text-transform: uppercase;
   }
+
+  ul {
+    list-style-type: circle;
+
+    li:not(:last-child) {
+      margin-bottom: .5rem;
+    }
+  }
 }
