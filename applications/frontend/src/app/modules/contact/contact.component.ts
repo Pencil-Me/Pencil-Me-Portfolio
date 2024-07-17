@@ -3,11 +3,14 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ApiClientService } from '@core/services/api/api-client.service';
 import { NgClass, NgIf, NgTemplateOutlet } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import {FaIconComponent} from "@fortawesome/angular-fontawesome";
+import {faBars} from "@fortawesome/free-solid-svg-icons";
+import {faEnvelope} from "@fortawesome/free-regular-svg-icons";
 
 @Component({
   selector: 'app-contact',
   standalone: true,
-  imports: [ReactiveFormsModule, NgIf, NgClass, RouterLink, NgTemplateOutlet],
+  imports: [ReactiveFormsModule, NgIf, NgClass, RouterLink, NgTemplateOutlet, FaIconComponent],
   templateUrl: './contact.component.html',
   styleUrl: './contact.component.scss',
 })
@@ -15,6 +18,8 @@ export class ContactComponent {
   generally_form: FormGroup;
   project_form: FormGroup;
   emailIsSend: boolean = false;
+  emailSending: boolean = false;
+  emailHasError: boolean = false;
   email: string = 'info@pencil-me.de';
   encryptedEmail: string = this.encryptEmail(this.email);
   contactForm: null | 'GENERALLY' | 'PROJECT' = null;
@@ -37,7 +42,7 @@ export class ContactComponent {
       generally_email: ['', [Validators.required, Validators.email]],
       generally_message: ['', [Validators.required, Validators.pattern('[a-zA-Z0-9!@#$%^&*(),.?":{}|<> ]*')]],
       generally_sendCopy: [false],
-      project_yes: [false],
+      generally_yes: [false, [Validators.required, Validators.requiredTrue]],
       generally_contactByFax: [null],
     });
   }
@@ -49,16 +54,15 @@ export class ContactComponent {
   private createProjectForm(): FormGroup {
     return this.formBuilder.group({
       project_company: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*')]],
-      project_contact_name: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*')]],
-      project_phone: ['', [Validators.required, Validators.email]],
+      project_contactName: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*')]],
+      project_phone: [''],
       project_email: ['', [Validators.required, Validators.email]],
-      project_message: ['', [Validators.required, Validators.pattern('[a-zA-Z0-9!@#$%^&*(),.?":{}|<> ]*')]],
       project_address: ['', [Validators.required, Validators.pattern('[a-zA-Z0-9!@#$%^&*(),.?":{}|<> ]*')]],
-      project_title: ['', [Validators.required, Validators.pattern('[a-zA-Z0-9!@#$%^&*(),.?":{}|<> ]*')]],
+      project_title: ['', [Validators.pattern('[a-zA-Z0-9!@#$%^&*(),.?":{}|<> ]*')]],
       project_description: ['', [Validators.required, Validators.pattern('[a-zA-Z0-9!@#$%^&*(),.?":{}|<> ]*')]],
       project_timeline: ['', [Validators.required, Validators.pattern('[a-zA-Z0-9!@#$%^&*(),.?":{}|<> ]*')]],
       project_sendCopy: [false],
-      project_yes: [false],
+      project_yes: [false, [Validators.required, Validators.requiredTrue]],
       project_contactByFax: [null],
     });
   }
@@ -76,20 +80,64 @@ export class ContactComponent {
    * If the form is invalid, it marks all controls as touched to show validation errors.
    */
   generally_send(): void {
-    if (this.generally_form.invalid) {
-      this.markFormAsTouched();
+    if (this.generally_form.invalid || this.generally_form.get('generally_yes')?.value === false) {
+      this.markGenerallyFormAsTouched();
       return;
     }
 
-    const formData = this.generally_form.value;
+    const formData = {
+      contactByFax: this.generally_form.get('generally_contactByFax')?.value,
+      email: this.generally_form.get('generally_email')?.value,
+      message: this.generally_form.get('generally_message')?.value,
+      name: this.generally_form.get('generally_name')?.value,
+      sendCopy: this.generally_form.get('generally_sendCopy')?.value,
+    };
+
     this.sendEmail(formData);
   }
 
   /**
    * Marks all form controls as touched to trigger validation messages.
    */
-  private markFormAsTouched(): void {
+  private markGenerallyFormAsTouched(): void {
     this.generally_form.markAllAsTouched();
+  }
+
+  /**
+   * Sends the contact form project data if the form is valid.
+   * If the form is invalid, it marks all controls as touched to show validation errors.
+   */
+  project_send(): void {
+    if (this.project_form.invalid || this.project_form.get('project_yes')?.value === false) {
+      this.markProjectFormAsTouched();
+      return;
+    }
+
+    const formData = {
+      contactByFax: this.project_form.get('project_contactByFax')?.value,
+      email: this.project_form.get('project_email')?.value,
+      message: `Unternehmen: ${this.project_form.get('project_company')?.value},
+      Kontaktname: ${this.project_form.get('project_contactName')?.value},
+      Telefon: ${this.project_form.get('project_phone')?.value},
+      Email: ${this.project_form.get('project_email')?.value},
+      Adresse: ${this.project_form.get('project_address')?.value}
+      -------------------------------------------------------
+      Projekttitel: ${this.project_form.get('project_title')?.value},
+      Beschreibung: ${this.project_form.get('project_description')?.value},
+      Timeline: ${this.project_form.get('project_timeline')?.value},
+      `,
+      name: `${this.project_form.get('project_contactName')?.value} - ${this.project_form.get('project_company')?.value}`,
+      sendCopy: this.project_form.get('project_sendCopy')?.value,
+    };
+    console.log(formData)
+    this.sendEmail(formData);
+  }
+
+  /**
+   * Marks all form controls as touched to trigger validation messages.
+   */
+  private markProjectFormAsTouched(): void {
+    this.project_form.markAllAsTouched();
   }
 
   /**
@@ -97,10 +145,13 @@ export class ContactComponent {
    * @param {any} formData The form data to be sent.
    */
   private sendEmail(formData: any): void {
-    this.apiClient.post('send_email', formData).subscribe({
+    console.log(formData);
+    this.emailSending = true;
+    setTimeout(() => this.apiClient.post('send_email', formData).subscribe({
       next: (data) => this.handleSuccess(data),
       error: (error) => this.handleError(error),
-    });
+    }), 50000)
+
   }
 
   /**
@@ -109,6 +160,7 @@ export class ContactComponent {
    */
   private handleSuccess(data: any): void {
     this.emailIsSend = true;
+    this.emailSending = false;
     this.generally_form.reset();
     this.project_form.reset();
   }
@@ -118,21 +170,9 @@ export class ContactComponent {
    * @param {any} error The error object.
    */
   private handleError(error: any): void {
+    this.emailHasError = true;
+    this.emailSending = false;
     console.error('There was an error!', error);
-  }
-
-  /**
-   * Sends the contact form project data if the form is valid.
-   * If the form is invalid, it marks all controls as touched to show validation errors.
-   */
-  project_send(): void {
-    if (this.project_form.invalid) {
-      this.markFormAsTouched();
-      return;
-    }
-
-    const formData = this.project_form.value;
-    this.sendEmail(formData);
   }
 
   /**
@@ -144,4 +184,7 @@ export class ContactComponent {
   private encryptEmail(email: string): string {
     return email.replace('@', '[at]');
   }
+
+  protected readonly faBars = faBars;
+  protected readonly faEnvelope = faEnvelope;
 }
