@@ -57,7 +57,9 @@
       </div>
       <div class="col-md-6 position-relative">
         <div class="alert alert-danger" *ngIf="emailHasError">
-          Ein Fehler beim Senden der Anfrage ist aufgetreten. Versuche es zu einem späteren Zeitpunkt erneut oder sende direkt eine E-Mail an <a href="mailto:{{ email }}">{{ encryptedEmail }}</a>.
+          Ein Fehler beim Senden der Anfrage ist aufgetreten. Versuche es zu einem späteren Zeitpunkt erneut oder sende direkt eine E-Mail
+          an <a href="mailto:{{ email }}">{{ encryptedEmail }}</a
+          >.
         </div>
         <div class="spinner-overlay" *ngIf="emailSending">
           <div class="spinner-border" role="status">
@@ -70,9 +72,7 @@
           </div>
         </ng-container>
         <ng-container *ngIf="contactForm === 'GENERALLY'">
-          <div class="alert alert-warning" *ngIf="generally_form.touched && !generally_form.valid">
-            Überprüfe deine Eingabe.
-          </div>
+          <div class="alert alert-warning" *ngIf="allRequiredFieldsTouchedAndInvalid(generally_form)">Überprüfe deine Eingabe.</div>
           <form [formGroup]="generally_form" (ngSubmit)="generally_send()" class="row">
             <ng-container
               [ngTemplateOutlet]="textInput"
@@ -134,9 +134,7 @@
         </ng-container>
 
         <ng-container *ngIf="contactForm === 'PROJECT'">
-          <div class="alert alert-warning" *ngIf="project_form.touched && !project_form.valid">
-            Überprüfe deine Eingabe.
-          </div>
+          <div class="alert alert-warning" *ngIf="allRequiredFieldsTouchedAndInvalid(project_form)">Überprüfe deine Eingabe.</div>
           <form [formGroup]="project_form" (ngSubmit)="project_send()" class="row">
             <h4>Kontaktdaten</h4>
             <ng-container
@@ -260,34 +258,24 @@
     class="form-group has-validation {{ class }}"
     [formGroup]="form"
     [ngClass]="{
-      'was-validated':
-        form.controls[variable].invalid &&
-        (form.controls[variable].dirty || form.controls[variable].touched),
-      'needs-validation':
-        !(
-          form.controls[variable].invalid &&
-          (form.controls[variable].dirty || form.controls[variable].touched)
-        )
+      'was-validated': form.controls[variable].dirty || form.controls[variable].touched,
+      'is-invalid': form.controls[variable].invalid && (form.controls[variable].dirty || form.controls[variable].touched),
+      'is-valid': form.controls[variable].valid && (form.controls[variable].dirty || form.controls[variable].touched)
     }"
   >
-    <ng-container *ngIf="required">
-      <label [for]="variable" class="leading-7 text-sm text-gray-600">{{ label }}</label>
-      <input required [formControlName]="variable" type="text" [id]="variable" [name]="variable" class="form-control" />
-    </ng-container>
-    <ng-container *ngIf="!required">
-      <label [for]="variable" class="leading-7 text-sm text-gray-600">{{ label }} (optional)</label>
-      <input [formControlName]="variable" type="text" [id]="variable" [name]="variable" class="form-control" />
-    </ng-container>
+    <label [for]="variable" class="leading-7 text-sm text-gray-600"> {{ label }} <span *ngIf="!required">(optional)</span> </label>
+    <input [required]="required" [formControlName]="variable" type="text" [id]="variable" [name]="variable" class="form-control" />
 
     <div
       class="invalid-feedback"
       *ngIf="
         form.controls[variable].errors &&
         form.controls[variable].invalid &&
-        (form.controls[variable].dirty || form.controls[variable].touched)"
+        (form.controls[variable].dirty || form.controls[variable].touched)
+      "
     >
-      <div *ngIf="form.controls[variable].errors?.['required']">"{{ label }}" ist benötigt</div>
-      <div *ngIf="form.controls[variable].errors?.['pattern']">Falsches Format für "{{ label }}"</div>
+      <div *ngIf="!!form.controls[variable].errors?.['required']">"{{ label }}" ist benötigt</div>
+      <div *ngIf="!!form.controls[variable].errors?.['pattern']">Falsches Format für "{{ label }}"</div>
     </div>
   </div>
 </ng-template>
@@ -298,72 +286,13 @@
     class="form-group has-validation {{ class }}"
     [formGroup]="form"
     [ngClass]="{
-    'was-validated':
-      form.controls[variable].invalid &&
-      (form.controls[variable].dirty || form.controls[variable].touched),
-    'needs-validation':
-      !(
-        form.controls[variable].invalid &&
-        (form.controls[variable].dirty || form.controls[variable].touched)
-      )
-  }"
-  >
-    <ng-container *ngIf="required">
-      <label [for]="variable" class="leading-7 text-sm text-gray-600">{{ label }}</label>
-      <input required [formControlName]="variable" type="email" [id]="variable" [name]="variable" class="form-control" />
-    </ng-container>
-    <ng-container *ngIf="!required">
-      <label [for]="variable" class="leading-7 text-sm text-gray-600">{{ label }} (optional)</label>
-      <input [formControlName]="variable" type="email" [id]="variable" [name]="variable" class="form-control" />
-    </ng-container>
-
-    <div
-      class="invalid-feedback"
-      *ngIf="
-      form.controls[variable].errors &&
-      form.controls[variable].invalid &&
-      (form.controls[variable].dirty || form.controls[variable].touched)"
-    >
-      <div *ngIf="form.controls[variable].errors?.['required']">"{{ label }}" ist benötigt</div>
-      <div *ngIf="form.controls[variable].errors?.['pattern']">Falsches Format für "{{ label }}"</div>
-    </div>
-  </div>
-</ng-template>
-
-<ng-template #textareaInput let-label="label" let-variable="variable" let-form="form" let-required="required" let-class="class">
-  <div
-    class="form-group has-validation {{ class }}"
-    [formGroup]="form"
-    [ngClass]="{
-      'was-validated':
-        form.controls[variable].invalid &&
-        (form.controls[variable].dirty || form.controls[variable].touched),
-      'needs-validation': !(
-        form.controls[variable].invalid &&
-        (form.controls[variable].dirty || form.controls[variable].touched)
-      )
+      'was-validated': form.controls[variable].dirty || form.controls[variable].touched,
+      'is-invalid': form.controls[variable].invalid && (form.controls[variable].dirty || form.controls[variable].touched),
+      'is-valid': form.controls[variable].valid && (form.controls[variable].dirty || form.controls[variable].touched)
     }"
   >
-    <ng-container *ngIf="required">
-      <label [for]="variable" class="leading-7 text-sm text-gray-600">{{ label }}</label>
-      <textarea
-        required
-        [formControlName]="variable"
-        [id]="variable"
-        [name]="variable"
-        class="form-control"
-      ></textarea>
-    </ng-container>
-    <ng-container *ngIf="!required">
-        <label [for]="variable" class="leading-7 text-sm text-gray-600">{{ label }} (optional)</label>
-        <textarea
-          required
-          [formControlName]="variable"
-          [id]="variable"
-          [name]="variable"
-          class="form-control"
-        ></textarea>
-    </ng-container>
+    <label [for]="variable" class="leading-7 text-sm text-gray-600"> {{ label }} <span *ngIf="!required">(optional)</span> </label>
+    <input [required]="required" [formControlName]="variable" type="email" [id]="variable" [name]="variable" class="form-control" />
 
     <div
       class="invalid-feedback"
@@ -373,43 +302,67 @@
         (form.controls[variable].dirty || form.controls[variable].touched)
       "
     >
-      <div *ngIf="form.controls[variable].errors?.['required']">"{{ label }}" ist benötigt</div>
-      <div *ngIf="form.controls[variable].errors?.['pattern']">Falsches Format für "{{ label }}"</div>
+      <div *ngIf="!!form.controls[variable].errors?.['required']">"{{ label }}" ist benötigt</div>
+      <div *ngIf="!!form.controls[variable].errors?.['pattern'] || !!form.controls[variable].errors?.['email']">
+        Falsches Format für "{{ label }}"
+      </div>
     </div>
   </div>
 </ng-template>
 
-<ng-template #confirmInput
-             let-variable="variable"
-             let-form="form"
-             let-class="class">
+<ng-template #textareaInput let-label="label" let-variable="variable" let-form="form" let-required="required" let-class="class">
   <div
     class="form-group has-validation {{ class }}"
     [formGroup]="form"
     [ngClass]="{
-      'was-validated':
-        form.controls[variable].invalid &&
-        (form.controls[variable].dirty || form.controls[variable].touched),
-      'needs-validation': !(
-        form.controls[variable].invalid &&
-        (form.controls[variable].dirty || form.controls[variable].touched)
-      )
+      'was-validated': form.controls[variable].dirty || form.controls[variable].touched,
+      'is-invalid': form.controls[variable].invalid && (form.controls[variable].dirty || form.controls[variable].touched),
+      'is-valid': form.controls[variable].valid && (form.controls[variable].dirty || form.controls[variable].touched)
     }"
   >
-    <input
-      required
+    <label [for]="variable" class="leading-7 text-sm text-gray-600"> {{ label }} <span *ngIf="!required">(optional)</span> </label>
+    <textarea
+      [required]="required"
       [formControlName]="variable"
-      type="checkbox"
       [id]="variable"
       [name]="variable"
-      value="1"
-      autocomplete="off"
-    />
+      class="form-control"
+      [attr.maxLength]="form.controls[variable].errors?.['maxLength']?.requiredLength || null"
+    ></textarea>
+
+    <div class="char-count">{{ form.controls[variable].value?.length || 0 }}/{{ maxLength || '∞' }}</div>
+
+    <div
+      class="invalid-feedback"
+      *ngIf="
+        form.controls[variable].errors &&
+        form.controls[variable].invalid &&
+        (form.controls[variable].dirty || form.controls[variable].touched)
+      "
+    >
+      <div *ngIf="!!form.controls[variable].errors?.['required']">"{{ label }}" ist benötigt</div>
+      <div *ngIf="!!form.controls[variable].errors?.['pattern']">Falsches Format für "{{ label }}"</div>
+      <div *ngIf="!!form.controls[variable].errors?.['maxlength']">Maximale Länge für "{{ label }}" ist {{ maxLength }} Zeichen</div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #confirmInput let-variable="variable" let-form="form" let-class="class">
+  <div
+    class="form-group has-validation checkbox {{ class }}"
+    [formGroup]="form"
+    [ngClass]="{
+      'was-validated': form.controls[variable].dirty || form.controls[variable].touched,
+      'is-invalid': form.controls[variable].invalid && (form.controls[variable].dirty || form.controls[variable].touched),
+      'is-valid': form.controls[variable].valid && (form.controls[variable].dirty || form.controls[variable].touched)
+    }"
+  >
+    <input required [formControlName]="variable" type="checkbox" [id]="variable" [name]="variable" value="1" autocomplete="off" />
     <label [for]="variable" class="leading-7 text-sm text-gray-600">
-      Ich stimme zu, dass meine Angaben aus dem Formular zur Beantwortung der Anfrage erhoben und verarbeitet werden. Die Daten
-      werden nach abgeschlossener Bearbeitung Ihrer Anfrage gelöscht. Sie können Ihre Einwilligung jederzeit für die Zukunft per
-      E-Mail an <a href="mailto:{{ email }}">{{ encryptedEmail }}</a> widerrufen. Detaillierte Informationen zum Umgang mit
-      Nutzerdaten finden Sie in unserer <a routerLink="/datenschutz">Datenschutzerklärung</a>.
+      Ich stimme zu, dass meine Angaben aus dem Formular zur Beantwortung der Anfrage erhoben und verarbeitet werden. Die Daten werden nach
+      abgeschlossener Bearbeitung Ihrer Anfrage gelöscht. Sie können Ihre Einwilligung jederzeit für die Zukunft per E-Mail an
+      <a href="mailto:{{ email }}">{{ encryptedEmail }}</a> widerrufen. Detaillierte Informationen zum Umgang mit Nutzerdaten finden Sie in
+      unserer <a routerLink="/datenschutz">Datenschutzerklärung</a>.
     </label>
 
     <div
@@ -431,14 +384,9 @@
   </p>
 </ng-template>
 
-<ng-template #confirmButtons
-             let-form="form">
+<ng-template #confirmButtons let-form="form">
   <div class="btn-container">
-    <button
-      (click)="contactForm = null"
-      class="btn btn-outline-secondary btn-lg">Abbrechen</button>
-    <button
-      type="submit"
-      class="btn btn-primary btn-lg">Senden</button>
+    <button (click)="contactForm = null" class="btn btn-outline-secondary btn-lg">Abbrechen</button>
+    <button type="submit" class="btn btn-primary btn-lg">Senden</button>
   </div>
 </ng-template>

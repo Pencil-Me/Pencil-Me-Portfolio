@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ApiClientService } from '@core/services/api/api-client.service';
-import { NgClass, NgIf, NgTemplateOutlet } from '@angular/common';
+import { JsonPipe, NgClass, NgIf, NgTemplateOutlet } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import {FaIconComponent} from "@fortawesome/angular-fontawesome";
-import {faBars} from "@fortawesome/free-solid-svg-icons";
-import {faEnvelope} from "@fortawesome/free-regular-svg-icons";
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope } from '@fortawesome/free-regular-svg-icons';
 
 @Component({
   selector: 'app-contact',
   standalone: true,
-  imports: [ReactiveFormsModule, NgIf, NgClass, RouterLink, NgTemplateOutlet, FaIconComponent],
+  imports: [ReactiveFormsModule, NgIf, NgClass, RouterLink, NgTemplateOutlet, FaIconComponent, JsonPipe],
   templateUrl: './contact.component.html',
   styleUrl: './contact.component.scss',
 })
@@ -32,15 +32,28 @@ export class ContactComponent {
     this.project_form = this.createProjectForm();
   }
 
+  textareaPattern = '[a-zA-Z0-9\\/!@#$%^&*(),.?":{}|<> \n\r]*';
+  textPattern = '[a-zA-Z0-9!@#$%^&*(),.?":{}|<> ]*';
+  textStrongPattern = '[a-zA-Z ]*';
+  minLength = 1;
+  maxLength = 1000;
   /**
    * Initializes the contact form with validation rules.
    * @returns {FormGroup} The initialized form group.
    */
   private createGenerallyForm(): FormGroup {
     return this.formBuilder.group({
-      generally_name: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*')]],
+      generally_name: ['', [Validators.required, Validators.pattern(this.textStrongPattern)]],
       generally_email: ['', [Validators.required, Validators.email]],
-      generally_message: ['', [Validators.required, Validators.pattern('[a-zA-Z0-9!@#$%^&*(),.?":{}|<> ]*')]],
+      generally_message: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(this.textareaPattern),
+          Validators.minLength(this.minLength),
+          Validators.maxLength(this.maxLength),
+        ],
+      ],
       generally_sendCopy: [false],
       generally_yes: [false, [Validators.required, Validators.requiredTrue]],
       generally_contactByFax: [null],
@@ -53,18 +66,49 @@ export class ContactComponent {
    */
   private createProjectForm(): FormGroup {
     return this.formBuilder.group({
-      project_company: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*')]],
-      project_contactName: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*')]],
+      project_company: ['', [Validators.required, Validators.pattern(this.textStrongPattern)]],
+      project_contactName: ['', [Validators.required, Validators.pattern(this.textStrongPattern)]],
       project_phone: [''],
       project_email: ['', [Validators.required, Validators.email]],
-      project_address: ['', [Validators.required, Validators.pattern('[a-zA-Z0-9!@#$%^&*(),.?":{}|<> ]*')]],
-      project_title: ['', [Validators.pattern('[a-zA-Z0-9!@#$%^&*(),.?":{}|<> ]*')]],
-      project_description: ['', [Validators.required, Validators.pattern('[a-zA-Z0-9!@#$%^&*(),.?":{}|<> ]*')]],
-      project_timeline: ['', [Validators.required, Validators.pattern('[a-zA-Z0-9!@#$%^&*(),.?":{}|<> ]*')]],
+      project_address: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(this.textareaPattern),
+          Validators.minLength(this.minLength),
+          Validators.maxLength(this.maxLength),
+        ],
+      ],
+      project_title: ['', [Validators.pattern(this.textPattern)]],
+      project_description: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(this.textareaPattern),
+          Validators.minLength(this.minLength),
+          Validators.maxLength(this.maxLength),
+        ],
+      ],
+      project_timeline: ['', [Validators.required, Validators.pattern(this.textPattern)]],
       project_sendCopy: [false],
       project_yes: [false, [Validators.required, Validators.requiredTrue]],
       project_contactByFax: [null],
     });
+  }
+
+  /**
+   * Checks if all required fields in the given form have been touched and are invalid.
+   * @param {FormGroup} form - The form to check.
+   * @returns {boolean} - Returns true if all required fields have been touched and are invalid, otherwise false.
+   */
+  allRequiredFieldsTouchedAndInvalid(form: FormGroup): boolean {
+    const controls = form.controls;
+    for (const name in controls) {
+      if (controls[name].errors && controls[name].touched) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
@@ -94,6 +138,24 @@ export class ContactComponent {
     };
 
     this.sendEmail(formData);
+  }
+  /**
+   * Finds and returns a list of invalid controls in the given form.
+   * @param {FormGroup} form - The form to check for invalid controls.
+   * @returns {Array<{name: string, value: any}>} - An array of objects representing the invalid controls, each containing the control's name and value.
+   */
+  findInvalidControls(form: FormGroup): { name: string; value: any }[] {
+    const invalid = [];
+    const controls = form.controls;
+    for (const name in controls) {
+      if (controls[name].invalid) {
+        invalid.push({
+          name: name,
+          value: controls[name].value,
+        });
+      }
+    }
+    return invalid;
   }
 
   /**
@@ -129,7 +191,6 @@ export class ContactComponent {
       name: `${this.project_form.get('project_contactName')?.value} - ${this.project_form.get('project_company')?.value}`,
       sendCopy: this.project_form.get('project_sendCopy')?.value,
     };
-    console.log(formData)
     this.sendEmail(formData);
   }
 
@@ -145,13 +206,11 @@ export class ContactComponent {
    * @param {any} formData The form data to be sent.
    */
   private sendEmail(formData: any): void {
-    console.log(formData);
     this.emailSending = true;
-    setTimeout(() => this.apiClient.post('send_email', formData).subscribe({
+    this.apiClient.post('send_email', formData).subscribe({
       next: (data) => this.handleSuccess(data),
       error: (error) => this.handleError(error),
-    }), 50000)
-
+    });
   }
 
   /**
