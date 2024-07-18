@@ -17,10 +17,37 @@ footer {
 }
 
 .footer {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   row-gap: 1.5rem;
+}
+
+.project-request {
+  position: absolute;
+  top: -4rem;
+  left: 5rem;
+  background: var(--pm-primary);
+  color: #fff;
+  padding: 1rem 2rem;
+  animation: wiggle 2.5s infinite;
+  scale: 1.5;
+  transition: .25s ease-in-out all;
+
+  &:hover {
+    scale: 1.6;
+    cursor: pointer;
+    animation: none;
+    transform: rotate(-5deg);
+  }
+}
+@keyframes wiggle {
+  0% { transform: rotate(-5deg); }
+  80% { transform: rotate(-5deg); }
+  85% { transform: rotate(-10deg); }
+  95% { transform: rotate(0deg); }
+  100% { transform: rotate(-5deg); }
 }
 
 .footer-social-links {

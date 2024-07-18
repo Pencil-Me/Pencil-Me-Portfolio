@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ApiClientService } from '@core/services/api/api-client.service';
 import { JsonPipe, NgClass, NgIf, NgTemplateOutlet } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import {ActivatedRoute, RouterLink} from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { faEnvelope } from '@fortawesome/free-regular-svg-icons';
@@ -14,7 +14,9 @@ import { faEnvelope } from '@fortawesome/free-regular-svg-icons';
   templateUrl: './contact.component.html',
   styleUrl: './contact.component.scss',
 })
-export class ContactComponent {
+export class ContactComponent implements OnInit {
+  private activatedRoute = inject(ActivatedRoute);
+
   generally_form: FormGroup;
   project_form: FormGroup;
   emailIsSend: boolean = false;
@@ -23,6 +25,12 @@ export class ContactComponent {
   email: string = 'info@pencil-me.de';
   encryptedEmail: string = this.encryptEmail(this.email);
   contactForm: null | 'GENERALLY' | 'PROJECT' = null;
+  isSpecalized: boolean = false;
+  textareaPattern: string = '[a-zA-Z0-9\\/!@#$%^&*(),.?":{}|<>\\- \n\r]*';
+  textPattern: string = '[a-zA-Z0-9!@#$%^&*(),.?":{}|<>\\- ]*';
+  textStrongPattern: string = '[a-zA-Z, ]*';
+  minLength: number = 1;
+  maxLength: number = 1000;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -31,12 +39,20 @@ export class ContactComponent {
     this.generally_form = this.createGenerallyForm();
     this.project_form = this.createProjectForm();
   }
+  ngOnInit() {
+    this.activatedRoute.paramMap.subscribe((params) => {
+      const type = params.get('type') ?? '';
+      if (type && type === 'project') {
+        this.contactForm = 'PROJECT';
+        this.isSpecalized = true;
+      }
+      if (type && type === 'general') {
+        this.contactForm = 'GENERALLY';
+        this.isSpecalized = true;
+      }
+    });
+  }
 
-  textareaPattern = '[a-zA-Z0-9\\/!@#$%^&*(),.-?":{}|<> \n\r]*';
-  textPattern = '[a-zA-Z0-9!@#$%^&*-(),.?":{}|<> ]*';
-  textStrongPattern = '[a-zA-Z-, ]*';
-  minLength = 1;
-  maxLength = 1000;
   /**
    * Initializes the contact form with validation rules.
    * @returns {FormGroup} The initialized form group.

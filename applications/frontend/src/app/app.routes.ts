@@ -38,6 +38,10 @@ export const routes: Routes = [
         },
       },
       {
+        path: 'contact/:type',
+        loadComponent: () => import('@modules/contact/contact.component').then((c) => c.ContactComponent),
+      },
+      {
         path: 'about',
         loadComponent: () => import('@modules/about/about.component').then((c) => c.AboutComponent),
         canActivate: [SeoGuard],
