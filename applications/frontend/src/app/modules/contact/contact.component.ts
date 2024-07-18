@@ -32,9 +32,9 @@ export class ContactComponent {
     this.project_form = this.createProjectForm();
   }
 
-  textareaPattern = '[a-zA-Z0-9\\/!@#$%^&*(),.?":{}|<> \n\r]*';
-  textPattern = '[a-zA-Z0-9!@#$%^&*(),.?":{}|<> ]*';
-  textStrongPattern = '[a-zA-Z ]*';
+  textareaPattern = '[a-zA-Z0-9\\/!@#$%^&*(),.-?":{}|<> \n\r]*';
+  textPattern = '[a-zA-Z0-9!@#$%^&*-(),.?":{}|<> ]*';
+  textStrongPattern = '[a-zA-Z-, ]*';
   minLength = 1;
   maxLength = 1000;
   /**
@@ -130,7 +130,7 @@ export class ContactComponent {
     }
 
     const formData = {
-      contactByFax: this.generally_form.get('generally_contactByFax')?.value,
+      contactByFax: (!!this.generally_form.get('generally_contactByFax')?.value) ? this.generally_form.get('generally_contactByFax')?.value : undefined,
       email: this.generally_form.get('generally_email')?.value,
       message: this.generally_form.get('generally_message')?.value,
       name: this.generally_form.get('generally_name')?.value,
@@ -176,7 +176,7 @@ export class ContactComponent {
     }
 
     const formData = {
-      contactByFax: this.project_form.get('project_contactByFax')?.value,
+      contactByFax: (!!this.project_form.get('project_contactByFax')?.value) ? this.project_form.get('project_contactByFax')?.value : undefined,
       email: this.project_form.get('project_email')?.value,
       message: `Unternehmen: ${this.project_form.get('project_company')?.value},
       Kontaktname: ${this.project_form.get('project_contactName')?.value},
@@ -207,10 +207,24 @@ export class ContactComponent {
    */
   private sendEmail(formData: any): void {
     this.emailSending = true;
-    this.apiClient.post('send_email', formData).subscribe({
+    this.apiClient.post('send_email', this.removeUndefinedKeys(formData)).subscribe({
       next: (data) => this.handleSuccess(data),
       error: (error) => this.handleError(error),
     });
+  }
+
+  /**
+   * Removes keys with undefined values from the given object.
+   * @param {object} object - The object from which to remove undefined keys.
+   * @returns {object} - The object with undefined keys removed.
+   */
+  private removeUndefinedKeys<T extends object>(object: T): T {
+    Object.keys(object).forEach(key => {
+      if (object[key as keyof T] === undefined) {
+        delete object[key as keyof T];
+      }
+    });
+    return object;
   }
 
   /**
