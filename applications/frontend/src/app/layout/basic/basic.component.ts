@@ -1,11 +1,12 @@
 import { Component, HostListener } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { NgClass, NgIf } from '@angular/common';
 import { NavigationComponent } from '@layout/components/navigation/navigation.component';
 import { FooterComponent } from '@layout/components/footer/footer.component';
 import { TopScrollerComponent } from '@shared/components/top-scroller/top-scroller.component';
 import { ScrollSectionDirective } from '@shared/directives/scroll-section.directive';
 import { ScrollManagerDirective } from '@shared/directives/scroll-manager.directive';
-import { NgClass, NgIf } from '@angular/common';
+import { ScrollService } from '@shared/services/scroll.service';
 
 @Component({
   selector: 'app-basic',
@@ -24,7 +25,18 @@ import { NgClass, NgIf } from '@angular/common';
   styleUrl: './basic.component.scss',
 })
 export class BasicComponent {
+  // Flag to control the visibility of the "scroll to top" button
   showScrollToTop = false;
+
+  // Threshold values for scroll visibility
+  private readonly SCROLL_THRESHOLD = 200;
+  private readonly BOTTOM_THRESHOLD = 400;
+
+  constructor(private scrollService: ScrollService) {}
+
+  ngOnInit() {
+    this.updateScrollToTopVisibility();
+  }
 
   /**
    * HostListener to monitor the scroll event and update the visibility of the "scroll to top" button.
@@ -38,7 +50,7 @@ export class BasicComponent {
    * Called when a route is deactivated to smoothly scroll the window to the top.
    */
   onDeactivate() {
-    this.scrollToTop();
+    this.scrollService.scrollToTop();
   }
 
   /**
@@ -46,28 +58,8 @@ export class BasicComponent {
    */
   private updateScrollToTopVisibility() {
     const windowScrollPosition = window.scrollY;
-    let distanceToBottom = this.calculateDistanceToBottom();
+    const distanceToBottom = this.scrollService.calculateDistanceToBottom();
 
-    // Ensure distanceToBottom is non-negative
-    if (distanceToBottom < 0) distanceToBottom = 0;
-
-    this.showScrollToTop = windowScrollPosition > 200 && distanceToBottom > 400;
-  }
-
-  /**
-   * Calculates the distance from the bottom of the document to the bottom of the visible window.
-   */
-  private calculateDistanceToBottom(): number {
-    return document.body.scrollHeight - (window.innerHeight + window.scrollY);
-  }
-
-  /**
-   * Smoothly scrolls the window to the top.
-   */
-  private scrollToTop() {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
+    this.showScrollToTop = windowScrollPosition > this.SCROLL_THRESHOLD && distanceToBottom > this.BOTTOM_THRESHOLD;
   }
 }

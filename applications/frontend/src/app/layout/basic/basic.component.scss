@@ -2,21 +2,16 @@
   display: flex;
   min-height: 100vh;
   flex-direction: column;
-  padding: 0; margin: 0;
+  padding: 0;
+  margin: 0;
 
-  .header-content {
-    display: block;
+  .header-content,
+  .footer-content {
     width: 100%;
   }
 
   .main-content {
-    display: inline-block;
     flex: 1;
-  }
-
-  .footer-content {
-    display: block;
-    width: 100%;
   }
 }
 
@@ -29,5 +24,5 @@
   position: fixed;
   right: 2rem;
   bottom: 2rem;
-  display: inline-block;
+  z-index: 1000;
 }

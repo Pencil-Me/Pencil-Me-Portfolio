@@ -7,6 +7,15 @@ import { of } from 'rxjs';
 describe('BasicComponent', () => {
   let component: BasicComponent;
   let fixture: ComponentFixture<BasicComponent>;
+  let scrollToSpy: jasmine.Spy;
+
+  // Helper function to set up scroll mocks and dispatch scroll event
+  const setupScrollTest = (scrollY: number, scrollHeight: number, innerHeight: number) => {
+    spyOnProperty(window, 'scrollY', 'get').and.returnValue(scrollY);
+    spyOnProperty(document.body, 'scrollHeight', 'get').and.returnValue(scrollHeight);
+    spyOnProperty(window, 'innerHeight', 'get').and.returnValue(innerHeight);
+    window.dispatchEvent(new Event('scroll'));
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -14,76 +23,43 @@ describe('BasicComponent', () => {
       providers: [
         {
           provide: ActivatedRoute,
-          useValue: {
-            queryParams: of({}),
-          },
+          useValue: { queryParams: of({}) },
         },
       ],
     }).compileComponents();
-  });
-
-  beforeEach(() => {
+    
     fixture = TestBed.createComponent(BasicComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create the component', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should update showScrollToTop when scrolling', () => {
-    const windowScrollEvent = new Event('scroll');
+  describe('Scroll behavior', () => {
+    it('should show scroll-to-top button when scrolled down more than 200px', () => {
+      setupScrollTest(201, 2000, 800);
+      expect(component.showScrollToTop).toBeTrue();
+    });
 
-    // Mocking window.scrollY, document.body.scrollHeight, and window.innerHeight
-    spyOnProperty(window, 'scrollY', 'get').and.returnValue(201);
-    spyOnProperty(document.body, 'scrollHeight', 'get').and.returnValue(2000);
-    spyOnProperty(window, 'innerHeight', 'get').and.returnValue(800);
+    it('should not show scroll-to-top button when scrolled less than 200px', () => {
+      setupScrollTest(199, 2000, 800);
+      expect(component.showScrollToTop).toBeFalse();
+    });
 
-    // Dispatching the scroll event
-    window.dispatchEvent(windowScrollEvent);
+    it('should not show scroll-to-top button when content is shorter than viewport', () => {
+      setupScrollTest(201, 1000, 800);
+      expect(component.showScrollToTop).toBeFalse();
+    });
 
-    // Logging the values for debugging
-    console.log('window.scrollY:', window.scrollY);
-    console.log('document.body.scrollHeight:', document.body.scrollHeight);
-    console.log('window.innerHeight:', window.innerHeight);
+    it('should scroll to top on deactivate', fakeAsync(() => {
+      scrollToSpy = spyOn(window, 'scrollTo');
+      
+      component.onDeactivate();
+      tick();
 
-    // Checking the value of component.showScrollToTop
-    console.log('component.showScrollToTop:', component.showScrollToTop);
-
-    expect(component.showScrollToTop).toBeTrue();
+      expect(scrollToSpy).toHaveBeenCalledWith({ top: 0, behavior: 'smooth' });
+    }));
   });
-
-  it('should NOT update showScrollToTop when scrolling', () => {
-    const windowScrollEvent = new Event('scroll');
-
-    // Mocking window.scrollY, document.body.scrollHeight, and window.innerHeight
-    spyOnProperty(window, 'scrollY', 'get').and.returnValue(201);
-    spyOnProperty(document.body, 'scrollHeight', 'get').and.returnValue(1000);
-    spyOnProperty(window, 'innerHeight', 'get').and.returnValue(800);
-
-    // Dispatching the scroll event
-    window.dispatchEvent(windowScrollEvent);
-
-    // Logging the values for debugging
-    console.log('window.scrollY:', window.scrollY);
-    console.log('document.body.scrollHeight:', document.body.scrollHeight);
-    console.log('window.innerHeight:', window.innerHeight);
-
-    // Checking the value of component.showScrollToTop
-    console.log('component.showScrollToTop:', component.showScrollToTop);
-
-    // Expecting component.showScrollToTop to be true
-    expect(component.showScrollToTop).toBeFalse();
-  });
-
-  it('should scroll to top on deactivate', fakeAsync(() => {
-    const scrollToSpy = spyOn(window, 'scrollTo') as jasmine.Spy<(options?: ScrollToOptions) => void>;
-
-    component.onDeactivate();
-    tick();
-
-    expect(scrollToSpy).toHaveBeenCalled();
-    expect(scrollToSpy).toHaveBeenCalledWith({ top: 0, behavior: 'smooth' });
-  }));
 });
