@@ -1,0 +1,14 @@
+<div class="footer-social-links">
+  <a
+    *ngFor="let link of socialLinks"
+    [href]="link.url"
+    target="_blank"
+    rel="noopener noreferrer"
+    [attr.aria-label]="link.name"
+    class="social-link"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" [attr.viewBox]="link.viewBox" fill="currentColor">
+      <path [attr.d]="link.svgPath"></path>
+    </svg>
+  </a>
+</div>
