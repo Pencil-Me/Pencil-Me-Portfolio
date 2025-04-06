@@ -15,6 +15,10 @@ class Cors
         // Allow from any origin if Origin header is present and allowed
         if (isset($_SERVER["HTTP_ORIGIN"]) && in_array($_SERVER['HTTP_ORIGIN'], $allowedOrigins)) {
             self::handleCorsRequest($_SERVER['HTTP_ORIGIN']);
+        } else {
+            // If the origin is not allowed, do not set CORS headers
+            header("HTTP/1.1 403 Forbidden");
+            exit();
         }
 
         // Handle preflight requests (OPTIONS method)

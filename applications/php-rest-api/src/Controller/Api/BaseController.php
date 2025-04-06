@@ -3,6 +3,8 @@
 namespace Controller\Api;
 
 use JetBrains\PhpStorm\NoReturn;
+use Inc\RateLimiter;
+use Inc\Bootstrap;
 
 /**
  * Base controller class holding common utility methods.
@@ -131,6 +133,56 @@ class BaseController
      */
     #[NoReturn] protected function sendErrorResponse(\Throwable $exception): void
     {
-        $this->sendOutput(['error' => $exception->getMessage() . ' Something went wrong! Please contact support.'], 500);
+        // Log the error using Monolog
+        Bootstrap::$logger->error($exception->getMessage(), ['exception' => $exception]);
+
+        $this->sendOutput(['error' => 'An unexpected error occurred. Please try again later.'], 500);
+    }
+
+    /**
+     * Validates and sanitizes an integer input.
+     *
+     * @param mixed $input The input to validate and sanitize.
+     * @return int|null The sanitized integer or null if invalid.
+     */
+    protected function sanitizeInt($input): ?int
+    {
+        return filter_var($input, FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
+    }
+
+    /**
+     * Validates and sanitizes a string input.
+     *
+     * @param mixed $input The input to validate and sanitize.
+     * @return string|null The sanitized string or null if invalid.
+     */
+    protected function sanitizeString($input): ?string
+    {
+        return filter_var($input, FILTER_SANITIZE_STRING);
+    }
+
+    /**
+     * Checks if the request is allowed based on rate limiting.
+     *
+     * @return bool True if the request is allowed, false otherwise.
+     */
+    protected function checkRateLimit(): bool
+    {
+        $clientIp = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+        if (!RateLimiter::isRequestAllowed($clientIp)) {
+            $this->sendOutput(['error' => 'Too many requests. Please try again later.'], 429);
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Sets security headers for the response.
+     */
+    protected function setSecurityHeaders(): void
+    {
+        header("X-Content-Type-Options: nosniff");
+        header("X-Frame-Options: DENY");
+        header("Content-Security-Policy: default-src 'self'");
     }
 }

@@ -16,6 +16,12 @@ class HealthController extends BaseController
      */
     public function getHealthcheck(): void
     {
+        $this->setSecurityHeaders(); // Set security headers
+
+        if (!$this->checkRateLimit()) {
+            return;
+        }
+        
         try {
             // Initialize Guzzle HTTP client
             $client = new Client();
@@ -30,13 +36,7 @@ class HealthController extends BaseController
             $statusCode = $response->getStatusCode();
 
             // Send appropriate response based on the status code
-            if ($statusCode === 200) {
-                // Data forwarded successfully
-                $responseMessage = 'Data forwarded successfully';
-            } else {
-                // Error in forwarding data
-                $responseMessage = 'Error in forwarding data';
-            }
+            $responseMessage = $statusCode === 200 ? 'Data forwarded successfully' : 'Error in forwarding data';
 
             // Send response
             $this->sendOutput(json_encode([

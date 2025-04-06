@@ -18,14 +18,22 @@ class ProjectsController extends BaseController
      * @param int $id The ID of the project.
      */
     public function getProjectFe($id): void {
+        $this->setSecurityHeaders(); // Set security headers
+
+        if (!$this->checkRateLimit()) {
+            return;
+        }
+
         try {
+            // Validate and sanitize ID
+            $id = $this->sanitizeInt($id);
+            if ($id === null) {
+                $this->sendOutput(['error' => 'Invalid project ID'], 400);
+            }
+
             // Check if the request method is GET
             if (!$this->isRequestMethodAllowed('GET')) {
-                // Send error response for unsupported request method
-                $this->sendOutput(
-                    json_encode(['error' => 'Method not supported']),
-                    422
-                );
+                $this->sendMethodNotAllowedResponse();
             }
 
             // Instantiate ProjectsModel
@@ -34,36 +42,22 @@ class ProjectsController extends BaseController
             // Retrieve projects data
             $projectData = $projectsModel->getProject($id);
 
-            // Add TechStack
+            if (!$projectData) {
+                $this->sendNotFoundResponse('Project not found');
+            }
+
+            // Add TechStack, Dates, and Customers
             $projectData['tech'] = $this->getTechstacksPerProject($projectData['techstack_uuids']);
-
-            // Add Dates
             $projectData['dates'] = $this->getDatesPerProject($projectData['uuid']);
-
-            // Add Customers
             $projectData['customers'] = $this->getCustomersPerProject($projectData['customer_uuids']);
 
-            // Format the results according to the expected output format
-            $formatedProjectsData = [
-                "uuid" => $projectData['uuid'],
-                "name" => $projectData['name'],
-                "location" => $projectData['location'],
-                "position" => $projectData['position'],
-                "content" => $projectData['content'],
-                "tech" => $projectData['tech'],
-                "customers" => $projectData['customers'],
-                "dates" => $projectData['dates'],
-                "type" => $projectData['type']
-            ];
+            // Format the results
+            $formatedProjectsData = $this->formatProjectData($projectData);
 
             // Send successful response
             $this->sendSuccessResponse($formatedProjectsData);
         } catch (\Throwable $exception) {
-            // Handle exceptions
-            $this->sendOutput(
-                $exception->getMessage() . ' Something went wrong! Please contact support.',
-                500
-            );
+            $this->sendErrorResponse($exception);
         }
     }
 
@@ -72,6 +66,12 @@ class ProjectsController extends BaseController
      */
     public function getAllFe(): void
     {
+        $this->setSecurityHeaders(); // Set security headers
+
+        if (!$this->checkRateLimit()) {
+            return;
+        }
+
         try {
             // Check if the request method is GET
             if (!$this->isRequestMethodAllowed('GET')) {
@@ -118,7 +118,6 @@ class ProjectsController extends BaseController
             // Send successful response
             $this->sendSuccessResponse($formatedProjectsData);
         } catch (\Throwable $exception) {
-            // Handle exceptions
             $this->sendErrorResponse($exception);
         }
     }
@@ -171,5 +170,19 @@ class ProjectsController extends BaseController
         $customerUuids = explode(',', $customerUuidsString);
         $customersModel = new CustomersModel();
         return $customersModel->getCustomersPerProject($customerUuids);
+    }
+
+    private function formatProjectData(array $projectData): array {
+        return [
+            "uuid" => $projectData['uuid'],
+            "name" => $projectData['name'],
+            "location" => $projectData['location'],
+            "position" => $projectData['position'],
+            "content" => $projectData['content'],
+            "tech" => $projectData['tech'],
+            "customers" => $projectData['customers'],
+            "dates" => $projectData['dates'],
+            "type" => $projectData['type']
+        ];
     }
 }

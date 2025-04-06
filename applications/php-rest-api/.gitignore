@@ -1,4 +1,6 @@
-/src/Inc/.env.dev
-/src/Inc/.env.prod
-/src/composer.lock
-/src/vendor/
+.env.dev
+.env.prod
+composer.lock
+.phpunit.result.cache
+/vendor/
+/logs/*

@@ -18,6 +18,12 @@ class MailController extends BaseController
      */
     public function sendEmail(): void
     {
+        $this->setSecurityHeaders(); // Set security headers
+
+        if (!$this->checkRateLimit()) {
+            return;
+        }
+        
         try {
             // Check if the request method is POST
             if (!$this->isRequestMethodAllowed('POST')) {
@@ -114,10 +120,14 @@ class MailController extends BaseController
      */
     private function validateParameters(?string $email, ?string $name, ?string $message): bool
     {
+        $email = filter_var($email, FILTER_VALIDATE_EMAIL);
+        $name = $this->sanitizeString($name);
+        $message = $this->sanitizeString($message);
+
         if (!$email || !$name || !$message) {
             // If any of the required parameters are missing, return an error response
             $this->sendOutput(json_encode([
-                'message' => 'Missing required parameters',
+                'message' => 'Missing or invalid required parameters',
                 '$email' => $email,
                 '$name' => $name,
                 '$message' => $message

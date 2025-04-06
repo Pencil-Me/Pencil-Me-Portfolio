@@ -15,6 +15,12 @@ class TechstackController extends BaseController
      */
     public function getAllFe(): void
     {
+        $this->setSecurityHeaders(); // Set security headers
+
+        if (!$this->checkRateLimit()) {
+            return;
+        }
+        
         try {
             // Check if the request method is GET
             if (!$this->isRequestMethodAllowed('GET')) {

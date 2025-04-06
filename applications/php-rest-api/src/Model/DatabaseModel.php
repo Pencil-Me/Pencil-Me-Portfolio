@@ -95,24 +95,21 @@ class DatabaseModel
             $stmt = $this->connection->prepare($query);
 
             if ($stmt === false) {
-                // If unable to prepare the statement, throw an exception
                 throw new Exception("Unable to prepare statement: " . $query);
             }
 
             // Bind parameters
-            $paramIndex = 0;
-            foreach ($params as $paramName  => &$paramValue) {
-                $paramType = $paramTypes[$paramName] ?? PDO::PARAM_STR;
-                $placeholder = isset($paramTypes[$paramName]) ? $paramName : null;
-                $stmt->bindParam($placeholder ?: ++$paramIndex, $paramValue, $paramType);
+            foreach ($params as $index => &$paramValue) {
+                $paramType = $paramTypes[$index] ?? PDO::PARAM_STR;
+                $stmt->bindParam($index + 1, $paramValue, $paramType);
             }
 
             // Execute the statement
             $stmt->execute();
             return $stmt;
         } catch (Exception $exception) {
-            // If an error occurs during execution, throw an exception
-            throw new Exception($exception->getMessage());
+            error_log($exception->getMessage());
+            throw new Exception("Database query execution failed");
         }
     }
 }

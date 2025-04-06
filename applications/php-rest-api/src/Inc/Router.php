@@ -99,6 +99,11 @@ class Router {
             if (preg_match($pattern, $path, $matches)) {
                 // Check if the ID is found in the path
                 if (isset($matches[1])) {
+                    // Validate the ID to ensure it is a valid UUID or expected format
+                    if (!self::isValidUuid($matches[1])) {
+                        self::routeNotFound(); // Invalid ID format, output an error
+                        return null;
+                    }
                     // Extract the ID from the path
                     $id = $matches[1];
                     // Adjust the GET variables to pass the ID to the controller
@@ -108,6 +113,16 @@ class Router {
             }
         }
         return null;
+    }
+
+    /**
+     * Validates if the given string is a valid UUID.
+     *
+     * @param string $uuid The string to validate.
+     * @return bool Returns true if the string is a valid UUID, otherwise false.
+     */
+    private static function isValidUuid(string $uuid): bool {
+        return preg_match('/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i', $uuid) === 1;
     }
 
     /**
@@ -183,5 +198,11 @@ class Router {
         http_response_code(401);
         echo json_encode(['message' => 'Unauthorized']);
         exit;
+    }
+
+    private static function parseRequestPath($uri): string
+    {
+        $path = str_replace('/index.php', '', $uri);
+        return filter_var($path, FILTER_SANITIZE_URL);
     }
 }

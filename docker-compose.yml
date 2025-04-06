@@ -48,10 +48,8 @@ services:
       - db
     ports:
       - "3001:80"
-#    environment:
-#      - APPLICATION_ROOT=/api2
     volumes:
-      - ./applications/php-rest-api/src:/var/www/html
+      - ./applications/php-rest-api/public:/var/www/html/public
 
   php_mailer:
     container_name: pm-mailer_php

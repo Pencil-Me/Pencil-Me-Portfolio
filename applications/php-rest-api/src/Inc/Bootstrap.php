@@ -3,17 +3,28 @@
 namespace Inc;
 
 use Cors;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+
+// Start the session
+session_start();
 
 /**
  * Bootstrap class responsible for initializing the application by including necessary files.
  */
 class Bootstrap
 {
+    public static Logger $logger;
+
     /**
      * Bootstraps the application.
      */
     public static function init(): void
     {
+        // Initialize the logger
+        self::$logger = new Logger('app');
+        self::$logger->pushHandler(new StreamHandler(__DIR__ . '/../logs/app.log', Logger::DEBUG));
+
         // Define project root path
         define("PROJECT_ROOT_PATH", __DIR__ . "/../");
 

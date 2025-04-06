@@ -14,6 +14,12 @@ class CustomersController extends BaseController
      */
     public function getAllFe(): void
     {
+        $this->setSecurityHeaders();
+
+        if (!$this->checkRateLimit()) {
+            return;
+        }
+        
         try {
             // Check if the request method is GET
             if (!$this->isRequestMethodAllowed('GET')) {
