@@ -7,8 +7,9 @@ import { Router } from '@angular/router';
  * to return to the home page.
  */
 @Component({
-  selector: 'app-not-found',
-  templateUrl: './not-found-error.component.html',
+    selector: 'app-not-found',
+    templateUrl: './not-found-error.component.html',
+    standalone: false
 })
 export class NotFoundErrorComponent {
   constructor(private router: Router) {}

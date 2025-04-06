@@ -9,20 +9,19 @@ import { ScrollManagerDirective } from '@shared/directives/scroll-manager.direct
 import { ScrollService } from '@shared/services/scroll.service';
 
 @Component({
-  selector: 'app-basic',
-  standalone: true,
-  imports: [
-    RouterOutlet,
-    NavigationComponent,
-    FooterComponent,
-    TopScrollerComponent,
-    ScrollSectionDirective,
-    ScrollManagerDirective,
-    NgIf,
-    NgClass,
-  ],
-  templateUrl: './basic.component.html',
-  styleUrl: './basic.component.scss',
+    selector: 'app-basic',
+    imports: [
+        RouterOutlet,
+        NavigationComponent,
+        FooterComponent,
+        TopScrollerComponent,
+        ScrollSectionDirective,
+        ScrollManagerDirective,
+        NgIf,
+        NgClass,
+    ],
+    templateUrl: './basic.component.html',
+    styleUrl: './basic.component.scss'
 })
 export class BasicComponent {
   // Flag to control the visibility of the "scroll to top" button

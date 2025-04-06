@@ -8,11 +8,10 @@ import { CountUpDirective } from '@shared/directives/count-up.directive';
 import { TrackVisibilityDirective } from '@shared/directives/track-visibility.directive';
 
 @Component({
-  selector: 'app-home',
-  standalone: true,
-  imports: [NgForOf, AsyncPipe, RouterLink, JsonPipe, NgOptimizedImage, CountUpDirective, TrackVisibilityDirective, NgIf],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.scss',
+    selector: 'app-home',
+    imports: [NgForOf, AsyncPipe, RouterLink, JsonPipe, NgOptimizedImage, CountUpDirective, TrackVisibilityDirective, NgIf],
+    templateUrl: './home.component.html',
+    styleUrl: './home.component.scss'
 })
 export class HomeComponent {
   private homeService = inject(HomeService);

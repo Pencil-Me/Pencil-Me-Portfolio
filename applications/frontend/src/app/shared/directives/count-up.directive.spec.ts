@@ -4,7 +4,8 @@ import { By } from '@angular/platform-browser';
 import { CountUpDirective } from './count-up.directive';
 
 @Component({
-  template: `<div [appCountUp]="count" [duration]="duration"></div>`,
+    template: `<div [appCountUp]="count" [duration]="duration"></div>`,
+    standalone: false
 })
 class TestComponent {
   count = 100;

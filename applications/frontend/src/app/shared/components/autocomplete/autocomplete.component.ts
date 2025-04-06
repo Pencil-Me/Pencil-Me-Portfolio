@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-autocomplete',
-  standalone: true,
-  imports: [],
-  templateUrl: './autocomplete.component.html',
-  styleUrl: './autocomplete.component.scss',
+    selector: 'app-autocomplete',
+    imports: [],
+    templateUrl: './autocomplete.component.html',
+    styleUrl: './autocomplete.component.scss'
 })
 export class AutocompleteComponent {}

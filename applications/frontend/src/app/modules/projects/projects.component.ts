@@ -9,11 +9,10 @@ import { Router } from '@angular/router';
  * Component to display projects.
  */
 @Component({
-  selector: 'app-projects',
-  standalone: true,
-  imports: [NgForOf, NgIf, JsonPipe, NgClass],
-  templateUrl: './projects.component.html',
-  styleUrls: ['./projects.component.scss'],
+    selector: 'app-projects',
+    imports: [NgForOf, NgIf, JsonPipe, NgClass],
+    templateUrl: './projects.component.html',
+    styleUrls: ['./projects.component.scss']
 })
 export class ProjectsComponent {
   private projectsService = inject(ProjectsService);

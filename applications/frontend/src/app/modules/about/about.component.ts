@@ -5,11 +5,10 @@ import { Observable } from 'rxjs';
 import { ITechCategory } from '@modules/about/about.models';
 
 @Component({
-  selector: 'app-about',
-  standalone: true,
-  imports: [NgForOf, JsonPipe, NgIf, AsyncPipe, NgStyle],
-  templateUrl: './about.component.html',
-  styleUrl: './about.component.scss',
+    selector: 'app-about',
+    imports: [NgForOf, JsonPipe, NgIf, AsyncPipe, NgStyle],
+    templateUrl: './about.component.html',
+    styleUrl: './about.component.scss'
 })
 export class AboutComponent {
   private aboutService = inject(AboutService);

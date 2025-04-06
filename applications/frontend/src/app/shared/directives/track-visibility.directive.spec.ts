@@ -4,7 +4,8 @@ import { By } from '@angular/platform-browser';
 import { TrackVisibilityDirective } from './track-visibility.directive';
 
 @Component({
-  template: `<div appTrackVisibility (visible)="onVisibilityChange($event)"></div>`,
+    template: `<div appTrackVisibility (visible)="onVisibilityChange($event)"></div>`,
+    standalone: false
 })
 class TestComponent {
   isVisible = false;

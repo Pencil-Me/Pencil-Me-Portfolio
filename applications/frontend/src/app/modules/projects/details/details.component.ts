@@ -6,11 +6,10 @@ import { IProject } from '@modules/projects/projects.models';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-project-details',
-  standalone: true,
-  imports: [NgForOf, NgIf, JsonPipe, NgClass, RouterLink],
-  templateUrl: './details.component.html',
-  styleUrl: './details.component.scss',
+    selector: 'app-project-details',
+    imports: [NgForOf, NgIf, JsonPipe, NgClass, RouterLink],
+    templateUrl: './details.component.html',
+    styleUrl: './details.component.scss'
 })
 export class ProjectDetailsComponent implements OnInit, OnDestroy {
   private projectsService = inject(ProjectsService);
