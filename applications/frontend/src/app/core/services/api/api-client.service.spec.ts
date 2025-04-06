@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ApiClientService } from './api-client.service';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 const toUrlEncoded = (obj: { [key: string]: string | number }) =>
   Object.keys(obj)
@@ -12,9 +13,9 @@ describe('ApiClientService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [ApiClientService],
-    });
+    imports: [],
+    providers: [ApiClientService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+});
     service = TestBed.inject(ApiClientService);
     httpMock = TestBed.inject(HttpTestingController);
   });
