@@ -11,7 +11,7 @@ export interface TechStack {
   selector: 'app-footer-disclaimer',
   standalone: true,
   imports: [CommonModule],
-  styleUrl: './footer-disclaimer.component.css',
+  styleUrl: './footer-disclaimer.component.scss',
   templateUrl: './footer-disclaimer.component.html',
 })
 export class FooterDisclaimerComponent {

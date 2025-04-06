@@ -1,8 +1,8 @@
-import {Component, inject, OnInit} from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ApiClientService } from '@core/services/api/api-client.service';
 import { JsonPipe, NgClass, NgIf, NgTemplateOutlet } from '@angular/common';
-import {ActivatedRoute, RouterLink} from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { faEnvelope } from '@fortawesome/free-regular-svg-icons';
@@ -146,7 +146,9 @@ export class ContactComponent implements OnInit {
     }
 
     const formData = {
-      contactByFax: (!!this.generally_form.get('generally_contactByFax')?.value) ? this.generally_form.get('generally_contactByFax')?.value : undefined,
+      contactByFax: this.generally_form.get('generally_contactByFax')?.value
+        ? this.generally_form.get('generally_contactByFax')?.value
+        : undefined,
       email: this.generally_form.get('generally_email')?.value,
       message: this.generally_form.get('generally_message')?.value,
       name: this.generally_form.get('generally_name')?.value,
@@ -192,7 +194,7 @@ export class ContactComponent implements OnInit {
     }
 
     const formData = {
-      contactByFax: (!!this.project_form.get('project_contactByFax')?.value) ? this.project_form.get('project_contactByFax')?.value : undefined,
+      contactByFax: this.project_form.get('project_contactByFax')?.value ? this.project_form.get('project_contactByFax')?.value : undefined,
       email: this.project_form.get('project_email')?.value,
       message: `Unternehmen: ${this.project_form.get('project_company')?.value},
       Kontaktname: ${this.project_form.get('project_contactName')?.value},
@@ -235,7 +237,7 @@ export class ContactComponent implements OnInit {
    * @returns {object} - The object with undefined keys removed.
    */
   private removeUndefinedKeys<T extends object>(object: T): T {
-    Object.keys(object).forEach(key => {
+    Object.keys(object).forEach((key) => {
       if (object[key as keyof T] === undefined) {
         delete object[key as keyof T];
       }

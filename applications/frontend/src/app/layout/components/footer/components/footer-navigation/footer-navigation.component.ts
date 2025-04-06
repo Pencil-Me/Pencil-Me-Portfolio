@@ -11,7 +11,7 @@ export interface NavLink {
   selector: 'app-footer-navigation',
   standalone: true,
   imports: [CommonModule, RouterLink],
-  styleUrl: './footer-navigation.component.css',
+  styleUrl: './footer-navigation.component.scss',
   templateUrl: './footer-navigation.component.html',
 })
 export class FooterNavigationComponent {

@@ -52,6 +52,7 @@
     "@angular/compiler-cli": "^17.0.0",
     "@angular/localize": "^17.0.0",
     "@ngrx/eslint-plugin": "^17.1.0",
+    "@types/dotenv-webpack": "^7.0.8",
     "@types/jasmine": "~5.1.0",
     "@types/jest": "^29.5.12",
     "@types/mocha": "^10.0.6",

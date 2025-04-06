@@ -27,7 +27,7 @@ describe('BasicComponent', () => {
         },
       ],
     }).compileComponents();
-    
+
     fixture = TestBed.createComponent(BasicComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -55,7 +55,7 @@ describe('BasicComponent', () => {
 
     it('should scroll to top on deactivate', fakeAsync(() => {
       scrollToSpy = spyOn(window, 'scrollTo');
-      
+
       component.onDeactivate();
       tick();
 

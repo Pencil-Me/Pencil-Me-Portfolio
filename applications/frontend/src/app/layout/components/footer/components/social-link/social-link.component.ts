@@ -12,7 +12,7 @@ export interface SocialLink {
   selector: 'app-social-links',
   standalone: true,
   imports: [CommonModule],
-  styleUrl: './social-link.component.css',
+  styleUrl: './social-link.component.scss',
   templateUrl: './social-link.component.html',
 })
 export class SocialLinkComponent {
