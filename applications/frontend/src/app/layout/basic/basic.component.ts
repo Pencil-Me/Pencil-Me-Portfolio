@@ -1,6 +1,6 @@
 import { Component, HostListener } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { NgClass, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { NavigationComponent } from '@layout/components/navigation/navigation.component';
 import { FooterComponent } from '@layout/components/footer/footer.component';
 import { TopScrollerComponent } from '@shared/components/top-scroller/top-scroller.component';
@@ -18,7 +18,6 @@ import { ScrollService } from '@shared/services/scroll.service';
         ScrollSectionDirective,
         ScrollManagerDirective,
         NgIf,
-        NgClass,
     ],
     templateUrl: './basic.component.html',
     styleUrl: './basic.component.scss'

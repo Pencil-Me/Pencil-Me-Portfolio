@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { TopScrollerComponent } from '@shared/components/top-scroller/top-scroller.component';
 import { RouterLink } from '@angular/router';
-import { NgForOf } from '@angular/common';
 import { TechStack } from '@layout/components/footer/components/footer-disclaimer/footer-disclaimer.component';
 import { SocialLink } from '@layout/components/footer/components/social-link/social-link.component';
 import { NavLink } from '@layout/components/footer/components/footer-navigation/footer-navigation.component';
@@ -11,7 +10,7 @@ import { FooterDisclaimerComponent } from '@layout/components/footer/components/
 
 @Component({
     selector: 'app-footer',
-    imports: [TopScrollerComponent, RouterLink, NgForOf, SocialLinkComponent, FooterNavigationComponent, FooterDisclaimerComponent],
+    imports: [TopScrollerComponent, RouterLink, SocialLinkComponent, FooterNavigationComponent, FooterDisclaimerComponent],
     templateUrl: './footer.component.html',
     styleUrls: ['./footer.component.scss']
 })

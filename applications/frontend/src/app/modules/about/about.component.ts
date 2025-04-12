@@ -1,12 +1,12 @@
 import { Component, inject } from '@angular/core';
-import { AsyncPipe, JsonPipe, NgForOf, NgIf, NgStyle } from '@angular/common';
+import { NgForOf, NgIf } from '@angular/common';
 import { AboutService } from '@modules/about/about.service';
 import { Observable } from 'rxjs';
 import { ITechCategory } from '@modules/about/about.models';
 
 @Component({
     selector: 'app-about',
-    imports: [NgForOf, JsonPipe, NgIf, AsyncPipe, NgStyle],
+    imports: [NgForOf, NgIf],
     templateUrl: './about.component.html',
     styleUrl: './about.component.scss'
 })

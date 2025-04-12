@@ -1,5 +1,5 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { JsonPipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgForOf, NgIf } from '@angular/common';
 import { ProjectsService } from '@modules/projects/projects.service';
 import { Observable } from 'rxjs';
 import { IProject } from '@modules/projects/projects.models';
@@ -7,7 +7,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 
 @Component({
     selector: 'app-project-details',
-    imports: [NgForOf, NgIf, JsonPipe, NgClass, RouterLink],
+    imports: [NgForOf, NgIf, RouterLink],
     templateUrl: './details.component.html',
     styleUrl: './details.component.scss'
 })

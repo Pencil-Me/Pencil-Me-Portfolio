@@ -1,4 +1,4 @@
-import { AsyncPipe, JsonPipe, NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
+import { NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HomeService } from '@modules/home/home.service';
@@ -9,7 +9,7 @@ import { TrackVisibilityDirective } from '@shared/directives/track-visibility.di
 
 @Component({
     selector: 'app-home',
-    imports: [NgForOf, AsyncPipe, RouterLink, JsonPipe, NgOptimizedImage, CountUpDirective, TrackVisibilityDirective, NgIf],
+    imports: [NgForOf, RouterLink, NgOptimizedImage, CountUpDirective, TrackVisibilityDirective, NgIf],
     templateUrl: './home.component.html',
     styleUrl: './home.component.scss'
 })

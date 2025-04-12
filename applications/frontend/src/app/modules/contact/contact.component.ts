@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ApiClientService } from '@core/services/api/api-client.service';
-import { JsonPipe, NgClass, NgIf, NgTemplateOutlet } from '@angular/common';
+import { NgClass, NgIf, NgTemplateOutlet } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
@@ -9,7 +9,7 @@ import { faEnvelope } from '@fortawesome/free-regular-svg-icons';
 
 @Component({
     selector: 'app-contact',
-    imports: [ReactiveFormsModule, NgIf, NgClass, RouterLink, NgTemplateOutlet, FaIconComponent, JsonPipe],
+    imports: [ReactiveFormsModule, NgIf, NgClass, RouterLink, NgTemplateOutlet, FaIconComponent],
     templateUrl: './contact.component.html',
     styleUrl: './contact.component.scss'
 })

@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { JsonPipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { ProjectsService } from '@modules/projects/projects.service';
 import { Observable } from 'rxjs';
 import { IProjectsCategory, IProjectTech } from '@modules/projects/projects.models';
@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
  */
 @Component({
     selector: 'app-projects',
-    imports: [NgForOf, NgIf, JsonPipe, NgClass],
+    imports: [NgForOf, NgIf, NgClass],
     templateUrl: './projects.component.html',
     styleUrls: ['./projects.component.scss']
 })

@@ -1,13 +1,13 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { NavigationStart, Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgForOf } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { NgbCollapse } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'app-navigation',
-    imports: [RouterLink, NgForOf, NgClass, NgIf, FaIconComponent, NgbCollapse, RouterLinkActive],
+    imports: [RouterLink, NgForOf, NgClass, FaIconComponent, NgbCollapse, RouterLinkActive],
     templateUrl: './navigation.component.html',
     styleUrls: ['./navigation.component.scss']
 })

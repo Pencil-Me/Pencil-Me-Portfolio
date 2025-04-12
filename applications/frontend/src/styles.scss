@@ -1,37 +1,29 @@
-// HELPERS
-@import "./sass/helpers/variables";
-@import "./sass/helpers/functions";
-@import "./sass/helpers/mixins";
+@use "./sass/helpers/variables" as var;
 
 // TOOLS
-@import "./sass/tools/reset";
-@import "./sass/tools/normalize";
+@use "./sass/tools/reset";
+@use "./sass/tools/normalize";
 
 // BASICS
-@import "./sass/basics/base";
-@import "./sass/basics/typography";
-
-:root {
-  --pm-primary: #{$primary};
-  --pm-primary-hover: #{$primary-hover};
-  --pm-secondary: #{$secondary};
-  --pm-secondary-hover: #{$secondary-hover};
-}
-
-// Import Bootstrap functions, vars and mixins
-@import "bootstrap/scss/functions";
-@import "bootstrap/scss/variables";
-@import "bootstrap/scss/mixins";
+@use "./sass/basics/base";
+@use "./sass/basics/typography";
 
 // Bootstrap main import
-@import "bootstrap/scss/bootstrap";
+@use "bootstrap/scss/bootstrap";
+
+:root {
+  --pm-primary: #{var.$primary};
+  --pm-primary-hover: #{var.$primary-hover};
+  --pm-secondary: #{var.$secondary};
+  --pm-secondary-hover: #{var.$secondary-hover};
+}
 
 // Then add additional custom code here
 a {
-  color: $primary;
+  color: var.$primary;
   text-decoration: none;
 
   &:hover {
-    color: $primary-hover;
+    color: var.$primary-hover;
   }
 }
