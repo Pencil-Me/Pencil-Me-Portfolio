@@ -1,3 +1,5 @@
+@use "sass:color";
+
 $content-width: 1000px;
 $breakpoint: 799px;
 $nav-height: 3.5rem;
@@ -20,7 +22,7 @@ header {
   z-index: 1;
 
   &.fixed-header {
-    background: rgba($nav-background, .75);
+    background: color.change($nav-background, $alpha: 0.75);
     position: fixed;
     right: 0;
     left: 0;
@@ -28,7 +30,7 @@ header {
     backdrop-filter: blur(5px);
 
     .header-content nav .nav-link:hover {
-      background: rgba($nav-background, .75);
+      background: color.change($nav-background, $alpha: 0.75);
     }
 
     .header-content .logo {
@@ -46,7 +48,7 @@ header {
 
     .header-content nav ul li:not(.active) .nav-link {
       &:hover {
-        background: rgba(darken($nav-background, 0.75), .75);
+        background: color.change(color.adjust($nav-background, $lightness: -75%), $alpha: 0.75);
       }
     }
   }
@@ -64,13 +66,13 @@ header {
       line-height: 1em;
 
       span {
-        border-top: 1px solid rgba(255,255,255,1);
+        border-top: 1px solid rgba(255, 255, 255, 1);
         letter-spacing: 0.1em;
         word-spacing: 0.5em;
         display: block;
-        font-size: .455em;
-        line-height: .85em;
-        opacity: .5;
+        font-size: 0.455em;
+        line-height: 0.85em;
+        opacity: 0.5;
         white-space: nowrap;
       }
 
@@ -138,7 +140,7 @@ header {
           }
 
           &:not(.active) .nav-link:hover {
-            background-color: darken($nav-background, 0.75);
+            background-color: color.adjust($nav-background, $lightness: -75%);
             color: $link-hover-color;
           }
         }

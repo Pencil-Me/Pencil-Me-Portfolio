@@ -1,4 +1,4 @@
-@use "./sass/helpers/variables" as var;
+@use "./sass/helpers/variables" as *;
 
 // TOOLS
 @use "./sass/tools/reset";
@@ -9,21 +9,25 @@
 @use "./sass/basics/typography";
 
 // Bootstrap main import
-@use "bootstrap/scss/bootstrap";
+@use "bootstrap/scss/bootstrap" with (
+  $primary: $primary,
+  $secondary: $secondary,
+  $theme-colors: $theme-colors
+);
 
 :root {
-  --pm-primary: #{var.$primary};
-  --pm-primary-hover: #{var.$primary-hover};
-  --pm-secondary: #{var.$secondary};
-  --pm-secondary-hover: #{var.$secondary-hover};
+  --pm-primary: #{$primary};
+  --pm-primary-hover: #{$primary-hover};
+  --pm-secondary: #{$secondary};
+  --pm-secondary-hover: #{$secondary-hover};
 }
 
 // Then add additional custom code here
 a {
-  color: var.$primary;
+  color: $primary;
   text-decoration: none;
 
   &:hover {
-    color: var.$primary-hover;
+    color: $primary-hover;
   }
 }
