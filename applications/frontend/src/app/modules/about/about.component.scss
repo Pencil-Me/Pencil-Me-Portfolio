@@ -4,13 +4,13 @@
 
   h2 {
     font-size: 3rem;
-    letter-spacing: -.045em;
+    letter-spacing: -0.045em;
     text-transform: uppercase;
   }
 
   h3 {
     font-size: 2rem;
-    letter-spacing: -.045em;
+    letter-spacing: -0.045em;
     text-transform: uppercase;
   }
 }
@@ -19,7 +19,7 @@ ul {
   list-style-type: circle;
 
   li:not(:last-child) {
-    margin-bottom: .5rem;
+    margin-bottom: 0.5rem;
   }
 }
 
@@ -29,7 +29,7 @@ ul {
 
     h4 {
       font-size: 1.5rem;
-      letter-spacing: -.045em;
+      letter-spacing: -0.045em;
       text-transform: uppercase;
     }
   }
@@ -40,8 +40,8 @@ ul {
     list-style-type: none;
 
     li {
-      padding-bottom: .25rem;
-      margin-bottom: .25rem;
+      padding-bottom: 0.25rem;
+      margin-bottom: 0.25rem;
 
       &:not(:last-child) {
         border-bottom: 1px solid #cbcbcb;
@@ -54,8 +54,8 @@ ul {
       .tech_info-box {
         color: var(--pm-secondary);
         display: flex;
-        gap: .5rem;
-        font-size: .65em;
+        gap: 0.5rem;
+        font-size: 0.65em;
 
         span {
           font-size: 1.25em;

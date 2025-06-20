@@ -4,13 +4,13 @@
 
   h2 {
     font-size: 3rem;
-    letter-spacing: -.045em;
+    letter-spacing: -0.045em;
     text-transform: uppercase;
   }
 
   h3 {
     font-size: 2rem;
-    letter-spacing: -.045em;
+    letter-spacing: -0.045em;
     text-transform: uppercase;
   }
 }
@@ -21,7 +21,7 @@
   padding: 0;
   margin: 0 0 1rem;
   list-style-type: none;
-  gap: .25rem .5rem;
+  gap: 0.25rem 0.5rem;
 
   .tech-item {
     background-color: transparent;
@@ -29,7 +29,8 @@
     color: var(--bs-secondary-rgb);
     padding: var(--bs-list-group-item-padding-y) var(--bs-list-group-item-padding-x);
     text-decoration: none;
-    border: var(--bs-list-group-border-width) solid RGBA(var(--bs-secondary-rgb), var(--bs-bg-opacity, 1));
+    border: var(--bs-list-group-border-width) solid
+      RGBA(var(--bs-secondary-rgb), var(--bs-bg-opacity, 1));
     border-radius: var(--bs-border-radius-pill) !important;
     --bs-badge-padding-x: 0.65em;
     --bs-badge-padding-y: 0.35em;
@@ -59,7 +60,6 @@
 }
 
 .category-card-container {
-
   .category-card {
     margin-bottom: 2rem;
     padding-bottom: 2rem;
@@ -72,7 +72,7 @@
     .project-list {
       width: 100%;
       padding: 0;
-      margin: 0 calc(var(--bs-gutter-x)* -0.5) 1rem;
+      margin: 0 calc(var(--bs-gutter-x) * -0.5) 1rem;
       list-style-type: none;
 
       .project-list_item {
@@ -81,20 +81,20 @@
         .project-list_item_main-info {
           &.bottom-border {
             border-bottom: 1px solid #c2c2c2;
-            margin-bottom: .5rem;
-            padding-bottom: .5rem;
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.5rem;
           }
 
           .project-list_item_main-info_label {
             font-size: 1.75rem;
             display: block;
             border-bottom: 1px solid #606060;
-            margin-bottom: .5rem;
-            padding-bottom: .5rem;
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.5rem;
             &:hover {
               cursor: pointer;
-              color:var(--pm-primary-hover);
-              transition: .25s ease-in-out all;
+              color: var(--pm-primary-hover);
+              transition: 0.25s ease-in-out all;
             }
           }
           .project-list_item_main-info_position {
@@ -111,15 +111,14 @@
         }
         .project-list_item_dates {
           border-bottom: 1px solid #c2c2c2;
-          margin-bottom: .5rem;
-          padding-bottom: .5rem;
+          margin-bottom: 0.5rem;
+          padding-bottom: 0.5rem;
 
           .project-list_item_dates_title {
             font-weight: bold;
           }
         }
         .project-list_item_tech {
-
           .project-list_item_tech_title {
             font-weight: bold;
           }
@@ -127,14 +126,14 @@
             display: flex;
             flex-wrap: wrap;
             padding: 0;
-            margin: .4rem 0 1rem;
+            margin: 0.4rem 0 1rem;
             list-style-type: none;
-            gap: .25rem .5rem;
+            gap: 0.25rem 0.5rem;
 
             li {
               --border: #a9a9a9;
               line-height: 1;
-              padding: 0.425rem .5rem;
+              padding: 0.425rem 0.5rem;
               border: 2px solid var(--border);
               border-radius: 10ch;
               white-space: nowrap;
@@ -142,7 +141,7 @@
               &.tech-container-li_selected {
                 background: var(--pm-primary-hover);
                 color: #fff;
-                transition: .25s ease-in-out all;
+                transition: 0.25s ease-in-out all;
               }
             }
           }

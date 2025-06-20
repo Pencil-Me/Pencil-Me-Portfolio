@@ -15,10 +15,20 @@ describe('KnowledgeEffects', () => {
   let knowledgeService: jasmine.SpyObj<KnowledgeService>;
 
   beforeEach(() => {
-    const spy = jasmine.createSpyObj('KnowledgeService', ['getTechstack', 'getProjects', 'getProject', 'getCustomers']);
+    const spy = jasmine.createSpyObj('KnowledgeService', [
+      'getTechstack',
+      'getProjects',
+      'getProject',
+      'getCustomers',
+    ]);
 
     TestBed.configureTestingModule({
-      providers: [KnowledgeEffects, provideMockActions(() => actions$), provideMockStore(), { provide: KnowledgeService, useValue: spy }],
+      providers: [
+        KnowledgeEffects,
+        provideMockActions(() => actions$),
+        provideMockStore(),
+        { provide: KnowledgeService, useValue: spy },
+      ],
     });
 
     effects = TestBed.inject(KnowledgeEffects);
@@ -67,9 +77,21 @@ describe('KnowledgeEffects', () => {
 
   describe('getProjectsDataEffect$', () => {
     it('should return GetProjectsSuccess action with data on success', (done) => {
-      const customerBasic: CUSTOMER = { name: 'Customer 1', location: 'Location 1', last_used_date: new Date('2021-05-01') };
-      const dateBasic: DATE = { start_date: new Date('2020-01-01'), end_date: new Date('2021-01-01') };
-      const techBasic: TECH = { name: 'Tech 1', uuid: '1', expertise_level: 'expertise_levelTest', type: 'typeTest' };
+      const customerBasic: CUSTOMER = {
+        name: 'Customer 1',
+        location: 'Location 1',
+        last_used_date: new Date('2021-05-01'),
+      };
+      const dateBasic: DATE = {
+        start_date: new Date('2020-01-01'),
+        end_date: new Date('2021-01-01'),
+      };
+      const techBasic: TECH = {
+        name: 'Tech 1',
+        uuid: '1',
+        expertise_level: 'expertise_levelTest',
+        type: 'typeTest',
+      };
       const projectBasic: PROJECT = {
         uuid: '1',
         name: 'Project 1',
@@ -110,9 +132,21 @@ describe('KnowledgeEffects', () => {
 
   describe('getProjectDataEffect$', () => {
     it('should return GetProjectSuccess action with data on success', (done) => {
-      const customerBasic: CUSTOMER = { name: 'Customer 1', location: 'Location 1', last_used_date: new Date('2021-05-01') };
-      const dateBasic: DATE = { start_date: new Date('2020-01-01'), end_date: new Date('2021-01-01') };
-      const techBasic: TECH = { name: 'Tech 1', uuid: '1', expertise_level: 'expertise_levelTest', type: 'typeTest' };
+      const customerBasic: CUSTOMER = {
+        name: 'Customer 1',
+        location: 'Location 1',
+        last_used_date: new Date('2021-05-01'),
+      };
+      const dateBasic: DATE = {
+        start_date: new Date('2020-01-01'),
+        end_date: new Date('2021-01-01'),
+      };
+      const techBasic: TECH = {
+        name: 'Tech 1',
+        uuid: '1',
+        expertise_level: 'expertise_levelTest',
+        type: 'typeTest',
+      };
       const projectBasic: PROJECT = {
         uuid: '1',
         name: 'Project 1',
@@ -153,7 +187,11 @@ describe('KnowledgeEffects', () => {
 
   describe('getCustomersDataEffect$', () => {
     it('should return GetCustomersSuccess action with data on success', (done) => {
-      const customerBasic: CUSTOMER = { name: 'Customer 1', location: 'Location 1', last_used_date: new Date('2021-05-01') };
+      const customerBasic: CUSTOMER = {
+        name: 'Customer 1',
+        location: 'Location 1',
+        last_used_date: new Date('2021-05-01'),
+      };
       const customers: CUSTOMER[] = [customerBasic];
       const action = fromKnowledge.actions.GetCustomers();
       const outcome = fromKnowledge.actions.GetCustomersSuccess({ data: customers });

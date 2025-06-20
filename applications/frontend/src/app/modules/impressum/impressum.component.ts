@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
-    selector: 'app-impressum',
-    templateUrl: './impressum.component.html',
-    styleUrls: ['./impressum.component.scss'],
-    imports: [RouterLink]
+  selector: 'app-impressum',
+  templateUrl: './impressum.component.html',
+  styleUrls: ['./impressum.component.scss'],
+  imports: [RouterLink],
 })
 export class ImpressumComponent {
   email: string = 'info@pencil-me.de';

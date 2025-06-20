@@ -8,10 +8,10 @@ export interface TechStack {
 }
 
 @Component({
-    selector: 'app-footer-disclaimer',
-    imports: [CommonModule],
-    styleUrl: './footer-disclaimer.component.scss',
-    templateUrl: './footer-disclaimer.component.html'
+  selector: 'app-footer-disclaimer',
+  imports: [CommonModule],
+  styleUrl: './footer-disclaimer.component.scss',
+  templateUrl: './footer-disclaimer.component.html',
 })
 export class FooterDisclaimerComponent {
   @Input() techStack: TechStack[] = [];

@@ -20,7 +20,9 @@ export class ApiClientService {
    * @returns Observable of generic T
    */
   public get<T>(path: string, options?: Record<string, unknown>): Observable<T> {
-    const headers = new HttpHeaders().set('API-Key', this.apiKey).set('Content-Type', 'application/x-www-form-urlencoded');
+    const headers = new HttpHeaders()
+      .set('API-Key', this.apiKey)
+      .set('Content-Type', 'application/x-www-form-urlencoded');
     return this.http.get<T>(this.composeApiUrl(path), { headers, ...options });
   }
 
@@ -32,7 +34,9 @@ export class ApiClientService {
    * @returns Observable of generic T
    */
   public post<T>(path: string, data?: object, options?: Record<string, unknown>): Observable<T> {
-    const headers = new HttpHeaders().set('API-Key', this.apiKey).set('Content-Type', 'application/x-www-form-urlencoded');
+    const headers = new HttpHeaders()
+      .set('API-Key', this.apiKey)
+      .set('Content-Type', 'application/x-www-form-urlencoded');
     const body = this.encodeFormData(data);
     return this.http.post<T>(this.composeApiUrl(path), body, { headers, ...options });
   }
@@ -58,7 +62,9 @@ export class ApiClientService {
    */
   public put<T>(path: string, data: object, options?: Record<string, unknown>): Observable<T> {
     if (options === undefined) options = {};
-    const headers = new HttpHeaders().set('API-Key', this.apiKey).set('Content-Type', 'application/x-www-form-urlencoded');
+    const headers = new HttpHeaders()
+      .set('API-Key', this.apiKey)
+      .set('Content-Type', 'application/x-www-form-urlencoded');
     return this.http.put<T>(this.composeApiUrl(path), data, { headers, ...options });
   }
 
@@ -69,7 +75,9 @@ export class ApiClientService {
    * @returns Observable of generic
    */
   public delete<T>(path: string, options?: Record<string, unknown>): Observable<T> {
-    const headers = new HttpHeaders().set('API-Key', this.apiKey).set('Content-Type', 'application/x-www-form-urlencoded');
+    const headers = new HttpHeaders()
+      .set('API-Key', this.apiKey)
+      .set('Content-Type', 'application/x-www-form-urlencoded');
     return this.http.delete<T>(this.composeApiUrl(path), { headers, ...options });
   }
 

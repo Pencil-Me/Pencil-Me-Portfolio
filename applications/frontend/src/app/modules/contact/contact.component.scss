@@ -4,7 +4,7 @@
 
   h2 {
     font-size: 3rem;
-    letter-spacing: -.045em;
+    letter-spacing: -0.045em;
     text-transform: uppercase;
   }
 }
@@ -24,7 +24,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255,255,255,.5);
+  background: rgba(255, 255, 255, 0.5);
 
   fa-icon {
     font-size: 10em;
@@ -34,11 +34,21 @@
 }
 
 @keyframes wiggle {
-  0% { transform: rotate(0deg); }
-  80% { transform: rotate(0deg); }
-  85% { transform: rotate(5deg); }
-  95% { transform: rotate(-5deg); }
-  100% { transform: rotate(0deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  80% {
+    transform: rotate(0deg);
+  }
+  85% {
+    transform: rotate(5deg);
+  }
+  95% {
+    transform: rotate(-5deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
 }
 
 .char-count {
@@ -46,7 +56,9 @@
 }
 
 .is-invalid {
-  .invalid-feedback { display: block; }
+  .invalid-feedback {
+    display: block;
+  }
 
   .form-control {
     border-color: var(--bs-form-invalid-border-color);
@@ -58,7 +70,9 @@
   }
 }
 .is-valid {
-  .invalid-feedback { display: block; }
+  .invalid-feedback {
+    display: block;
+  }
 
   .form-control {
     border-color: var(--bs-form-valid-border-color);
@@ -75,19 +89,20 @@
   grid-template-columns: 2rem 1fr;
   gap: 1rem;
 
-  input, label {
+  input,
+  label {
     display: inline-block;
     align-self: start;
   }
 
   input {
-    margin-top: .5rem;
+    margin-top: 0.5rem;
     transform: scale(2);
   }
 
   &.is-invalid label {
     border: 1px solid red !important;
-    padding: .5rem;
+    padding: 0.5rem;
   }
   .invalid-feedback {
     grid-column: 2 / span 1;

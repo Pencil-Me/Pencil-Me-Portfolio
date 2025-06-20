@@ -15,31 +15,37 @@ export const routes: Routes = [
         canActivate: [SeoGuard],
         data: {
           title: 'Home - Pencil&Me',
-          description: 'Willkommen auf der Startseite von Pencil&Me. Hier finden Sie das Portfolio von Johannes Kromer.',
+          description:
+            'Willkommen auf der Startseite von Pencil&Me. Hier finden Sie das Portfolio von Johannes Kromer.',
           keywords: 'Portfolio, Pencil&Me, Johannes Kromer, Startseite',
           ogTitle: 'Home - Pencil&Me',
-          ogDescription: 'Willkommen auf der Startseite von Pencil&Me. Hier finden Sie das Portfolio von Johannes Kromer.',
+          ogDescription:
+            'Willkommen auf der Startseite von Pencil&Me. Hier finden Sie das Portfolio von Johannes Kromer.',
           ogUrl: 'https://www.pencil-me.de/home',
           ogType: 'website',
         },
       },
       {
         path: 'contact',
-        loadComponent: () => import('@modules/contact/contact.component').then((c) => c.ContactComponent),
+        loadComponent: () =>
+          import('@modules/contact/contact.component').then((c) => c.ContactComponent),
         canActivate: [SeoGuard],
         data: {
           title: 'Kontakt - Pencil&Me',
-          description: 'Kontaktieren Sie Johannes Kromer, Freelance Frontend Developer bei Pencil&Me.',
+          description:
+            'Kontaktieren Sie Johannes Kromer, Freelance Frontend Developer bei Pencil&Me.',
           keywords: 'Kontakt, Pencil&Me, Johannes Kromer, Frontend Developer',
           ogTitle: 'Kontakt - Pencil&Me',
-          ogDescription: 'Kontaktieren Sie Johannes Kromer, Freelance Frontend Developer bei Pencil&Me.',
+          ogDescription:
+            'Kontaktieren Sie Johannes Kromer, Freelance Frontend Developer bei Pencil&Me.',
           ogUrl: 'https://www.pencil-me.de/contact',
           ogType: 'website',
         },
       },
       {
         path: 'contact/:type',
-        loadComponent: () => import('@modules/contact/contact.component').then((c) => c.ContactComponent),
+        loadComponent: () =>
+          import('@modules/contact/contact.component').then((c) => c.ContactComponent),
       },
       {
         path: 'about',
@@ -47,17 +53,20 @@ export const routes: Routes = [
         canActivate: [SeoGuard],
         data: {
           title: 'Über Mich - Pencil&Me',
-          description: 'Erfahren Sie mehr über Johannes Kromer und Pencil&Me, sein Portfolio und seine Projekte.',
+          description:
+            'Erfahren Sie mehr über Johannes Kromer und Pencil&Me, sein Portfolio und seine Projekte.',
           keywords: 'Über uns, Pencil&Me, Johannes Kromer, Projekte',
           ogTitle: 'Über Uns - Pencil&Me',
-          ogDescription: 'Erfahren Sie mehr über Johannes Kromer und Pencil&Me, sein Portfolio und seine Projekte.',
+          ogDescription:
+            'Erfahren Sie mehr über Johannes Kromer und Pencil&Me, sein Portfolio und seine Projekte.',
           ogUrl: 'https://www.pencil-me.de/about',
           ogType: 'website',
         },
       },
       {
         path: 'projects',
-        loadComponent: () => import('@modules/projects/projects.component').then((c) => c.ProjectsComponent),
+        loadComponent: () =>
+          import('@modules/projects/projects.component').then((c) => c.ProjectsComponent),
         canActivate: [SeoGuard],
         data: {
           title: 'Projekte - Pencil&Me',
@@ -71,15 +80,20 @@ export const routes: Routes = [
       },
       {
         path: 'projects/:id',
-        loadComponent: () => import('@modules/projects/details/details.component').then((c) => c.ProjectDetailsComponent),
+        loadComponent: () =>
+          import('@modules/projects/details/details.component').then(
+            (c) => c.ProjectDetailsComponent,
+          ),
       },
       {
         path: 'impressum',
-        loadComponent: () => import('@modules/impressum/impressum.component').then((c) => c.ImpressumComponent),
+        loadComponent: () =>
+          import('@modules/impressum/impressum.component').then((c) => c.ImpressumComponent),
       },
       {
         path: 'datenschutz',
-        loadComponent: () => import('@modules/datenschutz/datenschutz.component').then((c) => c.DatenschutzComponent),
+        loadComponent: () =>
+          import('@modules/datenschutz/datenschutz.component').then((c) => c.DatenschutzComponent),
       },
       {
         path: 'error',

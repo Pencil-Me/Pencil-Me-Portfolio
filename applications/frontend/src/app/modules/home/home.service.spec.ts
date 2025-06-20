@@ -144,7 +144,9 @@ describe('HomeService', () => {
     service.customers$.subscribe((customers: { url: string; alt: string }[]) => {
       if (customers.length > 0) {
         expect(customers.length).toBe(8);
-        expect(customers).toContain(jasmine.objectContaining({ url: './assets/logos/arvato.png', alt: 'arvato Bertelsmann' }));
+        expect(customers).toContain(
+          jasmine.objectContaining({ url: './assets/logos/arvato.png', alt: 'arvato Bertelsmann' }),
+        );
         done();
       }
     });

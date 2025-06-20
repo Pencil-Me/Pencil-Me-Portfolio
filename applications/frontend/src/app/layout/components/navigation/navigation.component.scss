@@ -1,4 +1,4 @@
-@use "sass:color";
+@use 'sass:color';
 
 $content-width: 1000px;
 $breakpoint: 799px;
@@ -118,7 +118,7 @@ header {
             width: 0;
             height: 5px;
             background-color: $link-hover-color;
-            content: "";
+            content: '';
             transition: 300ms;
           }
 

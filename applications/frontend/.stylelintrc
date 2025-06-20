@@ -4,10 +4,21 @@
     "stylelint-config-sass-guidelines",
     "stylelint-config-idiomatic-order"
   ],
+  "plugins": ["stylelint-scss", "stylelint-order"],
   "rules": {
-    "order/properties-alphabetical-order": true,
-    "max-nesting-depth": 4,
-    "selector-max-compound-selectors": 5,
+    "order/properties-alphabetical-order": null,
+    "order/properties-order": [],
+    "max-nesting-depth": 3,
+    "selector-max-compound-selectors": 4,
+    "selector-max-specificity": "0,4,0",
+    "selector-no-qualifying-type": [true, { "ignore": ["attribute"] }],
+    "color-hex-case": "lower",
+    "color-hex-length": "short",
+    "unit-allowed-list": ["em", "rem", "%", "s", "px", "vh", "vw"],
+    "property-no-vendor-prefix": true,
+    "value-no-vendor-prefix": true,
+    "declaration-no-important": true,
+    "no-descending-specificity": null,
     "import-notation": "string",
     "no-invalid-position-at-import-rule": null
   }

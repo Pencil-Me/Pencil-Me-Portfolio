@@ -1,9 +1,24 @@
 {
+  "$schema": "https://json.schemastore.org/prettierrc",
   "singleQuote": true,
-  "printWidth": 140,
+  "printWidth": 100,
+  "tabWidth": 2,
+  "trailingComma": "all",
+  "semi": true,
+  "bracketSpacing": true,
+  "arrowParens": "always",
+  "endOfLine": "auto",
 
-  "importOrder": ["^@angular/(.*)$", "^rxjs/(.*)$", "<THIRD_PARTY_MODULES>", "^@gov/(.*)$", "^@core/(.*)$", "^@shared/(.*)$", "^[./]"],
+  "importOrder": [
+    "^@angular/(.*)$",
+    "^rxjs",
+    "<THIRD_PARTY_MODULES>",
+    "^@gov/(.*)$",
+    "^@core/(.*)$",
+    "^@shared/(.*)$",
+    "^[./]"
+  ],
   "importOrderSeparation": true,
-  "importOrderParserPlugins": ["typescript", "decorators"],
-  "importOrderSortSpecifiers": true
+  "importOrderSortSpecifiers": true,
+  "importOrderParserPlugins": ["typescript", "decorators-legacy"]
 }

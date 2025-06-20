@@ -9,7 +9,8 @@
             <div class="card-body">
               <h1 class="text-center mb-4">Erfolgreich gesendet!</h1>
               <p class="text-center">
-                Vielen Dank für deine Nachricht. Wir haben deine Anfrage erhalten und werden uns bald mit dir in Verbindung setzen.
+                Vielen Dank für deine Nachricht. Wir haben deine Anfrage erhalten und werden uns
+                bald mit dir in Verbindung setzen.
               </p>
               <div class="text-center mt-4">
                 <a routerLink="/" class="btn btn-primary">Zurück zur Startseite</a>
@@ -24,7 +25,10 @@
   <ng-container *ngIf="!emailIsSend">
     <div class="row mt-5">
       <div class="col-md-6">
-        <h3>Danke, dass du dir die Zeit genommen hast, mich zu kontaktieren. Wie kann ich dir heute helfen?</h3>
+        <h3>
+          Danke, dass du dir die Zeit genommen hast, mich zu kontaktieren. Wie kann ich dir heute
+          helfen?
+        </h3>
 
         <ng-container *ngIf="!isSpecalized">
           <p>Wähle aus</p>
@@ -59,8 +63,9 @@
       </div>
       <div class="col-md-6 position-relative">
         <div class="alert alert-danger" *ngIf="emailHasError">
-          Ein Fehler beim Senden der Anfrage ist aufgetreten. Versuche es zu einem späteren Zeitpunkt erneut oder sende direkt eine E-Mail
-          an <a href="mailto:{{ email }}">{{ encryptedEmail }}</a
+          Ein Fehler beim Senden der Anfrage ist aufgetreten. Versuche es zu einem späteren
+          Zeitpunkt erneut oder sende direkt eine E-Mail an
+          <a href="mailto:{{ email }}">{{ encryptedEmail }}</a
           >.
         </div>
         <div class="spinner-overlay" *ngIf="emailSending">
@@ -74,7 +79,12 @@
           </div>
         </ng-container>
         <ng-container *ngIf="contactForm === 'GENERALLY'">
-          <div class="alert alert-warning" *ngIf="allRequiredFieldsTouchedAndInvalid(generally_form)">Überprüfe deine Eingabe.</div>
+          <div
+            class="alert alert-warning"
+            *ngIf="allRequiredFieldsTouchedAndInvalid(generally_form)"
+          >
+            Überprüfe deine Eingabe.
+          </div>
           <form [formGroup]="generally_form" (ngSubmit)="generally_send()" class="row">
             <ng-container
               [ngTemplateOutlet]="textInput"
@@ -83,7 +93,7 @@
                 variable: 'generally_name',
                 form: generally_form,
                 required: true,
-                class: 'mb-4 col-md-6'
+                class: 'mb-4 col-md-6',
               }"
             ></ng-container>
             <ng-container
@@ -93,7 +103,7 @@
                 variable: 'generally_email',
                 form: generally_form,
                 required: true,
-                class: 'mb-4 col-md-6'
+                class: 'mb-4 col-md-6',
               }"
             ></ng-container>
             <ng-container
@@ -103,7 +113,7 @@
                 variable: 'generally_message',
                 form: generally_form,
                 required: true,
-                class: 'mb-4'
+                class: 'mb-4',
               }"
             ></ng-container>
 
@@ -122,21 +132,23 @@
               [ngTemplateOutletContext]="{
                 variable: 'generally_yes',
                 form: generally_form,
-                class: 'mb-5'
+                class: 'mb-5',
               }"
             ></ng-container>
 
             <ng-container
               [ngTemplateOutlet]="confirmButtons"
               [ngTemplateOutletContext]="{
-                form: generally_form
+                form: generally_form,
               }"
             ></ng-container>
           </form>
         </ng-container>
 
         <ng-container *ngIf="contactForm === 'PROJECT'">
-          <div class="alert alert-warning" *ngIf="allRequiredFieldsTouchedAndInvalid(project_form)">Überprüfe deine Eingabe.</div>
+          <div class="alert alert-warning" *ngIf="allRequiredFieldsTouchedAndInvalid(project_form)">
+            Überprüfe deine Eingabe.
+          </div>
           <form [formGroup]="project_form" (ngSubmit)="project_send()" class="row">
             <h4>Kontaktdaten</h4>
             <ng-container
@@ -146,7 +158,7 @@
                 variable: 'project_company',
                 form: project_form,
                 required: true,
-                class: 'mb-4 col-md-6'
+                class: 'mb-4 col-md-6',
               }"
             ></ng-container>
             <ng-container
@@ -156,7 +168,7 @@
                 variable: 'project_contactName',
                 form: project_form,
                 required: true,
-                class: 'mb-4 col-md-6'
+                class: 'mb-4 col-md-6',
               }"
             ></ng-container>
             <ng-container
@@ -166,7 +178,7 @@
                 variable: 'project_address',
                 form: project_form,
                 required: true,
-                class: 'mb-4'
+                class: 'mb-4',
               }"
             ></ng-container>
             <ng-container
@@ -176,7 +188,7 @@
                 variable: 'project_phone',
                 form: project_form,
                 required: false,
-                class: 'mb-4 col-md-6'
+                class: 'mb-4 col-md-6',
               }"
             ></ng-container>
             <ng-container
@@ -186,7 +198,7 @@
                 variable: 'project_email',
                 form: project_form,
                 required: true,
-                class: 'mb-4 col-md-6'
+                class: 'mb-4 col-md-6',
               }"
             ></ng-container>
 
@@ -198,7 +210,7 @@
                 variable: 'project_title',
                 form: project_form,
                 required: false,
-                class: 'mb-4'
+                class: 'mb-4',
               }"
             ></ng-container>
             <ng-container
@@ -208,7 +220,7 @@
                 variable: 'project_timeline',
                 form: project_form,
                 required: true,
-                class: 'mb-4'
+                class: 'mb-4',
               }"
             ></ng-container>
             <ng-container
@@ -218,7 +230,7 @@
                 variable: 'project_description',
                 form: project_form,
                 required: true,
-                class: 'mb-4'
+                class: 'mb-4',
               }"
             ></ng-container>
 
@@ -237,14 +249,14 @@
               [ngTemplateOutletContext]="{
                 variable: 'project_yes',
                 form: project_form,
-                class: 'mb-4'
+                class: 'mb-4',
               }"
             ></ng-container>
 
             <ng-container
               [ngTemplateOutlet]="confirmButtons"
               [ngTemplateOutletContext]="{
-                form: project_form
+                form: project_form,
               }"
             ></ng-container>
           </form>
@@ -254,19 +266,39 @@
   </ng-container>
 </section>
 
-<ng-template #textInput let-label="label" let-variable="variable" let-form="form" let-required="required" let-class="class">
+<ng-template
+  #textInput
+  let-label="label"
+  let-variable="variable"
+  let-form="form"
+  let-required="required"
+  let-class="class"
+>
   <div
     *ngIf="form.controls[variable]"
     class="form-group has-validation {{ class }}"
     [formGroup]="form"
     [ngClass]="{
       'was-validated': form.controls[variable].dirty || form.controls[variable].touched,
-      'is-invalid': form.controls[variable].invalid && (form.controls[variable].dirty || form.controls[variable].touched),
-      'is-valid': form.controls[variable].valid && (form.controls[variable].dirty || form.controls[variable].touched)
+      'is-invalid':
+        form.controls[variable].invalid &&
+        (form.controls[variable].dirty || form.controls[variable].touched),
+      'is-valid':
+        form.controls[variable].valid &&
+        (form.controls[variable].dirty || form.controls[variable].touched),
     }"
   >
-    <label [for]="variable" class="leading-7 text-sm text-gray-600"> {{ label }} <span *ngIf="!required">(optional)</span> </label>
-    <input [required]="required" [formControlName]="variable" type="text" [id]="variable" [name]="variable" class="form-control" />
+    <label [for]="variable" class="leading-7 text-sm text-gray-600">
+      {{ label }} <span *ngIf="!required">(optional)</span>
+    </label>
+    <input
+      [required]="required"
+      [formControlName]="variable"
+      type="text"
+      [id]="variable"
+      [name]="variable"
+      class="form-control"
+    />
 
     <div
       class="invalid-feedback"
@@ -277,52 +309,92 @@
       "
     >
       <div *ngIf="!!form.controls[variable].errors?.['required']">"{{ label }}" ist benötigt</div>
-      <div *ngIf="!!form.controls[variable].errors?.['pattern']">Falsches Format für "{{ label }}"</div>
-    </div>
-  </div>
-</ng-template>
-
-<ng-template #emailInput let-label="label" let-variable="variable" let-form="form" let-required="required" let-class="class">
-  <div
-    *ngIf="form.controls[variable]"
-    class="form-group has-validation {{ class }}"
-    [formGroup]="form"
-    [ngClass]="{
-      'was-validated': form.controls[variable].dirty || form.controls[variable].touched,
-      'is-invalid': form.controls[variable].invalid && (form.controls[variable].dirty || form.controls[variable].touched),
-      'is-valid': form.controls[variable].valid && (form.controls[variable].dirty || form.controls[variable].touched)
-    }"
-  >
-    <label [for]="variable" class="leading-7 text-sm text-gray-600"> {{ label }} <span *ngIf="!required">(optional)</span> </label>
-    <input [required]="required" [formControlName]="variable" type="email" [id]="variable" [name]="variable" class="form-control" />
-
-    <div
-      class="invalid-feedback"
-      *ngIf="
-        form.controls[variable].errors &&
-        form.controls[variable].invalid &&
-        (form.controls[variable].dirty || form.controls[variable].touched)
-      "
-    >
-      <div *ngIf="!!form.controls[variable].errors?.['required']">"{{ label }}" ist benötigt</div>
-      <div *ngIf="!!form.controls[variable].errors?.['pattern'] || !!form.controls[variable].errors?.['email']">
+      <div *ngIf="!!form.controls[variable].errors?.['pattern']">
         Falsches Format für "{{ label }}"
       </div>
     </div>
   </div>
 </ng-template>
 
-<ng-template #textareaInput let-label="label" let-variable="variable" let-form="form" let-required="required" let-class="class">
+<ng-template
+  #emailInput
+  let-label="label"
+  let-variable="variable"
+  let-form="form"
+  let-required="required"
+  let-class="class"
+>
+  <div
+    *ngIf="form.controls[variable]"
+    class="form-group has-validation {{ class }}"
+    [formGroup]="form"
+    [ngClass]="{
+      'was-validated': form.controls[variable].dirty || form.controls[variable].touched,
+      'is-invalid':
+        form.controls[variable].invalid &&
+        (form.controls[variable].dirty || form.controls[variable].touched),
+      'is-valid':
+        form.controls[variable].valid &&
+        (form.controls[variable].dirty || form.controls[variable].touched),
+    }"
+  >
+    <label [for]="variable" class="leading-7 text-sm text-gray-600">
+      {{ label }} <span *ngIf="!required">(optional)</span>
+    </label>
+    <input
+      [required]="required"
+      [formControlName]="variable"
+      type="email"
+      [id]="variable"
+      [name]="variable"
+      class="form-control"
+    />
+
+    <div
+      class="invalid-feedback"
+      *ngIf="
+        form.controls[variable].errors &&
+        form.controls[variable].invalid &&
+        (form.controls[variable].dirty || form.controls[variable].touched)
+      "
+    >
+      <div *ngIf="!!form.controls[variable].errors?.['required']">"{{ label }}" ist benötigt</div>
+      <div
+        *ngIf="
+          !!form.controls[variable].errors?.['pattern'] ||
+          !!form.controls[variable].errors?.['email']
+        "
+      >
+        Falsches Format für "{{ label }}"
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template
+  #textareaInput
+  let-label="label"
+  let-variable="variable"
+  let-form="form"
+  let-required="required"
+  let-class="class"
+>
   <div
     class="form-group has-validation {{ class }}"
     [formGroup]="form"
     [ngClass]="{
       'was-validated': form.controls[variable].dirty || form.controls[variable].touched,
-      'is-invalid': form.controls[variable].invalid && (form.controls[variable].dirty || form.controls[variable].touched),
-      'is-valid': form.controls[variable].valid && (form.controls[variable].dirty || form.controls[variable].touched)
+      'is-invalid':
+        form.controls[variable].invalid &&
+        (form.controls[variable].dirty || form.controls[variable].touched),
+      'is-valid':
+        form.controls[variable].valid &&
+        (form.controls[variable].dirty || form.controls[variable].touched),
     }"
   >
-    <label [for]="variable" class="leading-7 text-sm text-gray-600"> {{ label }} <span *ngIf="!required">(optional)</span> </label>
+    <label [for]="variable" class="leading-7 text-sm text-gray-600">
+      {{ label }} <span *ngIf="!required">(optional)</span>
+    </label>
     <textarea
       [required]="required"
       [formControlName]="variable"
@@ -332,7 +404,9 @@
       [attr.maxLength]="form.controls[variable].errors?.['maxLength']?.requiredLength || null"
     ></textarea>
 
-    <div class="char-count">{{ form.controls[variable].value?.length || 0 }}/{{ maxLength || '∞' }}</div>
+    <div class="char-count">
+      {{ form.controls[variable].value?.length || 0 }}/{{ maxLength || '∞' }}
+    </div>
 
     <div
       class="invalid-feedback"
@@ -343,8 +417,12 @@
       "
     >
       <div *ngIf="!!form.controls[variable].errors?.['required']">"{{ label }}" ist benötigt</div>
-      <div *ngIf="!!form.controls[variable].errors?.['pattern']">Falsches Format für "{{ label }}"</div>
-      <div *ngIf="!!form.controls[variable].errors?.['maxlength']">Maximale Länge für "{{ label }}" ist {{ maxLength }} Zeichen</div>
+      <div *ngIf="!!form.controls[variable].errors?.['pattern']">
+        Falsches Format für "{{ label }}"
+      </div>
+      <div *ngIf="!!form.controls[variable].errors?.['maxlength']">
+        Maximale Länge für "{{ label }}" ist {{ maxLength }} Zeichen
+      </div>
     </div>
   </div>
 </ng-template>
@@ -355,16 +433,30 @@
     [formGroup]="form"
     [ngClass]="{
       'was-validated': form.controls[variable].dirty || form.controls[variable].touched,
-      'is-invalid': form.controls[variable].invalid && (form.controls[variable].dirty || form.controls[variable].touched),
-      'is-valid': form.controls[variable].valid && (form.controls[variable].dirty || form.controls[variable].touched)
+      'is-invalid':
+        form.controls[variable].invalid &&
+        (form.controls[variable].dirty || form.controls[variable].touched),
+      'is-valid':
+        form.controls[variable].valid &&
+        (form.controls[variable].dirty || form.controls[variable].touched),
     }"
   >
-    <input required [formControlName]="variable" type="checkbox" [id]="variable" [name]="variable" value="1" autocomplete="off" />
+    <input
+      required
+      [formControlName]="variable"
+      type="checkbox"
+      [id]="variable"
+      [name]="variable"
+      value="1"
+      autocomplete="off"
+    />
     <label [for]="variable" class="leading-7 text-sm text-gray-600">
-      Ich stimme zu, dass meine Angaben aus dem Formular zur Beantwortung der Anfrage erhoben und verarbeitet werden. Die Daten werden nach
-      abgeschlossener Bearbeitung Ihrer Anfrage gelöscht. Sie können Ihre Einwilligung jederzeit für die Zukunft per E-Mail an
-      <a href="mailto:{{ email }}">{{ encryptedEmail }}</a> widerrufen. Detaillierte Informationen zum Umgang mit Nutzerdaten finden Sie in
-      unserer <a routerLink="/datenschutz">Datenschutzerklärung</a>.
+      Ich stimme zu, dass meine Angaben aus dem Formular zur Beantwortung der Anfrage erhoben und
+      verarbeitet werden. Die Daten werden nach abgeschlossener Bearbeitung Ihrer Anfrage gelöscht.
+      Sie können Ihre Einwilligung jederzeit für die Zukunft per E-Mail an
+      <a href="mailto:{{ email }}">{{ encryptedEmail }}</a> widerrufen. Detaillierte Informationen
+      zum Umgang mit Nutzerdaten finden Sie in unserer
+      <a routerLink="/datenschutz">Datenschutzerklärung</a>.
     </label>
 
     <div
@@ -382,7 +474,8 @@
 
 <ng-template #copy>
   <p class="mb-5">
-    Deine Anfrage ist kostenlos und wird verschlüsselt übermittelt. Du erhälsten eine Kopie an die oben angegebene E-Mail-Adresse.
+    Deine Anfrage ist kostenlos und wird verschlüsselt übermittelt. Du erhälsten eine Kopie an die
+    oben angegebene E-Mail-Adresse.
   </p>
 </ng-template>
 

@@ -15,7 +15,12 @@
         </button>
       </div>
 
-      <button *ngIf="filterTech.length > 0" type="button" class="btn btn-outline-secondary mb-4" (click)="resetFilterProjects()">
+      <button
+        *ngIf="filterTech.length > 0"
+        type="button"
+        class="btn btn-outline-secondary mb-4"
+        (click)="resetFilterProjects()"
+      >
         Filter entfernen
       </button>
 
@@ -23,12 +28,19 @@
         <div class="category-card" *ngFor="let projectcategory of filteredProjectCategories">
           <h3 class="category-card_title">{{ projectcategory.title }}</h3>
           <ul class="row project-list">
-            <li class="project-list_item col-12 col-xl-4 col-lg-6" *ngFor="let project of projectcategory.data">
+            <li
+              class="project-list_item col-12 col-xl-4 col-lg-6"
+              *ngFor="let project of projectcategory.data"
+            >
               <div
                 class="project-list_item_main-info"
-                [ngClass]="{ 'bottom-border': project.position || project.customer || project.location }"
+                [ngClass]="{
+                  'bottom-border': project.position || project.customer || project.location,
+                }"
               >
-                <span class="project-list_item_main-info_label" (click)="openProject(project.id)">{{ project.label }}</span>
+                <span class="project-list_item_main-info_label" (click)="openProject(project.id)">{{
+                  project.label
+                }}</span>
                 <ng-container *ngIf="project.position">
                   <span class="project-list_item_main-info_position">{{ project.position }}</span>
                 </ng-container>
@@ -48,7 +60,10 @@
               <div class="project-list_item_tech" *ngIf="project.tech.length > 0">
                 <span class="project-list_item_tech_title">Verwendete Technologien</span>
                 <ul class="tech-container">
-                  <li [ngClass]="{ 'tech-container-li_selected': filterTech.includes(tech.name) }" *ngFor="let tech of project.tech">
+                  <li
+                    [ngClass]="{ 'tech-container-li_selected': filterTech.includes(tech.name) }"
+                    *ngFor="let tech of project.tech"
+                  >
                     {{ tech.name }}
                   </li>
                 </ul>

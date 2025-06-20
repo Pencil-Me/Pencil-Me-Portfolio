@@ -9,10 +9,10 @@ import { Router } from '@angular/router';
  * Component to display projects.
  */
 @Component({
-    selector: 'app-projects',
-    imports: [NgForOf, NgIf, NgClass],
-    templateUrl: './projects.component.html',
-    styleUrls: ['./projects.component.scss']
+  selector: 'app-projects',
+  imports: [NgForOf, NgIf, NgClass],
+  templateUrl: './projects.component.html',
+  styleUrls: ['./projects.component.scss'],
 })
 export class ProjectsComponent {
   private projectsService = inject(ProjectsService);
@@ -77,7 +77,9 @@ export class ProjectsComponent {
         ? filteredProjectCategories
             .map((category) => ({
               title: category.title,
-              data: category.data.filter((project) => project.tech.some((tech) => this.filterTech.includes(tech.name))),
+              data: category.data.filter((project) =>
+                project.tech.some((tech) => this.filterTech.includes(tech.name)),
+              ),
             }))
             .filter((category) => category.data.length > 0)
         : filteredProjectCategories;

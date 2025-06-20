@@ -3,10 +3,14 @@
     <p>made with</p>
     <ul>
       <li *ngFor="let tech of techStack">
-        <a *ngIf="tech.url" [href]="tech.url" target="_blank" rel="noopener noreferrer">{{ tech.name }}</a>
+        <a *ngIf="tech.url" [href]="tech.url" target="_blank" rel="noopener noreferrer">{{
+          tech.name
+        }}</a>
         <span *ngIf="!tech.url">{{ tech.name }}</span>
       </li>
     </ul>
   </div>
-  <p class="disclaimer-text">All logos, trademarks, and brand names are the property of their respective owners.</p>
+  <p class="disclaimer-text">
+    All logos, trademarks, and brand names are the property of their respective owners.
+  </p>
 </div>

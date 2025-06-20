@@ -14,12 +14,19 @@ export class SeoGuard implements CanActivate {
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     const routeData = next.data;
 
-    const title = typeof routeData['title'] === 'function' ? routeData['title'](next) : routeData['title'];
-    const description = typeof routeData['description'] === 'function' ? routeData['description'](next) : routeData['description'];
+    const title =
+      typeof routeData['title'] === 'function' ? routeData['title'](next) : routeData['title'];
+    const description =
+      typeof routeData['description'] === 'function'
+        ? routeData['description'](next)
+        : routeData['description'];
 
     this.title.setTitle(title || 'Pencil&Me');
 
-    this.meta.updateTag({ name: 'description', content: description || 'Pencil&Me - das Portfolio von Johannes Kromer' });
+    this.meta.updateTag({
+      name: 'description',
+      content: description || 'Pencil&Me - das Portfolio von Johannes Kromer',
+    });
 
     if (routeData['keywords']) {
       this.meta.updateTag({ name: 'keywords', content: routeData['keywords'] });

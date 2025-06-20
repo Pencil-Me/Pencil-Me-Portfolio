@@ -4,8 +4,16 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { fromKnowledge } from '@app/state/knowledge';
 import { AppState } from '@app/state';
 import { ISimpTech, ITechCategories } from '@modules/home/home.models';
-import { selectCustomersState, selectTechstackState } from '@app/state/knowledge/knowledge.selectors';
-import { CUSTOMER, CUSTOMERSDATASTATE, TECHSTACK, TECHSTACKDATASTATE } from '@app/state/knowledge/knowledge.models';
+import {
+  selectCustomersState,
+  selectTechstackState,
+} from '@app/state/knowledge/knowledge.selectors';
+import {
+  CUSTOMER,
+  CUSTOMERSDATASTATE,
+  TECHSTACK,
+  TECHSTACKDATASTATE,
+} from '@app/state/knowledge/knowledge.models';
 import { TechStackTitle } from '@app/state/knowledge/knowledge.reducer';
 
 @Injectable({
@@ -43,7 +51,9 @@ export class HomeService {
    */
   private processTechStack(techStack: TECHSTACK[]): ITechCategories[] {
     const tech: ITechCategories[] = [];
-    const sortedTech = [...techStack].sort((a, b) => Number(b.project_count) - Number(a.project_count));
+    const sortedTech = [...techStack].sort(
+      (a, b) => Number(b.project_count) - Number(a.project_count),
+    );
 
     sortedTech.forEach((item: TECHSTACK) => {
       if (item.project_count > 0 && this.isRecentUsage(item.last_usage_date)) {

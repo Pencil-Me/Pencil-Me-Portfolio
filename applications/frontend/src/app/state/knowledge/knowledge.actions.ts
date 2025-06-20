@@ -31,22 +31,51 @@ export enum KnowledgeActionTypes {
 
 // Techstack actions
 export const GetTechstack = createAction(KnowledgeActionTypes.API_GET_TECHSTACK);
-export const GetTechstackSuccess = createAction(KnowledgeActionTypes.API_GET_TECHSTACK_SUCCESS, props<{ data: TECHSTACK[] }>());
-export const GetTechstackFailure = createAction(KnowledgeActionTypes.API_GET_TECHSTACK_FAILURE, props<{ error: string }>());
+export const GetTechstackSuccess = createAction(
+  KnowledgeActionTypes.API_GET_TECHSTACK_SUCCESS,
+  props<{ data: TECHSTACK[] }>(),
+);
+export const GetTechstackFailure = createAction(
+  KnowledgeActionTypes.API_GET_TECHSTACK_FAILURE,
+  props<{ error: string }>(),
+);
 
 // Projects actions
-export const GetProjectServiceData = createAction(KnowledgeActionTypes.API_GET_PROJECT_SERVICE_DATA);
+export const GetProjectServiceData = createAction(
+  KnowledgeActionTypes.API_GET_PROJECT_SERVICE_DATA,
+);
 export const GetProjects = createAction(KnowledgeActionTypes.API_GET_PROJECTS);
-export const GetProjectsSuccess = createAction(KnowledgeActionTypes.API_GET_PROJECTS_SUCCESS, props<{ data: PROJECT[] }>());
-export const GetProjectsFailure = createAction(KnowledgeActionTypes.API_GET_PROJECTS_FAILURE, props<{ error: string }>());
+export const GetProjectsSuccess = createAction(
+  KnowledgeActionTypes.API_GET_PROJECTS_SUCCESS,
+  props<{ data: PROJECT[] }>(),
+);
+export const GetProjectsFailure = createAction(
+  KnowledgeActionTypes.API_GET_PROJECTS_FAILURE,
+  props<{ error: string }>(),
+);
 
 // Project actions
-export const GetProject = createAction(KnowledgeActionTypes.API_GET_PROJECT, props<{ id: string }>());
+export const GetProject = createAction(
+  KnowledgeActionTypes.API_GET_PROJECT,
+  props<{ id: string }>(),
+);
 export const ResetProject = createAction(KnowledgeActionTypes.API_RESET_PROJECT);
-export const GetProjectSuccess = createAction(KnowledgeActionTypes.API_GET_PROJECT_SUCCESS, props<{ data: PROJECT }>());
-export const GetProjectFailure = createAction(KnowledgeActionTypes.API_GET_PROJECT_FAILURE, props<{ error: string }>());
+export const GetProjectSuccess = createAction(
+  KnowledgeActionTypes.API_GET_PROJECT_SUCCESS,
+  props<{ data: PROJECT }>(),
+);
+export const GetProjectFailure = createAction(
+  KnowledgeActionTypes.API_GET_PROJECT_FAILURE,
+  props<{ error: string }>(),
+);
 
 // Customers actions
 export const GetCustomers = createAction(KnowledgeActionTypes.API_GET_CUSTOMERS);
-export const GetCustomersSuccess = createAction(KnowledgeActionTypes.API_GET_CUSTOMERS_SUCCESS, props<{ data: CUSTOMER[] }>());
-export const GetCustomersFailure = createAction(KnowledgeActionTypes.API_GET_CUSTOMERS_FAILURE, props<{ error: string }>());
+export const GetCustomersSuccess = createAction(
+  KnowledgeActionTypes.API_GET_CUSTOMERS_SUCCESS,
+  props<{ data: CUSTOMER[] }>(),
+);
+export const GetCustomersFailure = createAction(
+  KnowledgeActionTypes.API_GET_CUSTOMERS_FAILURE,
+  props<{ error: string }>(),
+);

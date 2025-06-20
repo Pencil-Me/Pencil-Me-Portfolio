@@ -4,7 +4,7 @@
 
   h2 {
     font-size: 3rem;
-    letter-spacing: -.045em;
+    letter-spacing: -0.045em;
     text-transform: uppercase;
   }
 
@@ -12,7 +12,7 @@
     list-style-type: circle;
 
     li:not(:last-child) {
-      margin-bottom: .5rem;
+      margin-bottom: 0.5rem;
     }
   }
 }

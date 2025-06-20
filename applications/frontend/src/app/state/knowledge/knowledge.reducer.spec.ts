@@ -1,6 +1,13 @@
 import { knowledgeReducers, initialState } from './knowledge.reducer';
 import * as actions from './knowledge.actions';
-import { CUSTOMER, DATE, KNOWLEDGESTATE, PROJECT, TECH, TECHSTACK } from '@app/state/knowledge/knowledge.models';
+import {
+  CUSTOMER,
+  DATE,
+  KNOWLEDGESTATE,
+  PROJECT,
+  TECH,
+  TECHSTACK,
+} from '@app/state/knowledge/knowledge.models';
 
 describe('Knowledge Reducer', () => {
   let state: KNOWLEDGESTATE;
@@ -18,9 +25,21 @@ describe('Knowledge Reducer', () => {
     });
 
     it('should handle GetProjectsSuccess action', () => {
-      const customerBasic: CUSTOMER = { name: 'Customer 1', location: 'Location 1', last_used_date: new Date('2021-05-01') };
-      const dateBasic: DATE = { start_date: new Date('2020-01-01'), end_date: new Date('2021-01-01') };
-      const techBasic: TECH = { name: 'Tech 1', uuid: '1', expertise_level: 'expertise_levelTest', type: 'typeTest' };
+      const customerBasic: CUSTOMER = {
+        name: 'Customer 1',
+        location: 'Location 1',
+        last_used_date: new Date('2021-05-01'),
+      };
+      const dateBasic: DATE = {
+        start_date: new Date('2020-01-01'),
+        end_date: new Date('2021-01-01'),
+      };
+      const techBasic: TECH = {
+        name: 'Tech 1',
+        uuid: '1',
+        expertise_level: 'expertise_levelTest',
+        type: 'typeTest',
+      };
       const projectBasic: PROJECT = {
         uuid: '1',
         name: 'Project 1',
@@ -68,9 +87,21 @@ describe('Knowledge Reducer', () => {
     });
 
     it('should handle GetProjectSuccess action', () => {
-      const customerBasic: CUSTOMER = { name: 'Customer 1', location: 'Location 1', last_used_date: new Date('2021-05-01') };
-      const dateBasic: DATE = { start_date: new Date('2020-01-01'), end_date: new Date('2021-01-01') };
-      const techBasic: TECH = { name: 'Tech 1', uuid: '1', expertise_level: 'expertise_levelTest', type: 'typeTest' };
+      const customerBasic: CUSTOMER = {
+        name: 'Customer 1',
+        location: 'Location 1',
+        last_used_date: new Date('2021-05-01'),
+      };
+      const dateBasic: DATE = {
+        start_date: new Date('2020-01-01'),
+        end_date: new Date('2021-01-01'),
+      };
+      const techBasic: TECH = {
+        name: 'Tech 1',
+        uuid: '1',
+        expertise_level: 'expertise_levelTest',
+        type: 'typeTest',
+      };
       const projectBasic: PROJECT = {
         uuid: '1',
         name: 'Project 1',
@@ -146,7 +177,11 @@ describe('Knowledge Reducer', () => {
     });
 
     it('should handle GetCustomersSuccess action', () => {
-      const customersBasic: CUSTOMER = { name: 'Customer 1', location: 'Location 1', last_used_date: new Date('2021-05-01') };
+      const customersBasic: CUSTOMER = {
+        name: 'Customer 1',
+        location: 'Location 1',
+        last_used_date: new Date('2021-05-01'),
+      };
       const customers: CUSTOMER[] = [{ ...customersBasic }];
       const action = actions.GetCustomersSuccess({ data: customers });
       const nextState = knowledgeReducers(state, action);

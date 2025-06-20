@@ -19,7 +19,10 @@ $top-scroller-color-focus: #9f0000;
     border-radius: 50%;
     background: $top-scroller-backgroundcolor;
     color: $top-scroller-color;
-    transition: width .5s, height .5s, background .5s;
+    transition:
+      width 0.5s,
+      height 0.5s,
+      background 0.5s;
 
     &:hover {
       width: 2.1rem;
@@ -33,7 +36,10 @@ $top-scroller-color-focus: #9f0000;
       height: 1.8rem;
       background: $top-scroller-backgroundcolor-focus;
       color: $top-scroller-color-focus;
-      transition: width .1s, height .1s, background .25s;
+      transition:
+        width 0.1s,
+        height 0.1s,
+        background 0.25s;
     }
   }
 }

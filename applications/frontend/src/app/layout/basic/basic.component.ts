@@ -9,18 +9,18 @@ import { ScrollManagerDirective } from '@shared/directives/scroll-manager.direct
 import { ScrollService } from '@shared/services/scroll.service';
 
 @Component({
-    selector: 'app-basic',
-    imports: [
-        RouterOutlet,
-        NavigationComponent,
-        FooterComponent,
-        TopScrollerComponent,
-        ScrollSectionDirective,
-        ScrollManagerDirective,
-        NgIf,
-    ],
-    templateUrl: './basic.component.html',
-    styleUrl: './basic.component.scss'
+  selector: 'app-basic',
+  imports: [
+    RouterOutlet,
+    NavigationComponent,
+    FooterComponent,
+    TopScrollerComponent,
+    ScrollSectionDirective,
+    ScrollManagerDirective,
+    NgIf,
+  ],
+  templateUrl: './basic.component.html',
+  styleUrl: './basic.component.scss',
 })
 export class BasicComponent {
   // Flag to control the visibility of the "scroll to top" button
@@ -58,6 +58,7 @@ export class BasicComponent {
     const windowScrollPosition = window.scrollY;
     const distanceToBottom = this.scrollService.calculateDistanceToBottom();
 
-    this.showScrollToTop = windowScrollPosition > this.SCROLL_THRESHOLD && distanceToBottom > this.BOTTOM_THRESHOLD;
+    this.showScrollToTop =
+      windowScrollPosition > this.SCROLL_THRESHOLD && distanceToBottom > this.BOTTOM_THRESHOLD;
   }
 }

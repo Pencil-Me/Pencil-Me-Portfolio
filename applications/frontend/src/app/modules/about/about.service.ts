@@ -65,7 +65,9 @@ export class AboutService {
     if (filteredDates.length === 0) return 0;
 
     // Sort dates by start_date
-    const sortedDates = filteredDates.sort((a, b) => a.start_date.getTime() - b.start_date.getTime());
+    const sortedDates = filteredDates.sort(
+      (a, b) => a.start_date.getTime() - b.start_date.getTime(),
+    );
 
     const mergedPeriods: DATE[] = [];
     let currentPeriod = sortedDates[0];
@@ -74,7 +76,9 @@ export class AboutService {
       const date = sortedDates[i];
       if (date.start_date <= currentPeriod.end_date) {
         // Extend the current period if overlapping
-        currentPeriod.end_date = new Date(Math.max(currentPeriod.end_date.getTime(), date.end_date.getTime()));
+        currentPeriod.end_date = new Date(
+          Math.max(currentPeriod.end_date.getTime(), date.end_date.getTime()),
+        );
       } else {
         // Push the current period and start a new one
         mergedPeriods.push(currentPeriod);
@@ -105,7 +109,9 @@ export class AboutService {
    * @param techItem The tech item to add.
    */
   private addTechItemToCategories(techCategories: ITechCategory[], techItem: TECHSTACK): void {
-    const lastUsageDate = techItem.last_usage_date ? new Date(techItem.last_usage_date) : new Date();
+    const lastUsageDate = techItem.last_usage_date
+      ? new Date(techItem.last_usage_date)
+      : new Date();
 
     if (this.isOutdatedTech(lastUsageDate)) return;
 

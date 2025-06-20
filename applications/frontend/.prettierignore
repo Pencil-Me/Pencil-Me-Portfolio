@@ -1,7 +1,41 @@
-# Add files here to ignore them from prettier formatting
-/dist
-/coverage
-.angular
+# Build & dependency folders
+dist/
+coverage/
+node_modules/
+.angular/
 
-# ignore pipeline files
+# Environment & config files
+.env
+.env.*
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# Angular CLI & Build Artefakte
+.angular/
+tmp/
+out-tsc/
+.idea/
+.vscode/
+.DS_Store
+
+# Git & CI/CD
 *.yml
+*.yaml
+.git/
+.husky/
+
+# Optional: Ignore test snapshots or reports
+*.snap
+test-results/
+reports/
+
+# Optional: Ignore generated files
+*.min.js
+*.min.css
+*.bundle.js
+*.map
+
+# Optional: Ignore API mocks or mock data
+**/__mocks__/
+**/__snapshots__/

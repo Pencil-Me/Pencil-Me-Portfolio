@@ -9,7 +9,6 @@ pre {
   text-align: var(--bs-body-text-align);
 }
 .project-list_item_tech {
-
   .project-list_item_tech_title {
     font-weight: bold;
   }
@@ -19,12 +18,12 @@ pre {
     padding: 0;
     margin: 0 0 1rem;
     list-style-type: none;
-    gap: .25rem .5rem;
+    gap: 0.25rem 0.5rem;
 
     li {
       --border: #a9a9a9;
       line-height: 1;
-      padding: 0.425rem .5rem;
+      padding: 0.425rem 0.5rem;
       border: 2px solid var(--border);
       border-radius: 10ch;
       white-space: nowrap;

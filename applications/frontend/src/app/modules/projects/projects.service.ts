@@ -5,8 +5,17 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { ProjectTitle } from '@app/state/knowledge/knowledge.reducer';
 import { fromKnowledge } from '@app/state/knowledge';
 import { IProject, IProjectsCategory, IProjectTech } from '@modules/projects/projects.models';
-import { selectProjectsState, selectProjectState, selectTechstackState } from '@app/state/knowledge/knowledge.selectors';
-import { PROJECT, PROJECTSDATASTATE, PROJECTDATASTATE, TECHSTACKDATASTATE } from '@app/state/knowledge/knowledge.models';
+import {
+  selectProjectsState,
+  selectProjectState,
+  selectTechstackState,
+} from '@app/state/knowledge/knowledge.selectors';
+import {
+  PROJECT,
+  PROJECTSDATASTATE,
+  PROJECTDATASTATE,
+  TECHSTACKDATASTATE,
+} from '@app/state/knowledge/knowledge.models';
 import moment from 'moment';
 
 @Injectable({
@@ -145,11 +154,13 @@ export class ProjectsService {
 
       a.org_dates.forEach((e) => {
         if (!e.end_date) aEndDate = new Date().getTime();
-        if (e.end_date && new Date(e.end_date).getTime() > aEndDate) aEndDate = new Date(e.end_date).getTime();
+        if (e.end_date && new Date(e.end_date).getTime() > aEndDate)
+          aEndDate = new Date(e.end_date).getTime();
       });
       b.org_dates.forEach((e) => {
         if (!e.end_date) bEndDate = new Date().getTime();
-        if (e.end_date && new Date(e.end_date).getTime() > bEndDate) bEndDate = new Date(e.end_date).getTime();
+        if (e.end_date && new Date(e.end_date).getTime() > bEndDate)
+          bEndDate = new Date(e.end_date).getTime();
       });
 
       return bEndDate - aEndDate;

@@ -5,10 +5,10 @@ import { Observable } from 'rxjs';
 import { ITechCategory } from '@modules/about/about.models';
 
 @Component({
-    selector: 'app-about',
-    imports: [NgForOf, NgIf],
-    templateUrl: './about.component.html',
-    styleUrl: './about.component.scss'
+  selector: 'app-about',
+  imports: [NgForOf, NgIf],
+  templateUrl: './about.component.html',
+  styleUrl: './about.component.scss',
 })
 export class AboutComponent {
   private aboutService = inject(AboutService);
@@ -18,7 +18,12 @@ export class AboutComponent {
   skills: ITechCategory[] = [];
 
   // Predefined lists of skills and areas of expertise
-  technicSkills = ['BEM', 'Styleguide Driven Development', 'Responsive Design', 'Test Driven Development'];
+  technicSkills = [
+    'BEM',
+    'Styleguide Driven Development',
+    'Responsive Design',
+    'Test Driven Development',
+  ];
 
   softSkills = [
     'Scrum',
@@ -46,8 +51,10 @@ export class AboutComponent {
   }
 
   years(data: number = 0): string {
-    let returnValue = Math.round(data) > 1 ? `${Math.round(data)}+ Jahre` : `${Math.round(data)}+ Jahr`;
-    if (Math.round(data) <= 0) returnValue = Math.round(data * 12) > 1 ? `${data * 12} Monate` : `${data * 12} Monat`;
+    let returnValue =
+      Math.round(data) > 1 ? `${Math.round(data)}+ Jahre` : `${Math.round(data)}+ Jahr`;
+    if (Math.round(data) <= 0)
+      returnValue = Math.round(data * 12) > 1 ? `${data * 12} Monate` : `${data * 12} Monat`;
     if (data * 12 <= 0) return '';
     return returnValue;
   }

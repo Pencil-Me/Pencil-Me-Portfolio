@@ -26,9 +26,18 @@ describe('ProjectsService', () => {
     loadStatus: 'COMPLETED',
     error: null,
   };
-  const customerBasic: CUSTOMER = { name: 'Customer 1', location: 'Location 1', last_used_date: new Date('2021-05-01') };
+  const customerBasic: CUSTOMER = {
+    name: 'Customer 1',
+    location: 'Location 1',
+    last_used_date: new Date('2021-05-01'),
+  };
   const dateBasic: DATE = { start_date: new Date('2020-01-01'), end_date: new Date('2021-01-01') };
-  const techBasic: TECH = { name: 'Tech 1', uuid: '1', expertise_level: 'expertise_levelTest', type: 'typeTest' };
+  const techBasic: TECH = {
+    name: 'Tech 1',
+    uuid: '1',
+    expertise_level: 'expertise_levelTest',
+    type: 'typeTest',
+  };
   const projectBasic: PROJECT = {
     uuid: '1',
     name: 'Project 1',

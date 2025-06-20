@@ -1,15 +1,15 @@
-@use "./sass/helpers/variables" as *;
+@use './sass/helpers/variables' as *;
 
 // TOOLS
-@use "./sass/tools/reset";
-@use "./sass/tools/normalize";
+@use './sass/tools/reset';
+@use './sass/tools/normalize';
 
 // BASICS
-@use "./sass/basics/base";
-@use "./sass/basics/typography";
+@use './sass/basics/base';
+@use './sass/basics/typography';
 
 // Bootstrap main import
-@use "bootstrap/scss/bootstrap" with (
+@use 'bootstrap/scss/bootstrap' with (
   $primary: $primary,
   $secondary: $secondary,
   $theme-colors: $theme-colors

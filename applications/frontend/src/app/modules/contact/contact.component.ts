@@ -8,10 +8,10 @@ import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { faEnvelope } from '@fortawesome/free-regular-svg-icons';
 
 @Component({
-    selector: 'app-contact',
-    imports: [ReactiveFormsModule, NgIf, NgClass, RouterLink, NgTemplateOutlet, FaIconComponent],
-    templateUrl: './contact.component.html',
-    styleUrl: './contact.component.scss'
+  selector: 'app-contact',
+  imports: [ReactiveFormsModule, NgIf, NgClass, RouterLink, NgTemplateOutlet, FaIconComponent],
+  templateUrl: './contact.component.html',
+  styleUrl: './contact.component.scss',
 })
 export class ContactComponent implements OnInit {
   private activatedRoute = inject(ActivatedRoute);
@@ -193,7 +193,9 @@ export class ContactComponent implements OnInit {
     }
 
     const formData = {
-      contactByFax: this.project_form.get('project_contactByFax')?.value ? this.project_form.get('project_contactByFax')?.value : undefined,
+      contactByFax: this.project_form.get('project_contactByFax')?.value
+        ? this.project_form.get('project_contactByFax')?.value
+        : undefined,
       email: this.project_form.get('project_email')?.value,
       message: `Unternehmen: ${this.project_form.get('project_company')?.value},
       Kontaktname: ${this.project_form.get('project_contactName')?.value},

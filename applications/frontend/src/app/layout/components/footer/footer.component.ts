@@ -9,10 +9,16 @@ import { FooterNavigationComponent } from '@layout/components/footer/components/
 import { FooterDisclaimerComponent } from '@layout/components/footer/components/footer-disclaimer/footer-disclaimer.component';
 
 @Component({
-    selector: 'app-footer',
-    imports: [TopScrollerComponent, RouterLink, SocialLinkComponent, FooterNavigationComponent, FooterDisclaimerComponent],
-    templateUrl: './footer.component.html',
-    styleUrls: ['./footer.component.scss']
+  selector: 'app-footer',
+  imports: [
+    TopScrollerComponent,
+    RouterLink,
+    SocialLinkComponent,
+    FooterNavigationComponent,
+    FooterDisclaimerComponent,
+  ],
+  templateUrl: './footer.component.html',
+  styleUrls: ['./footer.component.scss'],
 })
 export class FooterComponent {
   techStackForPortfolio: TechStack[] = [

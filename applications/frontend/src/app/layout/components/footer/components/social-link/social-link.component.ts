@@ -9,10 +9,10 @@ export interface SocialLink {
 }
 
 @Component({
-    selector: 'app-social-links',
-    imports: [CommonModule],
-    styleUrl: './social-link.component.scss',
-    templateUrl: './social-link.component.html'
+  selector: 'app-social-links',
+  imports: [CommonModule],
+  styleUrl: './social-link.component.scss',
+  templateUrl: './social-link.component.html',
 })
 export class SocialLinkComponent {
   @Input() socialLinks: SocialLink[] = [];

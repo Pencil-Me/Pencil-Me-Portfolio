@@ -13,9 +13,13 @@ describe('ApiClientService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-    imports: [],
-    providers: [ApiClientService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
-});
+      imports: [],
+      providers: [
+        ApiClientService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+      ],
+    });
     service = TestBed.inject(ApiClientService);
     httpMock = TestBed.inject(HttpTestingController);
   });

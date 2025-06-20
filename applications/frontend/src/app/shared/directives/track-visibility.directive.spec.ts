@@ -4,8 +4,8 @@ import { By } from '@angular/platform-browser';
 import { TrackVisibilityDirective } from './track-visibility.directive';
 
 @Component({
-    template: `<div appTrackVisibility (visible)="onVisibilityChange($event)"></div>`,
-    standalone: false
+  template: `<div appTrackVisibility (visible)="onVisibilityChange($event)"></div>`,
+  standalone: false,
 })
 class TestComponent {
   isVisible = false;
@@ -47,7 +47,9 @@ describe('TrackVisibilityDirective', () => {
     fixture.detectChanges(); // Initial binding trigger
 
     // Simulate the intersection change by manually invoking the observer's callback
-    directiveInstance['intersectionCallback']({ isIntersecting: true } as IntersectionObserverEntry);
+    directiveInstance['intersectionCallback']({
+      isIntersecting: true,
+    } as IntersectionObserverEntry);
 
     // Test if the visibility change was emitted correctly
     expect(component.onVisibilityChange).toHaveBeenCalledWith(true);

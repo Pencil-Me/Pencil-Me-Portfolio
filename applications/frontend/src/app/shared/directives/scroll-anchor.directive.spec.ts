@@ -5,19 +5,19 @@ import { By } from '@angular/platform-browser';
 import { ScrollManagerDirective } from '@shared/directives/scroll-manager.directive';
 
 @Component({
-    selector: 'app-test-host',
-    template: `
+  selector: 'app-test-host',
+  template: `
     <div id="scrollContainer">
       <div id="scrollTarget" appScrollAnchor="target"></div>
     </div>
   `,
-    imports: [ScrollAnchorDirective]
+  imports: [ScrollAnchorDirective],
 })
 class TestComponent {}
 
 @Directive({
-    selector: '[appScrollManager]',
-    standalone: false
+  selector: '[appScrollManager]',
+  standalone: false,
 })
 class MockScrollManagerDirective {
   scroll(id: string | number) {

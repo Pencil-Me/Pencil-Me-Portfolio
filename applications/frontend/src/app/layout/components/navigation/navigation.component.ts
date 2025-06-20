@@ -6,10 +6,10 @@ import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { NgbCollapse } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-    selector: 'app-navigation',
-    imports: [RouterLink, NgForOf, NgClass, FaIconComponent, NgbCollapse, RouterLinkActive],
-    templateUrl: './navigation.component.html',
-    styleUrls: ['./navigation.component.scss']
+  selector: 'app-navigation',
+  imports: [RouterLink, NgForOf, NgClass, FaIconComponent, NgbCollapse, RouterLinkActive],
+  templateUrl: './navigation.component.html',
+  styleUrls: ['./navigation.component.scss'],
 })
 export class NavigationComponent implements OnInit {
   faBars = faBars;
