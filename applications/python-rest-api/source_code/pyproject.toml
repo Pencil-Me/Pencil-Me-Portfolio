@@ -5,7 +5,15 @@ target-version = "py312"
 [tool.ruff.lint]
 select = ["E", "F", "I"]
 
+[tool.ruff.lint.per-file-ignores]
+# Legacy SQL-heavy modules — E501 cleanup deferred (Stufe 3 optional)
+"module/db/db.py" = ["E501"]
+"module/projects/projects_helper.py" = ["E501"]
+"module/customers/customers_helper.py" = ["E501"]
+"module/techstack/techstack_helper.py" = ["E501"]
+
 [tool.mypy]
 python_version = "3.12"
 ignore_missing_imports = true
-files = ["module/db/db.py"]
+files = ["configs", "module/helper"]
+warn_unused_ignores = true

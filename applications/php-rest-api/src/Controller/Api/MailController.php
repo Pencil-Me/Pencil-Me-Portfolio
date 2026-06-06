@@ -24,27 +24,22 @@ class MailController extends BaseController
     {
         $this->setSecurityHeaders();
 
-        if (!$this->checkRateLimit()) {
-            return;
-        }
-
         try {
             if (!$this->isRequestMethodAllowed('POST')) {
                 $this->sendMethodNotAllowedResponse();
             }
 
-            $honeyPotValueIsSet = $_POST['contactByFax'] ?? false;
-            if ($honeyPotValueIsSet) {
-                $this->jsonResponse(['message' => 'It´s a Trap'], 401);
+            if ($this->getPostField('contactByFax') !== null) {
+                $this->jsonResponse(['message' => 'Invalid submission'], 400);
             }
 
             $recipient = Config::$mailRecipient;
             $subject = 'Nachricht vom Kontaktformular';
-            $name = $_POST['name'] ?? null;
-            $message = $_POST['message'] ?? null;
-            $email = $_POST['email'] ?? null;
+            $name = $this->getPostField('name');
+            $message = $this->getPostField('message');
+            $email = $this->getPostField('email');
 
-            if (!$this->validateParameters($email, $name, $message)) {
+            if (!$this->validateParameters(is_string($email) ? $email : null, is_string($name) ? $name : null, is_string($message) ? $message : null)) {
                 return;
             }
 
@@ -57,7 +52,7 @@ class MailController extends BaseController
                     'sender' => $email,
                     'recipient' => $recipient,
                     'subject' => $subject,
-                    'message' => "EMAIL FROM CONTACT FORM\n\nNAME:\n$name\n\nEMAIL:\n$email\n\nMESSAGE:\n$message"
+                    'message' => "EMAIL FROM CONTACT FORM\n\nNAME:\n$name\n\nEMAIL:\n$email\n\nMESSAGE:\n$message",
                 ],
             ];
 
@@ -66,6 +61,11 @@ class MailController extends BaseController
         } catch (GuzzleException $exception) {
             $this->sendErrorResponse($exception);
         }
+    }
+
+    protected function getPostField(string $key): mixed
+    {
+        return $_POST[$key] ?? null;
     }
 
     #[NoReturn] private function sendResponse(ResponseInterface $response): void

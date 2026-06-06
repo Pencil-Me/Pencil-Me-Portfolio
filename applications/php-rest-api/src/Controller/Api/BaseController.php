@@ -3,7 +3,6 @@
 namespace Controller\Api;
 
 use JetBrains\PhpStorm\NoReturn;
-use Inc\RateLimiter;
 use Inc\Bootstrap;
 
 /**
@@ -12,6 +11,8 @@ use Inc\Bootstrap;
 class BaseController
 {
     private const MAX_TEXT_LENGTH = 5000;
+    private const DEFAULT_QUERY_LIMIT = 100;
+    private const MAX_QUERY_LIMIT = 100;
 
     #[NoReturn] public function __call(string $name, array $arguments)
     {
@@ -63,13 +64,13 @@ class BaseController
     protected function getQueryLimit(): int
     {
         $queryParams = $this->getQueryStringParams();
-        $limit = 100;
+        $limit = self::DEFAULT_QUERY_LIMIT;
 
-        if (isset($queryParams['limit']) && $queryParams['limit']) {
-            $limit = $queryParams['limit'];
+        if (array_key_exists('limit', $queryParams) && $queryParams['limit'] !== '' && $queryParams['limit'] !== null) {
+            $limit = (int) $queryParams['limit'];
         }
 
-        return (int) $limit;
+        return max(1, min($limit, self::MAX_QUERY_LIMIT));
     }
 
     #[NoReturn] protected function sendMethodNotAllowedResponse(): void
@@ -133,16 +134,6 @@ class BaseController
         }
 
         return $uuid;
-    }
-
-    protected function checkRateLimit(): bool
-    {
-        $clientIp = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
-        if (!RateLimiter::isRequestAllowed($clientIp)) {
-            $this->jsonResponse(['message' => 'Too many requests. Please try again later.'], 429);
-        }
-
-        return true;
     }
 
     protected function setSecurityHeaders(): void

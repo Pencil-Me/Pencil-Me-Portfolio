@@ -1,5 +1,6 @@
-import uuid
 import logging
+import uuid
+
 from module.helper.helper import Helper
 
 logging.basicConfig(level=logging.DEBUG)

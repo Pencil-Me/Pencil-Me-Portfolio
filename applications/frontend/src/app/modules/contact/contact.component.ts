@@ -239,6 +239,12 @@ export class ContactComponent {
   }
 
   private sendEmail(formData: Record<string, unknown>): void {
+    const honeypot = formData['contactByFax'];
+    if (typeof honeypot === 'string' && honeypot.length > 0) {
+      this.emailSending.set(false);
+      return;
+    }
+
     this.emailSending.set(true);
     this.emailHasError.set(false);
     this.emailErrorMessage.set(null);

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
-export interface TechStack {
+export interface FooterTechEntry {
   name: string;
   version: string;
   url?: string;
@@ -14,5 +14,5 @@ export interface TechStack {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FooterDisclaimerComponent {
-  @Input() techStack: TechStack[] = [];
+  @Input() techStack: FooterTechEntry[] = [];
 }

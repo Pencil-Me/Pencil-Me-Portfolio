@@ -29,12 +29,9 @@ class ProjectsController extends BaseController
         $this->customersModel = $customersModel ?? new CustomersModel();
     }
 
-    public function getProjectFe($id): void {
+    public function getProjectFe($id): void
+    {
         $this->setSecurityHeaders();
-
-        if (!$this->checkRateLimit()) {
-            return;
-        }
 
         try {
             $projectUuid = $this->sanitizeUuid($id);
@@ -66,10 +63,6 @@ class ProjectsController extends BaseController
     {
         $this->setSecurityHeaders();
 
-        if (!$this->checkRateLimit()) {
-            return;
-        }
-
         try {
             if (!$this->isRequestMethodAllowed('GET')) {
                 $this->sendMethodNotAllowedResponse();
@@ -77,42 +70,109 @@ class ProjectsController extends BaseController
 
             $limit = $this->getQueryLimit();
             $projectsData = $this->projectsModel->getProjects($limit);
+            $formattedProjectsData = $this->enrichProjectsForFrontend($projectsData);
 
-            foreach ($projectsData as &$project) {
-                $project['tech'] = $this->getTechstacksPerProject($project['techstack_uuids']);
-                $project['dates'] = $this->getDatesPerProject($project['uuid']);
-                $project['customers'] = $this->getCustomersPerProject($project['customer_uuids']);
-            }
-
-            $formatedProjectsData = [];
-            foreach ($projectsData as $projectResult) {
-                $formatedProjectsData[] = [
-                    'uuid' => $projectResult['uuid'],
-                    'name' => $projectResult['name'],
-                    'location' => $projectResult['location'],
-                    'position' => $projectResult['position'],
-                    'content' => $projectResult['content'],
-                    'tech' => $projectResult['tech'],
-                    'customers' => $projectResult['customers'],
-                    'dates' => $projectResult['dates'],
-                    'type' => $projectResult['type']
-                ];
-            }
-
-            $this->sendSuccessResponse($formatedProjectsData);
+            $this->sendSuccessResponse($formattedProjectsData);
         } catch (\Throwable $exception) {
             $this->sendErrorResponse($exception);
         }
     }
 
-    private function getTechstacksPerProject(?string $techstackUuidsString): array
+    /**
+     * @param array<int, array<string, mixed>> $projectsData
+     * @return array<int, array<string, mixed>>
+     */
+    private function enrichProjectsForFrontend(array $projectsData): array
     {
-        if ($techstackUuidsString === null) {
+        if ($projectsData === []) {
             return [];
         }
 
-        $techstackUuids = explode(',', $techstackUuidsString);
-        return $this->techstackModel->getTechstacksPerProject($techstackUuids);
+        $uuidBuckets = $this->collectRelatedUuids($projectsData);
+        $techByUuid = $this->techstackModel->getTechstacksByUuids($uuidBuckets['tech']);
+        $customersByUuid = $this->customersModel->getCustomersByUuids($uuidBuckets['customers']);
+        $datesByProject = $this->datesModel->getDatesGroupedByProject($uuidBuckets['projects']);
+
+        $formattedProjectsData = [];
+        foreach ($projectsData as $projectResult) {
+            $projectUuid = $projectResult['uuid'];
+            $formattedProjectsData[] = $this->formatProjectData([
+                'uuid' => $projectUuid,
+                'name' => $projectResult['name'],
+                'location' => $projectResult['location'],
+                'position' => $projectResult['position'],
+                'content' => $projectResult['content'],
+                'type' => $projectResult['type'],
+                'tech' => $this->mapRelatedEntities($projectResult['techstack_uuids'] ?? null, $techByUuid),
+                'customers' => $this->mapRelatedEntities($projectResult['customer_uuids'] ?? null, $customersByUuid),
+                'dates' => $datesByProject[$projectUuid] ?? [],
+            ]);
+        }
+
+        return $formattedProjectsData;
+    }
+
+    /**
+     * @param array<int, array<string, mixed>> $projectsData
+     * @return array{projects: array<int, string>, tech: array<int, string>, customers: array<int, string>}
+     */
+    private function collectRelatedUuids(array $projectsData): array
+    {
+        $projectUuids = [];
+        $techUuids = [];
+        $customerUuids = [];
+
+        foreach ($projectsData as $project) {
+            $projectUuids[] = $project['uuid'];
+
+            foreach ($this->splitUuidList($project['techstack_uuids'] ?? null) as $uuid) {
+                $techUuids[$uuid] = true;
+            }
+
+            foreach ($this->splitUuidList($project['customer_uuids'] ?? null) as $uuid) {
+                $customerUuids[$uuid] = true;
+            }
+        }
+
+        return [
+            'projects' => $projectUuids,
+            'tech' => array_keys($techUuids),
+            'customers' => array_keys($customerUuids),
+        ];
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function splitUuidList(?string $uuidList): array
+    {
+        if ($uuidList === null || $uuidList === '') {
+            return [];
+        }
+
+        return array_values(array_filter(explode(',', $uuidList), static fn(string $uuid): bool => $uuid !== ''));
+    }
+
+    /**
+     * @param array<string, array<string, mixed>> $entitiesByUuid
+     * @return array<int, array<string, mixed>>
+     */
+    private function mapRelatedEntities(?string $uuidList, array $entitiesByUuid): array
+    {
+        $mapped = [];
+
+        foreach ($this->splitUuidList($uuidList) as $uuid) {
+            if (isset($entitiesByUuid[$uuid])) {
+                $mapped[] = $entitiesByUuid[$uuid];
+            }
+        }
+
+        return $mapped;
+    }
+
+    private function getTechstacksPerProject(?string $techstackUuidsString): array
+    {
+        return $this->techstackModel->getTechstacksPerProject($this->splitUuidList($techstackUuidsString));
     }
 
     private function getDatesPerProject(string $projectUuid): array
@@ -122,14 +182,13 @@ class ProjectsController extends BaseController
 
     private function getCustomersPerProject(?string $customerUuidsString): array
     {
-        if ($customerUuidsString === null) {
-            return [];
-        }
-
-        $customerUuids = explode(',', $customerUuidsString);
-        return $this->customersModel->getCustomersPerProject($customerUuids);
+        return $this->customersModel->getCustomersPerProject($this->splitUuidList($customerUuidsString));
     }
 
+    /**
+     * @param array<string, mixed> $projectData
+     * @return array<string, mixed>
+     */
     private function formatProjectData(array $projectData): array
     {
         return [
@@ -141,7 +200,7 @@ class ProjectsController extends BaseController
             'tech' => $projectData['tech'],
             'customers' => $projectData['customers'],
             'dates' => $projectData['dates'],
-            'type' => $projectData['type']
+            'type' => $projectData['type'],
         ];
     }
 }

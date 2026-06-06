@@ -1,6 +1,7 @@
-from module.db.db import SqlBase
-from configs.config import dbconfig
 import logging
+
+from configs.config import dbconfig
+from module.db.db import SqlBase
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -35,44 +36,6 @@ class TechStackHelper(SqlBase):
                 project_techstack pt ON t.uuid = pt.techstack_id
             GROUP BY
                 t.uuid, t.name, t.type, t.expertise_level, t.flag_important;
-        """
-        return self.select_all(query)
-
-    def get_all_techstacks_fe(self):
-        #logging.debug('###### get_all_techstacks_fe ########')
-
-        # SQL-Abfrage, um Projektinformationen abzurufen
-        query = """
-            SELECT
-                BIN_TO_UUID(t.uuid) as uuid,
-                t.name,
-                (
-                    SELECT
-                        tt.type
-                    FROM
-                        techstack_type tt
-                    WHERE
-                        id=t.type
-                ) as type,
-                t.expertise_level,
-                t.flag_important,
-                (
-                    SELECT
-                        MAX(COALESCE(p.end_date, CURDATE()))
-                    FROM
-                        project_dates p
-                    JOIN
-                        project_techstack pt ON p.project_id = pt.project_id
-                    WHERE
-                        pt.techstack_id = t.uuid
-                ) AS last_usage_date,
-                COUNT(DISTINCT pt.project_id) AS project_count
-            FROM
-                techstack t
-            LEFT JOIN
-                project_techstack pt ON t.uuid = pt.techstack_id
-            GROUP BY
-                t.uuid, t.name, type, t.expertise_level, t.flag_important;
         """
         return self.select_all(query)
 

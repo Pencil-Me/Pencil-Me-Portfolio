@@ -25,10 +25,6 @@ class TechstackController extends BaseController
     {
         $this->setSecurityHeaders();
 
-        if (!$this->checkRateLimit()) {
-            return;
-        }
-
         try {
             if (!$this->isRequestMethodAllowed('GET')) {
                 $this->sendMethodNotAllowedResponse();
@@ -43,9 +39,9 @@ class TechstackController extends BaseController
                 $techstack['dates'] = $this->getDatesPerTechstack($flatTechstackUUIDsArray);
             }
 
-            $formatedTechstackData = [];
+            $formattedTechstackData = [];
             foreach ($techstackData as $techstackResult) {
-                $formatedTechstackData[] = [
+                $formattedTechstackData[] = [
                     'uuid' => $techstackResult['uuid'],
                     'name' => $techstackResult['name'],
                     'type' => $techstackResult['type'],
@@ -57,7 +53,7 @@ class TechstackController extends BaseController
                 ];
             }
 
-            $this->sendSuccessResponse($formatedTechstackData);
+            $this->sendSuccessResponse($formattedTechstackData);
         } catch (\Throwable $exception) {
             $this->sendErrorResponse($exception);
         }

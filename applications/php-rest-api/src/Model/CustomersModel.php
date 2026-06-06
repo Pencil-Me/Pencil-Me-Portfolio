@@ -5,55 +5,80 @@ namespace Model;
 use Exception;
 use PDO;
 
-require_once PROJECT_ROOT_PATH . "/Model/DatabaseModel.php";
-
 /**
  * Model class for interacting with the customers table in the MySQL database.
  */
 class CustomersModel extends DatabaseModel
 {
     /**
+     * Retrieves customer rows keyed by UUID for batch project enrichment.
+     *
+     * @param array<int, string> $customerUuids
+     * @return array<string, array<string, mixed>>
+     * @throws Exception
+     */
+    public function getCustomersByUuids(array $customerUuids): array
+    {
+        if ($customerUuids === []) {
+            return [];
+        }
+
+        $customerResults = $this->fetchCustomerRows($customerUuids);
+        $byUuid = [];
+
+        foreach ($customerResults as $customerResult) {
+            $byUuid[$customerResult['uuid']] = [
+                'uuid' => $customerResult['uuid'],
+                'name' => $customerResult['name'],
+                'location' => $customerResult['location'],
+            ];
+        }
+
+        return $byUuid;
+    }
+
+    /**
      * Retrieves customers associated with a project from the database.
      *
-     * @param array $customerUuids The UUIDs of customers associated with the project.
-     * @return array The array of formatted customer data.
+     * @param array<int, string> $customerUuids The UUIDs of customers associated with the project.
+     * @return array<int, array<string, mixed>> The array of formatted customer data.
      * @throws Exception If an error occurs during the database operation.
      */
     public function getCustomersPerProject(array $customerUuids): array
     {
+        if ($customerUuids === []) {
+            return [];
+        }
+
         try {
-            // Check if customer UUIDs are provided
-            if (empty($customerUuids)) {
-                throw new Exception("Customer UUIDs are empty");
-            }
-
-            // Create placeholders for the UUIDs in the SQL query
-            $placeholders = implode(', ', array_fill(0, count($customerUuids), 'UUID_TO_BIN(?)'));
-
-            // Build the SQL query
-            $customerQuery = "SELECT BIN_TO_UUID(uuid) as uuid, name, location FROM customers WHERE uuid IN ($placeholders)";
-
-            // Execute the SQL query and replace the placeholders with the UUIDs
-            $customerResults = $this->fetchAll($customerQuery, $customerUuids);
-
-            // Format the results according to the expected output format
+            $customerResults = $this->fetchCustomerRows($customerUuids);
             $formattedResults = [];
+
             foreach ($customerResults as $customerResult) {
                 $formattedResults[] = [
-                    "uuid" => $customerResult['uuid'],
-                    "name" => $customerResult['name'],
-                    "location" => $customerResult['location']
+                    'uuid' => $customerResult['uuid'],
+                    'name' => $customerResult['name'],
+                    'location' => $customerResult['location'],
                 ];
             }
 
             return $formattedResults;
         } catch (Exception $e) {
-            // Log the error
             error_log($e->getMessage());
-
-            // Throw an exception to indicate failure
-            throw new Exception("Failed to retrieve customers per project");
+            throw new Exception('Failed to retrieve customers per project', 0, $e);
         }
+    }
+
+    /**
+     * @param array<int, string> $customerUuids
+     * @return array<int, array<string, mixed>>
+     * @throws Exception
+     */
+    private function fetchCustomerRows(array $customerUuids): array
+    {
+        $placeholders = implode(', ', array_fill(0, count($customerUuids), 'UUID_TO_BIN(?)'));
+        $customerQuery = "SELECT BIN_TO_UUID(uuid) as uuid, name, location FROM customers WHERE uuid IN ($placeholders)";
+        return $this->fetchAll($customerQuery, $customerUuids);
     }
 
     /**

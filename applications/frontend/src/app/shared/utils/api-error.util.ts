@@ -7,12 +7,19 @@ function readStringBody(body: unknown): string | null {
 }
 
 function readObjectMessage(body: unknown): string | null {
-  if (!body || typeof body !== 'object' || !('message' in body)) {
+  if (!body || typeof body !== 'object') {
     return null;
   }
 
-  const message = body.message;
-  return typeof message === 'string' ? message : null;
+  if ('message' in body && typeof body.message === 'string') {
+    return body.message;
+  }
+
+  if ('error' in body && typeof body.error === 'string') {
+    return body.error;
+  }
+
+  return null;
 }
 
 function readHttpErrorMessage(error: HttpErrorResponse): string | null {

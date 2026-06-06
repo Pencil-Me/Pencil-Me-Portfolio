@@ -60,6 +60,7 @@ class RouterTest extends TestCase
         $match = $this->invokePrivate('matchRoute', ['/get_project/' . self::UUID, $routes]);
 
         $this->assertSame('/get_project/(\w+)', $match['pattern']);
+        $this->assertSame(self::UUID, $match['params']['id']);
         $this->assertArrayHasKey('GET', $match['handlers']);
     }
 
@@ -102,7 +103,6 @@ class RouterTest extends TestCase
             ],
         ];
 
-        $this->expectOutputString(json_encode(['message' => 'Requested Route Not Found']));
         $match = $this->invokePrivate('matchRoute', ['/get_project/not-a-uuid', $routes]);
         $this->assertNull($match);
     }

@@ -146,19 +146,14 @@ describe('ContactComponent', () => {
     expect(component.project_form.pristine).toBeTrue();
   });
 
-  it('should include optional fax when provided on generally form', () => {
+  it('should ignore honeypot when fax field is filled on generally form', () => {
     fillValidGenerallyForm();
     component.generally_form.controls['generally_contactByFax'].setValue('012345');
 
     component.generally_send();
 
-    expect(apiClientService.post).toHaveBeenCalledWith('send_email', {
-      name: 'John Doe',
-      email: 'john@example.com',
-      message: 'Test message',
-      sendCopy: false,
-      contactByFax: '012345',
-    });
+    expect(apiClientService.post).not.toHaveBeenCalled();
+    expect(component.emailSending()).toBeFalse();
   });
 
   it('should select and clear contact form type', () => {

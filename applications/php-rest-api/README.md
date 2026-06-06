@@ -4,7 +4,7 @@ REST-Gateway für das **öffentliche Frontend**. Liefert Projekte, Tech-Stack un
 
 ## Tech-Stack
 
-- **PHP 8.1** + Apache
+- **PHP 8.3** + Apache
 - Composer: Guzzle, phpdotenv, Monolog
 - **PHPUnit 11** (Tests)
 - PDO/MySQL
@@ -28,6 +28,16 @@ Header: `API-Key: <wert von API_KEY_FE>`
 
 Geschützte Routen erwarten den Frontend-Key (`fe_key`).
 
+### Rate Limiting
+
+Read-Endpunkte haben keinen PHP-internen Limiter mehr (Option A, ADR-001). Kontakt-Mail ist am Nginx-Gateway limitiert (`limit_req` auf `/api2/send_email`).
+
+### Query-Parameter
+
+| Parameter | Endpunkte | Default | Maximum |
+|-----------|-----------|---------|---------|
+| `limit` | `/all_projects`, `/all_customers`, `/all_techstacks` | 100 | 100 |
+
 ## Response-Contract
 
 | Situation | Format |
@@ -36,7 +46,8 @@ Geschützte Routen erwarten den Frontend-Key (`fe_key`).
 | Erfolg (Mail) | `{"message": "..."}` |
 | Fehler | `{"message": "..."}` + passender HTTP-Status |
 
-OpenAPI: [`openapi.yaml`](openapi.yaml) · Architektur: [`docs/adr/001-api-responsibilities.md`](../../docs/adr/001-api-responsibilities.md)
+| Endpunkte | [`openapi.yaml`](openapi.yaml) · Architektur: [`docs/adr/001-api-responsibilities.md`](../../docs/adr/001-api-responsibilities.md) |
+| Refactoring | [05-php-apis.md](../../docs/refactoring/05-php-apis.md) · Follow-up: [16-php-rest-api-followup.md](../../docs/refactoring/16-php-rest-api-followup.md) |
 
 ## Logging & Analyse
 

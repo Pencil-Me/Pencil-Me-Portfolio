@@ -1,5 +1,6 @@
-import pymysql.cursors
 import logging
+
+import pymysql.cursors
 
 logging.basicConfig(level=logging.DEBUG)
 

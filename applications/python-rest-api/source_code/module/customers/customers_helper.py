@@ -1,7 +1,8 @@
-from module.db.db import SqlBase, SqlError
-from configs.config import dbconfig
-from datetime import datetime
 import logging
+from datetime import datetime
+
+from configs.config import dbconfig
+from module.db.db import SqlBase
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -19,28 +20,6 @@ class CustomerHelper(SqlBase):
                 c.location
             FROM
                 customers c
-            GROUP BY
-                c.uuid,
-                c.name,
-                c.location
-        """
-        return self.select_all(query)
-
-    def get_all_customers_fe(self):
-        #logging.debug('###### get_all_customers_fe ########')
-
-        query = """
-            SELECT
-                BIN_TO_UUID(c.uuid) as uuid,
-                c.name,
-                c.location,
-                MAX(pd.end_date) AS last_used_date
-            FROM
-                customers c
-            LEFT JOIN
-                project_customer pc ON c.uuid = pc.customer_id
-            LEFT JOIN
-                project_dates pd ON pc.project_id = pd.project_id
             GROUP BY
                 c.uuid,
                 c.name,

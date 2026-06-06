@@ -1,7 +1,8 @@
-from module.db.db import SqlBase, SqlError
-from configs.config import dbconfig
-from datetime import datetime
 import logging
+from datetime import datetime
+
+from configs.config import dbconfig
+from module.db.db import SqlBase
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -33,43 +34,6 @@ class ProjectHelper(SqlBase):
                 uuid,
                 p.type,
                 p.public,
-                p.name,
-                p.location,
-                p.position,
-                p.content
-        """
-        return self.select_all(query)
-
-    def get_all_projects_fe(self):
-        #logging.debug('###### get_all_projects_fe ########')
-
-        query = """
-            SELECT
-                BIN_TO_UUID(p.uuid) as uuid,
-                (
-                SELECT
-                    pt.type
-                FROM
-                    project_type pt
-                WHERE
-                    id=p.type
-                ) as type,
-                p.name,
-                p.public,
-                p.location,
-                p.position,
-                p.content,
-                GROUP_CONCAT(DISTINCT BIN_TO_UUID(pt.techstack_id)) as techstack_uuids,
-                GROUP_CONCAT(DISTINCT BIN_TO_UUID(pc.customer_id)) as customer_uuids
-            FROM
-                projects p
-            LEFT JOIN
-                project_techstack pt ON p.uuid = pt.project_id
-            LEFT JOIN
-                project_customer pc ON p.uuid = pc.project_id
-            GROUP BY
-                p.uuid,
-                p.type,
                 p.name,
                 p.location,
                 p.position,

@@ -1,5 +1,6 @@
-import uuid
 import logging
+import uuid
+
 from module.helper.helper import Helper
 
 logging.basicConfig(level=logging.DEBUG)
@@ -26,7 +27,6 @@ class Project:
         return {
             'uuid': self.__clean_string(self.uuid),
             'name': self.__clean_string(self.name),
-            'public': self.__clean_number(self.public),
             'location': self.__clean_string(self.location),
             'position': self.__clean_string(self.position),
             'content': self.__clean_string(self.content),
@@ -52,7 +52,6 @@ class Project:
             'customers': self.__revert_object_array(self.customers),
             'dates': self.dates,
             'type': self.type,
-            'public': self.public
         }
 
     @staticmethod

@@ -22,10 +22,6 @@ class HealthController extends BaseController
     {
         $this->setSecurityHeaders();
 
-        if (!$this->checkRateLimit()) {
-            return;
-        }
-
         try {
             $endpoint = Config::$healthApiEndpoint;
             $response = $this->httpClient->get($endpoint);

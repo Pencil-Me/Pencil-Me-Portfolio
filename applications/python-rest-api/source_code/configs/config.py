@@ -30,17 +30,7 @@ dbconfig = {
     'database': _require('DB_DATABASE'),
 }
 
-mailconfig = {
-    'host': _require('MAIL_HOST'),
-    'port': int(_optional('MAIL_PORT', '587')),
-    'username': _require('MAIL_USERNAME'),
-    'password': _require('MAIL_PASSWORD'),
-    'sender': _require('MAIL_SENDER'),
-    'recipient': _require('MAIL_RECIPIENT'),
-}
-
 api_keys = {
-    'fe_key': _require('API_KEY_FE'),
     'be_key': _require('API_KEY_BE'),
 }
 

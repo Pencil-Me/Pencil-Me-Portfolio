@@ -40,7 +40,7 @@ npm install
 | **Docker Compose**   | `environment.docker.ts`      | `/api2`                              | `docker compose up --build` |
 | **Production**       | `environment.production.ts`  | `https://api.pencil-me.eu/index.php` | `npm run build:prod`        |
 
-`API_KEY` muss mit `API_KEY_FE` in der PHP-API übereinstimmen (lokal: `apikey123` in `.env.dev`).
+`API_KEY` muss mit `API_KEY_FE` in der PHP-API übereinstimmen (lokal/Docker: `secretApiFEkey` in `php-rest-api/src/Inc/.env.dev` bzw. Root-`.env`). **Docker-Build:** Compose-Arg `API_KEY_FE` ersetzt den Wert in `environment.docker.ts`. **Production:** Wert in `environment.production.ts` vor Deploy setzen — committed nur Platzhalter `REPLACE_BEFORE_DEPLOY`; Vorlage `environment.example.ts`.
 
 ### Lokal entwickeln (`ng serve` :4200)
 
@@ -87,13 +87,19 @@ Vorlage für eigene Werte: `environment.example.ts`
 
 **Coverage-Schwellen** (`karma.conf.js`): Statements/Lines/Functions ≥ 90 %, Branches ≥ 74 %.
 
+**Refactoring-Plan:** [docs/refactoring/20-angular-frontend-quality.md](../../docs/refactoring/20-angular-frontend-quality.md)
+
+**Domain-Enums:** Kanonische Werte in [applications/shared/domain/README.md](../../shared/domain/README.md) (`portfolio-domain.json`).
+
+**API-Modelle:** PHP-Roh-JSON in `src/app/core/models/portfolio-api.models.ts` (snake_case); View-Models in `@modules/*/…models.ts`.
+
 **Pre-commit** (Repo-Root): Husky + lint-staged formatiert und lintet geänderte Dateien unter `applications/frontend/` automatisch vor jedem Commit.
 
 **Fallow** (`.fallowrc.json`): Dead-Code, Duplikat- und Health-Checks; in `quality:ci` integriert.
 
 ## E2E-Tests (Playwright)
 
-Specs unter `e2e/` — Home, Navigation, Theme-Toggle. API-Aufrufe werden per Route-Mock abgefangen (`e2e/helpers/api-mocks.ts`), kein Backend nötig.
+Specs unter `e2e/` — Home, Navigation, Theme, **Projekte**, **Kontakt**, **API-Fehler**. API-Aufrufe werden per Route-Mock abgefangen (`e2e/helpers/api-mocks.ts`, Fixture-Daten in `api-fixtures.ts`), kein Backend nötig.
 
 ```bash
 npm run e2e        # lokal, nutzt laufenden Server falls vorhanden
@@ -107,7 +113,9 @@ Konfiguration: `playwright.config.ts`
 ```
 src/
 ├── app/
-│   ├── core/services/api/   # ApiClientService → environment.API_BASE_URL
+│   ├── core/
+│   │   ├── models/           # PHP API-Roh-Typen (portfolio-api.models.ts)
+│   │   └── services/api/     # ApiClientService → environment.API_BASE_URL
 │   ├── modules/
 │   └── state/
 ├── environments/

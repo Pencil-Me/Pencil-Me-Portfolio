@@ -5,8 +5,6 @@ namespace Model;
 use Exception;
 use PDO;
 
-require_once PROJECT_ROOT_PATH . "/Model/DatabaseModel.php";
-
 /**
  * Model class for interacting with the projects table in the MySQL database.
  */

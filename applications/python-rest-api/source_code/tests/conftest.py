@@ -12,13 +12,6 @@ _TEST_ENV_DEFAULTS = {
     'DB_USERNAME': 'test',
     'DB_PASSWORD': 'test',
     'DB_DATABASE': 'portfolio_db_test',
-    'MAIL_HOST': 'smtp.example.com',
-    'MAIL_PORT': '587',
-    'MAIL_USERNAME': 'mail@example.com',
-    'MAIL_PASSWORD': 'test',
-    'MAIL_SENDER': 'mail@example.com',
-    'MAIL_RECIPIENT': 'mail@example.com',
-    'API_KEY_FE': 'test-fe-key',
     'API_KEY_BE': 'test-be-key',
 }
 

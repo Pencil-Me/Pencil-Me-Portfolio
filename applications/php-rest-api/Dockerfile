@@ -1,5 +1,5 @@
-# Use the official PHP 8.1 image as the base
-FROM php:8.1-apache
+# Use the official PHP 8.3 image as the base
+FROM php:8.3-apache
 
 # Set the ServerName directive to suppress AH00558 message
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf

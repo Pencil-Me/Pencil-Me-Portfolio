@@ -26,7 +26,7 @@ describe('ProjectsService', () => {
 
   const stateBasics: {
     loadStatus: LoadStatus;
-    error: object | string | null;
+    error: string | null;
   } = {
     loadStatus: 'COMPLETED',
     error: null,

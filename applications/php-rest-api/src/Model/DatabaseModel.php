@@ -2,10 +2,8 @@
 
 namespace Model;
 
-use Inc\Config;
 use Exception;
 use PDO;
-use PDOException;
 use PDOStatement;
 
 /**
@@ -13,104 +11,78 @@ use PDOStatement;
  */
 class DatabaseModel
 {
-    /** @var PDO|null The database connection object. */
-    protected ?PDO $connection = null;
+    protected PDO $connection;
 
     /**
-     * Constructor to initialize the database connection.
-     *
-     * @throws Exception If unable to establish a database connection.
+     * @throws Exception
      */
-    public function __construct()
+    public function __construct(?PDO $connection = null)
     {
-        try {
-            // Establish a database connection
-            $this->connection = new PDO(
-                "mysql:host=" . Config::$dbHost . ";port=" . Config::$dbPort . ";dbname=" . Config::$dbDatabaseName,
-                Config::$dbUsername,
-                Config::$dbPassword
-            );
-
-            // Set character encoding
-            $this->connection->exec("set names utf8");
-        } catch (PDOException $exception) {
-            // If connection fails, throw an exception
-            throw new Exception($exception->getMessage());
-        }
+        $this->connection = $connection ?? ConnectionFactory::getConnection();
     }
 
     /**
-     * Fetches a single row from the database.
-     *
-     * @param string $query The SQL query to execute.
-     * @param array $params An associative array of parameters for the query.
-     * @param array $paramTypes An associative array specifying the parameter types.
-     * @return array|false Returns the fetched row as an associative array, or false on failure.
-     * @throws Exception If an error occurs during execution.
+     * @param array<string|int, mixed> $params
+     * @param array<string|int, int> $paramTypes
+     * @return array<string, mixed>|false
+     * @throws Exception
      */
-    public function fetch(string $query = "", array $params = [], array $paramTypes = []): array|false
+    public function fetch(string $query = '', array $params = [], array $paramTypes = []): array|false
     {
         try {
             $stmt = $this->executeStatement($query, $params, $paramTypes);
-            return $stmt->fetch(PDO::FETCH_ASSOC);
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            return $row === false ? false : $row;
         } catch (Exception $exception) {
-            // If an error occurs during execution, throw an exception
-            throw new Exception($exception->getMessage());
+            throw new Exception($exception->getMessage(), (int) $exception->getCode(), $exception);
         }
     }
 
     /**
-     * Fetches all rows from the database.
-     *
-     * @param string $query The SQL query to execute.
-     * @param array $params An associative array of parameters for the query.
-     * @param array $paramTypes An associative array specifying the parameter types.
-     * @return array|false Returns an array containing all fetched rows, or false on failure.
-     * @throws Exception If an error occurs during execution.
+     * @param array<string|int, mixed> $params
+     * @param array<string|int, int> $paramTypes
+     * @return array<int, array<string, mixed>>
+     * @throws Exception
      */
-    public function fetchAll(string $query = "", array $params = [], array $paramTypes = []): array|false
+    public function fetchAll(string $query = '', array $params = [], array $paramTypes = []): array
     {
         try {
             $stmt = $this->executeStatement($query, $params, $paramTypes);
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return $rows;
         } catch (Exception $exception) {
-            // If an error occurs during execution, throw an exception
-            throw new Exception($exception->getMessage());
+            throw new Exception($exception->getMessage(), (int) $exception->getCode(), $exception);
         }
     }
 
     /**
-     * Executes a prepared statement with the given parameters.
-     *
-     * @param string $query The SQL query to prepare and execute.
-     * @param array $params An associative array of parameters for the query.
-     * @param array $paramTypes An associative array specifying the parameter types.
-     * @return PDOStatement Returns the PDOStatement object representing the prepared statement.
-     * @throws Exception If an error occurs during execution.
+     * @param array<string|int, mixed> $params
+     * @param array<string|int, int> $paramTypes
+     * @throws Exception
      */
-    private function executeStatement(string $query = "", array $params = [], array $paramTypes = []): PDOStatement
+    private function executeStatement(string $query = '', array $params = [], array $paramTypes = []): PDOStatement
     {
         try {
-            // Prepare the SQL query
             $stmt = $this->connection->prepare($query);
 
             if ($stmt === false) {
-                throw new Exception("Unable to prepare statement: " . $query);
+                throw new Exception('Unable to prepare statement: ' . $query);
             }
 
-            // Bind parameters (unterstuetzt benannte :placeholder und positionale Indizes)
             foreach ($params as $key => &$paramValue) {
                 $paramType = $paramTypes[$key] ?? PDO::PARAM_STR;
                 $placeholder = is_int($key) ? $key + 1 : $key;
                 $stmt->bindParam($placeholder, $paramValue, $paramType);
             }
 
-            // Execute the statement
             $stmt->execute();
+
             return $stmt;
         } catch (Exception $exception) {
             error_log($exception->getMessage());
-            throw new Exception("Database query execution failed");
+            throw new Exception('Database query execution failed', (int) $exception->getCode(), $exception);
         }
     }
 }

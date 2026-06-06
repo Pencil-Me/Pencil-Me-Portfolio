@@ -6,14 +6,7 @@ x-python-env: &python-env
   DB_USERNAME: ${DB_USERNAME:-user}
   DB_PASSWORD: ${DB_PASSWORD:-test}
   DB_DATABASE: ${DB_DATABASE:-portfolio_db}
-  API_KEY_FE: ${API_KEY_FE:-secretApiFEkey}
   API_KEY_BE: ${API_KEY_BE:-secretApiBEkey}
-  MAIL_HOST: ${MAIL_HOST:-smtp.example.com}
-  MAIL_PORT: ${MAIL_PORT:-587}
-  MAIL_USERNAME: ${MAIL_USERNAME:-mail@example.com}
-  MAIL_PASSWORD: ${MAIL_PASSWORD:-change-me}
-  MAIL_SENDER: ${MAIL_SENDER:-mail@example.com}
-  MAIL_RECIPIENT: ${MAIL_RECIPIENT:-mail@example.com}
   BASE_URL: ${BASE_URL:-}
 
 services:
@@ -24,6 +17,7 @@ services:
       dockerfile: ./Dockerfile
       args:
         BUILD_CONFIGURATION: docker
+        API_KEY_FE: ${API_KEY_FE:-secretApiFEkey}
 
   backend:
     container_name: pm-backend_vue

@@ -1,9 +1,11 @@
-from flask import make_response
-from module.helper.response_util import not_found_response
 import logging
-from module.customers.customers_helper import CustomerHelper
+
+from flask import make_response
+
 from module.customers.customers import Customer
+from module.customers.customers_helper import CustomerHelper
 from module.helper.helper import Helper
+from module.helper.response_util import not_found_response
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -18,7 +20,7 @@ class CustomersRepository():
         customer_obj = new_customer.to_dict()
         #logging.debug('customer_obj: %s', customer_obj)
 
-        insert_customer = customer_helper.insert_customer(customer_obj)
+        customer_helper.insert_customer(customer_obj)
         #logging.debug('insert_customer: %s', insert_customer)
 
         # Erstelle die Antwort und setze den Statuscode
@@ -59,30 +61,6 @@ class CustomersRepository():
                 for result in results
             ]
             #logging.debug('return_object: %s', return_object)
-
-            response = make_response(return_object)
-            response.status_code = 200
-            response.mimetype = 'application/json'
-            return response
-        else:
-            # Rückgabe, falls keine Daten gefunden wurden
-            response = make_response([])
-            response.status_code = 200
-            response.mimetype = 'application/json'
-            return response
-
-    def get_all_fe(self):
-        # logging.debug('###### get_all_fe ########')
-
-        results = customer_helper.get_all_customers_fe()
-        # logging.debug('results get_all_customers: %s', results)
-
-        if results is not None and len(results) > 0:
-            return_object = [
-                Customer(result).to_disp()
-                for result in results
-            ]
-            # logging.debug('return_object: %s', return_object)
 
             response = make_response(return_object)
             response.status_code = 200

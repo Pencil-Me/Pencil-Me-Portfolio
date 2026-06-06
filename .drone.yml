@@ -51,8 +51,22 @@ steps:
     commands:
       - cd applications/python-rest-api/source_code
       - pip install --no-cache-dir -r requirements.txt -r requirements-dev.txt
-      - ruff check app.py configs module/helper tests
+      - ruff check app.py configs module tests
+      - python -m mypy configs module/helper
       - python -m pytest -q
+
+  - name: vue-admin-e2e
+    image: cypress/included:13.6.4
+    commands:
+      - cd applications/backend
+      - npm ci
+      - npm run test:e2e:ci
+
+  - name: openapi-lint
+    image: node:20
+    commands:
+      - npm ci
+      - npm run openapi:lint
 
   - name: compose-config
     image: docker/compose:2.32.4

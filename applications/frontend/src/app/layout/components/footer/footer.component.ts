@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import {
   FooterDisclaimerComponent,
-  type TechStack,
+  type FooterTechEntry,
 } from '@layout/components/footer/components/footer-disclaimer/footer-disclaimer.component';
 import {
   FooterNavigationComponent,
@@ -30,7 +30,7 @@ import { formatYear } from '@app/shared/utils/date-format';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FooterComponent {
-  techStackForPortfolio: TechStack[] = [
+  techStackForPortfolio: FooterTechEntry[] = [
     { name: 'Angular', version: 'v17.0' },
     { name: 'Bootstrap', version: 'v5.3' },
     { name: 'NGRX', version: 'v17.1' },

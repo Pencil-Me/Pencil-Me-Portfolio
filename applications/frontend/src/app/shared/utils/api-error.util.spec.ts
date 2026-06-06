@@ -7,6 +7,16 @@ describe('mapApiError', () => {
     expect(mapApiError('Server error')).toBe('Server error');
   });
 
+  it('should extract error field from HttpErrorResponse', () => {
+    const error = new HttpErrorResponse({
+      status: 400,
+      statusText: 'Bad Request',
+      error: { error: 'Honeypot triggered' },
+    });
+
+    expect(mapApiError(error)).toBe('Honeypot triggered');
+  });
+
   it('should extract message from HttpErrorResponse', () => {
     const error = new HttpErrorResponse({
       status: 500,

@@ -1,9 +1,11 @@
-from flask import make_response
-from module.helper.response_util import not_found_response
 import logging
-from module.techstack.techstack_helper import TechStackHelper
-from module.techstack.techstack import TechStack
+
+from flask import make_response
+
 from module.helper.helper import Helper
+from module.helper.response_util import not_found_response
+from module.techstack.techstack import TechStack
+from module.techstack.techstack_helper import TechStackHelper
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -19,7 +21,7 @@ class TechStackRepository():
         #logging.debug('data: %s', data)
         #logging.debug('techstack_obj: %s', techstack_obj)
 
-        insert_techstack = techstack_helper.insert_techstack(techstack_obj)
+        techstack_helper.insert_techstack(techstack_obj)
 
         response = make_response({"message":"CREATED_SUCCESSFULLY"})
         response.status_code = 201
@@ -73,30 +75,6 @@ class TechStackRepository():
 
         results = techstack_helper.get_all_techstacks()
         #logging.debug('results get_all_techstacks: %s', results)
-
-        if results is not None and len(results) > 0:
-            return_object = [
-                TechStack(result).to_disp()
-                for result in results
-            ]
-            #logging.debug('return_object: %s', return_object)
-
-            response = make_response(return_object)
-            response.status_code = 200
-            response.mimetype = 'application/json'
-            return response
-        else:
-            # Rückgabe, falls keine Daten gefunden wurden
-            response = make_response([])
-            response.status_code = 200
-            response.mimetype = 'application/json'
-            return response
-
-    def get_all_fe(self):
-        #logging.debug('###### get_all ########')
-
-        results = techstack_helper.get_all_techstacks_fe()
-        #logging.debug('results get_all_techstacks_fe: %s', results)
 
         if results is not None and len(results) > 0:
             return_object = [

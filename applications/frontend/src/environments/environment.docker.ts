@@ -7,6 +7,6 @@ import type { Environment } from './environment.model';
  */
 export const environment: Environment = {
   production: true,
-  API_KEY: 'apikey123',
+  API_KEY: 'secretApiFEkey',
   API_BASE_URL: '/api2',
 };

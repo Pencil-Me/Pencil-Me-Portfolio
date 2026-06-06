@@ -1,9 +1,11 @@
-from flask import make_response
-from module.helper.response_util import not_found_response
 import logging
-from module.projects.projects_helper import ProjectHelper
-from module.projects.projects import Project
+
+from flask import make_response
+
 from module.helper.helper import Helper
+from module.helper.response_util import not_found_response
+from module.projects.projects import Project
+from module.projects.projects_helper import ProjectHelper
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -18,7 +20,7 @@ class ProjectsRepository():
         project_obj = new_project.to_dict()
         #logging.debug('project_obj: %s', project_obj)
 
-        insert_project = project_helper.insert_project(project_obj)
+        project_helper.insert_project(project_obj)
         project_helper.insert_project_techstack(project_obj)
         project_helper.insert_project_dates(project_obj)
         project_helper.insert_project_customers(project_obj)
@@ -114,45 +116,6 @@ class ProjectsRepository():
                 for result in results
             ]
             # logging.debug('return_object: %s', return_object)
-
-            response = make_response(return_object)
-            response.status_code = 200
-            response.mimetype = 'application/json'
-            return response
-        else:
-            # Rückgabe, falls keine Daten gefunden wurden
-            response = make_response([])
-            response.status_code = 200
-            response.mimetype = 'application/json'
-            return response
-
-    def get_all_fe(self):
-        # logging.debug('###### get_all_fe ########')
-
-        results = project_helper.get_all_projects_fe()
-        # logging.debug('results get_all_projects: %s', results)
-
-        if results is not None and len(results) > 0:
-            for row in results:
-                row['tech'] = []
-                techstack_uuids = row.get('techstack_uuids',[])
-
-                if techstack_uuids is not None and len(techstack_uuids) > 0:
-                    row['tech'] = project_helper.get_all_techstacks_per_project(techstack_uuids)
-
-                row['dates'] = project_helper.get_all_dates_per_project(row)
-
-                row['customers'] = []
-                customer_uuids = row.get('customer_uuids',[])
-
-                if customer_uuids is not None and len(customer_uuids) > 0:
-                    row['customers'] = project_helper.get_all_customers_per_project(customer_uuids)
-
-            return_object = [
-                Project(result).to_disp()
-                for result in results
-            ]
-            #logging.debug('return_object: %s', return_object)
 
             response = make_response(return_object)
             response.status_code = 200

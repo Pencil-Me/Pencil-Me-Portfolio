@@ -53,7 +53,7 @@ describe('ApiClientService', () => {
     });
 
     expectHttpJsonResponse(httpMock, apiUrl(path), 'GET', testData, (req: TestRequest) => {
-      expect(req.request.headers.get('API-Key')).toBe('apikey123');
+      expect(req.request.headers.get('API-Key')).toBe('secretApiFEkey');
     });
   });
 
@@ -67,7 +67,7 @@ describe('ApiClientService', () => {
     });
 
     expectHttpJsonResponse(httpMock, apiUrl(path), 'POST', testData, (req: TestRequest) => {
-      expect(req.request.headers.get('API-Key')).toBe('apikey123');
+      expect(req.request.headers.get('API-Key')).toBe('secretApiFEkey');
       expect(req.request.body).toEqual(toUrlEncoded(postData));
     });
   });
@@ -82,7 +82,7 @@ describe('ApiClientService', () => {
     });
 
     expectHttpJsonResponse(httpMock, apiUrl(path), 'PUT', testData, (req: TestRequest) => {
-      expect(req.request.headers.get('API-Key')).toBe('apikey123');
+      expect(req.request.headers.get('API-Key')).toBe('secretApiFEkey');
       expect(req.request.body).toEqual(putData);
     });
   });
@@ -96,7 +96,7 @@ describe('ApiClientService', () => {
     });
 
     expectHttpJsonResponse(httpMock, apiUrl(path), 'DELETE', testData, (req: TestRequest) => {
-      expect(req.request.headers.get('API-Key')).toBe('apikey123');
+      expect(req.request.headers.get('API-Key')).toBe('secretApiFEkey');
     });
   });
 

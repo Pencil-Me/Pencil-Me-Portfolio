@@ -1,14 +1,20 @@
 const path = require('path');
 
 const frontendRoot = path.join(__dirname, 'applications', 'frontend');
+const backendRoot = path.join(__dirname, 'applications', 'backend');
 
-function toRelative(files) {
-  return files.map((file) => path.relative(frontendRoot, file)).join(' ');
+function toRelative(root, files) {
+  return files.map((file) => path.relative(root, file)).join(' ');
 }
 
-function isSrcLintTarget(file) {
+function isFrontendSrcLintTarget(file) {
   const normalized = file.replace(/\\/g, '/');
   return normalized.includes('applications/frontend/src/');
+}
+
+function isBackendSrcLintTarget(file) {
+  const normalized = file.replace(/\\/g, '/');
+  return normalized.includes('applications/backend/src/');
 }
 
 module.exports = {
@@ -17,13 +23,13 @@ module.exports = {
       return [];
     }
 
-    const relative = toRelative(files);
+    const relative = toRelative(frontendRoot, files);
     const commands = [`npm run format:files --prefix applications/frontend -- ${relative}`];
 
-    const srcFiles = files.filter(isSrcLintTarget);
+    const srcFiles = files.filter(isFrontendSrcLintTarget);
     if (srcFiles.length > 0) {
       commands.push(
-        `npm run lint:files --prefix applications/frontend -- ${toRelative(srcFiles)}`,
+        `npm run lint:files --prefix applications/frontend -- ${toRelative(frontendRoot, srcFiles)}`,
       );
     }
 
@@ -34,7 +40,24 @@ module.exports = {
       return [];
     }
 
-    const relative = toRelative(files);
+    const relative = toRelative(frontendRoot, files);
     return [`npm run lint:styles:files --prefix applications/frontend -- ${relative}`];
+  },
+  'applications/backend/src/**/*.{ts,vue,js}': (files) => {
+    if (files.length === 0) {
+      return [];
+    }
+
+    const relative = toRelative(backendRoot, files);
+    const commands = [`npm run format:files --prefix applications/backend -- ${relative}`];
+
+    const srcFiles = files.filter(isBackendSrcLintTarget);
+    if (srcFiles.length > 0) {
+      commands.push(
+        `npm run lint:files --prefix applications/backend -- ${toRelative(backendRoot, srcFiles)}`,
+      );
+    }
+
+    return commands;
   },
 };

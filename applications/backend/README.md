@@ -43,9 +43,10 @@ VITE_API_KEY=dein-be-key
 | `npm run build` | Production-Build |
 | `npm run preview` | Vorschau des Production-Builds |
 | `npm run test:unit:ci` | Vitest (CI, non-watch) |
-| `npm run test:e2e:dev` | Cypress interaktiv gegen Dev-Server |
+| `npm run test:e2e:dev` | Cypress interaktiv (Preview-Port 4173, Base `/backend/`) |
 | `npm run test:e2e` | Cypress gegen Production-Build |
-| `npm run quality:ci` | ESLint (`src/`) + vue-tsc + Vitest — für Drone CI |
+| `npm run test:e2e:ci` | Build + Cypress headless — Drone `vue-admin-e2e` |
+| `npm run quality:ci` | ESLint (`src/`) + vue-tsc + Vitest — Drone `vue-admin-quality` |
 | `npm run lint` | ESLint (gesamtes Projekt) |
 | `npm run type-check` | vue-tsc Typprüfung |
 

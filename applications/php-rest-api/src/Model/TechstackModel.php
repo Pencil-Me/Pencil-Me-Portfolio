@@ -5,55 +5,82 @@ namespace Model;
 use Exception;
 use PDO;
 
-require_once PROJECT_ROOT_PATH . "/Model/DatabaseModel.php";
-
 /**
  * Model class for interacting with the techstack table in the MySQL database.
  */
 class TechstackModel extends DatabaseModel
 {
     /**
+     * Retrieves techstack rows keyed by UUID for batch project enrichment.
+     *
+     * @param array<int, string> $techstackUuids
+     * @return array<string, array<string, mixed>>
+     * @throws Exception
+     */
+    public function getTechstacksByUuids(array $techstackUuids): array
+    {
+        if ($techstackUuids === []) {
+            return [];
+        }
+
+        $techstackResults = $this->fetchTechstackRows($techstackUuids);
+        $byUuid = [];
+
+        foreach ($techstackResults as $techstackResult) {
+            $byUuid[$techstackResult['uuid']] = [
+                'uuid' => $techstackResult['uuid'],
+                'name' => $techstackResult['name'],
+                'type' => $techstackResult['type'],
+                'expertise_level' => $techstackResult['expertise_level'],
+            ];
+        }
+
+        return $byUuid;
+    }
+
+    /**
      * Retrieves all techstacks associated with a project.
      *
-     * @param array $techstackUuids An array of techstack UUIDs.
-     * @return array Formatted techstack data.
+     * @param array<int, string> $techstackUuids An array of techstack UUIDs.
+     * @return array<int, array<string, mixed>> Formatted techstack data.
      * @throws Exception If an error occurs during execution.
      */
     public function getTechstacksPerProject(array $techstackUuids): array
     {
+        if ($techstackUuids === []) {
+            return [];
+        }
+
         try {
-            // Check if techstack UUIDs are provided
-            if (empty($techstackUuids)) {
-                throw new Exception("Techstack UUIDs are empty");
-            }
-            // Create placeholders for the UUIDs in the SQL query
-            $placeholders = implode(', ', array_fill(0, count($techstackUuids), 'UUID_TO_BIN(?)'));
-
-            // Build the SQL query
-            $techstackQuery = "SELECT BIN_TO_UUID(uuid) as uuid, name, type, expertise_level FROM techstack WHERE uuid IN ($placeholders)";
-
-            // Execute the SQL query and replace the placeholders with the UUIDs
-            $techstackResults = $this->fetchAll($techstackQuery, $techstackUuids);
-
-            // Format the results according to the expected output format
+            $techstackResults = $this->fetchTechstackRows($techstackUuids);
             $formattedResults = [];
+
             foreach ($techstackResults as $techstackResult) {
                 $formattedResults[] = [
-                    "uuid" => $techstackResult['uuid'],
-                    "name" => $techstackResult['name'],
-                    "type" => $techstackResult['type'],
-                    "expertise_level" => $techstackResult['expertise_level']
+                    'uuid' => $techstackResult['uuid'],
+                    'name' => $techstackResult['name'],
+                    'type' => $techstackResult['type'],
+                    'expertise_level' => $techstackResult['expertise_level'],
                 ];
             }
 
             return $formattedResults;
         } catch (Exception $e) {
-            // Log the error
             error_log($e->getMessage());
-
-            // Throw an exception to indicate failure
-            throw new Exception("Failed to retrieve techstacks per project");
+            throw new Exception('Failed to retrieve techstacks per project', 0, $e);
         }
+    }
+
+    /**
+     * @param array<int, string> $techstackUuids
+     * @return array<int, array<string, mixed>>
+     * @throws Exception
+     */
+    private function fetchTechstackRows(array $techstackUuids): array
+    {
+        $placeholders = implode(', ', array_fill(0, count($techstackUuids), 'UUID_TO_BIN(?)'));
+        $techstackQuery = "SELECT BIN_TO_UUID(uuid) as uuid, name, type, expertise_level FROM techstack WHERE uuid IN ($placeholders)";
+        return $this->fetchAll($techstackQuery, $techstackUuids);
     }
 
 

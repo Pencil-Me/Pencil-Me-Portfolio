@@ -2,10 +2,13 @@
   "name": "pencil-me-portfolio",
   "private": true,
   "scripts": {
-    "prepare": "husky"
+    "prepare": "husky",
+    "openapi:lint": "spectral lint applications/php-rest-api/openapi.yaml applications/python-rest-api/openapi.yaml"
   },
   "devDependencies": {
+    "@stoplight/spectral-cli": "^6.15.0",
     "husky": "^9.1.7",
     "lint-staged": "^15.4.3"
   }
 }
+

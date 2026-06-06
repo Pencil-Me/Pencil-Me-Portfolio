@@ -20,10 +20,6 @@ class CustomersController extends BaseController
     {
         $this->setSecurityHeaders();
 
-        if (!$this->checkRateLimit()) {
-            return;
-        }
-
         try {
             if (!$this->isRequestMethodAllowed('GET')) {
                 $this->sendMethodNotAllowedResponse();

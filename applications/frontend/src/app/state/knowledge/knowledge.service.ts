@@ -19,7 +19,7 @@ export class KnowledgeService {
    * @returns An Observable that emits an array of TECHSTACK objects.
    */
   getTechstack(): Observable<TECHSTACK[]> {
-    return this.apiClient.get('all_techstacks');
+    return this.apiClient.get<TECHSTACK[]>('all_techstacks');
   }
 
   /**
@@ -27,7 +27,7 @@ export class KnowledgeService {
    * @returns An Observable that emits an array of PROJECT objects.
    */
   getProjects(): Observable<PROJECT[]> {
-    return this.apiClient.get('all_projects');
+    return this.apiClient.get<PROJECT[]>('all_projects');
   }
 
   /**
@@ -44,6 +44,6 @@ export class KnowledgeService {
    * @returns An Observable that emits an array of CUSTOMER objects.
    */
   getCustomers(): Observable<CUSTOMER[]> {
-    return this.apiClient.get('all_customers');
+    return this.apiClient.get<CUSTOMER[]>('all_customers');
   }
 }

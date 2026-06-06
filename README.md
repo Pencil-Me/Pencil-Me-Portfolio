@@ -57,7 +57,7 @@ Jede Anwendung kann einzeln gestartet werden. Typischer Ablauf:
 
 1. MySQL starten (`applications/db`) oder Docker nur für `db` + `phpmyadmin`
 2. PHP REST API und Mailer konfigurieren und starten
-3. **Optional (Pre-commit-Hooks):** im Repo-Root `npm install` — aktiviert Husky + lint-staged für Frontend-Dateien
+3. **Optional (Pre-commit-Hooks):** im Repo-Root `npm install` — aktiviert Husky + lint-staged für Angular-Frontend **und** Vue-Admin (`applications/backend/src/`)
 4. Angular-Frontend: `cd applications/frontend && npm install && npm start` → [http://localhost:4200](http://localhost:4200)
 5. Vue-Backend: `cd applications/backend && npm install && npm run dev`
 
@@ -126,11 +126,13 @@ Die Drone-Pipeline (`.drone.yml`) prüft Frontend und Backend-Services:
 | Step | Befehl | Inhalt |
 |------|--------|--------|
 | `frontend-quality` | `npm run quality:ci` | Prettier, ESLint, Stylelint, Unit-Tests + Coverage, Production-Build, Fallow |
-| `frontend-e2e` | `npm run e2e:ci` | Playwright E2E (Chromium) gegen `ng serve` |
+| `frontend-e2e` | `npm run e2e:ci` | Playwright E2E (9 Tests: Home, Nav, Theme, Projekte, Kontakt, API-Fehler) |
 | `php-rest-api-test` | `composer test` | PHPUnit (Router, BaseController) |
 | `php-mailer-api-test` | `composer test` | PHPUnit (Router, Health) |
 | `vue-admin-quality` | `npm run quality:ci` | ESLint (src/), vue-tsc, Vitest (35 Tests) |
-| `python-api-smoke` | `pytest -q` | Health + API-Key-Auth |
+| `vue-admin-e2e` | `npm run test:e2e:ci` | Cypress E2E (6 Tests, API-Mocks) |
+| `python-api-smoke` | ruff + mypy + pytest | Python Admin API |
+| `openapi-lint` | `npm run openapi:lint` | Spectral — PHP + Python OpenAPI |
 | `compose-config` | `docker compose config` | Compose-Syntax-Check |
 
 Lokal dieselbe Qualitäts-Pipeline:
@@ -149,6 +151,10 @@ cd applications/php-mailer-api && composer test
 
 # Vue Admin
 cd applications/backend && npm run quality:ci
+cd applications/backend && npm run test:e2e:ci
+
+# OpenAPI (Spectral)
+npm run openapi:lint
 
 # Python API
 cd applications/python-rest-api/source_code && pytest -q
