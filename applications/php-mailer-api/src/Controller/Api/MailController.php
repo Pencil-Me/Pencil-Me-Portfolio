@@ -2,6 +2,7 @@
 
 namespace Controller\Api;
 
+use Inc\AppLogger;
 use Inc\Config;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
@@ -17,55 +18,48 @@ class MailController extends BaseController
     public function sendEmail(): void
     {
         try {
-            // Check if the request method is POST
             if (!$this->isRequestMethodAllowed('POST')) {
-                // Send error response for unsupported request method
                 $this->sendMethodNotAllowedResponse();
             }
 
-            // Initialize PHPMailer
             $mail = new PHPMailer(true);
 
-            // Extract parameters from POST request
             $sender = $_POST["sender"] ?? null;
             $recipient = $_POST["recipient"] ?? null;
             $subject = $_POST["subject"] ?? null;
             $message = $_POST["message"] ?? null;
 
-            // Validate required parameters
-            if (!$this->validateParameters($sender, $recipient, $subject, $message))
-            {
-                exit();
+            if (!$this->validateParameters($sender, $recipient, $subject, $message)) {
+                return;
             }
 
-            // Configure PHPMailer
             $this->configureMailer($mail);
 
-            // Set sender and recipient
             $mail->setFrom($mail->Username);
             $mail->addAddress($recipient);
 
-            // Set email subject and body
             $mail->Subject = $subject;
             $mail->Body = "Sender: $sender\n\nMessage:\n$message";
 
             try {
-                // Send the email
                 $mail->send();
-
-                // Send success response
                 $this->sendSuccessResponse(['message' => 'Email sent']);
             } catch (Exception $e) {
-                $this->sendOutput(
-                    "An error occurred while sending the email: {$mail->ErrorInfo}",
-                    400
+                AppLogger::error('PHPMailer send failed', [
+                    'error_info' => $mail->ErrorInfo,
+                    'exception' => $e->getMessage(),
+                ]);
+                $this->sendGenericErrorResponse(
+                    'E-Mail konnte nicht gesendet werden.',
+                    500
                 );
             }
-        }
-        catch (Exception $exception) {
-            // Handle exceptions
-            $this->sendOutput(
-                $exception->getMessage() . ' Something went wrong! Please contact support.',
+        } catch (Exception $exception) {
+            AppLogger::error('MailController unexpected error', [
+                'exception' => $exception->getMessage(),
+            ]);
+            $this->sendGenericErrorResponse(
+                'E-Mail konnte nicht gesendet werden.',
                 500
             );
         }
@@ -83,14 +77,8 @@ class MailController extends BaseController
     private function validateParameters(?string $sender, ?string $recipient, ?string $subject, ?string $message): bool
     {
         if (!$sender || !$recipient || !$subject || !$message) {
-            // If any of the required parameters are missing, return an error response
-            $this->sendOutput([
-                'message' => 'Missing required parameters',
-                '$sender' => $sender,
-                '$recipient' => $recipient,
-                '$subject' => $subject,
-                '$message' => $message
-            ], 400);
+            $this->sendOutput(['message' => 'Missing required parameters'], 400);
+            return false;
         }
         return true;
     }
@@ -102,12 +90,12 @@ class MailController extends BaseController
      */
     private function configureMailer(PHPMailer $mail): void
     {
-        $mail->isSMTP(); // Use SMTP
-        $mail->Host = Config::$mailHost; // SMTP server address
-        $mail->SMTPAuth = true; // Enable SMTP authentication
-        $mail->Username = Config::$mailUsername; // SMTP username
-        $mail->Password = Config::$mailPassword; // SMTP password
-        $mail->SMTPSecure = 'tls'; // Encryption type
-        $mail->Port = Config::$mailPort; // SMTP port
+        $mail->isSMTP();
+        $mail->Host = Config::$mailHost;
+        $mail->SMTPAuth = true;
+        $mail->Username = Config::$mailUsername;
+        $mail->Password = Config::$mailPassword;
+        $mail->SMTPSecure = 'tls';
+        $mail->Port = (int) Config::$mailPort;
     }
 }

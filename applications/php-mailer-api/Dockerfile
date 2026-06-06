@@ -1,18 +1,29 @@
 # Use the official PHP 8.1 image as the base
 FROM php:8.1-apache
 
-# Set the ServerName directive to suppress AH00558 message
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
-# Set the working directory within the container
+RUN apt-get update && apt-get install -y \
+    unzip \
+    zip \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN sed -i 's|/var/www/html|/var/www/html/src|g' /etc/apache2/sites-available/000-default.conf
+
 WORKDIR /var/www/html
 
-# Copy the source code into the container's working directory
-COPY src/ .
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Expose port 80
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --optimize-autoloader
+
+COPY src/ ./src/
+
+RUN mkdir -p src/logs && chown -R www-data:www-data src/logs
+
+COPY src/Inc/.env.example /var/www/html/src/Inc/.env.example
+
 EXPOSE 80
 
-# Enable hot reload by mounting a volume for the src directory
-# This will allow changes made to the source code on the host machine to be reflected immediately in the container
-VOLUME /var/www/html
+CMD ["apache2-foreground"]

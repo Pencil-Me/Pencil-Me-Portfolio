@@ -1,23 +1,25 @@
+"""Deprecated: use `.env` (see `.env.example`) — config loads from environment via config.py."""
+
 dbconfig = {
-    "host":"XXXXXXXXX_DB_HOST",
-    "port":"XXXXXXXXX_DB_PORT",
-    "username":"XXXXXXXXX_DB_USERNAME",
-    "password":"XXXXXXXXX_DB_PASSWORD",
-    "database":"XXXXXXXXX_DB_DATABASE"
+    'host': 'DB_HOST',
+    'port': 'DB_PORT',
+    'username': 'DB_USERNAME',
+    'password': 'DB_PASSWORD',
+    'database': 'DB_DATABASE',
 }
 
 mailconfig = {
-    "host":"XXXXXXXXX_MAIL_HOST",
-    "port":"XXXXXXXXX_MAIL_PORT",
-    "username":"XXXXXXXXX_MAIL_USERNAME",
-    "password":"XXXXXXXXX_MAIL_PASSWORD",
-    "sender":"XXXXXXXXX_MAIL_SENDER_EMAIL",
-    "recipient":"XXXXXXXXX_MAIL_RECIPIENT_EMAIL"
+    'host': 'MAIL_HOST',
+    'port': 'MAIL_PORT',
+    'username': 'MAIL_USERNAME',
+    'password': 'MAIL_PASSWORD',
+    'sender': 'MAIL_SENDER',
+    'recipient': 'MAIL_RECIPIENT',
 }
 
 api_keys = {
-    "fe_key": "XXXXXXXXX_EXAMPLE_SECRET",
-    "be_key": "XXXXXXXXX_EXAMPLE_SECRET2"
+    'fe_key': 'API_KEY_FE',
+    'be_key': 'API_KEY_BE',
 }
 
-baseurl = ""
+baseurl = 'BASE_URL'

@@ -2,51 +2,39 @@
 
 namespace Controller\Api;
 
-use Inc\Config;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use Inc\Config;
 
 /**
  * Health controller class holding the necessary application code to entertain REST API calls.
  */
 class HealthController extends BaseController
 {
-    /**
-     * Performs a health check for the API.
-     */
+    private Client $httpClient;
+
+    public function __construct(?Client $httpClient = null)
+    {
+        $this->httpClient = $httpClient ?? new Client();
+    }
+
     public function getHealthcheck(): void
     {
-        $this->setSecurityHeaders(); // Set security headers
+        $this->setSecurityHeaders();
 
         if (!$this->checkRateLimit()) {
             return;
         }
-        
+
         try {
-            // Initialize Guzzle HTTP client
-            $client = new Client();
-
-            // Target URL of the API
             $endpoint = Config::$healthApiEndpoint;
-
-            // Send GET request to the endpoint
-            $response = $client->get($endpoint);
-
-            // Get the status code from the response
+            $response = $this->httpClient->get($endpoint);
             $statusCode = $response->getStatusCode();
-
-            // Send appropriate response based on the status code
             $responseMessage = $statusCode === 200 ? 'Data forwarded successfully' : 'Error in forwarding data';
 
-            // Send response
-            $this->sendOutput(json_encode([
-                'message' => $responseMessage
-            ]), $statusCode);
+            $this->jsonResponse(['message' => $responseMessage], $statusCode);
         } catch (GuzzleException $e) {
-            // Error in making HTTP request
-            $this->sendOutput(json_encode([
-                'message' => 'Error in making HTTP request: ' . $e->getMessage()
-            ]), 500);
+            $this->jsonResponse(['message' => 'Error in making HTTP request: ' . $e->getMessage()], 500);
         }
     }
 }

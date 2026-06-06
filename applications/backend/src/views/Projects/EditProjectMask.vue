@@ -1,23 +1,25 @@
 <script lang="ts">
-import LoadingBar from '@/components/LoadingBar.vue'
 import TextInput from '@/components/inputs/TextInput.vue'
 import DateInput from '@/components/inputs/DateInput.vue'
 import TextareaInput from '@/components/inputs/Textarea.vue'
 import SelectInput from '@/components/inputs/SelectInput.vue'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapState } from 'pinia'
 import CardModal from '@/views/CardModal.vue'
-import AddTechStack from '@/views/TechStack/AddTechStack.vue'
+import AddTechStackModal from '@/views/TechStack/AddTechStack.vue'
 import AutocompleteInput from '@/components/inputs/AutocompleteInput.vue'
-import { type TProject } from '@/views/Projects/ProjectTypes'
+import type { TProject } from '@/types/project'
+import { cloneProject } from '@/utils/mappers/project.mapper'
 import type { PropType } from 'vue'
-import { async } from 'rxjs'
+import { useAppStore } from '@/pinia/useAppStore'
+import { useProjectsStore } from '@/pinia/useProjectsStore'
+import { useCustomersStore } from '@/pinia/useCustomersStore'
+import { useTechStackStore } from '@/pinia/useTechStackStore'
 
 export default {
   components: {
     AutocompleteInput,
-    AddTechStack,
+    AddTechStackModal,
     CardModal,
-    LoadingBar,
     TextInput,
     DateInput,
     TextareaInput,
@@ -32,8 +34,8 @@ export default {
       techToAdd: '',
       showingModal: false,
       yes_no_options: [
-        { label: 'no', value: 0 },
-        { label: 'yes', value: 1 }
+        { label: 'Nein', value: 0 },
+        { label: 'Ja', value: 1 }
       ],
       mutableProject: {} as TProject
     }
@@ -42,18 +44,13 @@ export default {
     currentProject: {
       type: Object as PropType<TProject>,
       required: true
-    },
-    debug: {
-      type: Boolean,
-      required: false,
-      default: false
     }
   },
   watch: {
     currentProject: {
       immediate: true,
       handler(newProject) {
-        this.mutableProject = { ...newProject }
+        this.mutableProject = cloneProject(newProject)
       }
     }
   },
@@ -63,7 +60,10 @@ export default {
     this.getAllCustomers()
   },
   computed: {
-    ...mapGetters(['techStackItems', 'customerItems', 'projectTypes', 'isLoading']),
+    ...mapState(useAppStore, ['isLoading']),
+    ...mapState(useTechStackStore, ['techStackItems']),
+    ...mapState(useCustomersStore, ['customerItems']),
+    ...mapState(useProjectsStore, ['projectTypes']),
     techstack_options() {
       return (
         this.techStackItems
@@ -79,24 +79,16 @@ export default {
       )
     },
     project_options() {
-      return (
-        this.projectTypes.sort((a, b) => (a.label > b.label ? 1 : b.label > a.label ? -1 : 0)) ?? []
+      return [...this.projectTypes].sort((a, b) =>
+        a.label > b.label ? 1 : b.label > a.label ? -1 : 0
       )
     }
   },
   emits: ['submitEvent', 'deleteEvent', 'cancelEvent'],
   methods: {
-    async() {
-      return async
-    },
-    ...mapActions([
-      'getAllProjectTypes',
-      'getAllTechStacks',
-      'getAllCustomers',
-      'setCurrentProjectItem',
-      'updateCurrentProject',
-      'deleteCurrentProject'
-    ]),
+    ...mapActions(useProjectsStore, ['getAllProjectTypes']),
+    ...mapActions(useTechStackStore, ['getAllTechStacks']),
+    ...mapActions(useCustomersStore, ['getAllCustomers']),
     submitProject() {
       this.$emit('submitEvent', this.mutableProject)
     },
@@ -117,12 +109,10 @@ export default {
       if (index > -1) this.mutableProject.tech.splice(index, 1)
     },
     addStack(id: string | undefined) {
-      if (id) {
-        this.mutableProject.tech.push(
-          this.techStackItems.filter((item) => {
-            return item.id.indexOf(id) > -1
-          })[0]
-        )
+      if (!id) return
+      const item = this.techStackItems.find((entry) => entry.id === id)
+      if (item) {
+        this.mutableProject.tech.push({ ...item, id: item.id ?? '' })
         this.techstack_id = ''
         this.showAddStack = false
       }
@@ -132,12 +122,10 @@ export default {
       if (index > -1) this.mutableProject.customers.splice(index, 1)
     },
     addCustomer(id: string | undefined) {
-      if (id) {
-        this.mutableProject.customers.push(
-          this.customerItems.filter((item) => {
-            return item.id.indexOf(id) > -1
-          })[0]
-        )
+      if (!id) return
+      const item = this.customerItems.find((entry) => entry.id === id)
+      if (item) {
+        this.mutableProject.customers.push({ ...item })
         this.customer_id = ''
         this.showAddCustomer = false
       }
@@ -164,27 +152,26 @@ export default {
 </script>
 
 <template>
-  <card-modal :showing="showingModal" @close="closeModal">
-    <add-tech-stack :given-name="techToAdd"></add-tech-stack>
+  <card-modal :showing="showingModal" title="Tech-Stack anlegen" @close="closeModal">
+    <AddTechStackModal :given-name="techToAdd" />
   </card-modal>
 
   <div class="border-b border-gray-800">
-    <div v-if="debug">mutableProject: {{ mutableProject }}<br /></div>
     <form class="container mx-auto px-4 mt-12 mb-12">
       <div class="mb-4">
-        <select-input :label="'show'" v-model="mutableProject.show" :options="yes_no_options" />
+        <select-input label="Öffentlich" v-model="mutableProject.show" :options="yes_no_options" />
       </div>
       <div class="mb-4">
-        <select-input :label="'type'" v-model="mutableProject.type" :options="project_options" />
+        <select-input label="Typ" v-model="mutableProject.type" :options="project_options" />
       </div>
       <div class="mb-4">
-        <text-input :label="'name'" v-model="mutableProject.name" :required="true" />
+        <text-input label="Name" v-model="mutableProject.name" :required="true" />
       </div>
       <div class="mb-4">
-        <text-input :label="'position'" v-model="mutableProject.position" :required="true" />
+        <text-input label="Position" v-model="mutableProject.position" :required="true" />
       </div>
       <div class="mb-4">
-        <text-input :label="'location'" v-model="mutableProject.location" :required="true" />
+        <text-input label="Standort" v-model="mutableProject.location" :required="true" />
       </div>
       <div class="flex flex-row md:items-center mb-4">
         <h3 class="md:w-4/12">dates</h3>
@@ -195,16 +182,28 @@ export default {
             :key="index"
           >
             <div class="col-span-2">
-              <date-input :label="'start_date'" v-model="date.start_date" :required="true" />
+              <date-input
+                label="Start"
+                name="start_date"
+                :model-value="date.start_date ?? ''"
+                @update:model-value="date.start_date = $event"
+                :required="true"
+              />
             </div>
             <div class="col-span-2">
-              <date-input :label="'end_date'" v-model="date.end_date" :required="true" />
+              <date-input
+                label="Ende"
+                name="end_date"
+                :model-value="date.end_date ?? ''"
+                @update:model-value="date.end_date = $event"
+                :required="true"
+              />
             </div>
             <button
               class="md:w-12/12 border border-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
               @click="removeDate(index)"
             >
-              Remove
+              Entfernen
             </button>
           </div>
           <button
@@ -213,29 +212,29 @@ export default {
             class="border border-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             @click="addDates()"
           >
-            Add
+            Zeitraum hinzufügen
           </button>
           <button
             v-else
             class="border border-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             @click="addDates()"
           >
-            Add
+            Zeitraum hinzufügen
           </button>
         </div>
       </div>
       <div class="mb-4">
-        <textarea-input :label="'contentshort'" v-model="mutableProject.content_short" />
+        <textarea-input label="Kurztext" name="content_short" v-model="mutableProject.content_short" />
       </div>
       <div class="mb-4">
-        <textarea-input :label="'contentlong'" v-model="mutableProject.content_long" />
+        <textarea-input label="Langtext" name="content_long" v-model="mutableProject.content_long" />
       </div>
       <div class="mb-4">
-        <textarea-input :label="'contentold'" v-model="mutableProject.content" />
+        <textarea-input label="Alt-Text" name="content" v-model="mutableProject.content" />
       </div>
 
       <div class="mb-6">
-        Customers
+        Kunden
         <ul
           v-if="mutableProject.customers.length > 0"
           class="mb-10 ap-4 flex flex-row flex-wrap gap-8"
@@ -249,7 +248,7 @@ export default {
             <div class="inline-block basis-1/4">
               <button
                 class="border border-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                @click="removeCustomer(customer.id)"
+                @click="removeCustomer(customer.id ?? '')"
               >
                 -
               </button>
@@ -263,14 +262,15 @@ export default {
               class="border border-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               @click="openAddCustomer()"
             >
-              Add Customer
+              Kunde hinzufügen
             </button>
           </div>
           <div v-else>
             <autocomplete-input
               :options="customer_options"
               v-model="customer_id"
-              :label="'select stack'"
+              label="Kunde suchen"
+              name="customer"
               @need-new-entry="needNewEntry"
             />
             <button
@@ -278,14 +278,14 @@ export default {
               class="border border-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               @click="addCustomer(customer_id)"
             >
-              Add
+              Hinzufügen
             </button>
           </div>
         </div>
       </div>
 
       <div class="mb-4">
-        Techstack
+        Tech-Stack
         <ul v-if="mutableProject.tech.length > 0" class="mb-10 ap-4 flex flex-row flex-wrap gap-8">
           <li
             class="gap-4 items-center flex flex-row basis-1/6"
@@ -296,7 +296,7 @@ export default {
             <div class="inline-block basis-1/4">
               <button
                 class="border border-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                @click="removeStack(tech.id)"
+                @click="removeStack(tech.id ?? '')"
               >
                 -
               </button>
@@ -310,14 +310,15 @@ export default {
               class="border border-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               @click="openAddStack()"
             >
-              Add Stack
+              Tech-Stack hinzufügen
             </button>
           </div>
           <div v-else>
             <autocomplete-input
               :options="techstack_options"
               v-model="techstack_id"
-              :label="'select stack'"
+              label="Tech-Stack suchen"
+              name="techstack"
               @need-new-entry="needNewEntry"
             />
             <button
@@ -325,7 +326,7 @@ export default {
               class="border border-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               @click="addStack(techstack_id)"
             >
-              Add
+              Hinzufügen
             </button>
           </div>
         </div>
@@ -337,7 +338,7 @@ export default {
           class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           @click="submitProject"
         >
-          Submit
+          Speichern
         </button>
       </div>
       <div v-if="mutableProject.id" class="inline-block">
@@ -345,7 +346,7 @@ export default {
           class="border border-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           @click="deleteProject"
         >
-          Delete
+          Löschen
         </button>
       </div>
       <div class="inline-block">
@@ -353,7 +354,7 @@ export default {
           class="border border-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           @click="cancelProject"
         >
-          Cancel
+          Abbrechen
         </button>
       </div>
     </div>

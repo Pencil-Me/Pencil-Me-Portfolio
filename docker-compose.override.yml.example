@@ -1,0 +1,15 @@
+# Dev-Override fuer lokale Entwicklung
+# Kopieren nach docker-compose.override.yml (gitignored, wird automatisch geladen)
+
+services:
+  php_api:
+    volumes:
+      - ./applications/php-rest-api/src:/var/www/html/src:ro
+      - ./applications/php-rest-api/public:/var/www/html/public:ro
+      - ./applications/php-rest-api/src/Inc/.env.dev:/var/www/html/src/Inc/.env.dev:ro
+      - php_api_logs:/var/www/html/src/logs
+
+  php_mailer:
+    volumes:
+      - ./applications/php-mailer-api/src:/var/www/html/src:ro
+      - ./applications/php-mailer-api/src/Inc/.env.dev:/var/www/html/src/Inc/.env.dev:ro

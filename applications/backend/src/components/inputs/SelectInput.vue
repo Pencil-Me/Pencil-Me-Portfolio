@@ -1,7 +1,6 @@
 <template>
   <div class="md:flex md:items-center mb-6">
-    <div v-if="debug" class="md:w-2/12">modelValue: {{ modelValue }}<br /></div>
-    <div :class="debug ? 'md:w-2/12' : 'md:w-4/12'">
+    <div class="md:w-4/12">
       <label>{{ label }}</label>
     </div>
     <div class="md:w-8/12">
@@ -15,13 +14,8 @@
           }
         }"
       >
-        <option value="" selected disabled>Choose</option>
-        <option
-          v-for="option in options"
-          :value="option.value"
-          :key="option.value"
-          :selected="option === modelValue"
-        >
+        <option value="" selected disabled>Bitte wählen</option>
+        <option v-for="option in options" :value="option.value" :key="option.value">
           {{ option.label }}
         </option>
       </select>
@@ -32,10 +26,6 @@
 <script>
 export default {
   props: {
-    debug: {
-      type: Boolean,
-      default: false
-    },
     label: {
       type: String,
       required: true
@@ -46,8 +36,9 @@ export default {
     },
     options: {
       type: Array,
-      require: true
+      required: true
     }
-  }
+  },
+  emits: ['update:modelValue']
 }
 </script>

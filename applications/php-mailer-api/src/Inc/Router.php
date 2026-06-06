@@ -33,26 +33,23 @@ class Router {
      * @param array $protectedRoutes A list of protected routes requiring authentication.
      */
     public static function route(string $method, string $path, string $api_key, array $routes, array $protectedRoutes) {
-        // First, check if the path matches any known pattern
         $matchedRoute = self::matchRoute($path, $routes);
-        if ($matchedRoute !== null && isset($matchedRoute[$method])) {
-            $route = $matchedRoute[$method];
+        if ($matchedRoute !== null && isset($matchedRoute['handlers'][$method])) {
+            $route = $matchedRoute['handlers'][$method];
+            $routePattern = $matchedRoute['pattern'];
             $controllerName = $route['controller'];
             $methodName = $route['method'];
 
-            // Check if the route is protected and the user is authenticated
-            if (self::isRouteProtected($path, $method, $protectedRoutes)) {
-                $required_key = $protectedRoutes[$path]['required_key'];
+            if (self::isRouteProtected($routePattern, $method, $protectedRoutes)) {
+                $required_key = $protectedRoutes[$routePattern]['required_key'];
                 if (!self::isAuthenticated($api_key, $required_key)) {
-                    self::unauthorized(); // User is not authenticated, output an error
-                    exit();
+                    self::unauthorized();
                 }
             }
 
-            self::executeRoute($controllerName, $methodName); // Execute the route
-            exit();
+            self::executeRoute($controllerName, $methodName);
         }
-        self::routeNotFound(); // Route not found, output an error
+        self::routeNotFound();
     }
 
     /**
@@ -63,16 +60,11 @@ class Router {
      * @return bool Returns true if the route expects an ID parameter, otherwise false.
      */
     private static function routeExpectsId(string $controllerName, string $methodName): bool {
-        // Construct the method reflection object
         $reflectionMethod = new \ReflectionMethod($controllerName, $methodName);
-
-        // Check the parameters of the method
         $parameters = $reflectionMethod->getParameters();
 
-        // Check if the parameter list is not empty
         if (!empty($parameters)) {
             foreach ($parameters as $parameter) {
-                // If a parameter with the name "id" is found, an ID is expected
                 if ($parameter->getName() === 'id') {
                     return true;
                 }
@@ -86,25 +78,23 @@ class Router {
      *
      * @param string $path The requested path.
      * @param array $routes A list of defined routes.
-     * @return array|null Returns the matched route data if found, otherwise null.
+     * @return array|null Returns matched route metadata if found, otherwise null.
      */
     private static function matchRoute(string $path, array $routes): ?array {
         foreach ($routes as $route => $routeData) {
             $pattern = str_replace('/', '\/', $route);
             $pattern = '/^' . str_replace('(\w+)',  '([\w-]+)', $pattern) . '$/';
 
-            // Define $matches to store the results of matches
             $matches = [];
 
             if (preg_match($pattern, $path, $matches)) {
-                // Check if the ID is found in the path
                 if (isset($matches[1])) {
-                    // Extract the ID from the path
-                    $id = $matches[1];
-                    // Adjust the GET variables to pass the ID to the controller
-                    $_GET['id'] = $id;
+                    $_GET['id'] = $matches[1];
                 }
-                return $routeData;
+                return [
+                    'pattern' => $route,
+                    'handlers' => $routeData,
+                ];
             }
         }
         return null;
@@ -121,41 +111,45 @@ class Router {
             $controller = new $controllerName();
 
             if (method_exists($controller, $methodName)) {
-                // Check if the route expects an ID
                 if (self::routeExpectsId($controllerName, $methodName)) {
-                    // Pass the ID as an argument to the controller method
                     $controller->$methodName($_GET['id']);
                     exit();
                 }
-                // If no ID is expected, call the method without arguments
                 $controller->$methodName();
                 exit();
             }
         }
-        self::controllerNotFound(); // Controller or method not found, output an error
+        self::controllerNotFound();
     }
 
     /**
-     * Checks if the specified route is protected and requires authentication.
+     * Checks if the specified route pattern is protected and requires authentication.
      *
-     * @param string $path The path of the request.
+     * @param string $routePattern The matched route pattern.
      * @param string $method The HTTP method of the request.
      * @param array $protectedRoutes A list of protected routes.
      * @return bool Returns true if the route is protected, otherwise false.
      */
-    private static function isRouteProtected(string $path, string $method, array $protectedRoutes): bool {
-        return isset($protectedRoutes[$path][$method]);
+    private static function isRouteProtected(string $routePattern, string $method, array $protectedRoutes): bool {
+        return isset($protectedRoutes[$routePattern][$method]);
     }
 
     /**
      * Checks if the user is authenticated.
      *
      * @param string $api_key The API key provided by the user.
-     * @param string $required_key The required API key for the protected route.
+     * @param string $required_key The required API key identifier for the protected route.
      * @return bool Returns true if the user is authenticated, otherwise false.
      */
-    private static function isAuthenticated(string $api_key, string $required_key) {
-        return $api_key && isset(Config::getApiKeys()[$required_key]) && $api_key == Config::getApiKeys()[$required_key];
+    private static function isAuthenticated(string $api_key, string $required_key): bool {
+        if ($api_key === '' || !isset(Config::getApiKeys()[$required_key])) {
+            return false;
+        }
+
+        return hash_equals(
+            (string) Config::getApiKeys()[$required_key],
+            (string) $api_key
+        );
     }
 
     /**

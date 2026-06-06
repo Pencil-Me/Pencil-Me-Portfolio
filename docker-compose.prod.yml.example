@@ -1,0 +1,28 @@
+# Production-Override (Beispiel)
+# Nutzung: docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+# Oder kopieren nach docker-compose.prod.yml (gitignored)
+
+services:
+  frontend:
+    build:
+      args:
+        BUILD_CONFIGURATION: production
+
+  backend:
+    build:
+      args:
+        VITE_API_URL: https://api.pencil-me.eu/api
+        VITE_API_KEY: ${API_KEY_BE}
+
+  python_api:
+    environment:
+      APP_ENV: production
+      LOG_LEVEL: INFO
+
+  php_api:
+    environment:
+      APP_ENV: production
+
+  php_mailer:
+    environment:
+      APP_ENV: production

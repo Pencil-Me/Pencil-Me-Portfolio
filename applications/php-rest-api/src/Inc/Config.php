@@ -90,7 +90,40 @@ class Config
         self::$mailApiKey = $_ENV['MAIL_API_KEY'];
         self::$healthApiEndpoint = $_ENV['HEALTH_ENDPOINT'];
     }
-}
 
-// loadConfig on start
-Config::loadConfig(false);
+    /**
+     * Resolves whether the application runs in production mode.
+     */
+    public static function isProductionEnvironment(): bool
+    {
+        $appEnv = getenv('APP_ENV');
+        if ($appEnv === false) {
+            $appEnv = $_ENV['APP_ENV'] ?? $_SERVER['APP_ENV'] ?? 'development';
+        }
+
+        return $appEnv === 'production';
+    }
+
+    /**
+     * Monolog level from LOG_LEVEL env (DEBUG default in dev, INFO in production).
+     */
+    public static function getLogLevel(): \Monolog\Level
+    {
+        $configured = getenv('LOG_LEVEL');
+        if ($configured === false) {
+            $configured = $_ENV['LOG_LEVEL'] ?? null;
+        }
+
+        if ($configured === null || $configured === '') {
+            return self::isProductionEnvironment() ? \Monolog\Level::Info : \Monolog\Level::Debug;
+        }
+
+        return match (strtoupper((string) $configured)) {
+            'DEBUG' => \Monolog\Level::Debug,
+            'INFO' => \Monolog\Level::Info,
+            'WARNING', 'WARN' => \Monolog\Level::Warning,
+            'ERROR' => \Monolog\Level::Error,
+            default => \Monolog\Level::Debug,
+        };
+    }
+}

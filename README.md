@@ -28,7 +28,7 @@ pm-middlenginx (:8080)
 | Python API | `pm-api_python` | via Nginx `/api` | Flask, PyMySQL |
 | Mailer | `pm-mailer_php` | 3002 (direkt) / `/mailer` | PHP 8.1, PHPMailer |
 | Datenbank | `pm-db` | 3306 | MySQL 8 |
-| phpMyAdmin | `pm-phpmyadmin` | 8000 | Web-UI für MySQL |
+| phpMyAdmin | `pm-phpmyadmin` | 8000 (nur mit `--profile dev`) | Web-UI für MySQL |
 
 ## Schnellstart (Docker)
 
@@ -36,16 +36,20 @@ Voraussetzungen: [Docker](https://www.docker.com/) und Docker Compose.
 
 ```bash
 # Im Repo-Root
+cp .env.example .env          # optional: zentrale Compose-Variablen
 docker compose up --build
+
+# phpMyAdmin (nur Dev):
+docker compose --profile dev up phpmyadmin
 ```
 
 Danach erreichbar:
 
 - Portfolio: [http://localhost:8080](http://localhost:8080)
 - Admin-UI: [http://localhost:8080/backend](http://localhost:8080/backend)
-- phpMyAdmin: [http://localhost:8000](http://localhost:8000)
+- phpMyAdmin: [http://localhost:8000](http://localhost:8000) (nur mit `docker compose --profile dev up phpmyadmin`)
 
-Vor dem ersten Start die Umgebungsvariablen in den einzelnen Anwendungen konfigurieren (siehe READMEs unten). API-Keys müssen zwischen Frontend, Backend und APIs übereinstimmen.
+Vor dem ersten Start die Umgebungsvariablen konfigurieren (siehe unten). API-Keys müssen zwischen Frontend, Backend und APIs übereinstimmen.
 
 ## Lokale Entwicklung (ohne Docker)
 
@@ -85,29 +89,76 @@ Zentrale Dateien:
 
 | Datei | Zweck |
 |-------|-------|
+| `.env.example` | Master-Liste aller Compose-/Build-Variablen |
 | `docker-compose.yml` | Orchestrierung aller Services |
-| `nginx.middle.conf` | Routing zwischen Frontend, Backend und APIs |
+| `docker-compose.override.yml.example` | Dev-Mounts für PHP (→ `docker-compose.override.yml`, gitignored) |
+| `docker-compose.prod.yml.example` | Production-Build-Args und `APP_ENV=production` |
+| `nginx.middle.conf` | Routing, gzip, Rate-Limit, Security-Headers |
 
-API-Authentifizierung erfolgt über den Header `API-Key` (Frontend: `fe_key`, Backend: `be_key`). Die Keys müssen in allen beteiligten `.env`-Dateien identisch sein.
+Optional: `cp .env.example .env` und `docker compose --env-file .env up`.
+
+### Keys synchron halten
+
+Dieselben Werte an mehreren Stellen pflegen:
+
+| Variable | Wo setzen |
+|----------|-----------|
+| `API_KEY_FE` | Root `.env`, `php-rest-api/src/Inc/.env.dev`, `php-mailer-api/src/Inc/.env.dev`, Angular `environment.ts` |
+| `API_KEY_BE` | Root `.env`, `python-rest-api` (Compose-Env), Vue `.env` / Compose `VITE_API_KEY` |
+| `DB_*` | Root `.env`, Compose (Python), PHP `.env.dev` falls direkter DB-Zugriff |
+| `MAIL_*` | Root `.env`, Compose (Python), `php-mailer-api/src/Inc/.env.dev` |
+| `APP_ENV` | Root `.env`, Compose (`php_api`, `php_mailer`, `python_api`) |
+
+API-Authentifizierung erfolgt über den Header `API-Key` (Frontend: `fe_key`, Backend: `be_key`).
+
+### Production (Hinweise)
+
+- `docker-compose.prod.yml.example` kopieren nach `docker-compose.prod.yml` und anpassen
+- Start: `docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d`
+- TLS am externen Reverse-Proxy (nicht im Repo-Stack)
+- phpMyAdmin nicht starten (kein `--profile dev`)
+- `APP_ENV=production` in PHP/Python; `.env`-Dateien mit Prod-Werten (nicht committen)
 
 ## CI / Qualitätssicherung
 
-Die Drone-Pipeline (`.drone.yml`) prüft das Angular-Frontend in zwei Schritten:
+Die Drone-Pipeline (`.drone.yml`) prüft Frontend und Backend-Services:
 
 | Step | Befehl | Inhalt |
 |------|--------|--------|
 | `frontend-quality` | `npm run quality:ci` | Prettier, ESLint, Stylelint, Unit-Tests + Coverage, Production-Build, Fallow |
 | `frontend-e2e` | `npm run e2e:ci` | Playwright E2E (Chromium) gegen `ng serve` |
+| `php-rest-api-test` | `composer test` | PHPUnit (Router, BaseController) |
+| `php-mailer-api-test` | `composer test` | PHPUnit (Router, Health) |
+| `vue-admin-quality` | `npm run quality:ci` | ESLint (src/), vue-tsc, Vitest (35 Tests) |
+| `python-api-smoke` | `pytest -q` | Health + API-Key-Auth |
+| `compose-config` | `docker compose config` | Compose-Syntax-Check |
 
 Lokal dieselbe Qualitäts-Pipeline:
 
 ```bash
+# Angular Frontend
 cd applications/frontend
 npm run quality:ci   # ohne E2E
 npm run e2e:ci       # E2E separat (Port 4200 muss frei sein)
+
+# PHP REST API
+cd applications/php-rest-api && composer test
+
+# PHP Mailer
+cd applications/php-mailer-api && composer test
+
+# Vue Admin
+cd applications/backend && npm run quality:ci
+
+# Python API
+cd applications/python-rest-api/source_code && pytest -q
 ```
 
 Details zu Scripts, Coverage-Schwellen und Pre-commit-Hooks: [applications/frontend/README.md](applications/frontend/README.md)
+
+## Backend-Refactoring
+
+Geplanter Verbesserungsplan für PHP-/Python-APIs, Vue-Admin und Docker: [docs/refactoring/README.md](docs/refactoring/README.md)
 
 ## Autor
 

@@ -30,18 +30,27 @@ Das SQL-Dump enthält bereits Beispieldaten für die öffentliche Portfolio-Ansi
 | `MYSQL_PASSWORD` | `test` |
 | Root-Passwort | zufällig generiert (`MYSQL_RANDOM_ROOT_PASSWORD=yes`) |
 
-phpMyAdmin im Stack: [http://localhost:8000](http://localhost:8000) (User `user` / Passwort `test`).
+Werte können über Root-`.env` (`DB_*`) überschrieben werden — dann auch im `db`-Healthcheck und phpMyAdmin anpassen.
+
+phpMyAdmin (nur Dev, Compose-Profil `dev`): [http://localhost:8000](http://localhost:8000) (User `user` / Passwort `test`).
+
+```bash
+docker compose --profile dev up phpmyadmin
+```
 
 ## Verwendung
 
 ### Mit docker-compose (empfohlen)
 
 ```bash
-# Im Repo-Root — startet db + phpmyadmin mit
-docker compose up db phpmyadmin
+# Im Repo-Root — DB startet automatisch mit dem Stack
+docker compose up --build
+
+# Nur DB + phpMyAdmin (Dev)
+docker compose --profile dev up db phpmyadmin
 ```
 
-Port **3306** ist auf dem Host gemappt.
+Port **3306** ist auf dem Host gemappt. Der Service `db` hat einen Healthcheck; `php_api` und `python_api` warten auf `service_healthy`.
 
 ### Einzeln bauen
 
@@ -54,10 +63,23 @@ docker run -p 3306:3306 -v portfolio-data:/var/lib/mysql pm-db
 
 Compose nutzt das Volume `data` für `/var/lib/mysql`. Beim ersten Start führt MySQL alle Skripte in `/docker-entrypoint-initdb.d/` aus — danach nur bei leerem Volume erneut.
 
-## Schema aktualisieren
+## Schema aktualisieren (Migrations-Strategie)
 
-1. Änderungen in `init-scripts/dll.sql` vornehmen
-2. Volume löschen und Container neu starten (nur Dev!), **oder** Migration manuell per phpMyAdmin / CLI ausführen
+**Aktuell:** Init-only via `init-scripts/dll.sql` beim ersten Container-Start.
+
+| Szenario | Vorgehen |
+|----------|----------|
+| Lokale Dev-DB neu aufsetzen | Volume `data` löschen, `docker compose up db` |
+| Schema-Änderung in Dev | SQL manuell per phpMyAdmin / CLI, oder Volume reset |
+| Production | Geplante SQL-Migrationen oder Tool (Flyway/Liquibase) — noch nicht im Repo |
+
+Empfehlung: Schema-Änderungen zuerst in `dll.sql` dokumentieren und in Dev testen; Production per kontrolliertem SQL-Deploy ausrollen.
+
+## Backups (Production)
+
+- **Volume-Snapshot:** `docker run --rm -v pencil-me-portfolio_data:/data -v $(pwd):/backup alpine tar czf /backup/db-backup.tar.gz /data`
+- **Logical dump:** `docker exec pm-db mysqldump -u user -ptest portfolio_db > backup.sql`
+- Backups regelmäßig und außerhalb des Hosts aufbewahren; Restore vor Deploy testen.
 
 ## Autor
 

@@ -11,163 +11,116 @@ use Inc\Bootstrap;
  */
 class BaseController
 {
-    /**
-     * Magic method to handle undefined method calls.
-     *
-     * @param string $name The name of the method being called.
-     * @param array $arguments The arguments passed to the method.
-     */
+    private const MAX_TEXT_LENGTH = 5000;
+
     #[NoReturn] public function __call(string $name, array $arguments)
     {
-        $this->sendOutput('', 404);
+        $this->jsonResponse(['message' => 'Endpoint not found'], 404);
     }
 
-    /**
-     * Retrieve URI segments.
-     *
-     * @return array The array containing URI segments.
-     */
     protected function getUriSegments(): array
     {
         $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-        return explode('/', $uri);
+        return explode('/', (string) $uri);
     }
 
-    /**
-     * Retrieve query string parameters.
-     *
-     * @return array The array containing query string parameters.
-     */
     protected function getQueryStringParams(): array
     {
-        parse_str($_SERVER['QUERY_STRING'], $query);
+        parse_str($_SERVER['QUERY_STRING'] ?? '', $query);
         return $query;
     }
 
     /**
-     * Send API output.
+     * Sends a JSON response and terminates the request.
      *
-     * @param mixed $data The data to be sent as output.
-     * @param array $httpHeaders An array of HTTP headers to be sent.
+     * @param mixed $payload Response body (array or scalar).
      */
-    #[NoReturn] protected function sendOutput($data, int $response_code): void
+    #[NoReturn] protected function jsonResponse(mixed $payload, int $status = 200): void
     {
         $this->clearCookies();
-        http_response_code($response_code);
-        echo json_encode($data);
+        http_response_code($status);
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode($payload, JSON_THROW_ON_ERROR);
         exit;
     }
 
-    /**
-     * Clear cookies from the response.
-     */
+    #[NoReturn] protected function sendOutput(mixed $data, int $response_code): void
+    {
+        $this->jsonResponse($data, $response_code);
+    }
+
     protected function clearCookies(): void
     {
         header_remove('Set-Cookie');
     }
 
-    /**
-     * Get the limit from query parameters.
-     *
-     * @param string $allowedMethod The allowed Method.
-     * @return bool Is the Request Method is the Allowed Method.
-     */
     protected function isRequestMethodAllowed(string $allowedMethod): bool
     {
-        $requestMethod = $_SERVER["REQUEST_METHOD"];
-        return (strtoupper($requestMethod) == $allowedMethod);
+        $requestMethod = $_SERVER['REQUEST_METHOD'] ?? '';
+        return strtoupper($requestMethod) === $allowedMethod;
     }
 
-    /**
-     * Get the limit from query parameters.
-     *
-     * @return int The limit value.
-     */
-    protected function getQueryLimit(): int {
+    protected function getQueryLimit(): int
+    {
         $queryParams = $this->getQueryStringParams();
-
-        // set default limit
         $limit = 100;
 
-        // Check if limit parameter is provided in the query string
         if (isset($queryParams['limit']) && $queryParams['limit']) {
             $limit = $queryParams['limit'];
         }
 
-        // Convert limit to integer and return
-        return intval($limit);
+        return (int) $limit;
     }
 
-    /**
-     * Sends a response indicating that the request method is not allowed.
-     */
     #[NoReturn] protected function sendMethodNotAllowedResponse(): void
     {
-        $this->sendOutput(['error' => 'Method not allowed'], 405);
+        $this->jsonResponse(['message' => 'Method not allowed'], 405);
     }
 
-    /**
-     * Sends a response indicating that the requested resource was not found.
-     *
-     * @param string $message The error message.
-     */
     #[NoReturn] protected function sendNotFoundResponse(string $message): void
     {
-        $this->sendOutput(['error' => $message], 404);
+        $this->jsonResponse(['message' => $message], 404);
     }
 
-    /**
-     * Sends a successful response with the provided data.
-     *
-     * @param array $data The data to be sent.
-     */
     #[NoReturn] protected function sendSuccessResponse(array $data): void
     {
-        $this->sendOutput($data, 200);
+        $this->jsonResponse($data, 200);
     }
 
-    /**
-     * Sends an error response based on the provided exception.
-     *
-     * @param \Throwable $exception The exception.
-     */
     #[NoReturn] protected function sendErrorResponse(\Throwable $exception): void
     {
-        // Log the error using Monolog
-        Bootstrap::$logger->error($exception->getMessage(), ['exception' => $exception]);
+        Bootstrap::$logger->error($exception->getMessage(), [
+            'exception' => $exception,
+            'ip' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
+        ]);
 
-        $this->sendOutput(['error' => 'An unexpected error occurred. Please try again later.'], 500);
+        $this->jsonResponse(['message' => 'An unexpected error occurred. Please try again later.'], 500);
     }
 
-    /**
-     * Validates and sanitizes an integer input.
-     *
-     * @param mixed $input The input to validate and sanitize.
-     * @return int|null The sanitized integer or null if invalid.
-     */
-    protected function sanitizeInt($input): ?int
+    protected function sanitizeInt(mixed $input): ?int
     {
         return filter_var($input, FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
     }
 
     /**
-     * Validates and sanitizes a string input.
-     *
-     * @param mixed $input The input to validate and sanitize.
-     * @return string|null The sanitized string or null if invalid.
+     * Validates plain-text input (replaces deprecated FILTER_SANITIZE_STRING).
      */
-    protected function sanitizeString($input): ?string
+    protected function sanitizeString(mixed $input, int $maxLength = self::MAX_TEXT_LENGTH): ?string
     {
-        return filter_var($input, FILTER_SANITIZE_STRING);
+        if (!is_string($input)) {
+            return null;
+        }
+
+        $value = trim($input);
+
+        if ($value === '' || strlen($value) > $maxLength || str_contains($value, "\0")) {
+            return null;
+        }
+
+        return $value;
     }
 
-    /**
-     * Validates a UUID string (RFC 4122 format).
-     *
-     * @param mixed $input The input to validate.
-     * @return string|null The normalized lowercase UUID or null if invalid.
-     */
-    protected function sanitizeUuid($input): ?string
+    protected function sanitizeUuid(mixed $input): ?string
     {
         if (!is_string($input) && !is_numeric($input)) {
             return null;
@@ -182,28 +135,20 @@ class BaseController
         return $uuid;
     }
 
-    /**
-     * Checks if the request is allowed based on rate limiting.
-     *
-     * @return bool True if the request is allowed, false otherwise.
-     */
     protected function checkRateLimit(): bool
     {
         $clientIp = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
         if (!RateLimiter::isRequestAllowed($clientIp)) {
-            $this->sendOutput(['error' => 'Too many requests. Please try again later.'], 429);
+            $this->jsonResponse(['message' => 'Too many requests. Please try again later.'], 429);
         }
 
         return true;
     }
 
-    /**
-     * Sets security headers for the response.
-     */
     protected function setSecurityHeaders(): void
     {
-        header("X-Content-Type-Options: nosniff");
-        header("X-Frame-Options: DENY");
-        header("Content-Security-Policy: default-src 'self'");
+        header('X-Content-Type-Options: nosniff');
+        header('X-Frame-Options: DENY');
+        header('Content-Security-Policy: default-src \'self\'');
     }
 }

@@ -73,7 +73,31 @@ class Config
         self::$mailUsername = $_ENV['MAIL_USERNAME'];
         self::$mailPassword = $_ENV['MAIL_PASSWORD'];
     }
-}
 
-// loadConfig on start
-Config::loadConfig(false);
+    /**
+     * Resolves whether the application runs in production mode.
+     */
+    public static function isProductionEnvironment(): bool
+    {
+        $appEnv = getenv('APP_ENV');
+        if ($appEnv === false) {
+            $appEnv = $_ENV['APP_ENV'] ?? $_SERVER['APP_ENV'] ?? 'development';
+        }
+
+        return $appEnv === 'production';
+    }
+
+    public static function getLogLevel(): string
+    {
+        $configured = getenv('LOG_LEVEL');
+        if ($configured === false) {
+            $configured = $_ENV['LOG_LEVEL'] ?? null;
+        }
+
+        if ($configured === null || $configured === '') {
+            return self::isProductionEnvironment() ? 'INFO' : 'DEBUG';
+        }
+
+        return strtoupper((string) $configured);
+    }
+}

@@ -46,3 +46,7 @@ blob-report/
 .env.*
 !.env.example
 !**/.env.example
+
+# Docker local overrides (keep *.example templates)
+docker-compose.override.yml
+docker-compose.prod.yml

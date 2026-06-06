@@ -16,3 +16,45 @@ steps:
       - cd applications/frontend
       - npm ci
       - npm run e2e:ci
+
+  - name: php-rest-api-test
+    image: php:8.3-cli
+    commands:
+      - apt-get update && apt-get install -y unzip git libzip-dev && docker-php-ext-install zip
+      - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+      - cd applications/php-rest-api
+      - cp src/Inc/.env.example src/Inc/.env.dev
+      - composer install --no-interaction --prefer-dist
+      - composer test
+      - composer analyse
+
+  - name: php-mailer-api-test
+    image: php:8.3-cli
+    commands:
+      - apt-get update && apt-get install -y unzip git libzip-dev && docker-php-ext-install zip
+      - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+      - cd applications/php-mailer-api
+      - cp src/Inc/.env.example src/Inc/.env.dev
+      - composer install --no-interaction --prefer-dist
+      - composer test
+      - composer analyse
+
+  - name: vue-admin-quality
+    image: node:20
+    commands:
+      - cd applications/backend
+      - npm ci
+      - npm run quality:ci
+
+  - name: python-api-smoke
+    image: python:3.12-slim
+    commands:
+      - cd applications/python-rest-api/source_code
+      - pip install --no-cache-dir -r requirements.txt -r requirements-dev.txt
+      - ruff check app.py configs module/helper tests
+      - python -m pytest -q
+
+  - name: compose-config
+    image: docker/compose:2.32.4
+    commands:
+      - docker compose -f docker-compose.yml config --quiet

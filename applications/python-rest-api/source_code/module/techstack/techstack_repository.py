@@ -1,4 +1,5 @@
 from flask import make_response
+from module.helper.response_util import not_found_response
 import logging
 from module.techstack.techstack_helper import TechStackHelper
 from module.techstack.techstack import TechStack
@@ -65,10 +66,7 @@ class TechStackRepository():
             return response
         else:
             # Rückgabe, falls keine Daten gefunden wurden
-            response = make_response("No Data Found")
-            response.status_code = 404
-            response.mimetype = 'application/json'
-            return response
+            return not_found_response()
 
     def get_all(self):
         #logging.debug('###### get_all ########')

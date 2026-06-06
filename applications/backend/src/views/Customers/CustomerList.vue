@@ -1,16 +1,39 @@
+<script setup lang="ts">
+import { computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { storeToRefs } from 'pinia'
+import CustomerCard from '@/views/Customers/CustomerCard.vue'
+import ListPageShell from '@/components/ListPageShell.vue'
+import { useAppStore } from '@/pinia/useAppStore'
+import { useCustomersStore } from '@/pinia/useCustomersStore'
+
+const router = useRouter()
+const appStore = useAppStore()
+const customersStore = useCustomersStore()
+const { isLoading } = storeToRefs(appStore)
+const { customerItems } = storeToRefs(customersStore)
+
+const sortedCustomers = computed(() =>
+  [...customerItems.value].sort((a, b) => a.name.localeCompare(b.name, 'de'))
+)
+
+onMounted(() => {
+  customersStore.getAllCustomers()
+})
+</script>
+
 <template>
-  <div v-if="isLoading"><loading-bar /></div>
-  <div v-else class="container px-4 pt-10 mx-auto">
+  <ListPageShell :is-loading="isLoading">
     <div>
       <h2 class="pb-6 text-lg font-semibold tracking-wider uppercase text-myyellow">
-        Alle Customer
+        Alle Kunden
       </h2>
       <div>
         <button
           class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          @click="$router.push({ name: 'AddCustomer' })"
+          @click="router.push({ name: 'AddCustomer' })"
         >
-          Add Customer
+          Kunde hinzufügen
         </button>
       </div>
       <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
@@ -19,46 +42,5 @@
         </div>
       </div>
     </div>
-  </div>
+  </ListPageShell>
 </template>
-
-<script>
-import CustomerCard from '@/views/Customers/CustomerCard.vue'
-import { mapActions, mapGetters } from 'vuex'
-import LoadingBar from '@/components/LoadingBar.vue'
-import SelectInput from '@/components/inputs/SelectInput.vue'
-
-export default {
-  components: {
-    SelectInput,
-    LoadingBar,
-    CustomerCard
-  },
-  computed: {
-    ...mapGetters(['customerItems', 'isLoading']),
-    sortedCustomers() {
-      return (
-        this.customerItems
-          .map((s) => ({
-            id: s.id,
-            name: s.name,
-            location: s.location
-          }))
-          .sort((a, b) => {
-            // Only sort on name if not identical
-            if (a.name.toUpperCase() < b.name.toUpperCase()) return -1
-            if (a.name.toUpperCase() > b.name.toUpperCase()) return 1
-            // Both idential, return 0
-            return 0
-          }) ?? []
-      )
-    }
-  },
-  created() {
-    this.getAllCustomers()
-  },
-  methods: {
-    ...mapActions(['getAllCustomers', 'getAllTechStacks'])
-  }
-}
-</script>

@@ -1,0 +1,11 @@
+parameters:
+    level: 5
+    paths:
+        - src
+    excludePaths:
+        - src/logs
+        - src/vendor
+    bootstrapFiles:
+        - tests/bootstrap.php
+    ignoreErrors:
+        - '#Attribute class JetBrains\\PhpStorm\\NoReturn does not exist#'

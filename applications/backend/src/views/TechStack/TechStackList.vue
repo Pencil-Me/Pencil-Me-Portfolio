@@ -1,68 +1,54 @@
 <template>
-  <div v-if="isLoading"><loading-bar /></div>
-  <div v-else class="container px-4 pt-10 mx-auto">
+  <ListPageShell :is-loading="isLoading">
     <div>
       <h2 class="pb-6 text-lg font-semibold tracking-wider uppercase text-myyellow">
-        Alle TechStack
+        Tech-Stack
       </h2>
       <div>
         <button
           class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           @click="$router.push({ name: 'AddTechStack' })"
         >
-          Add TechStack
+          Eintrag hinzufügen
         </button>
       </div>
       <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
         <div class="mt-3" v-for="techStack in techstacks" :key="techStack.id">
-          <TechStackCard :techStack="techStack" />
+          <TechStackCard :tech-stack="techStack" />
         </div>
       </div>
     </div>
-  </div>
+  </ListPageShell>
 </template>
 
 <script>
 import TechStackCard from '@/views/TechStack/TechStackCard.vue'
-import LoadingBar from '@/components/LoadingBar.vue'
-import { mapActions, mapGetters } from 'vuex'
-import formatDate from '@/composables/formatDate.js'
+import ListPageShell from '@/components/ListPageShell.vue'
+import { mapActions, mapState } from 'pinia'
+import { formatDate } from '@/utils/date'
+import { useAppStore } from '@/pinia/useAppStore'
+import { useTechStackStore } from '@/pinia/useTechStackStore'
 
 export default {
   components: {
     TechStackCard,
-    LoadingBar
+    ListPageShell
   },
   computed: {
-    ...mapGetters(['techStackItems', 'techStackTypes', 'isLoading']),
+    ...mapState(useAppStore, ['isLoading']),
+    ...mapState(useTechStackStore, ['techStackItems', 'techStackTypes']),
     techstacks() {
-      return (
-        this.techStackItems
-          .sort((a, b) => {
-            // Only sort on type if not identical
-            // if (a.type < b.type) return -1
-            // if (a.type > b.type) return 1
-            // Sort on name
-            if (a.name.toUpperCase() < b.name.toUpperCase()) return -1
-            if (a.name.toUpperCase() > b.name.toUpperCase()) return 1
-            // Both idential, return 0
-            return 0
-          })
-          .map((item) => {
-            const type_name =
-              this.techStackTypes.filter((type) => {
-                return type.value === item.type
-              })[0]?.label ?? 'error'
-            return {
-              id: item.id,
-              name: item.name,
-              type: type_name,
-              expertise_level: item.expertise_level,
-              last_usage: item.last_usage ? formatDate(item.last_usage) : 'heute',
-              project_count: item.project_count
-            }
-          }) ?? []
-      )
+      return [...this.techStackItems]
+        .sort((a, b) => a.name.localeCompare(b.name, 'de'))
+        .map((item) => {
+          const type_name =
+            this.techStackTypes.find((type) => type.value === item.type)?.label ?? item.type
+          return {
+            ...item,
+            type: type_name,
+            last_usage: item.last_usage ? formatDate(item.last_usage) : 'heute'
+          }
+        })
     }
   },
   created() {
@@ -70,7 +56,7 @@ export default {
     this.getAllTechStackTypes()
   },
   methods: {
-    ...mapActions(['getAllTechStacks', 'getAllTechStackTypes'])
+    ...mapActions(useTechStackStore, ['getAllTechStacks', 'getAllTechStackTypes'])
   }
 }
 </script>

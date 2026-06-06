@@ -10,7 +10,7 @@ export default defineConfig({
     vue(),
   ],
   preview: {
-    port: 8081,
+    port: 4173,
     strictPort: true,
   },
   server: {

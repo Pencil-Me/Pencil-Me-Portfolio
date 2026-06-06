@@ -15,7 +15,7 @@ class DatesModel extends DatabaseModel
     /**
      * Retrieves dates associated with a project from the database.
      *
-     * @param string $projectUuid The UUID of the project.
+     * @param array $projectUuids Project UUIDs.
      * @return array The array of formatted date data.
      * @throws Exception If an error occurs during the database operation.
      */

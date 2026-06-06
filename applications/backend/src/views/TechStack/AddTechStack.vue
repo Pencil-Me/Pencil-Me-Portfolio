@@ -1,38 +1,62 @@
 <script lang="ts">
+import { mapActions } from 'pinia'
 import EditTechStackMask from '@/views/TechStack/EditTechStackMask.vue'
-import type { TTechStack } from '@/views/TechStack/TechStackTypes'
+import { useAppStore } from '@/pinia/useAppStore'
+import { useTechStackStore } from '@/pinia/useTechStackStore'
+import { runValidatedAction } from '@/composables/useCrudForm'
+import { validateTechStack } from '@/utils/validation'
+import type { TTechStack } from '@/types/techstack'
+import type { PropType } from 'vue'
 
 export default {
   components: { EditTechStackMask },
+  props: {
+    givenName: {
+      type: String as PropType<string>,
+      default: ''
+    }
+  },
   data() {
     return {
       techStack: {
         name: '',
         type: '',
-        expertise_level: ''
+        expertise_level: '',
+        flag_important: false
       } as TTechStack
     }
   },
-  computed: {},
-  created() {},
+  created() {
+    if (this.givenName) {
+      this.techStack.name = this.givenName
+    }
+  },
   methods: {
-    submitTechStack(techStack: TTechStack) {
-      if (techStack.name != '' && techStack.type != '' && techStack.expertise_level != '') {
-        this.$store.dispatch('addTechStack', techStack)
-
-        this.techStack.name = ''
-        this.techStack.type = ''
-        this.techStack.expertise_level = ''
-
-        this.$router.push({ name: 'TechStackList' })
-      } else alert('Please fill up all the input box')
+    ...mapActions(useTechStackStore, ['addTechStack']),
+    ...mapActions(useAppStore, ['showError']),
+    async submitTechStack(techStack: TTechStack) {
+      await runValidatedAction(
+        techStack,
+        validateTechStack,
+        this.showError,
+        () => this.addTechStack(techStack),
+        () => {
+          if (!this.givenName) {
+            this.cancelTechStack()
+          }
+        }
+      )
     },
     cancelTechStack() {
-      this.techStack.name = ''
-      this.techStack.type = ''
-      this.techStack.expertise_level = ''
-
-      this.$router.push({ name: 'TechStackList' })
+      this.techStack = {
+        name: '',
+        type: '',
+        expertise_level: '',
+        flag_important: false
+      } as TTechStack
+      if (!this.givenName) {
+        this.$router.push({ name: 'TechStackList' })
+      }
     }
   }
 }

@@ -1,0 +1,333 @@
+openapi: 3.0.3
+info:
+  title: Pencil Me Portfolio — Python Admin API
+  description: |
+    Admin-CRUD fuer die Vue-UI. Basis hinter Nginx: `/api`.
+    Legacy Read-Routen (`/all_*`, `/get_project`, `PUT /send_email`) sind deprecated — siehe ADR-001.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api
+    description: Docker / Nginx Gateway
+components:
+  securitySchemes:
+    BackendKey:
+      type: apiKey
+      in: header
+      name: API-Key
+      description: be_key fuer Admin-CRUD
+    FrontendKey:
+      type: apiKey
+      in: header
+      name: API-Key
+      description: fe_key (nur deprecated Read-Routen)
+  schemas:
+    ErrorMessage:
+      type: object
+      required: [message]
+      properties:
+        message:
+          type: string
+    UuidPath:
+      type: string
+      format: uuid
+paths:
+  /healthcheck:
+    get:
+      summary: Health-Check
+      security: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+  /project:
+    get:
+      summary: Alle Projekte (Admin)
+      security:
+        - BackendKey: []
+      responses:
+        '200':
+          description: Projektliste
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: true
+    post:
+      summary: Projekt anlegen
+      security:
+        - BackendKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '201':
+          description: Erstellt
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: CREATED_SUCCESSFULLY
+  /project/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UuidPath'
+    get:
+      summary: Einzelnes Projekt (Admin)
+      security:
+        - BackendKey: []
+      responses:
+        '200':
+          description: Projekt
+        '404':
+          description: Nicht gefunden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+    put:
+      summary: Projekt aktualisieren
+      security:
+        - BackendKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200':
+          description: Aktualisiert
+    delete:
+      summary: Projekt loeschen
+      security:
+        - BackendKey: []
+      responses:
+        '200':
+          description: Geloescht
+  /customer:
+    get:
+      summary: Alle Kunden (Admin)
+      security:
+        - BackendKey: []
+      responses:
+        '200':
+          description: Kundenliste
+    post:
+      summary: Kunde anlegen
+      security:
+        - BackendKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '201':
+          description: Erstellt
+  /customer/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UuidPath'
+    get:
+      summary: Einzelner Kunde
+      security:
+        - BackendKey: []
+      responses:
+        '200':
+          description: Kunde
+    put:
+      summary: Kunde aktualisieren
+      security:
+        - BackendKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200':
+          description: Aktualisiert
+    delete:
+      summary: Kunde loeschen
+      security:
+        - BackendKey: []
+      responses:
+        '200':
+          description: Geloescht
+  /techstack:
+    get:
+      summary: Tech-Stack (Admin)
+      security:
+        - BackendKey: []
+      responses:
+        '200':
+          description: Liste
+    post:
+      summary: Tech-Stack-Eintrag anlegen
+      security:
+        - BackendKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '201':
+          description: Erstellt
+  /techstack/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UuidPath'
+    get:
+      summary: Einzelner Tech-Stack-Eintrag
+      security:
+        - BackendKey: []
+      responses:
+        '200':
+          description: Eintrag
+    put:
+      summary: Aktualisieren
+      security:
+        - BackendKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200':
+          description: OK
+    delete:
+      summary: Loeschen
+      security:
+        - BackendKey: []
+      responses:
+        '200':
+          description: OK
+  /project_types:
+    get:
+      summary: Projekt-Typen Lookup
+      security:
+        - BackendKey: []
+      responses:
+        '200':
+          description: Typenliste
+  /techstack_types:
+    get:
+      summary: Tech-Stack-Typen Lookup
+      security:
+        - BackendKey: []
+      responses:
+        '200':
+          description: Typenliste
+  /all_projects:
+    get:
+      summary: "[DEPRECATED] Projekte Frontend-Format"
+      deprecated: true
+      description: Nutze PHP GET /api2/all_projects
+      security:
+        - FrontendKey: []
+      responses:
+        '200':
+          description: Projektliste
+  /get_project/{id}:
+    get:
+      summary: "[DEPRECATED] Einzelprojekt Frontend-Format"
+      deprecated: true
+      security:
+        - FrontendKey: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UuidPath'
+      responses:
+        '200':
+          description: Projekt
+  /all_customers:
+    get:
+      summary: "[DEPRECATED] Kunden Frontend-Format"
+      deprecated: true
+      security:
+        - FrontendKey: []
+      responses:
+        '200':
+          description: Kundenliste
+  /all_techstacks:
+    get:
+      summary: "[DEPRECATED] Tech-Stack Frontend-Format"
+      deprecated: true
+      security:
+        - FrontendKey: []
+      responses:
+        '200':
+          description: Liste
+  /send_email:
+    put:
+      summary: "[DEPRECATED] Kontakt-Mail via Flask-Mail"
+      deprecated: true
+      description: Nutze PHP POST /api2/send_email
+      security:
+        - FrontendKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                message:
+                  type: string
+                sendCopy:
+                  type: boolean
+                contactByFax:
+                  nullable: true
+      responses:
+        '200':
+          description: Gesendet
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string

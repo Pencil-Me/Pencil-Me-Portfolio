@@ -1,23 +1,24 @@
-<script>
-export default {
-  props: ['customer'],
-  setup() {}
-}
+<script setup lang="ts">
+import type { TCustomer } from '@/types/customer'
+
+defineProps<{
+  customer: TCustomer
+}>()
 </script>
 
 <template>
   <div class="mt-2">
     <router-link
-      :to="{ name: 'EditCustomer', params: { id: customer['id'] } }"
+      :to="{ name: 'EditCustomer', params: { id: customer.id } }"
       class="mt-2 text-lg dark:hover:text-gray-300 hover:text-gray-500"
     >
-      {{ customer['name'] }}
+      {{ customer.name }}
     </router-link>
     <div
+      v-if="customer.location"
       class="span-container mt-1 text-sm text-gray-500 dark:text-gray-400"
-      v-if="customer['location']"
     >
-      <span v-if="customer['location']">{{ customer['location'] }}</span>
+      <span>{{ customer.location }}</span>
     </div>
   </div>
 </template>

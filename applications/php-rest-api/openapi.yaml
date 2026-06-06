@@ -1,0 +1,169 @@
+openapi: 3.0.3
+info:
+  title: Pencil Me Portfolio — PHP Public API
+  description: |
+    Oeffentliche Read-API und Kontakt-Mail-Proxy fuer das Angular-Frontend.
+    Basis hinter Nginx: `/api2`. Siehe ADR-001 (`docs/adr/001-api-responsibilities.md`).
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api2
+    description: Docker / Nginx Gateway
+  - url: http://localhost:3003
+    description: PHP-Container direkt
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: API-Key
+  schemas:
+    ErrorMessage:
+      type: object
+      required: [message]
+      properties:
+        message:
+          type: string
+    ContactForm:
+      type: object
+      required: [name, email, message]
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        message:
+          type: string
+        contactByFax:
+          type: string
+          description: Honeypot — darf leer sein
+        sendCopy:
+          type: boolean
+    ProjectFe:
+      type: object
+      additionalProperties: true
+      description: Frontend-Projektformat (siehe ProjectsModel)
+security:
+  - ApiKeyAuth: []
+paths:
+  /all_projects:
+    get:
+      summary: Alle oeffentlichen Projekte
+      operationId: getAllProjectsFe
+      responses:
+        '200':
+          description: Projektliste
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectFe'
+        '401':
+          description: Ungueltiger API-Key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+  /get_project/{id}:
+    get:
+      summary: Einzelnes Projekt
+      operationId: getProjectFe
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Projekt
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectFe'
+        '404':
+          description: Nicht gefunden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+  /all_customers:
+    get:
+      summary: Alle Kunden (Frontend-Format)
+      operationId: getAllCustomersFe
+      responses:
+        '200':
+          description: Kundenliste
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: true
+  /all_techstacks:
+    get:
+      summary: Tech-Stack (Frontend-Format)
+      operationId: getAllTechstacksFe
+      responses:
+        '200':
+          description: Tech-Stack-Liste
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: true
+  /send_email:
+    post:
+      summary: Kontaktformular — Proxy zum Mailer
+      operationId: sendContactEmail
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ContactForm'
+      responses:
+        '200':
+          description: Weitergeleitet
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Data forwarded successfully
+        '400':
+          description: Validierungsfehler
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Rate limit
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+  /healthcheck:
+    get:
+      summary: Health-Check (Mailer-Proxy)
+      operationId: healthcheck
+      security: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string

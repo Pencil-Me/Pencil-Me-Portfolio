@@ -16,8 +16,9 @@ module.exports = {
     }
   ],
   parserOptions: {
-    project: 'tsconfig.json',
+    project: ['./tsconfig.app.json', './tsconfig.vitest.json', './tsconfig.node.json'],
     tsconfigRootDir: __dirname,
+    extraFileExtensions: ['.vue'],
     sourceType: 'module',
     ecmaVersion: 'latest'
   }

@@ -19,6 +19,7 @@ class Bootstrap
 
         // Include main configuration file
         require_once PROJECT_ROOT_PATH . "/Inc/Config.php";
+        Config::loadConfig(Config::isProductionEnvironment());
         require_once PROJECT_ROOT_PATH . "/Inc/Cors.php";
         require_once PROJECT_ROOT_PATH . "/Inc/Router.php";
 

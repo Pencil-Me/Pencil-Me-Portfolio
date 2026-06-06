@@ -9,9 +9,13 @@ use Model\CustomersModel;
  */
 class CustomersController extends BaseController
 {
-    /**
-     * Retrieves all customers.
-     */
+    private CustomersModel $customersModel;
+
+    public function __construct(?CustomersModel $customersModel = null)
+    {
+        $this->customersModel = $customersModel ?? new CustomersModel();
+    }
+
     public function getAllFe(): void
     {
         $this->setSecurityHeaders();
@@ -19,27 +23,17 @@ class CustomersController extends BaseController
         if (!$this->checkRateLimit()) {
             return;
         }
-        
+
         try {
-            // Check if the request method is GET
             if (!$this->isRequestMethodAllowed('GET')) {
-                // Send error response for unsupported request method
                 $this->sendMethodNotAllowedResponse();
             }
 
-            // Instantiate CustomersModel
-            $customersModel = new CustomersModel();
-
-            // Set default limit
             $limit = $this->getQueryLimit();
+            $customersData = $this->customersModel->getCustomers($limit);
 
-            // Retrieve customers data
-            $customersData = $customersModel->getCustomers($limit);
-
-            // Send successful response
             $this->sendSuccessResponse($customersData);
         } catch (\Throwable $exception) {
-            // Handle exceptions
             $this->sendErrorResponse($exception);
         }
     }

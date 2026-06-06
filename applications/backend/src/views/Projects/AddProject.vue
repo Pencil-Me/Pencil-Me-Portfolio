@@ -1,43 +1,35 @@
 <script lang="ts">
-import { mapActions } from 'vuex'
+import { mapActions } from 'pinia'
 import EditProjectMask from '@/views/Projects/EditProjectMask.vue'
-import { convertIProjectToTProject, type TProject } from '@/views/Projects/ProjectTypes'
+import { useAppStore } from '@/pinia/useAppStore'
+import { useProjectsStore } from '@/pinia/useProjectsStore'
+import { runValidatedAction } from '@/composables/useCrudForm'
+import { validateProject } from '@/utils/validation'
+import { convertIProjectToTProject, type TProject } from '@/types/project'
 
 export default {
   components: {
     EditProjectMask
   },
-  computed: {},
   data() {
     return {
-      project: convertIProjectToTProject({}),
-      showAddStack: false,
-      showingModal: false,
-      techToAdd: '',
-      techstack_id: ''
+      project: convertIProjectToTProject({})
     }
   },
-  created() {},
   methods: {
-    ...mapActions([]),
-    submit(project: TProject) {
-      if (project.name != '' || !project.type) {
-        this.$store.dispatch('addProject', project)
-
-        this.cancelProject()
-      } else alert('Please fill up all the input box')
+    ...mapActions(useProjectsStore, ['addProject']),
+    ...mapActions(useAppStore, ['showError']),
+    async submit(project: TProject) {
+      await runValidatedAction(
+        project,
+        validateProject,
+        this.showError,
+        () => this.addProject(project),
+        () => this.cancelProject()
+      )
     },
     cancelProject() {
-      this.project.name = ''
-      this.project.position = ''
-      this.project.customer = ''
-      this.project.location = ''
-      this.project.content = ''
-      this.project.type = ''
-      this.project.dates = []
-      this.project.tech = []
-      this.project.customers = []
-
+      this.project = convertIProjectToTProject({})
       this.$router.push({ name: 'ProjectList' })
     }
   }
@@ -47,7 +39,6 @@ export default {
 <template>
   <edit-project-mask
     :current-project="project"
-    :debug="true"
     @cancel-event="cancelProject()"
     @submit-event="submit($event)"
   ></edit-project-mask>

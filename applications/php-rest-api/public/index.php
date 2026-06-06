@@ -6,6 +6,7 @@
 
 use Inc\Router;
 use Inc\Bootstrap;
+use Inc\RequestPath;
 
 // Include the autoloader
 require __DIR__ . '/../vendor/autoload.php';
@@ -37,35 +38,22 @@ $protectedRoutes = [
 ];
 
 try {
-    // Get request method, path, and API key
     $method = $_SERVER['REQUEST_METHOD'] ?? null;
-    $path = parseRequestPath($_SERVER['REQUEST_URI']);
+    $path = RequestPath::parse($_SERVER['REQUEST_URI']);
     $api_key = $_SERVER['HTTP_API_KEY'] ?? '';
 
-    // Check if method and path are defined
-    if ($method == null || $path == null) {
+    if ($method === null || $path === null) {
         throw new Exception('Required fields are undefined.');
     }
 
-    // Route the request
     Router::route($method, $path, $api_key, $routes, $protectedRoutes);
 } catch (Exception $e) {
-    // Log the detailed error message internally
-    logError($e);
+    Bootstrap::$logger->error($e->getMessage(), [
+        'exception' => $e,
+        'route' => $_SERVER['REQUEST_URI'] ?? '',
+        'ip' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
+    ]);
 
-    // Send a generic error message to the client
     http_response_code(500);
     echo json_encode(['message' => 'An unexpected error occurred. Please try again later.']);
-}
-
-// Function to parse and sanitize the request path
-function parseRequestPath($uri) {
-    $path = str_replace('/index.php', '', $uri);
-    return filter_var($path, FILTER_SANITIZE_URL);
-}
-
-// Function to log errors
-function logError($exception) {
-    // Log the error using Monolog
-    Bootstrap::$logger->error($exception->getMessage(), ['exception' => $exception]);
 }

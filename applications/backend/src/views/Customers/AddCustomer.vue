@@ -1,37 +1,32 @@
-<script lang="ts">
-import { mapActions } from 'vuex'
+<script setup lang="ts">
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import EditCustomerMask from '@/views/Customers/EditCustomerMask.vue'
-import type { TCustomer } from '@/views/Customers/CustomerTypes'
+import { useAppStore } from '@/pinia/useAppStore'
+import { useCustomersStore } from '@/pinia/useCustomersStore'
+import { runValidatedAction } from '@/composables/useCrudForm'
+import { validateCustomer } from '@/utils/validation'
+import type { TCustomer } from '@/types/customer'
 
-export default {
-  components: {
-    EditCustomerMask
-  },
-  computed: {},
-  data() {
-    return {
-      customer: {
-        name: '',
-        location: ''
-      } as TCustomer
-    }
-  },
-  created() {},
-  methods: {
-    ...mapActions([]),
-    submit(customer) {
-      if (customer.name != '') {
-        this.$store.dispatch('addCustomer', customer)
+const router = useRouter()
+const appStore = useAppStore()
+const customersStore = useCustomersStore()
 
-        this.cancelCustomer()
-      } else alert('Please fill up all the input box')
-    },
-    cancelCustomer() {
-      this.customer.name = ''
+const customer = ref<TCustomer>({ name: '', location: '' })
 
-      this.$router.push({ name: 'CustomerList' })
-    }
-  }
+async function submit(payload: TCustomer) {
+  await runValidatedAction(
+    payload,
+    validateCustomer,
+    (message) => appStore.showError(message),
+    () => customersStore.addCustomer(payload),
+    () => cancelCustomer()
+  )
+}
+
+function cancelCustomer() {
+  customer.value = { name: '', location: '' }
+  router.push({ name: 'CustomerList' })
 }
 </script>
 
@@ -40,7 +35,5 @@ export default {
     :current-customer="customer"
     @cancel-event="cancelCustomer()"
     @submit-event="submit($event)"
-  ></edit-customer-mask>
+  />
 </template>
-
-<style></style>

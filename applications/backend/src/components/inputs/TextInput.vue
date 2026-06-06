@@ -1,25 +1,18 @@
 <template>
   <div class="md:flex md:items-center mb-6">
-    <div v-if="debug" class="md:w-2/12">modelValue: {{ modelValue }}<br /></div>
-    <div :class="debug ? 'md:w-2/12' : 'md:w-4/12'">
+    <div class="md:w-4/12">
       <label>{{ label }}</label>
     </div>
     <div class="md:w-8/12">
       <input
         type="text"
         class="w-full mt-1 font-semibold md:mt-0 text-black"
-        :name="name"
+        :name="inputName"
         :value="modelValue"
         @input="onInput"
-        v-bind="{
-          ...$attrs,
-          onChange: ($event) => {
-            $emit('update:modelValue', $event.target.value)
-          }
-        }"
       />
     </div>
-    <p v-if="error">{{ error }}</p>
+    <p v-if="error" class="text-red-600 text-sm mt-1">{{ error }}</p>
   </div>
 </template>
 
@@ -27,13 +20,13 @@
 export default {
   name: 'CustomInput',
   props: {
-    debug: {
-      type: Boolean,
-      default: false
-    },
     label: {
       type: String,
       required: true
+    },
+    name: {
+      type: String,
+      default: ''
     },
     modelValue: {
       type: String,
@@ -50,8 +43,8 @@ export default {
     }
   },
   computed: {
-    name() {
-      return this.label.toLowerCase()
+    inputName() {
+      return this.name || this.label.toLowerCase()
     }
   },
   methods: {
@@ -59,10 +52,12 @@ export default {
       const value = event.target.value
 
       if (!value && this.required) {
-        this.error = 'Value should not be empty'
+        this.error = 'Dieses Feld darf nicht leer sein.'
+      } else if (value) {
+        this.error = ''
       }
 
-      this.$emit('input', event.target.value)
+      this.$emit('update:modelValue', value)
     }
   },
   watch: {

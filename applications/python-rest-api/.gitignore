@@ -5,10 +5,10 @@ __pycache__/
 .pytest_cache/
 .mypy_cache/
 
-# Local config / secrets
-/source_code/configs/config.py
+# Local secrets (config.py is committed and reads from env)
 .env
 .env.*
+!.env.example
 
 # IDEs
 .idea/

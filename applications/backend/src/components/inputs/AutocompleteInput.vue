@@ -1,14 +1,6 @@
 <template>
   <div class="md:flex md:items-center mb-6">
-    <div v-if="debug" class="md:w-2/12">
-      modelValue: {{ modelValue }}<br />
-      searchTerm: {{ searchTerm }}<br />
-      selectedValue: {{ selectedValue }}<br />
-      isOpen: {{ isOpen }}<br />
-      result: {{ results }}<br />
-      options: {{ options }}<br />
-    </div>
-    <div :class="debug ? 'md:w-2/12' : 'md:w-4/12'">
+    <div class="md:w-4/12">
       <label>{{ label }}</label>
     </div>
     <div class="autocomplete md:w-8/12">
@@ -16,14 +8,15 @@
         <input
           type="text"
           class="w-full mt-1 font-semibold md:mt-0 text-black"
-          :name="name"
+          :name="inputName"
           :value="searchTerm"
+          placeholder="Suche…"
           @input="onInput"
           @change="onChange"
           @focusout="onFocusOut"
         />
         <div
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer"
           v-show="searchTerm !== '' && results.length <= 0"
           @click="needNewEntry()"
         >
@@ -31,21 +24,21 @@
         </div>
       </div>
       <ul id="autocomplete-results" v-show="isOpen" class="autocomplete-results">
-        <li v-if="isLoading" class="loading">Loading results...</li>
-        <li
-          v-else-if="results.length > 0"
-          v-for="(result, i) in results"
-          :key="i"
-          @click="setResult(result)"
-          class="autocomplete-result"
-          :class="{ 'is-active': i === arrowCounter }"
-        >
-          {{ result.label }}
-        </li>
-        <li v-else>no results found</li>
+        <template v-if="results.length > 0">
+          <li
+            v-for="(result, i) in results"
+            :key="i"
+            @click="setResult(result)"
+            class="autocomplete-result"
+            :class="{ 'is-active': i === arrowCounter }"
+          >
+            {{ result.label }}
+          </li>
+        </template>
+        <li v-else-if="searchTerm !== ''">Keine Treffer</li>
       </ul>
     </div>
-    <p v-if="error">{{ error }}</p>
+    <p v-if="error" class="text-red-600 text-sm mt-1">{{ error }}</p>
   </div>
 </template>
 
@@ -59,13 +52,13 @@ export default {
     document.removeEventListener('click', this.handleClickOutside)
   },
   props: {
-    debug: {
-      type: Boolean,
-      default: false
-    },
     label: {
       type: String,
       required: true
+    },
+    name: {
+      type: String,
+      default: ''
     },
     modelValue: {
       type: [String, Number],
@@ -73,7 +66,7 @@ export default {
     },
     options: {
       type: Array,
-      require: true
+      required: true
     }
   },
   data() {
@@ -83,19 +76,13 @@ export default {
       selectedValue: '',
       results: [],
       isOpen: false,
-      isLoading: false,
       arrowCounter: -1
     }
   },
-  emits: ['needNewEntry'],
+  emits: ['needNewEntry', 'update:modelValue'],
   computed: {
-    name() {
-      return this.label.toLowerCase()
-    }
-  },
-  watch: {
-    modelValue(val, oldVal) {
-      console.log('modelValue changed', val, oldVal)
+    inputName() {
+      return this.name || this.label.toLowerCase()
     }
   },
   methods: {
@@ -116,42 +103,24 @@ export default {
     setResult(result) {
       this.searchTerm = result.label
       this.selectedValue = result.value
-
       this.isOpen = false
-
       this.$emit('update:modelValue', result.value)
     },
-    onChange(event) {
+    onChange() {
       if (this.searchTerm === '') {
         this.$emit('update:modelValue', '')
-        return
-      }
-      if (this.results.length > 0) {
-        // this.searchTerm = this.results[0].label
-        // this.selectedValue = this.results[0].value
-        // this.isOpen = false
-        // this.$emit('update:modelValue', this.results[0].value)
       }
     },
     onInput(event) {
       this.searchTerm = event.target.value
-
-      if (!this.searchTerm && this.required) {
-        this.error = 'Value should not be empty'
-      }
-
       this.filterResults()
       this.isOpen = true
     },
-    onFocusOut(event) {
-      console.log('onFocusOut', event)
-
+    onFocusOut() {
       if (this.results.length > 0) {
         this.searchTerm = this.results[0].label
         this.selectedValue = this.results[0].value
-
         this.isOpen = false
-
         this.$emit('update:modelValue', this.results[0].value)
       }
     },
@@ -162,7 +131,7 @@ export default {
       }
     },
     needNewEntry() {
-      this.$emit('need-new-entry', this.searchTerm)
+      this.$emit('needNewEntry', this.searchTerm)
     }
   }
 }
