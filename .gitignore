@@ -1,9 +1,5 @@
 # JetBrains IDEs (PhpStorm, WebStorm, IntelliJ, …)
-.idea/*
-!.idea/sqldialects.xml
-!.idea/jsLibraryMappings.xml
-!.idea/inspectionProfiles/
-!.idea/inspectionProfiles/Project_Default.xml
+.idea/
 *.iml
 *.ipr
 *.iws
