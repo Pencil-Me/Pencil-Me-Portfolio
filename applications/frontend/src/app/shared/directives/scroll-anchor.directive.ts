@@ -1,4 +1,4 @@
-import { Directive, HostListener, Input } from '@angular/core';
+import { Directive, HostListener, Input, inject } from '@angular/core';
 import { ScrollManagerDirective } from './scroll-manager.directive';
 
 // Directive for handling scroll anchor behavior
@@ -7,9 +7,9 @@ import { ScrollManagerDirective } from './scroll-manager.directive';
   standalone: true, // Indicating that the directive is standalone
 })
 export class ScrollAnchorDirective {
-  @Input('appScrollAnchor') id: string | number = ''; // Input property for specifying the anchor ID
+  private manager = inject(ScrollManagerDirective);
 
-  constructor(private manager: ScrollManagerDirective) {} // Constructor with ScrollManagerDirective injection
+  @Input('appScrollAnchor') id: string | number = ''; // Constructor with ScrollManagerDirective injection
 
   // Host listener for the 'click' event
   @HostListener('click')

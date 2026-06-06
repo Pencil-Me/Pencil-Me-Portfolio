@@ -162,6 +162,27 @@ class BaseController
     }
 
     /**
+     * Validates a UUID string (RFC 4122 format).
+     *
+     * @param mixed $input The input to validate.
+     * @return string|null The normalized lowercase UUID or null if invalid.
+     */
+    protected function sanitizeUuid($input): ?string
+    {
+        if (!is_string($input) && !is_numeric($input)) {
+            return null;
+        }
+
+        $uuid = strtolower(trim((string) $input));
+
+        if (preg_match('/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/', $uuid) !== 1) {
+            return null;
+        }
+
+        return $uuid;
+    }
+
+    /**
      * Checks if the request is allowed based on rate limiting.
      *
      * @return bool True if the request is allowed, false otherwise.
@@ -171,8 +192,8 @@ class BaseController
         $clientIp = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
         if (!RateLimiter::isRequestAllowed($clientIp)) {
             $this->sendOutput(['error' => 'Too many requests. Please try again later.'], 429);
-            return false;
         }
+
         return true;
     }
 

@@ -1,5 +1,4 @@
-import { CommonModule } from '@angular/common';
-import { Input, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 export interface TechStack {
   name: string;
@@ -9,9 +8,10 @@ export interface TechStack {
 
 @Component({
   selector: 'app-footer-disclaimer',
-  imports: [CommonModule],
+  imports: [],
   styleUrl: './footer-disclaimer.component.scss',
   templateUrl: './footer-disclaimer.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FooterDisclaimerComponent {
   @Input() techStack: TechStack[] = [];

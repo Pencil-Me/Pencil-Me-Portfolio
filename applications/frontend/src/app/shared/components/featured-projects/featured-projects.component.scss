@@ -1,0 +1,212 @@
+@use '../../../../sass/effects/fx-cyber' as fx;
+
+.pm-featured-projects {
+  &--home {
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+  }
+
+  &--projects {
+    margin-bottom: 2.5rem;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  &__item {
+    min-width: 0;
+  }
+}
+
+.pm-highlight-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.85rem;
+  }
+
+  &__index {
+    font-family: var(--pm-font-mono), monospace;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    color: var(--pm-gold-bright);
+    text-shadow: 0 0 10px var(--pm-glitch-cyan-a22);
+    @include fx.pm-neon-text-flicker;
+  }
+
+  &__tag {
+    font-family: var(--pm-font-mono), monospace;
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--pm-secondary);
+    padding: 0.15rem 0.4rem;
+    border: 1px solid var(--pm-border-subtle);
+    box-shadow: inset 0 0 8px var(--pm-glitch-cyan-a18);
+  }
+
+  &__title {
+    margin: 0 0 0.35rem;
+    font-size: 1.05rem;
+    line-height: 1.35;
+  }
+
+  &__title-btn {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    text-transform: none;
+
+    &:hover {
+      color: var(--pm-primary-hover);
+      cursor: pointer;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--pm-focus-ring);
+      outline-offset: 2px;
+    }
+  }
+
+  &__meta {
+    margin: 0 0 1rem;
+    font-size: 0.88rem;
+    color: var(--pm-text-muted);
+  }
+
+  &__story {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    margin: 0 0 1rem;
+
+    dt {
+      margin: 0 0 0.2rem;
+      font-family: var(--pm-font-mono), monospace;
+      font-size: 0.62rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--pm-gold-a58);
+
+      &::before {
+        content: '>';
+        margin-right: 0.35rem;
+        color: var(--pm-glitch-cyan-a40);
+      }
+    }
+
+    dd {
+      margin: 0;
+      line-height: 1.55;
+      font-size: 0.92rem;
+    }
+  }
+
+  &__tech {
+    margin: 0 0 1rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__cta {
+    margin-top: auto;
+    align-self: flex-start;
+  }
+}
+
+:host-context([data-bs-theme='dark']) {
+  .pm-featured-projects--home .pm-highlight-panel {
+    background: color-mix(in srgb, var(--pm-dark-shade-500) 90%, var(--pm-dark-shade-300));
+    color: var(--pm-on-dark);
+    border-color: color-mix(in srgb, var(--pm-gold-shade-500) 42%, transparent);
+
+    .pm-highlight-panel__meta {
+      color: var(--pm-text-on-dark-a78);
+    }
+
+    .pm-highlight-panel__tag {
+      color: var(--pm-gold-bright);
+      border-color: color-mix(in srgb, var(--pm-gold-shade-500) 38%, transparent);
+    }
+  }
+}
+
+:host-context([data-bs-theme='light']) {
+  .pm-featured-projects__item .pm-highlight-panel {
+    background: var(--pm-bg-elevated);
+    color: var(--pm-text);
+    border-color: var(--pm-border-strong);
+    box-shadow: 4px 0 0 var(--pm-gold-shade-600);
+
+    &::before {
+      border-top-color: var(--pm-gold-shade-500);
+      border-left-color: var(--pm-gold-shade-600);
+    }
+
+    .pm-highlight-panel__index {
+      color: var(--pm-red-shade-600);
+      text-shadow: none;
+      animation: none;
+    }
+
+    .pm-highlight-panel__tag {
+      color: var(--pm-red-shade-700);
+      border-color: color-mix(in srgb, var(--pm-red-shade-500) 32%, transparent);
+      box-shadow: none;
+    }
+
+    .pm-highlight-panel__title {
+      margin: 0 0 0.85rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--pm-border);
+      color: var(--pm-red-shade-700);
+    }
+
+    .pm-highlight-panel__meta {
+      color: var(--pm-text-muted);
+    }
+
+    .pm-highlight-panel__story {
+      dt {
+        color: var(--pm-red-shade-700);
+
+        &::before {
+          color: color-mix(in srgb, var(--pm-red-shade-600) 72%, transparent);
+        }
+      }
+
+      dd {
+        color: var(--pm-text);
+      }
+    }
+
+    .pm-highlight-panel__tech {
+      border-top: 1px solid var(--pm-border-subtle);
+      padding-top: 0.75rem;
+    }
+  }
+}
+
+@media (width >= 992px) {
+  .pm-featured-projects__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

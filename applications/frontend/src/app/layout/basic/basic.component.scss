@@ -11,8 +11,13 @@
   }
 
   .main-content {
+    position: relative;
     flex: 1;
   }
+}
+
+.footer-content--placeholder {
+  min-height: 5rem;
 }
 
 .anchor {
@@ -25,4 +30,11 @@
   right: 2rem;
   bottom: 2rem;
   z-index: 1000;
+}
+
+@media (width <= 768px) {
+  .top-scroll-container {
+    right: 1rem;
+    bottom: 1rem;
+  }
 }

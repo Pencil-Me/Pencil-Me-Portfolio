@@ -2,7 +2,7 @@ RewriteEngine On
 RewriteBase /
 # Redirection to HTTPS:
 RewriteCond %{SERVER_PORT} !=443
-RewriteRule ^(.*)$ https://blog-hub.net/$1 [R=301,L]
+RewriteRule ^(.*)$ https://www.pencil-me.de/$1 [R=301,L]
 
 # Redirection of requests to index.html
 RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -f [OR]

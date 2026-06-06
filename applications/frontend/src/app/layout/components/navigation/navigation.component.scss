@@ -1,12 +1,9 @@
-@use 'sass:color';
+@use '../../../../sass/effects/cyberpunk' as cyber;
+@use '../../../../sass/effects/fx-cyber' as fx;
 
 $content-width: 1000px;
 $breakpoint: 799px;
 $nav-height: 3.5rem;
-$nav-background: #180000;
-$nav-font-color: #fff;
-$link-hover-color: var(--pm-primary-hover);
-$link-active-bg: var(--pm-primary);
 
 .header-buffer {
   height: $nav-height * 1.5;
@@ -16,26 +13,32 @@ $link-active-bg: var(--pm-primary);
 header {
   display: block;
   width: 100%;
-  background: $nav-background;
+  background: var(--pm-nav-bg);
   position: absolute;
   top: 0;
   z-index: 1;
+  border-bottom: 2px solid var(--pm-nav-border);
+  padding-left: 2rem;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.35;
+    @include cyber.pm-scanlines(1px, 3px);
+  }
 
   &.fixed-header {
-    background: color.change($nav-background, $alpha: 0.75);
+    background: var(--pm-nav-bg-glass);
     position: fixed;
     right: 0;
-    left: 0;
+    left: var(--pm-chrome-status-width);
     z-index: 999;
-    backdrop-filter: blur(5px);
+    padding-left: 0;
 
     .header-content nav .nav-link:hover {
-      background: color.change($nav-background, $alpha: 0.75);
-    }
-
-    .header-content .logo {
-      height: $nav-height;
-      font-size: 1rem;
+      background: var(--pm-nav-link-hover-bg-glass);
     }
 
     .header-content nav {
@@ -48,7 +51,7 @@ header {
 
     .header-content nav ul li:not(.active) .nav-link {
       &:hover {
-        background: color.change(color.adjust($nav-background, $lightness: -75%), $alpha: 0.75);
+        background: var(--pm-nav-link-hover-bg-glass);
       }
     }
   }
@@ -56,46 +59,77 @@ header {
   .header-content {
     padding: 0 1rem;
     display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    min-width: 0;
+    width: 100%;
+    position: relative;
+    z-index: 1;
 
-    .logo {
-      float: left;
-      font-size: 2.25rem;
-      text-transform: uppercase;
-      position: relative;
-      height: $nav-height * 1.5;
-      line-height: 1em;
-
-      span {
-        border-top: 1px solid rgba(255, 255, 255, 1);
-        letter-spacing: 0.1em;
-        word-spacing: 0.5em;
-        display: block;
-        font-size: 0.455em;
-        line-height: 0.85em;
-        opacity: 0.5;
-        white-space: nowrap;
-      }
-
-      a,
-      a:visited {
-        position: absolute;
-        top: 50%;
-        -ms-transform: translateY(-50%);
-        transform: translateY(-50%);
-        color: $nav-font-color;
-        text-decoration: none;
-      }
+    app-pm-logo {
+      flex: 0 1 auto;
+      min-width: 0;
+      max-width: 100%;
     }
 
     .navbar-toggler {
-      color: $nav-font-color;
-      border: none;
-      outline: none;
+      color: var(--pm-on-primary);
+      border: 1px solid var(--pm-nav-toggle-border);
+      border-radius: 0;
+      background: var(--pm-nav-toggle-bg);
+
+      &:focus {
+        outline: none;
+      }
+
+      &:focus-visible {
+        outline: 2px solid var(--pm-focus-ring);
+        outline-offset: 2px;
+      }
     }
 
     nav {
       height: $nav-height * 1.5;
       flex-direction: row-reverse;
+      align-items: center;
+      gap: 0.5rem;
+
+      .theme-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.5rem;
+        height: 2.5rem;
+        margin-left: 0.5rem;
+        padding: 0;
+        border: 1px solid var(--pm-nav-toggle-border);
+        background: var(--pm-nav-toggle-bg);
+        color: var(--pm-on-primary);
+        cursor: pointer;
+        border-radius: 0;
+        clip-path: polygon(
+          0 0,
+          calc(100% - 6px) 0,
+          100% 6px,
+          100% 100%,
+          0 100%
+        );
+        transition:
+          background 200ms ease,
+          border-color 200ms ease,
+          color 200ms ease;
+
+        &:hover {
+          background: var(--pm-nav-toggle-hover-bg);
+          border-color: var(--pm-nav-toggle-hover-border);
+          color: var(--pm-gold-bright);
+        }
+
+        &:focus-visible {
+          outline: 2px solid var(--pm-focus-ring);
+          outline-offset: 2px;
+        }
+      }
 
       &.collapse.show {
         height: auto;
@@ -115,36 +149,113 @@ header {
           &::before {
             position: absolute;
             bottom: 0;
+            left: 0.5rem;
             width: 0;
-            height: 5px;
-            background-color: $link-hover-color;
+            height: 3px;
+            background-color: var(--pm-gold-bright);
             content: '';
-            transition: 300ms;
+            transition: width 300ms ease;
           }
 
           &:hover:not(.active)::before {
-            width: 70%;
+            width: calc(100% - 1rem);
           }
 
           .nav-link {
-            display: block;
+            display: flex;
+            align-items: baseline;
+            gap: 0.45rem;
             padding: 0 1rem;
-            color: $nav-font-color;
+            font-family: var(--pm-font-heading), sans-serif;
+            letter-spacing: 0.04em;
+            color: var(--pm-on-primary);
             line-height: $nav-height * 1.5;
             text-decoration: none;
+
+            &__index {
+              font-family: var(--pm-font-mono), monospace;
+              font-size: 0.62rem;
+              font-weight: 500;
+              letter-spacing: 0.08em;
+              color: var(--pm-gold-a58);
+              line-height: 1;
+            }
+
+            &__label {
+              line-height: inherit;
+            }
+
+            &:focus {
+              outline: none;
+            }
+
+            &:focus-visible {
+              outline: 2px solid var(--pm-focus-ring);
+              outline-offset: -2px;
+            }
           }
 
           &.active .nav-link {
-            background: $link-active-bg;
+            position: relative;
+            overflow: hidden;
+            background: var(--pm-primary);
+            color: var(--pm-on-primary);
             cursor: default;
+            clip-path: polygon(
+              0 0,
+              calc(100% - 8px) 0,
+              100% 8px,
+              100% 100%,
+              8px 100%,
+              0 calc(100% - 8px)
+            );
+            box-shadow:
+              inset 0 0 0 1px var(--pm-gold-a38),
+              4px 0 0 var(--pm-gold-soft),
+              0 0 14px var(--pm-red-a28);
+
+            &::after {
+              content: '';
+              position: absolute;
+              inset: 0;
+              pointer-events: none;
+              opacity: 0.14;
+              @include cyber.pm-scanlines(1px, 3px);
+            }
+
+            .nav-link__index {
+              color: var(--pm-gold-bright);
+              @include fx.pm-neon-text-flicker;
+            }
           }
 
           &:not(.active) .nav-link:hover {
-            background-color: color.adjust($nav-background, $lightness: -75%);
-            color: $link-hover-color;
+            background-color: var(--pm-nav-link-hover-bg);
+            color: var(--pm-gold-bright);
+
+            .nav-link__index {
+              color: var(--pm-gold-bright);
+              text-shadow: 0 0 8px var(--pm-glitch-cyan-a22);
+            }
           }
         }
       }
     }
+  }
+}
+
+@media (width <= 768px) {
+  header.fixed-header {
+    left: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  header::after {
+    opacity: 0.15;
+  }
+
+  header nav ul li.active .nav-link::after {
+    opacity: 0.08;
   }
 }

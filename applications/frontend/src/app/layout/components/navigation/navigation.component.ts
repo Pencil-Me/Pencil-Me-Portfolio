@@ -1,20 +1,34 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, HostListener, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { filter } from 'rxjs';
 import { NavigationStart, Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { NgClass, NgForOf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { faBars } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
 import { NgbCollapse } from '@ng-bootstrap/ng-bootstrap';
+
+import { ThemeService } from '@app/core/services/theme/theme.service';
+import { PmLogoComponent } from '@layout/components/navigation/components/pm-logo/pm-logo.component';
+import { RoutePrefetchService } from '@core/routing/route-prefetch.service';
 
 @Component({
   selector: 'app-navigation',
-  imports: [RouterLink, NgForOf, NgClass, FaIconComponent, NgbCollapse, RouterLinkActive],
+  imports: [RouterLink, NgClass, FaIconComponent, NgbCollapse, RouterLinkActive, PmLogoComponent],
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NavigationComponent implements OnInit {
+export class NavigationComponent {
+  private router = inject(Router);
+  private destroyRef = inject(DestroyRef);
+  private routePrefetch = inject(RoutePrefetchService);
+  readonly themeService = inject(ThemeService);
+
   faBars = faBars;
-  sticky = false;
-  isCollapsed = true;
+  faSun = faSun;
+  faMoon = faMoon;
+  readonly sticky = signal(false);
+  readonly isCollapsed = signal(true);
   navItems = [
     { label: 'Start', target: 'home' },
     { label: 'Über mich', target: 'about' },
@@ -22,40 +36,38 @@ export class NavigationComponent implements OnInit {
     { label: 'Kontakt', target: 'contact' },
   ];
 
-  constructor(private router: Router) {}
-
-  ngOnInit() {
-    this.subscribeToRouterEvents();
+  constructor() {
+    this.themeService.init();
+    this.router.events
+      .pipe(
+        filter((event): event is NavigationStart => event instanceof NavigationStart),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe(() => this.collapseNavigation());
   }
 
-  /**
-   * Subscribes to router events to handle navigation start.
-   */
-  private subscribeToRouterEvents() {
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationStart) {
-        this.collapseNavigation();
-      }
-    });
+  toggleTheme(): void {
+    this.themeService.toggle();
   }
 
-  /**
-   * Collapses the navigation menu.
-   */
-  private collapseNavigation() {
-    this.isCollapsed = true;
+  toggleCollapsed(): void {
+    this.isCollapsed.update((value) => !value);
+  }
+
+  formatNavIndex(index: number): string {
+    return String(index + 1).padStart(2, '0');
+  }
+
+  prefetchRoute(target: string): void {
+    this.routePrefetch.prefetch(target);
+  }
+
+  private collapseNavigation(): void {
+    this.isCollapsed.set(true);
   }
 
   @HostListener('window:scroll', [])
-  onWindowScroll() {
-    this.checkScrollPosition();
-  }
-
-  /**
-   * Checks the scroll position to toggle the sticky state.
-   */
-  private checkScrollPosition() {
-    const windowScrollPosition = window.scrollY;
-    this.sticky = windowScrollPosition > 200;
+  onWindowScroll(): void {
+    this.sticky.set(window.scrollY > 200);
   }
 }

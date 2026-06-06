@@ -1,7 +1,9 @@
 <nav class="footer-nav">
   <ul>
-    <li *ngFor="let link of navLinks">
-      <a [routerLink]="link.route">{{ link.label }}</a>
-    </li>
+    @for (link of navLinks; track link) {
+      <li>
+        <a [routerLink]="link.route">{{ link.label }}</a>
+      </li>
+    }
   </ul>
 </nav>

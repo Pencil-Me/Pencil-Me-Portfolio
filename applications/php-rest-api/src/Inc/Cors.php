@@ -1,5 +1,7 @@
 <?php
 
+namespace Inc;
+
 /**
  * Cors class responsible for handling Cross-Origin Resource Sharing (CORS) headers.
  */
@@ -12,13 +14,13 @@ class Cors
      */
     public static function setCorsHeaders(array $allowedOrigins): void
     {
-        // Allow from any origin if Origin header is present and allowed
-        if (isset($_SERVER["HTTP_ORIGIN"]) && in_array($_SERVER['HTTP_ORIGIN'], $allowedOrigins)) {
-            self::handleCorsRequest($_SERVER['HTTP_ORIGIN']);
-        } else {
-            // If the origin is not allowed, do not set CORS headers
-            header("HTTP/1.1 403 Forbidden");
-            exit();
+        if (isset($_SERVER['HTTP_ORIGIN'])) {
+            if (in_array($_SERVER['HTTP_ORIGIN'], $allowedOrigins, true)) {
+                self::handleCorsRequest($_SERVER['HTTP_ORIGIN']);
+            } else {
+                header('HTTP/1.1 403 Forbidden');
+                exit();
+            }
         }
 
         // Handle preflight requests (OPTIONS method)

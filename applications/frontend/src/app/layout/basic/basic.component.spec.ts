@@ -1,4 +1,5 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { BasicComponent } from './basic.component';
 import { ActivatedRoute } from '@angular/router';
@@ -40,17 +41,17 @@ describe('BasicComponent', () => {
   describe('Scroll behavior', () => {
     it('should show scroll-to-top button when scrolled down more than 200px', () => {
       setupScrollTest(201, 2000, 800);
-      expect(component.showScrollToTop).toBeTrue();
+      expect(component.showScrollToTop()).toBeTrue();
     });
 
     it('should not show scroll-to-top button when scrolled less than 200px', () => {
       setupScrollTest(199, 2000, 800);
-      expect(component.showScrollToTop).toBeFalse();
+      expect(component.showScrollToTop()).toBeFalse();
     });
 
     it('should not show scroll-to-top button when content is shorter than viewport', () => {
       setupScrollTest(201, 1000, 800);
-      expect(component.showScrollToTop).toBeFalse();
+      expect(component.showScrollToTop()).toBeFalse();
     });
 
     it('should scroll to top on deactivate', fakeAsync(() => {

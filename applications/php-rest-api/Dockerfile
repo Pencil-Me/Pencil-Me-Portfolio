@@ -34,12 +34,15 @@ COPY composer.json composer.lock ./
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
+# Log-Verzeichnis (Monolog) — Volume auf src/ ueberschreibt sonst ohne logs/
+RUN mkdir -p /var/www/html/src/logs \
+    && chown -R www-data:www-data /var/www/html/src/logs
+
+# Fallback-Env fuer Builds ohne gemountete .env.dev (Compose mountet src/Inc/.env.dev)
+COPY src/Inc/.env.example /var/www/html/src/Inc/.env.example
+
 # Expose port 80
 EXPOSE 80
-
-# Enable hot reload by mounting a volume for the src directory
-# This will allow changes made to the source code on the host machine to be reflected immediately in the container
-VOLUME /var/www/html/src
 
 # Set the entrypoint to Apache
 CMD ["apache2-foreground"]

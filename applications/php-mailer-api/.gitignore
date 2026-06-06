@@ -1,4 +1,8 @@
-/src/Inc/.env.dev
-/src/Inc/.env.prod
-/src/composer.lock
+# Dependencies
 /src/vendor/
+/src/composer.lock
+
+# Environment (template: src/Inc/.env.example)
+/src/Inc/.env
+/src/Inc/.env.*
+!src/Inc/.env.example

@@ -1,0 +1,20 @@
+{
+  "description": "Kanoniche Domain-Werte fuer Portfolio-API, Frontend und Admin-UI.",
+  "projectTypes": ["CUST", "PRIV", "FEST"],
+  "techStackTypes": [
+    "FEDEV",
+    "BEDEV",
+    "FEFRAME",
+    "BEFRAME",
+    "FEBT",
+    "DEVOPS",
+    "DB",
+    "CMS",
+    "TEST",
+    "PROJECTTOOL",
+    "MISC",
+    "DESIGN",
+    "LANG"
+  ],
+  "loadStatuses": ["PENDING", "LOADING", "COMPLETED", "ERROR"]
+}

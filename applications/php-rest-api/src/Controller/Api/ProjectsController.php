@@ -15,7 +15,7 @@ class ProjectsController extends BaseController
     /**
      * Retrieves project data by ID.
      *
-     * @param int $id The ID of the project.
+     * @param string $id The UUID of the project.
      */
     public function getProjectFe($id): void {
         $this->setSecurityHeaders(); // Set security headers
@@ -25,9 +25,9 @@ class ProjectsController extends BaseController
         }
 
         try {
-            // Validate and sanitize ID
-            $id = $this->sanitizeInt($id);
-            if ($id === null) {
+            // Validate project UUID (Router already checks format; normalize here)
+            $projectUuid = $this->sanitizeUuid($id);
+            if ($projectUuid === null) {
                 $this->sendOutput(['error' => 'Invalid project ID'], 400);
             }
 
@@ -40,7 +40,7 @@ class ProjectsController extends BaseController
             $projectsModel = new ProjectsModel();
 
             // Retrieve projects data
-            $projectData = $projectsModel->getProject($id);
+            $projectData = $projectsModel->getProject($projectUuid);
 
             if (!$projectData) {
                 $this->sendNotFoundResponse('Project not found');

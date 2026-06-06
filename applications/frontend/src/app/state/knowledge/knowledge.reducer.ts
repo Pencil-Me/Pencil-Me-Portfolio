@@ -1,7 +1,7 @@
 import { createReducer } from '@ngrx/store';
 import { immerOn } from 'ngrx-immer/store';
 import * as actions from './knowledge.actions';
-import {
+import type {
   CUSTOMER,
   KNOWLEDGESTATE,
   PROJECT,
@@ -21,7 +21,7 @@ export const TechStackTitle = {
   DB: 'Databases',
   CMS: 'CMS',
   TEST: 'Testing Frameworks',
-  PROJECTTOO: 'Project Tools',
+  PROJECTTOOL: 'Project Tools',
   MISC: 'Misc',
   DESIGN: 'Design',
   LANG: 'Spoken Languages',
@@ -79,7 +79,7 @@ export const knowledgeReducers = createReducer(
     state.projects.data = action.data;
   }),
   immerOn(actions.GetProjectsFailure, (state, action) => {
-    state.projects.loadStatus = 'COMPLETED';
+    state.projects.loadStatus = 'ERROR';
     state.projects.error = action.error;
   }),
 
@@ -98,7 +98,7 @@ export const knowledgeReducers = createReducer(
     state.selectedProject.data = action.data;
   }),
   immerOn(actions.GetProjectFailure, (state, action) => {
-    state.selectedProject.loadStatus = 'COMPLETED';
+    state.selectedProject.loadStatus = 'ERROR';
     state.selectedProject.error = action.error;
   }),
 
@@ -112,7 +112,7 @@ export const knowledgeReducers = createReducer(
     state.techStack.data = convertTechstackDataToType(action.data);
   }),
   immerOn(actions.GetTechstackFailure, (state, action) => {
-    state.techStack.loadStatus = 'COMPLETED';
+    state.techStack.loadStatus = 'ERROR';
     state.techStack.error = action.error;
   }),
 
@@ -126,7 +126,7 @@ export const knowledgeReducers = createReducer(
     state.customers.data = convertCustomersDataToType(action.data);
   }),
   immerOn(actions.GetCustomersFailure, (state, action) => {
-    state.customers.loadStatus = 'COMPLETED';
+    state.customers.loadStatus = 'ERROR';
     state.customers.error = action.error;
   }),
 );

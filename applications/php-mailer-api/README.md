@@ -1,38 +1,78 @@
-# Pencil&Me Portfolio - Email PHP API
+# PHP Mailer API
 
-The Email PHP API is a RESTful API that allows sending emails via an HTTP endpoint. This API is easy to integrate and provides a quick way to send emails via SMTP.
+Schlanker Microservice zum Versenden von E-Mails über SMTP (PHPMailer). Wird vom PHP REST API Gateway und optional direkt vom Frontend angesprochen.
 
-## Built With
+## Tech-Stack
 
-* PHP 8.1
-* PHPMailer
-* Docker
+- **PHP 8.1** + Apache
+- **PHPMailer**
+- phpdotenv
 
-## Installation
+## Endpunkte
 
-1. Configure your settings in Inc/.env.dev and Inc/.env.prod, using Inc/.env.example as a template.
-2. Ensure you have an SMTP server set up for email delivery.
+| Methode | Pfad | Auth | Beschreibung |
+|---------|------|------|--------------|
+| POST | `/send_email` | `fe_key` | E-Mail senden |
+| GET | `/healthcheck` | — | Verfügbarkeit prüfen |
 
-## Usage
-### Authentication
-The API requires authentication via an API key, which is sent in the request header.
+Im Compose-Stack: Basis-Pfad **`/mailer`** (Nginx rewrite → `index.php`).
 
-### Error Handling
-The API returns appropriate HTTP status codes and error messages in case of errors, enabling easy error handling.
+### POST `/send_email`
 
-### Sending an Email
-#### Endpoint:
+Header: `API-Key: <API_KEY_FE>`
 
-POST /send_email
+Body (JSON oder Form):
 
-#### Parameter:
+| Feld | Beschreibung |
+|------|--------------|
+| `sender` | Absender-Adresse |
+| `recipient` | Empfänger-Adresse |
+| `subject` | Betreff |
+| `message` | Nachrichtentext |
 
-```bash
-sender (Sender's email address)
-recipient (Recipient's email address)
-subject (Email subject)
-message (Message content)
+## Konfiguration
+
+Vorlage: `src/Inc/.env.example`
+
+Kopieren nach **`src/Inc/.env.dev`** bzw. **`src/Inc/.env.prod`**:
+
+```env
+ALLOWED_ORIGINS=http://localhost:4200,http://localhost:8080
+API_KEY_FE=secretApiFEkey
+API_KEY_BE=secretApiBEkey
+
+MAIL_HOST=smtp.example.com
+MAIL_PORT=587
+MAIL_USERNAME=mail_user
+MAIL_PASSWORD=mail_password
+
+BASE_URL=/
 ```
 
-## Authors
-- **Johannes Kromer** - [https://github.com/Pencil-Me](https://github.com/Pencil-Me)
+SMTP-Zugangsdaten müssen zu einem erreichbaren Mailserver passen.
+
+## Lokale Entwicklung
+
+```bash
+cd src
+composer install
+# oder Docker:
+docker build -t pm-mailer .
+docker run -p 3002:80 -v ./src:/var/www/html pm-mailer
+```
+
+Direkt erreichbar unter [http://localhost:3002](http://localhost:3002), im Stack unter [http://localhost:8080/mailer](http://localhost:8080/mailer).
+
+## Projektstruktur
+
+```
+src/
+├── index.php             # Front-Controller
+├── Controller/Api/       # MailController, HealthController
+├── Inc/                  # Bootstrap, Router, Config
+└── vendor/
+```
+
+## Autor
+
+**Johannes Kromer** — [github.com/Pencil-Me](https://github.com/Pencil-Me)

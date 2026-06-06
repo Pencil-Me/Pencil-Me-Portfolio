@@ -1,6 +1,12 @@
-import { Component, DebugElement } from '@angular/core';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import type { DebugElement } from '@angular/core';
+import { Component } from '@angular/core';
+import type { ComponentFixture } from '@angular/core/testing';
+import { TestBed, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import {
+  installIntersectionObserverSpy,
+  type IntersectionObserverSpyState,
+} from '../../../testing/dom-test.helpers';
 import { TrackVisibilityDirective } from './track-visibility.directive';
 
 @Component({
@@ -20,8 +26,12 @@ describe('TrackVisibilityDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
   let debugElement: DebugElement;
   let directiveInstance: TrackVisibilityDirective;
+  let observerState: IntersectionObserverSpyState;
 
   beforeEach(waitForAsync(() => {
+    observerState = {} as IntersectionObserverSpyState;
+    installIntersectionObserverSpy(observerState);
+
     TestBed.configureTestingModule({
       imports: [TrackVisibilityDirective],
       declarations: [TestComponent],
@@ -32,9 +42,7 @@ describe('TrackVisibilityDirective', () => {
     fixture = TestBed.createComponent(TestComponent);
     component = fixture.componentInstance;
     debugElement = fixture.debugElement.query(By.directive(TrackVisibilityDirective));
-
     directiveInstance = debugElement.injector.get(TrackVisibilityDirective);
-
     fixture.detectChanges();
   });
 
@@ -42,22 +50,19 @@ describe('TrackVisibilityDirective', () => {
     expect(directiveInstance).toBeTruthy();
   });
 
-  it('should emit visibility changes', () => {
+  it('should emit visibility when intersection occurs', () => {
     spyOn(component, 'onVisibilityChange');
-    fixture.detectChanges(); // Initial binding trigger
 
-    // Simulate the intersection change by manually invoking the observer's callback
-    directiveInstance['intersectionCallback']({
-      isIntersecting: true,
-    } as IntersectionObserverEntry);
+    observerState.callback(
+      [{ isIntersecting: true } as IntersectionObserverEntry],
+      {} as IntersectionObserver,
+    );
 
-    // Test if the visibility change was emitted correctly
     expect(component.onVisibilityChange).toHaveBeenCalledWith(true);
   });
 
   it('should disconnect observer on destroy', () => {
-    spyOn(directiveInstance['observer'], 'disconnect');
     directiveInstance.ngOnDestroy();
-    expect(directiveInstance['observer'].disconnect).toHaveBeenCalled();
+    expect(directiveInstance['observer']?.disconnect).toHaveBeenCalled();
   });
 });

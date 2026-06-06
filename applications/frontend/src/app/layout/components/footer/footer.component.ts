@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { formatYear } from '@app/shared/utils/date-format';
 import { TopScrollerComponent } from '@shared/components/top-scroller/top-scroller.component';
 import { RouterLink } from '@angular/router';
-import { TechStack } from '@layout/components/footer/components/footer-disclaimer/footer-disclaimer.component';
-import { SocialLink } from '@layout/components/footer/components/social-link/social-link.component';
-import { NavLink } from '@layout/components/footer/components/footer-navigation/footer-navigation.component';
+import type { TechStack } from '@layout/components/footer/components/footer-disclaimer/footer-disclaimer.component';
+import type { SocialLink } from '@layout/components/footer/components/social-link/social-link.component';
+import type { NavLink } from '@layout/components/footer/components/footer-navigation/footer-navigation.component';
 import { SocialLinkComponent } from '@layout/components/footer/components/social-link/social-link.component';
 import { FooterNavigationComponent } from '@layout/components/footer/components/footer-navigation/footer-navigation.component';
 import { FooterDisclaimerComponent } from '@layout/components/footer/components/footer-disclaimer/footer-disclaimer.component';
@@ -19,6 +20,7 @@ import { FooterDisclaimerComponent } from '@layout/components/footer/components/
   ],
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FooterComponent {
   techStackForPortfolio: TechStack[] = [
@@ -59,10 +61,7 @@ export class FooterComponent {
     },
   ];
 
-  /**
-   * Returns the current year as a string.
-   */
   getCurrentYear(): string {
-    return new Date().getFullYear().toString();
+    return formatYear(new Date());
   }
 }

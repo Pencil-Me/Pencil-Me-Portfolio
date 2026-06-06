@@ -1,7 +1,19 @@
-import moment from 'moment'
+const parseDate = (value) => {
+  const date = new Date(String(value));
+  return Number.isNaN(date.getTime()) ? null : date;
+};
 
 const formatDate = (value) => {
-  return moment(String(value)).format('DD MMM YYYY')
-}
+  const date = parseDate(value);
+  if (!date) {
+    return String(value);
+  }
 
-export default formatDate
+  return date.toLocaleDateString('de-DE', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  });
+};
+
+export default formatDate;

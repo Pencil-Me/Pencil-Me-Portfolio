@@ -1,4 +1,5 @@
 @use './sass/helpers/variables' as *;
+@use './sass/basics/theme';
 
 // TOOLS
 @use './sass/tools/reset';
@@ -6,28 +7,66 @@
 
 // BASICS
 @use './sass/basics/base';
-@use './sass/basics/typography';
+
+@use './sass/effects/cyberpunk';
+@use './sass/effects/scroll-fx';
+@use './sass/layout/chrome';
+@use './sass/layout/sections';
 
 // Bootstrap main import
 @use 'bootstrap/scss/bootstrap' with (
   $primary: $primary,
   $secondary: $secondary,
-  $theme-colors: $theme-colors
+  $theme-colors: $theme-colors,
+  $font-family-sans-serif: $font-family-body,
+  $headings-font-family: $font-family-heading,
+  $headings-font-weight: $font-weight-bold,
+  $container-max-widths: (
+    sm: 540px,
+    md: 720px,
+    lg: 960px,
+    xl: 1140px,
+    xxl: $layout-max-width,
+  )
 );
 
-:root {
-  --pm-primary: #{$primary};
-  --pm-primary-hover: #{$primary-hover};
-  --pm-secondary: #{$secondary};
-  --pm-secondary-hover: #{$secondary-hover};
+// PM Button-Stufen nach Bootstrap, damit unsere Styles greifen
+@use './sass/components/buttons';
+@use './sass/components/forms';
+@use './sass/components/loading';
+@use './sass/components/tech-chips';
+
+@view-transition {
+  navigation: auto;
 }
 
-// Then add additional custom code here
+body {
+  font-family: var(--pm-font-body), sans-serif;
+  background-color: var(--pm-bg);
+  color: var(--pm-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizelegibility;
+  transition:
+    background-color 200ms ease,
+    color 200ms ease;
+}
+
+h1:not(.hero-title),
+h2,
+h3,
+h4,
+h5,
+h6 {
+  letter-spacing: -0.03em;
+  font-weight: 400;
+}
+
 a {
-  color: $primary;
+  color: var(--pm-primary);
   text-decoration: none;
 
   &:hover {
-    color: $primary-hover;
+    color: var(--pm-primary-hover);
   }
 }

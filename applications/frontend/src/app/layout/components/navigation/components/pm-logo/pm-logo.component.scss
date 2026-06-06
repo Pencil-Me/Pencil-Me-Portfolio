@@ -1,0 +1,45 @@
+$nav-height: 3.5rem;
+
+:host {
+  display: block;
+}
+
+.pm-logo {
+  display: flex;
+  align-items: center;
+  font-family: var(--pm-font-logo), sans-serif;
+  font-size: clamp(1rem, 2.5vw, 2.25rem);
+  text-transform: uppercase;
+  position: relative;
+  height: $nav-height * 1.5;
+  line-height: 1em;
+  min-width: 0;
+
+  &--compact {
+    height: $nav-height;
+    font-size: 1rem;
+  }
+
+  span {
+    border-top: 1px solid var(--pm-nav-logo-rule);
+    letter-spacing: 0.1em;
+    word-spacing: 0.5em;
+    display: block;
+    font-size: 0.455em;
+    line-height: 0.85em;
+    opacity: 0.5;
+    white-space: nowrap;
+    font-family: inherit;
+  }
+
+  a,
+  a:visited {
+    position: relative;
+    top: auto;
+    transform: none;
+    color: var(--pm-on-primary);
+    text-decoration: none;
+    font-family: inherit;
+    min-width: 0;
+  }
+}

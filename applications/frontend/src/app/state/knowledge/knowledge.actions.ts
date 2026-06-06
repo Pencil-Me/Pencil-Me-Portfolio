@@ -1,7 +1,7 @@
 import { createAction, props } from '@ngrx/store';
-import { CUSTOMER, PROJECT, TECHSTACK } from '@app/state/knowledge/knowledge.models';
+import type { CUSTOMER, PROJECT, TECHSTACK } from '@app/state/knowledge/knowledge.models';
 
-export enum KnowledgeActionTypes {
+enum KnowledgeActionTypes {
   // Actions for fetching techstack data
   API_GET_TECHSTACK = '[Core] GET Techstack Data',
   API_GET_TECHSTACK_SUCCESS = '[Core] GET Techstack Data Success',
@@ -11,9 +11,6 @@ export enum KnowledgeActionTypes {
   API_GET_PROJECTS = '[Core] GET Projects Data',
   API_GET_PROJECTS_SUCCESS = '[Core] GET Projects Data Success',
   API_GET_PROJECTS_FAILURE = '[Core] GET Projects Data Failure',
-
-  // Action for triggering project service data retrieval
-  API_GET_PROJECT_SERVICE_DATA = '[Core] GET ProjectService Data',
 
   // Actions for fetching project data
   API_GET_PROJECT = '[Core] GET Project Data',
@@ -41,9 +38,6 @@ export const GetTechstackFailure = createAction(
 );
 
 // Projects actions
-export const GetProjectServiceData = createAction(
-  KnowledgeActionTypes.API_GET_PROJECT_SERVICE_DATA,
-);
 export const GetProjects = createAction(KnowledgeActionTypes.API_GET_PROJECTS);
 export const GetProjectsSuccess = createAction(
   KnowledgeActionTypes.API_GET_PROJECTS_SUCCESS,

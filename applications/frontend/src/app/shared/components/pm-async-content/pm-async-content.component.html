@@ -1,0 +1,79 @@
+<div class="pm-async-content" [style.min-height]="minHeight || null">
+  @if (isLoading) {
+    <div class="pm-async-content__placeholder" role="status" [attr.aria-label]="label">
+      @switch (variant) {
+        @case ('skill-grid') {
+          <div class="pm-async-content__skill-grid">
+            @for (item of [1, 2, 3, 4]; track item) {
+              <div class="pm-skeleton pm-skeleton--panel">
+                <div class="pm-skeleton pm-skeleton--line is-title"></div>
+                <div class="pm-skeleton pm-skeleton--line"></div>
+                <div class="pm-skeleton pm-skeleton--line is-short"></div>
+              </div>
+            }
+          </div>
+        }
+        @case ('chips') {
+          <div class="pm-async-content__chips">
+            @for (item of [1, 2, 3, 4, 5, 6, 7, 8]; track item) {
+              <span class="pm-skeleton pm-skeleton--chip"></span>
+            }
+          </div>
+        }
+        @case ('featured') {
+          <div class="pm-async-content__featured">
+            @for (item of [1, 2, 3]; track item) {
+              <div class="pm-skeleton pm-skeleton--panel">
+                <div class="pm-skeleton pm-skeleton--line is-title"></div>
+                <div class="pm-skeleton pm-skeleton--line"></div>
+                <div class="pm-skeleton pm-skeleton--line"></div>
+                <div class="pm-skeleton pm-skeleton--line is-short"></div>
+              </div>
+            }
+          </div>
+        }
+        @case ('project-grid') {
+          <div class="pm-async-content__project-grid">
+            @for (item of [1, 2, 3, 4, 5, 6]; track item) {
+              <div class="pm-skeleton pm-skeleton--panel"></div>
+            }
+          </div>
+        }
+        @case ('ticker') {
+          <div class="pm-async-content__ticker">
+            @for (item of [1, 2, 3, 4, 5, 6]; track item) {
+              <span class="pm-skeleton pm-skeleton--logo"></span>
+            }
+          </div>
+        }
+        @case ('detail') {
+          <div class="pm-skeleton pm-skeleton--panel pm-async-content__detail">
+            <div class="pm-skeleton pm-skeleton--line is-title"></div>
+            <div class="pm-skeleton pm-skeleton--line"></div>
+            <div class="pm-skeleton pm-skeleton--line"></div>
+            <div class="pm-skeleton pm-skeleton--line"></div>
+            <div class="pm-skeleton pm-skeleton--line is-short"></div>
+          </div>
+        }
+        @default {
+          <div class="pm-loader pm-async-content__spinner">
+            <span class="pm-loader__ring" aria-hidden="true"></span>
+            <span class="pm-loader__label">{{ label }}</span>
+          </div>
+        }
+      }
+    </div>
+  } @else if (hasError) {
+    <div class="pm-load-error" role="alert">
+      <p class="pm-load-error__title">Fehler beim Laden</p>
+      <p class="pm-load-error__message">{{ errorMessage }}</p>
+      @if (showRetry) {
+        <button type="button" class="pm-load-error__retry" (click)="retry.emit()">
+          Erneut versuchen
+        </button>
+      }
+    </div>
+  } @else {
+    <ng-content />
+  }
+</div>

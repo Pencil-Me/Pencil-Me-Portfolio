@@ -1,0 +1,421 @@
+// UI: Bordeaux-Rot + Dark + Gold | Glitch: Cyan/Hot-Red (separat)
+@use '../helpers/variables' as *;
+@use '../helpers/palette' as palette;
+
+$pm-alpha-steps: 4, 6, 8, 10, 12, 14, 18, 22, 28, 32, 35, 38, 40, 42, 45, 48, 50, 55, 58, 68, 72, 80, 85, 88, 90, 95;
+$pm-glitch-alpha-steps: 18, 22, 32, 35, 40, 42, 45, 50, 58, 80;
+
+:root {
+  --pm-white: #{$white};
+  --pm-black: #{$black};
+
+  // ── Shade-Skala (50 hell → 500 base → 900 tief) ────────────────
+  @each $step in palette.$shade-steps {
+    --pm-red-shade-#{$step}: #{palette.red-shade($step)};
+    --pm-dark-shade-#{$step}: #{palette.dark-shade($step)};
+    --pm-gold-shade-#{$step}: #{palette.gold-shade($step)};
+  }
+
+  --pm-red: var(--pm-red-shade-500);
+  --pm-dark: var(--pm-dark-shade-500);
+  --pm-gold: var(--pm-gold-shade-500);
+
+  --pm-red-soft: var(--pm-red-shade-200);
+  --pm-red-hover: var(--pm-red-shade-400);
+  --pm-red-deep: var(--pm-red-shade-700);
+
+  --pm-dark-surface: var(--pm-dark-shade-50);
+  --pm-dark-panel: var(--pm-dark-shade-100);
+  --pm-dark-light: var(--pm-dark-shade-200);
+  --pm-dark-mid: var(--pm-dark-shade-300);
+
+  --pm-gold-bright: var(--pm-gold-shade-200);
+  --pm-gold-soft: var(--pm-gold-shade-700);
+
+  --pm-on-primary: var(--pm-white);
+  --pm-on-dark: #{$color-text-on-dark};
+
+  // ── Glitch (nur Effekte — nicht UI-Palette) ────────────────────
+  --pm-glitch-red-hot: #{$glitch-red-hot};
+  --pm-glitch-gold: #{$glitch-gold};
+  --pm-glitch-gold-bright: #{$glitch-gold-bright};
+  --pm-glitch-cyan: #{$glitch-cyan};
+  --pm-glitch-cyan-bright: #{$glitch-cyan-bright};
+
+  --pm-glitch-red-hot-a35: color-mix(in srgb, var(--pm-glitch-red-hot) 35%, transparent);
+  --pm-glitch-red-hot-a38: color-mix(in srgb, var(--pm-glitch-red-hot) 38%, transparent);
+  --pm-glitch-red-hot-a40: color-mix(in srgb, var(--pm-glitch-red-hot) 40%, transparent);
+
+  @each $step in $pm-glitch-alpha-steps {
+    $mix-percent: $step * 1%;
+    --pm-glitch-cyan-a#{$step}: color-mix(in srgb, var(--pm-glitch-cyan-bright) $mix-percent, transparent);
+  }
+
+  // ── Alpha-Shades (UI-Hauptfarben) ──────────────────────────────
+  @each $step in $pm-alpha-steps {
+    $mix-percent: $step * 1%;
+    --pm-red-a#{$step}: color-mix(in srgb, var(--pm-red-shade-500) $mix-percent, transparent);
+    --pm-dark-a#{$step}: color-mix(in srgb, var(--pm-dark-shade-500) $mix-percent, transparent);
+    --pm-gold-a#{$step}: color-mix(in srgb, var(--pm-gold-shade-500) $mix-percent, transparent);
+  }
+
+  --pm-red-hover-a85: color-mix(in srgb, var(--pm-red-shade-400) 85%, transparent);
+  --pm-red-hover-a88: color-mix(in srgb, var(--pm-red-shade-400) 88%, transparent);
+  --pm-red-hover-a90: color-mix(in srgb, var(--pm-red-shade-400) 90%, transparent);
+
+  --pm-dark-light-a55: color-mix(in srgb, var(--pm-dark-shade-200) 55%, transparent);
+  --pm-dark-a72: color-mix(in srgb, var(--pm-dark-shade-300) 72%, transparent);
+
+  --pm-black-a8: color-mix(in srgb, var(--pm-black) 8%, transparent);
+  --pm-black-a12: color-mix(in srgb, var(--pm-black) 12%, transparent);
+  --pm-black-a15: color-mix(in srgb, var(--pm-black) 15%, transparent);
+  --pm-black-a20: color-mix(in srgb, var(--pm-black) 20%, transparent);
+  --pm-black-a25: color-mix(in srgb, var(--pm-black) 25%, transparent);
+  --pm-black-a30: color-mix(in srgb, var(--pm-black) 30%, transparent);
+  --pm-black-a35: color-mix(in srgb, var(--pm-black) 35%, transparent);
+  --pm-black-a40: color-mix(in srgb, var(--pm-black) 40%, transparent);
+
+  --pm-white-a25: color-mix(in srgb, var(--pm-white) 25%, transparent);
+
+  --pm-text-on-dark-a78: color-mix(in srgb, var(--pm-on-dark) 78%, transparent);
+  --pm-text-on-dark-a85: color-mix(in srgb, var(--pm-on-dark) 85%, transparent);
+
+  // ── Semantik ───────────────────────────────────────────────────
+  --pm-primary: var(--pm-red-shade-500);
+  --pm-primary-hover: var(--pm-red-hover);
+  --pm-secondary: color-mix(in srgb, var(--pm-red-shade-700) 55%, var(--pm-dark-shade-500));
+  --pm-secondary-hover: var(--pm-red-shade-500);
+
+  --pm-accent: var(--pm-gold-shade-500);
+  --pm-accent-soft: var(--pm-gold-shade-700);
+  --pm-accent-bright: var(--pm-gold-shade-200);
+
+  --pm-font-body: #{$font-family-body};
+  --pm-font-heading: #{$font-family-heading};
+  --pm-font-logo: #{$font-family-logo};
+  --pm-font-mono: #{$font-family-mono};
+  --pm-font-weight-regular: #{$font-weight-regular};
+  --pm-font-weight-bold: #{$font-weight-bold};
+
+  // ── Buttons ────────────────────────────────────────────────────
+  --pm-btn-gradient-filled: linear-gradient(
+    to bottom,
+    var(--pm-red-shade-400) 0%,
+    var(--pm-red-shade-500) 45%,
+    var(--pm-red-shade-700) 100%
+  );
+  --pm-btn-bg-deep: color-mix(in srgb, var(--pm-red-shade-700) 45%, var(--pm-dark-shade-500));
+  --pm-btn-inset-highlight: var(--pm-white-a25);
+  --pm-btn-inset-shadow: var(--pm-black-a35);
+  --pm-btn-outer-shadow: var(--pm-dark-a22);
+  --pm-btn-shadow-soft: var(--pm-black-a12);
+  --pm-btn-shadow-deep: var(--pm-black-a15);
+  --pm-btn-inset-glow: color-mix(in srgb, var(--pm-gold-shade-200) 30%, transparent);
+  --pm-btn-inset-tint: color-mix(in srgb, var(--pm-white) 20%, transparent);
+  --pm-btn-ghost-accent: var(--pm-accent-soft);
+  --pm-btn-ghost-shadow: color-mix(in srgb, var(--pm-btn-ghost-accent) 70%, transparent);
+
+  // ── Heading Glitch (Cyan/Hot-Red — nicht UI-Gold) ──────────────
+  --pm-heading-glitch-accent: var(--pm-glitch-cyan-a32);
+  --pm-heading-glitch-accent-strong: var(--pm-glitch-cyan-a50);
+  --pm-heading-glitch-neon: var(--pm-red-a38);
+  --pm-heading-glitch-neon-strong: var(--pm-red-a48);
+  --pm-heading-glitch-hot: var(--pm-glitch-red-hot-a35);
+  --pm-heading-glitch-hot-strong: var(--pm-glitch-red-hot-a40);
+  --pm-heading-prefix-glow: var(--pm-glitch-cyan-a40);
+  --pm-heading-prefix-color: var(--pm-gold-a58);
+  --pm-heading-hud-corner-accent: var(--pm-glitch-gold);
+  --pm-heading-hud-corner-base: var(--pm-gold-soft);
+  --pm-heading-hud-shadow: var(--pm-red-a28);
+
+  // ── Hero (UI: Bordeaux + Gold) ───────────────────────────────
+  --pm-hero-bg-radial: radial-gradient(
+    farthest-corner at top,
+    var(--pm-hero-radial-start) 0%,
+    var(--pm-dark-shade-500) 50%,
+    var(--pm-hero-radial-end) 100%
+  );
+  --pm-hero-radial-start: #{$hero-radial-start};
+  --pm-hero-radial-end: #{$hero-radial-end};
+  --pm-hero-blob-big: radial-gradient(
+    circle at 30% 30%,
+    var(--pm-red-a95),
+    var(--pm-dark-a55)
+  );
+  --pm-hero-blob-mid: radial-gradient(
+    circle at 40% 20%,
+    var(--pm-gold-a38),
+    color-mix(in srgb, var(--pm-red-shade-700) 68%, var(--pm-dark-shade-500))
+  );
+  --pm-hero-blob-small: radial-gradient(
+    circle at 50% 50%,
+    var(--pm-red-hover-a85),
+    var(--pm-dark-light-a55)
+  );
+  --pm-hero-title-shadow-accent: var(--pm-gold-a42);
+  --pm-hero-title-shadow-neon: var(--pm-red-a45);
+  --pm-hero-scanline-strong: var(--pm-black-a25);
+  --pm-hero-scanline-soft: var(--pm-black-a15);
+  --pm-hero-particle: var(--pm-red-shade-200);
+
+  // ── Layout-Chrome (Phase A) ────────────────────────────────────
+  --pm-chrome-status-width: 1.75rem;
+  --pm-chrome-border: var(--pm-red-a35);
+  --pm-chrome-border-subtle: var(--pm-gold-a18);
+  --pm-chrome-accent: var(--pm-gold-soft);
+  --pm-chrome-status-bg: color-mix(in srgb, var(--pm-dark-shade-800) 92%, var(--pm-red-shade-700));
+  --pm-chrome-status-text: var(--pm-gold-bright);
+  --pm-footer-warn-band: repeating-linear-gradient(
+    -45deg,
+    var(--pm-gold-shade-500),
+    var(--pm-gold-shade-500) 6px,
+    var(--pm-red-shade-700) 6px,
+    var(--pm-red-shade-700) 12px
+  );
+
+  // ── Focus (global) ─────────────────────────────────────────────
+  --pm-focus-ring: color-mix(in srgb, var(--pm-gold-shade-700) 45%, transparent);
+
+  // ── Navigation ─────────────────────────────────────────────────
+  --pm-nav-bg: var(--pm-dark-shade-800);
+  --pm-nav-border: var(--pm-red-a35);
+  --pm-nav-toggle-bg: var(--pm-dark-a10);
+  --pm-nav-toggle-border: var(--pm-gold-a45);
+  --pm-nav-toggle-hover-bg: var(--pm-red-a58);
+  --pm-nav-toggle-hover-border: var(--pm-gold-a55);
+  --pm-nav-focus-ring: var(--pm-focus-ring);
+  --pm-nav-logo-rule: var(--pm-white);
+  --pm-nav-link-hover-bg: color-mix(in srgb, var(--pm-nav-bg) 25%, var(--pm-black));
+  --pm-nav-bg-glass: color-mix(in srgb, var(--pm-nav-bg) 94%, transparent);
+  --pm-nav-link-hover-bg-glass: color-mix(in srgb, var(--pm-nav-link-hover-bg) 75%, transparent);
+
+  // ── Footer / Misc ──────────────────────────────────────────────
+  --pm-footer-bg: var(--pm-dark-shade-300);
+  --pm-top-scroller-bg: var(--pm-red-shade-700);
+  --pm-top-scroller-bg-hover: var(--pm-red-shade-500);
+  --pm-top-scroller-bg-focus: var(--pm-red-shade-700);
+  --pm-top-scroller-fg: var(--pm-on-primary);
+  --pm-top-scroller-fg-focus: var(--pm-on-primary);
+  --pm-error-fg: var(--pm-red-shade-700);
+  --pm-success: #{$success};
+  --pm-info: #{$info};
+  --pm-warning: #{$warning};
+  --pm-danger: #{$danger};
+  --pm-manifest-tile: #{$manifest-tile};
+  --pm-loader-bg: var(--pm-dark-shade-500);
+  --pm-loader-stroke: #{$hero-text-light};
+
+  --pm-tech-item-text: var(--pm-secondary);
+  --pm-tech-item-border: var(--pm-border-strong);
+  --pm-tech-item-hover-bg: var(--pm-secondary);
+  --pm-social-muted: color-mix(in srgb, var(--pm-text) 45%, transparent);
+
+  // ── Legacy-Aliase ──────────────────────────────────────────────
+  --pm-neon-red: var(--pm-red-shade-500);
+  --pm-neon-red-hover: var(--pm-red-shade-400);
+  --pm-neon-red-deep: var(--pm-red-shade-700);
+  --pm-neon-red-soft: var(--pm-red-shade-200);
+  --pm-neon-red-hot: var(--pm-glitch-red-hot);
+  --pm-bordeaux: var(--pm-red-shade-500);
+  --pm-bordeaux-hover: var(--pm-red-shade-400);
+  --pm-bordeaux-deep: var(--pm-secondary);
+  --pm-bordeaux-glitch: var(--pm-glitch-red-hot);
+  --pm-anthracite: var(--pm-dark-shade-300);
+  --pm-anthracite-deep: var(--pm-dark-shade-500);
+  --pm-anthracite-light: var(--pm-dark-shade-200);
+  --pm-royal-gold: var(--pm-gold-shade-500);
+  --pm-royal-wine-deep: var(--pm-btn-bg-deep);
+  --pm-cyan-bright: var(--pm-gold-bright);
+  --pm-cyan-soft: var(--pm-gold-soft);
+  --pm-cyan: var(--pm-gold);
+
+  @each $step in palette.$shade-steps {
+    --pm-cyan-shade-#{$step}: var(--pm-gold-shade-#{$step});
+  }
+
+  @each $step in $pm-alpha-steps {
+    --pm-neon-a#{$step}: var(--pm-red-a#{$step});
+    --pm-accent-a#{$step}: var(--pm-gold-a#{$step});
+    --pm-cyan-a#{$step}: var(--pm-gold-a#{$step});
+    --pm-wine-a#{$step}: var(--pm-dark-a#{$step});
+  }
+
+  --pm-neon-a85: var(--pm-red-hover-a85);
+  --pm-neon-a88: var(--pm-red-hover-a88);
+  --pm-neon-a90: var(--pm-red-hover-a90);
+  --pm-neon-hot-a35: var(--pm-glitch-red-hot-a35);
+  --pm-neon-hot-a38: var(--pm-glitch-red-hot-a38);
+  --pm-neon-hot-a40: var(--pm-glitch-red-hot-a40);
+  --pm-anthracite-a55: var(--pm-dark-light-a55);
+  --pm-anthracite-deep-a55: var(--pm-dark-a55);
+  --pm-anthracite-deep-a72: var(--pm-dark-a72);
+
+  --pm-surface-grid-opacity: 0.28;
+  --pm-surface-grid-size: 64px;
+}
+
+:root,
+[data-bs-theme='light'] {
+  color-scheme: light;
+
+  // Warme Papierflächen
+  --pm-bg: #f5f3f0;
+  --pm-bg-elevated: #fdfcfb;
+  --pm-surface-gradient: linear-gradient(
+    180deg,
+    #faf9f7 0%,
+    var(--pm-bg) 48%,
+    color-mix(in srgb, var(--pm-red-shade-500) 5%, var(--pm-bg)) 100%
+  );
+  --pm-surface-grid-opacity: 0.22;
+  --pm-surface-grid-size: 52px;
+
+  // Lesbarkeit & Hierarchie
+  --pm-text: var(--pm-dark-shade-500);
+  --pm-text-muted: #{$color-text-muted-light};
+  --pm-secondary: var(--pm-red-shade-700);
+  --pm-secondary-hover: var(--pm-red-shade-600);
+
+  // Kanten klarer auf Hell
+  --pm-border: color-mix(in srgb, var(--pm-red-shade-500) 26%, var(--pm-dark-shade-200));
+  --pm-border-strong: color-mix(in srgb, var(--pm-red-shade-600) 68%, var(--pm-dark-shade-300));
+  --pm-border-subtle: color-mix(in srgb, var(--pm-red-shade-500) 16%, transparent);
+  --pm-grid-line: color-mix(in srgb, var(--pm-red-shade-500) 12%, transparent);
+  --pm-overlay: color-mix(in srgb, var(--pm-bg) 90%, transparent);
+  --pm-spinner: var(--pm-red-a55);
+  --pm-focus-ring: color-mix(in srgb, var(--pm-red-shade-500) 42%, var(--pm-gold-shade-600));
+
+  --pm-footer-text: color-mix(in srgb, var(--pm-on-dark) 88%, transparent);
+  --pm-theme-color: var(--pm-bg);
+  --pm-loader-stroke: var(--pm-red-shade-700);
+
+  --pm-tech-item-text: var(--pm-red-shade-700);
+  --pm-tech-item-border: color-mix(in srgb, var(--pm-red-shade-500) 38%, var(--pm-dark-shade-200));
+  --pm-tech-item-hover-bg: var(--pm-red-shade-600);
+  --pm-social-muted: color-mix(in srgb, var(--pm-dark-shade-500) 50%, transparent);
+
+  // Hero bleibt dunkel (Kontrast-Anker)
+  --pm-hero-bg: var(--pm-dark-shade-500);
+  --pm-hero-text: #{$hero-text-light};
+  --pm-hero-accent: var(--pm-red-shade-500);
+
+  // Bänder
+  --pm-section-dark-gradient: linear-gradient(
+    319deg,
+    color-mix(in srgb, var(--pm-dark-shade-500) 86%, var(--pm-red-shade-900)) 0%,
+    color-mix(in srgb, var(--pm-red-shade-800) 68%, var(--pm-dark-shade-500)) 52%,
+    color-mix(in srgb, var(--pm-dark-shade-500) 80%, var(--pm-red-shade-700)) 100%
+  );
+  --pm-section-featured-gradient: linear-gradient(
+    180deg,
+    #fdfcfb 0%,
+    var(--pm-bg) 44%,
+    color-mix(in srgb, var(--pm-gold-shade-500) 7%, var(--pm-bg)) 100%
+  );
+  --pm-featured-band-grid-opacity: 0.2;
+
+  // Chrome & Shell
+  --pm-chrome-border: color-mix(in srgb, var(--pm-red-shade-500) 36%, transparent);
+  --pm-chrome-border-subtle: color-mix(in srgb, var(--pm-gold-shade-600) 26%, transparent);
+  --pm-chrome-accent: var(--pm-gold-shade-600);
+  --pm-chrome-status-bg: color-mix(in srgb, var(--pm-red-shade-900) 52%, var(--pm-dark-shade-500));
+  --pm-chrome-status-text: var(--pm-gold-shade-200);
+
+  // Nav & Footer — dunkler Weinanker, nicht losgelöstes Grau
+  --pm-nav-bg: color-mix(in srgb, var(--pm-dark-shade-500) 88%, var(--pm-red-shade-900));
+  --pm-nav-border: color-mix(in srgb, var(--pm-red-shade-500) 42%, transparent);
+  --pm-nav-toggle-bg: color-mix(in srgb, var(--pm-dark-shade-500) 55%, transparent);
+  --pm-nav-toggle-border: color-mix(in srgb, var(--pm-gold-shade-500) 55%, transparent);
+  --pm-nav-link-hover-bg: color-mix(in srgb, var(--pm-red-shade-800) 62%, var(--pm-dark-shade-500));
+  --pm-nav-bg-glass: color-mix(in srgb, var(--pm-nav-bg) 94%, transparent);
+  --pm-nav-link-hover-bg-glass: color-mix(in srgb, var(--pm-nav-link-hover-bg) 78%, transparent);
+  --pm-footer-bg: color-mix(in srgb, var(--pm-dark-shade-500) 84%, var(--pm-red-shade-900));
+
+  // Überschriften-FX auf hellen Flächen
+  --pm-heading-glitch-accent: var(--pm-glitch-cyan-a40);
+  --pm-heading-glitch-neon: var(--pm-red-a55);
+  --pm-heading-prefix-glow: var(--pm-red-a55);
+  --pm-heading-prefix-color: color-mix(in srgb, var(--pm-red-shade-800) 55%, var(--pm-gold-shade-800));
+  --pm-heading-hud-corner-accent: var(--pm-gold-shade-800);
+  --pm-heading-hud-corner-base: color-mix(in srgb, var(--pm-red-shade-800) 45%, var(--pm-gold-shade-900));
+  --pm-heading-hud-shadow: color-mix(in srgb, var(--pm-red-shade-800) 48%, transparent);
+
+  // Buttons auf hellen Flächen
+  --pm-btn-shadow-soft: var(--pm-black-a8);
+  --pm-btn-shadow-deep: var(--pm-black-a12);
+}
+
+[data-bs-theme='dark'] {
+  color-scheme: dark;
+
+  --pm-surface-grid-opacity: 0.22;
+  --pm-surface-grid-size: 64px;
+  --pm-bg: var(--pm-dark-shade-500);
+  --pm-bg-elevated: var(--pm-dark-shade-300);
+  --pm-surface-gradient: linear-gradient(
+    319deg,
+    var(--pm-dark-shade-500) 0%,
+    #{$section-tint} 48%,
+    var(--pm-dark-shade-200) 96%
+  );
+  --pm-text: var(--pm-on-dark);
+  --pm-text-muted: var(--pm-text-on-dark-a78);
+  --pm-border: var(--pm-red-a32);
+  --pm-border-strong: var(--pm-gold-a38);
+  --pm-border-subtle: color-mix(in srgb, var(--pm-red-shade-500) 24%, transparent);
+  --pm-grid-line: var(--pm-red-a14);
+  --pm-overlay: color-mix(in srgb, var(--pm-dark-shade-500) 90%, transparent);
+  --pm-spinner: var(--pm-red-a48);
+  --pm-footer-text: color-mix(in srgb, var(--pm-hero-text) 78%, transparent);
+  --pm-theme-color: var(--pm-dark-shade-500);
+  --pm-secondary: var(--pm-red-shade-200);
+  --pm-secondary-hover: var(--pm-red-shade-300);
+
+  --pm-tech-item-text: var(--pm-secondary);
+  --pm-tech-item-border: var(--pm-border-strong);
+  --pm-tech-item-hover-bg: var(--pm-secondary);
+  --pm-social-muted: color-mix(in srgb, var(--pm-text) 45%, transparent);
+
+  --pm-hero-bg: var(--pm-dark-shade-500);
+  --pm-hero-text: #{$hero-text-dark};
+  --pm-section-dark-gradient: linear-gradient(
+    319deg,
+    color-mix(in srgb, var(--pm-dark-shade-500) 86%, var(--pm-red-shade-900)) 0%,
+    color-mix(in srgb, var(--pm-red-shade-800) 68%, var(--pm-dark-shade-500)) 52%,
+    color-mix(in srgb, var(--pm-dark-shade-500) 80%, var(--pm-red-shade-700)) 100%
+  );
+  --pm-section-featured-gradient: linear-gradient(
+    319deg,
+    color-mix(in srgb, var(--pm-dark-shade-300) 55%, var(--pm-gold-shade-900)) 0%,
+    color-mix(in srgb, var(--pm-dark-shade-500) 82%, var(--pm-gold-shade-800)) 54%,
+    var(--pm-dark-shade-500) 100%
+  );
+  --pm-featured-band-grid-opacity: 0.12;
+  --pm-loader-stroke: #{$hero-text-dark};
+
+  --pm-chrome-border: var(--pm-red-a35);
+  --pm-chrome-border-subtle: var(--pm-gold-a18);
+  --pm-chrome-accent: var(--pm-gold-soft);
+  --pm-chrome-status-bg: color-mix(in srgb, var(--pm-dark-shade-800) 92%, var(--pm-red-shade-700));
+  --pm-chrome-status-text: var(--pm-gold-bright);
+
+  --pm-nav-bg: var(--pm-dark-shade-800);
+  --pm-nav-border: var(--pm-red-a35);
+  --pm-nav-toggle-bg: var(--pm-dark-a10);
+  --pm-nav-toggle-border: var(--pm-gold-a45);
+  --pm-nav-link-hover-bg: color-mix(in srgb, var(--pm-nav-bg) 25%, var(--pm-black));
+  --pm-nav-bg-glass: color-mix(in srgb, var(--pm-nav-bg) 94%, transparent);
+  --pm-nav-link-hover-bg-glass: color-mix(in srgb, var(--pm-nav-link-hover-bg) 75%, transparent);
+  --pm-footer-bg: var(--pm-dark-shade-300);
+
+  --pm-heading-glitch-accent: var(--pm-glitch-cyan-a32);
+  --pm-heading-glitch-neon: var(--pm-red-a38);
+  --pm-heading-prefix-glow: var(--pm-glitch-cyan-a58);
+  --pm-heading-prefix-color: var(--pm-gold-bright);
+  --pm-heading-hud-corner-accent: var(--pm-glitch-gold-bright);
+  --pm-heading-hud-corner-base: var(--pm-gold-shade-200);
+  --pm-heading-hud-shadow: var(--pm-glitch-cyan-a35);
+
+  --pm-btn-shadow-soft: var(--pm-black-a12);
+  --pm-btn-shadow-deep: var(--pm-black-a15);
+}

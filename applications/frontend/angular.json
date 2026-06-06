@@ -34,7 +34,7 @@
                 "output": "assets/root"
               }
             ],
-            "styles": ["src/styles.scss"],
+            "styles": ["src/sass/basics/_fonts.scss", "src/styles.scss"],
             "stylePreprocessorOptions": {
               "includePaths": ["node_modules"]
             },
@@ -50,11 +50,26 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "5kb",
-                  "maximumError": "10kb"
+                  "maximumWarning": "10kb",
+                  "maximumError": "16kb"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.production.ts"
+                }
+              ]
+            },
+            "docker": {
+              "outputHashing": "all",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.docker.ts"
+                }
+              ]
             },
             "development": {
               "optimization": false,
@@ -77,7 +92,8 @@
               "buildTarget": "Portfolio:build:production"
             },
             "development": {
-              "buildTarget": "Portfolio:build:development"
+              "buildTarget": "Portfolio:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"
@@ -106,7 +122,7 @@
                 "output": "assets/root"
               }
             ],
-            "styles": ["src/styles.scss"],
+            "styles": ["src/sass/basics/_fonts.scss", "src/styles.scss"],
             "stylePreprocessorOptions": {
               "includePaths": ["node_modules"]
             },
@@ -125,5 +141,31 @@
   },
   "cli": {
     "schematicCollections": ["@angular-eslint/schematics"]
+  },
+  "schematics": {
+    "@schematics/angular:component": {
+      "type": "component"
+    },
+    "@schematics/angular:directive": {
+      "type": "directive"
+    },
+    "@schematics/angular:service": {
+      "type": "service"
+    },
+    "@schematics/angular:guard": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:interceptor": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:module": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:pipe": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:resolver": {
+      "typeSeparator": "."
+    }
   }
 }

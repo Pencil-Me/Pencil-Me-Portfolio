@@ -1,0 +1,157 @@
+@use '../effects/fx-cyber' as fx;
+
+.pm-loader {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--pm-text-muted);
+
+  &__ring {
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 2px solid var(--pm-border-subtle);
+    border-top-color: var(--pm-primary);
+    border-right-color: var(--pm-gold-soft);
+    animation:
+      pm-loader-spin 0.85s linear infinite,
+      pm-loader-neon-pulse 2.2s ease-in-out infinite;
+    clip-path: polygon(
+      0 0,
+      calc(100% - 6px) 0,
+      100% 6px,
+      100% 100%,
+      6px 100%,
+      0 calc(100% - 6px)
+    );
+  }
+
+  &__label {
+    font-family: var(--pm-font-mono), monospace;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--pm-gold-a58);
+  }
+
+  @include fx.pm-fx-motion-safe;
+}
+
+.pm-load-error {
+  padding: 1.25rem 1.5rem;
+  border: 2px solid var(--pm-danger);
+  background: color-mix(in srgb, var(--pm-bg) 90%, var(--pm-danger));
+  box-shadow: 3px 0 0 var(--pm-gold-soft);
+
+  &__title {
+    margin: 0 0 0.35rem;
+    font-family: var(--pm-font-mono), monospace;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--pm-danger);
+  }
+
+  &__message {
+    margin: 0;
+    line-height: 1.55;
+  }
+
+  &__retry {
+    margin-top: 0.85rem;
+    padding: 0.45rem 0.85rem;
+    border: 2px solid var(--pm-danger);
+    background: transparent;
+    color: var(--pm-danger);
+    font-family: var(--pm-font-mono), monospace;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+
+    &:hover {
+      background: color-mix(in srgb, var(--pm-danger) 12%, transparent);
+    }
+  }
+}
+
+.pm-skeleton {
+  position: relative;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--pm-bg) 82%, var(--pm-bg-elevated));
+  border: 2px solid var(--pm-border-subtle);
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in srgb, var(--pm-gold-soft) 18%, transparent),
+      color-mix(in srgb, var(--pm-glitch-cyan-bright) 14%, transparent),
+      transparent
+    );
+    animation: pm-skeleton-shimmer 1.35s ease-in-out infinite;
+  }
+
+  &--chip {
+    display: inline-block;
+    width: 5.5rem;
+    height: 1.75rem;
+    border-radius: 0;
+  }
+
+  &--line {
+    height: 0.85rem;
+    margin-bottom: 0.55rem;
+
+    &.is-short {
+      width: 55%;
+    }
+
+    &.is-title {
+      height: 1.25rem;
+      width: 70%;
+      margin-bottom: 0.85rem;
+    }
+  }
+
+  &--panel {
+    min-height: 9rem;
+    padding: 1.25rem;
+    box-shadow: 3px 0 0 var(--pm-border-subtle);
+    clip-path: polygon(
+      0 0,
+      calc(100% - 8px) 0,
+      100% 8px,
+      100% 100%,
+      8px 100%,
+      0 calc(100% - 8px)
+    );
+  }
+
+  &--logo {
+    width: 9rem;
+    height: 3.5rem;
+    flex: 0 0 auto;
+  }
+
+  @include fx.pm-fx-motion-safe;
+}
+
+@keyframes pm-loader-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pm-skeleton-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}

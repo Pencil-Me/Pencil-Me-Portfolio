@@ -1,31 +1,43 @@
-import { Injectable } from '@angular/core';
-import { createEffect, Actions, ofType } from '@ngrx/effects';
-import { fromKnowledge } from '@app/state/knowledge/index';
-import { catchError, map, mergeMap, of, take } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { Actions } from '@ngrx/effects';
+import { createEffect, ofType } from '@ngrx/effects';
+import {
+  GetCustomers,
+  GetCustomersFailure,
+  GetCustomersSuccess,
+  GetProject,
+  GetProjectFailure,
+  GetProjectSuccess,
+  GetProjects,
+  GetProjectsFailure,
+  GetProjectsSuccess,
+  GetTechstack,
+  GetTechstackFailure,
+  GetTechstackSuccess,
+} from './knowledge.actions';
+import { catchError, map, mergeMap, of } from 'rxjs';
 import { KnowledgeService } from '@app/state/knowledge/knowledge.service';
-import { Observable } from 'rxjs';
-import { Action } from '@ngrx/store';
+import { mapApiError } from '@app/shared/utils/api-error.util';
+import type { Observable } from 'rxjs';
+import type { Action } from '@ngrx/store';
 
 @Injectable()
 export class KnowledgeEffects {
-  constructor(
-    private actions$: Actions,
-    private knowledgeService: KnowledgeService,
-  ) {}
+  private actions$ = inject(Actions);
+  private knowledgeService = inject(KnowledgeService);
 
   /**
    * Effect to fetch techstack data.
    */
   getTechstackDataEffect$: Observable<Action> = createEffect(() => {
     return this.actions$.pipe(
-      ofType(fromKnowledge.actions.GetTechstack, fromKnowledge.actions.GetProjectServiceData),
+      ofType(GetTechstack),
       mergeMap(() =>
         this.knowledgeService.getTechstack().pipe(
-          map((res) => fromKnowledge.actions.GetTechstackSuccess({ data: res })),
-          catchError((error) => of(fromKnowledge.actions.GetTechstackFailure({ error }))),
+          map((res) => GetTechstackSuccess({ data: res })),
+          catchError((error) => of(GetTechstackFailure({ error: mapApiError(error) }))),
         ),
       ),
-      take(1),
     );
   });
 
@@ -34,14 +46,13 @@ export class KnowledgeEffects {
    */
   getProjectsDataEffect$: Observable<Action> = createEffect(() => {
     return this.actions$.pipe(
-      ofType(fromKnowledge.actions.GetProjects, fromKnowledge.actions.GetProjectServiceData),
+      ofType(GetProjects),
       mergeMap(() =>
         this.knowledgeService.getProjects().pipe(
-          map((res) => fromKnowledge.actions.GetProjectsSuccess({ data: res })),
-          catchError((error) => of(fromKnowledge.actions.GetProjectsFailure({ error }))),
+          map((res) => GetProjectsSuccess({ data: res })),
+          catchError((error) => of(GetProjectsFailure({ error: mapApiError(error) }))),
         ),
       ),
-      take(1),
     );
   });
 
@@ -50,11 +61,11 @@ export class KnowledgeEffects {
    */
   getProjectDataEffect$: Observable<Action> = createEffect(() => {
     return this.actions$.pipe(
-      ofType(fromKnowledge.actions.GetProject),
+      ofType(GetProject),
       mergeMap((arg) =>
         this.knowledgeService.getProject(arg.id).pipe(
-          map((res) => fromKnowledge.actions.GetProjectSuccess({ data: res })),
-          catchError((error) => of(fromKnowledge.actions.GetProjectFailure({ error }))),
+          map((res) => GetProjectSuccess({ data: res })),
+          catchError((error) => of(GetProjectFailure({ error: mapApiError(error) }))),
         ),
       ),
     );
@@ -65,14 +76,13 @@ export class KnowledgeEffects {
    */
   getCustomersDataEffect$: Observable<Action> = createEffect(() => {
     return this.actions$.pipe(
-      ofType(fromKnowledge.actions.GetCustomers),
+      ofType(GetCustomers),
       mergeMap(() =>
         this.knowledgeService.getCustomers().pipe(
-          map((res) => fromKnowledge.actions.GetCustomersSuccess({ data: res })),
-          catchError((error) => of(fromKnowledge.actions.GetCustomersFailure({ error }))),
+          map((res) => GetCustomersSuccess({ data: res })),
+          catchError((error) => of(GetCustomersFailure({ error: mapApiError(error) }))),
         ),
       ),
-      take(1),
     );
   });
 }

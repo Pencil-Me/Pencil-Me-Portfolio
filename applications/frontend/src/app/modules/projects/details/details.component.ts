@@ -1,42 +1,85 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { NgForOf, NgIf } from '@angular/common';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  DestroyRef,
+  inject,
+  type OnDestroy,
+  type OnInit,
+} from '@angular/core';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs';
+
 import { ProjectsService } from '@modules/projects/projects.service';
-import { Observable } from 'rxjs';
-import { IProject } from '@modules/projects/projects.models';
+import type { IProject } from '@modules/projects/projects.models';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { PmAsyncContentComponent } from '@shared/components/pm-async-content/pm-async-content.component';
+import { ProjectDateRangeComponent } from '@shared/components/project-date-range/project-date-range.component';
+import { ScrollRevealDirective } from '@shared/directives/scroll-reveal.directive';
+import { GibberishRevealDirective } from '@shared/directives/gibberish-reveal.directive';
+import { toLoadStatusSignals } from '@app/shared/models/load-status.signals';
 
 @Component({
   selector: 'app-project-details',
-  imports: [NgForOf, NgIf, RouterLink],
+  imports: [
+    RouterLink,
+    ProjectDateRangeComponent,
+    PmAsyncContentComponent,
+    ScrollRevealDirective,
+    GibberishRevealDirective,
+  ],
   templateUrl: './details.component.html',
   styleUrl: './details.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectDetailsComponent implements OnInit, OnDestroy {
   private projectsService = inject(ProjectsService);
   private activatedRoute = inject(ActivatedRoute);
-  projectdetail$: Observable<IProject> = this.projectsService.project$;
+  private destroyRef = inject(DestroyRef);
 
-  projectdetail: IProject | null = null;
+  private   readonly projectLoad = toLoadStatusSignals(this.projectsService.projectState$);
+  readonly projectLoadStatus = this.projectLoad.loadStatus;
+  readonly projectError = this.projectLoad.error;
 
-  constructor() {
-    this.projectdetail$.subscribe((e) => (this.projectdetail = e));
+  private readonly routeProjectId = toSignal(
+    this.activatedRoute.paramMap.pipe(map((params) => params.get('id') ?? '')),
+    { initialValue: '' },
+  );
+
+  private readonly projectdetailRaw = toSignal(this.projectsService.project$, {
+    initialValue: {} as IProject,
+  });
+
+  readonly projectdetail = computed(() => {
+    const project = this.projectdetailRaw();
+    return project.id ? project : null;
+  });
+
+  readonly content = computed(() => {
+    const project = this.projectdetail();
+    return project ? this.renderNewLines(project.content) : '';
+  });
+
+  ngOnInit(): void {
+    this.activatedRoute.paramMap
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((params) => {
+        this.projectsService.selectProject(params.get('id') ?? '');
+      });
   }
-  ngOnDestroy() {
-    this.projectdetail = null;
+
+  ngOnDestroy(): void {
     this.projectsService.selectProject(undefined);
   }
-  ngOnInit() {
-    this.activatedRoute.paramMap.subscribe((params) => {
-      const id = params.get('id') ?? '';
+
+  retryProjectLoad(): void {
+    const id = this.routeProjectId();
+    if (id) {
       this.projectsService.selectProject(id);
-    });
+    }
   }
 
-  get content() {
-    return this.projectdetail ? this.renderNewLines(this.projectdetail.content) : '';
-  }
-
-  renderNewLines(text: string): string {
+  private renderNewLines(text: string): string {
     return text.replace(/\\n/g, '<br>');
   }
 }

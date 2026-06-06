@@ -1,100 +1,144 @@
-<section class="container section-container">
+<section class="container section-container pm-surface-light pm-section--offset">
   <div class="row">
+    <div class="col-12 pm-intro-block" appScrollReveal="up">
+      <h2 appGibberishReveal>Ein bisschen über mich</h2>
+      <p appGibberishReveal>
+        Ich bin ein <b>Fullstack Web- und Mobile-Entwickler mit Grafik-Designer Hintergrund</b> — von der ersten Skizze bis zum
+        Live-Feature. Mir liegt <b>wiederverwendbarer, wartbarer Code</b> und eine UX, die nicht nur
+        gut aussieht, sondern im Alltag funktioniert. Design, Technik und ein bisschen Schräglage
+        verbinden sich bei mir gern in einem Projekt; aktuell mit Schwerpunkt
+        <b>Frontend-Entwicklung</b>.
+      </p>
+    </div>
+
+    <div class="col-12" appScrollReveal="left">
+      <h4 appGibberishReveal>Mein Hintergrund</h4>
+      <p appGibberishReveal>
+        Seit dem Sinclair ZX Spectrum geht es bei mir um Software — inzwischen
+        <b>über zwanzig Jahre Berufserfahrung</b> in Agenturen, Konzernen und eigenen Projekten.
+      </p>
+      <p appGibberishReveal>
+        Ich arbeite gern im Team, übernehme aber auch allein komplette Frontend-Lösungen vom Konzept
+        bis zum Deployment. Komplexe Probleme aufzubrechen und umzusetzen macht mir Spaß. Neben
+        klassischer SPA-Entwicklung setze ich
+        <b>DevOps, KI-Tools und Automatisierung</b> dort ein, wo sie den Alltag wirklich entlasten.
+      </p>
+    </div>
+
+    <div class="col-12 pm-work-process">
+      <h3 appGibberishReveal>So arbeite ich</h3>
+      <p class="pm-work-process__intro" appGibberishReveal>
+        Remote oder hybrid aus Berlin — feste Projekte, langfristige Begleitung oder punktuelle
+        Frontend-Unterstützung. Immer direkt mit mir, nicht über ein anonymes Team.
+      </p>
+      <ol class="pm-work-process__grid">
+        @for (phase of workProcess; track phase.step; let i = $index) {
+          <li class="pm-work-process__item" appScrollReveal="up" [revealDelay]="i * 100">
+            <article class="pm-panel-brutal pm-workflow-panel">
+              <span class="pm-workflow-panel__step" aria-hidden="true">{{ phase.step }}</span>
+              <h4 class="pm-workflow-panel__title" appGibberishReveal>{{ phase.title }}</h4>
+              <p class="pm-workflow-panel__text" appGibberishReveal>{{ phase.text }}</p>
+            </article>
+          </li>
+        }
+      </ol>
+    </div>
+
     <div class="col-12">
-      <h2>Ein bisschen über mich</h2>
-      <p>
-        Ich bin ein autodidaktischer <b>Web- und Mobile App Entwickler</b> mit Erfahrung in der
-        Gestaltung neuer Features von der Ideenfindung bis zur Produktion, Implementierung von
-        Wireframes und Designabläufen in leistungsstarke Softwareanwendungen. Bei der Erstellung
-        wieder verwendbarem und effizienten Codes berücksichtige ich immer die Benutzererfahrung.
-        Leidenschaftlich kombiniere ich
-        <b>gutes Design, Technologie und Innovation in all meinen Projekten</b>, die ich gerne von
-        der ersten Idee bis zur finalen Veröffentlichung begleite. In Projekten konzentiriere ich
-        mich derzeit auf die <b>Frontend-Entwicklung</b>.
-      </p>
+      <div class="pm-section-divider" role="separator" aria-hidden="true"></div>
+    </div>
+
+    <div class="col-12 col-lg-4 col-md-4" appScrollReveal="up" [revealDelay]="0">
+      <h3 appGibberishReveal>Worin ich gut bin</h3>
+      <ul>
+        @for (good of whatIAmGoodAt; track good) {
+          <li appGibberishReveal>
+            {{ good }}
+          </li>
+        }
+      </ul>
+    </div>
+
+    <div class="col-12 col-lg-4 col-md-4" appScrollReveal="up" [revealDelay]="120">
+      <h3 appGibberishReveal>Tech-Skills</h3>
+      <ul>
+        @for (skill of technicSkills; track skill) {
+          <li appGibberishReveal>
+            {{ skill }}
+          </li>
+        }
+      </ul>
+    </div>
+
+    <div class="col-12 col-lg-4 col-md-4" appScrollReveal="up" [revealDelay]="240">
+      <h3 appGibberishReveal>Soft Skills</h3>
+      <ul>
+        @for (skill of softSkills; track skill) {
+          <li appGibberishReveal>
+            {{ skill }}
+          </li>
+        }
+      </ul>
     </div>
 
     <div class="col-12">
-      <h4>Mein Hintergrund</h4>
-      <p>
-        Ich habe eine Leidenschaft für Technologie und einen starken Hintergrund in der
-        Softwareentwicklung. Mit
-        <b>mehreren Dekaden Berufserfahrung</b>
-        habe ich meine Fähigkeiten in verschiedenen Programmiersprachen und Technologien verfeinert.
-      </p>
-      <p>
-        Ich bin <b>ein engagierter und kreativer Entwickler</b>, der es genießt, komplexe Probleme
-        zu lösen und mit Teams zusammenzuarbeiten, um hochwertige Lösungen zu liefern. Ich halte
-        mich über die neuesten Branchentrends auf dem Laufenden und bin immer begierig darauf, neue
-        Technologien zu lernen. Derzeitiger Fokus liegt auf der
-        <b>praktischen Anwendung von DevOps, Machine Lerning und AI</b>.
-      </p>
+      <div class="pm-section-divider" role="separator" aria-hidden="true"></div>
     </div>
-
-    <hr class="mt-5 mb-5" />
-
-    <div class="col-12 col-lg-4 col-md-4">
-      <h3>Worin ich gut bin</h3>
-      <ul>
-        <li *ngFor="let good of whatIAmGoodAt">
-          {{ good }}
-        </li>
-      </ul>
-    </div>
-
-    <div class="col-12 col-lg-4 col-md-4">
-      <h3>Techskills</h3>
-      <ul>
-        <li *ngFor="let skill of technicSkills">
-          {{ skill }}
-        </li>
-      </ul>
-    </div>
-
-    <div class="col-12 col-lg-4 col-md-4">
-      <h3>Softskills</h3>
-      <ul>
-        <li *ngFor="let skill of softSkills">
-          {{ skill }}
-        </li>
-      </ul>
-    </div>
-
-    <hr class="mt-5 mb-5" />
 
     <div class="col-12 mb-5">
-      <h3>Aktuelle Technologie und Tool-Kenntnisse</h3>
-      <p>
-        Hier eine Liste der Technologien und Tools die ich über die Jahre benutzt habe und wann sie
-        zuletzt produktiv genutzt wurden. Klicke auf ein Technologie um die zugehörigen Projekte
-        anzusehen.
+      <h3 appGibberishReveal>Aktuelle Technologie und Tool-Kenntnisse</h3>
+      <p appGibberishReveal>
+        Technologien und Tools, die ich über die Jahre produktiv genutzt habe — mit Projektzahl,
+        Erfahrungsdauer und letztem Einsatz. Passende Referenzen findest du im Bereich Projekte.
       </p>
-      <div class="row tech-card-container">
-        <div
-          class="tech-card col-12 col-xl-3 col-lg-4 col-md-6 col-sm-12 mt-4"
-          *ngFor="let skill of skills"
-        >
-          <h4>{{ skill.title }}</h4>
-          <ul>
-            <li *ngFor="let data of skill.data">
-              <div class="tech_name">
-                {{ data.label }}
+      <app-pm-async-content
+        [status]="techLoadStatus()"
+        [error]="techError()"
+        variant="skill-grid"
+        label="Lade Technologien"
+        [showRetry]="true"
+        (retry)="retryTechLoad()"
+      >
+        <div class="row tech-card-container">
+          @for (skill of skills(); track skill; let i = $index) {
+            <div
+              class="tech-card col-12 col-xl-3 col-lg-4 col-md-6 col-sm-12 mt-4"
+              appScrollReveal="scale"
+              [revealDelay]="(i % 4) * 80"
+            >
+              <div class="pm-panel-brutal pm-skill-panel">
+                <h4 appGibberishReveal>{{ skill.title }}</h4>
+                <ul>
+                  @for (data of skill.data; track data) {
+                    <li>
+                      <div class="tech_name" appGibberishReveal>
+                        {{ data.label }}
+                      </div>
+                      <div class="tech_info-box">
+                        @if (data.project_count) {
+                          <div class="tech_project-count">
+                            Projekte: <span>{{ data.project_count }}</span>
+                          </div>
+                        }
+                        @if (data.project_years) {
+                          <div class="tech_year-count">
+                            Erfahrung: <span>{{ years(data.project_years) }}</span>
+                          </div>
+                        }
+                        @if (data.lastTouch) {
+                          <div class="tech_last-touch">
+                            Zuletzt: <span>{{ data.lastTouch }}</span>
+                          </div>
+                        }
+                      </div>
+                    </li>
+                  }
+                </ul>
               </div>
-              <div class="tech_info-box">
-                <div *ngIf="data.project_count" class="tech_project-count">
-                  Projekte: <span>{{ data.project_count }}</span>
-                </div>
-                <div *ngIf="data.project_years" class="tech_year-count">
-                  Erfahrung: <span>{{ years(data.project_years) }}</span>
-                </div>
-                <div *ngIf="data.lastTouch" class="tech_last-touch">
-                  Zuletzt: <span>{{ data.lastTouch }}</span>
-                </div>
-              </div>
-            </li>
-          </ul>
+            </div>
+          }
         </div>
-      </div>
+      </app-pm-async-content>
     </div>
   </div>
 </section>

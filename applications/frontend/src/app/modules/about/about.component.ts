@@ -1,23 +1,34 @@
-import { Component, inject } from '@angular/core';
-import { NgForOf, NgIf } from '@angular/common';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+
 import { AboutService } from '@modules/about/about.service';
-import { Observable } from 'rxjs';
-import { ITechCategory } from '@modules/about/about.models';
+import type { ITechCategory } from '@modules/about/about.models';
+import { PmAsyncContentComponent } from '@shared/components/pm-async-content/pm-async-content.component';
+import { ScrollRevealDirective } from '@shared/directives/scroll-reveal.directive';
+import { GibberishRevealDirective } from '@shared/directives/gibberish-reveal.directive';
+import { toLoadStatusSignals } from '@app/shared/models/load-status.signals';
 
 @Component({
   selector: 'app-about',
-  imports: [NgForOf, NgIf],
+  imports: [PmAsyncContentComponent, ScrollRevealDirective, GibberishRevealDirective],
   templateUrl: './about.component.html',
   styleUrl: './about.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AboutComponent {
   private aboutService = inject(AboutService);
-  private skills$: Observable<ITechCategory[]> = this.aboutService.tech$;
 
-  // Array to hold the technical skills fetched from the service
-  skills: ITechCategory[] = [];
+  readonly skills = toSignal(this.aboutService.tech$, {
+    initialValue: [] as ITechCategory[],
+  });
+  private readonly techLoad = toLoadStatusSignals(this.aboutService.techState$);
+  readonly techLoadStatus = this.techLoad.loadStatus;
+  readonly techError = this.techLoad.error;
 
-  // Predefined lists of skills and areas of expertise
+  retryTechLoad(): void {
+    this.aboutService.reloadTechstack();
+  }
+
   technicSkills = [
     'BEM',
     'Styleguide Driven Development',
@@ -30,42 +41,55 @@ export class AboutComponent {
     'Erfahrung in deutsch- und englischsprachigen Teams',
     'Refactoring',
     'Konzeption, Design und Umsetzung von Frontend-Architekturen',
-    'nachhaltige Software-Entwicklung',
+    'Nachhaltige Softwareentwicklung',
+  ];
+
+  workProcess = [
+    {
+      step: '01',
+      title: 'Kennenlernen',
+      text: 'Kurzes Gespräch oder Nachricht: Was soll erreicht werden, wer ist beteiligt, welcher Zeitrahmen steht im Raum?',
+    },
+    {
+      step: '02',
+      title: 'Einordnung',
+      text: 'Ich schaue mir Bestand, Team und Rahmenbedingungen an — ehrlich, ohne Sales-Pitch. Passt es nicht, sage ich das.',
+    },
+    {
+      step: '03',
+      title: 'Umsetzung',
+      text: 'Iterativ in engen Zyklen: Design und Code zusammen, reviewbar, mit klarem Fokus auf wartbares Frontend.',
+    },
+    {
+      step: '04',
+      title: 'Übergabe',
+      text: 'Dokumentation, Wissenstransfer, sauberer Stand — damit du (oder ich später) ohne Bruch weiterarbeiten kannst.',
+    },
   ];
 
   whatIAmGoodAt = [
     'Produkte mit Leben erfüllen',
-    'Spannende und Skurrile Designs',
-    'Frontend Lösungen',
-    'Automation',
+    'Spannende und schräge Designs',
+    'Frontend-Lösungen und Design Systems',
+    'Automatisierung',
     'Persönlichkeit in Services integrieren',
     'Progressive Web Apps (PWAs)',
-    'Vollständige Lösungen, Front- bis Backend',
+    'Vollständige Lösungen von Frontend bis Backend',
     'Integrationen',
-    'Internet Of Things',
+    'Internet of Things',
   ];
 
-  // Constructor to initialize the component and subscribe to the skills observable
-  constructor() {
-    this.subscribeToSkills();
-  }
-
   years(data: number = 0): string {
-    let returnValue =
-      Math.round(data) > 1 ? `${Math.round(data)}+ Jahre` : `${Math.round(data)}+ Jahr`;
-    if (Math.round(data) <= 0)
-      returnValue = Math.round(data * 12) > 1 ? `${data * 12} Monate` : `${data * 12} Monat`;
-    if (data * 12 <= 0) return '';
-    return returnValue;
-  }
+    const roundedYears = Math.round(data);
+    if (roundedYears > 0) {
+      return roundedYears > 1 ? `${roundedYears}+ Jahre` : `${roundedYears}+ Jahr`;
+    }
 
-  /**
-   * Subscribes to the skills observable from the AboutService
-   * and updates the local skills array when new data is emitted.
-   */
-  private subscribeToSkills(): void {
-    this.skills$.subscribe((skills) => {
-      this.skills = skills;
-    });
+    const months = Math.round(data * 12);
+    if (months <= 0) {
+      return '';
+    }
+
+    return months > 1 ? `${months} Monate` : `${months} Monat`;
   }
 }

@@ -1,53 +1,32 @@
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { AppState } from '@app/state';
+import type { AppState } from '@app/state';
 import { ProjectsService } from './projects.service';
 import { TestBed } from '@angular/core/testing';
 import { fromKnowledge } from '@app/state/knowledge';
-import {
-  CUSTOMER,
+import type {
   CUSTOMERSDATASTATE,
-  DATE,
-  PROJECT,
   PROJECTDATASTATE,
   PROJECTSDATASTATE,
-  TECH,
   TECHSTACK,
   TECHSTACKDATASTATE,
 } from '@app/state/knowledge/knowledge.models';
+
+import type { LoadStatus } from '@app/shared/models/load-status.model';
+import { convertProject, convertProjects } from '@app/state/knowledge/mappers/project.mapper';
+import { createHomeTechStackFixture, createSampleCustomer, createSampleProject } from '../../../testing/knowledge.fixtures';
 
 describe('ProjectsService', () => {
   let service: ProjectsService;
   let store: MockStore<AppState>;
 
   const stateBasics: {
-    loadStatus: 'PENDING' | 'LOADING' | 'COMPLETED';
+    loadStatus: LoadStatus;
     error: object | string | null;
   } = {
     loadStatus: 'COMPLETED',
     error: null,
   };
-  const customerBasic: CUSTOMER = {
-    name: 'Customer 1',
-    location: 'Location 1',
-    last_used_date: new Date('2021-05-01'),
-  };
-  const dateBasic: DATE = { start_date: new Date('2020-01-01'), end_date: new Date('2021-01-01') };
-  const techBasic: TECH = {
-    name: 'Tech 1',
-    uuid: '1',
-    expertise_level: 'expertise_levelTest',
-    type: 'typeTest',
-  };
-  const projectBasic: PROJECT = {
-    uuid: '1',
-    name: 'Project 1',
-    position: 'Position 1',
-    content: 'Content 1',
-    customers: [customerBasic],
-    dates: [dateBasic],
-    tech: [techBasic],
-    type: 'FEDEV',
-  };
+  const projectBasic = createSampleProject();
 
   const mockProjectsData: PROJECTSDATASTATE = {
     ...stateBasics,
@@ -77,7 +56,7 @@ describe('ProjectsService', () => {
 
   const mockCustomersData: CUSTOMERSDATASTATE = {
     ...stateBasics,
-    data: [customerBasic],
+    data: [createSampleCustomer()],
   };
 
   const initialState: AppState = {
@@ -102,10 +81,6 @@ describe('ProjectsService', () => {
 
   it('should be created', () => {
     expect(service).toBeTruthy();
-  });
-
-  it('should dispatch GetProjectServiceData action on initialization', () => {
-    expect(store.dispatch).toHaveBeenCalledWith(fromKnowledge.actions.GetProjectServiceData());
   });
 
   it('should update projects$ with converted project categories', (done) => {
@@ -135,42 +110,14 @@ describe('ProjectsService', () => {
 
     service.projects$.subscribe((projects) => {
       expect(projects.length).toBe(1);
-      expect(projects[0].title).toBe('FEDEV');
+      expect(projects[0].title).toBe('Projekte als Auftragnehmer');
       done();
     });
   });
 
   it('should update tech$ with sorted tech data', (done) => {
     const techstackState: TECHSTACKDATASTATE = {
-      data: [
-        {
-          name: 'FETech1',
-          project_count: 5,
-          last_usage_date: new Date('2022-01-01'),
-          type: 'FEDEV',
-          expertise_level: 80,
-          flag_important: false,
-          project_dates: [],
-        },
-        {
-          name: 'FETech2',
-          project_count: 4,
-          last_usage_date: new Date('2023-01-01'),
-          type: 'FEDEV',
-          expertise_level: 85,
-          flag_important: false,
-          project_dates: [],
-        },
-        {
-          name: 'BETech1',
-          project_count: 10,
-          last_usage_date: new Date('2021-01-01'),
-          type: 'BEDEV',
-          expertise_level: 80,
-          flag_important: false,
-          project_dates: [],
-        },
-      ],
+      data: createHomeTechStackFixture(),
       loadStatus: 'COMPLETED',
       error: null,
     };
@@ -230,17 +177,27 @@ describe('ProjectsService', () => {
   });
 
   it('should convert projects correctly', () => {
-    const projects = service.convertProjects(mockProjectsData.data);
+    const projects = convertProjects(mockProjectsData.data);
     expect(projects.length).toBe(1);
-    expect(projects[0].title).toBe('FEDEV');
+    expect(projects[0].title).toBe('Projekte als Auftragnehmer');
     expect(projects[0].data.length).toBe(1);
     expect(projects[0].data[0].label).toBe('Project 1');
   });
 
   it('should convert a single project correctly', () => {
-    const project = service.convertProject(mockProjectData.data as any);
+    const project = convertProject(mockProjectData.data);
     expect(project.id).toBe('1');
     expect(project.label).toBe('Project 1');
     expect(project.position).toBe('Position 1');
+  });
+
+  it('should dispatch GetProjects on reloadProjects', () => {
+    service.reloadProjects();
+    expect(store.dispatch).toHaveBeenCalledWith(fromKnowledge.actions.GetProjects());
+  });
+
+  it('should dispatch GetTechstack on reloadTechstack', () => {
+    service.reloadTechstack();
+    expect(store.dispatch).toHaveBeenCalledWith(fromKnowledge.actions.GetTechstack());
   });
 });

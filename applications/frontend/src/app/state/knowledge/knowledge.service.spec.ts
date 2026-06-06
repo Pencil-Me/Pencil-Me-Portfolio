@@ -2,7 +2,8 @@ import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { KnowledgeService } from './knowledge.service';
 import { ApiClientService } from '@core/services/api/api-client.service';
-import { CUSTOMER, DATE, PROJECT, TECH, TECHSTACK } from '@app/state/knowledge/knowledge.models';
+import type { TECHSTACK, CUSTOMER } from '@app/state/knowledge/knowledge.models';
+import { createSampleProject } from '../../../testing/knowledge.fixtures';
 
 describe('KnowledgeService', () => {
   let service: KnowledgeService;
@@ -40,32 +41,7 @@ describe('KnowledgeService', () => {
   });
 
   it('should return projects data', () => {
-    const customerBasic: CUSTOMER = {
-      name: 'Customer 1',
-      location: 'Location 1',
-      last_used_date: new Date('2021-05-01'),
-    };
-    const dateBasic: DATE = {
-      start_date: new Date('2020-01-01'),
-      end_date: new Date('2021-01-01'),
-    };
-    const techBasic: TECH = {
-      name: 'Tech 1',
-      uuid: '1',
-      expertise_level: 'expertise_levelTest',
-      type: 'typeTest',
-    };
-    const projectBasic: PROJECT = {
-      uuid: '1',
-      name: 'Project 1',
-      position: 'Position 1',
-      content: 'Content 1',
-      customers: [customerBasic],
-      dates: [dateBasic],
-      tech: [techBasic],
-      type: 'FEDEV',
-    };
-    const projects: PROJECT[] = [{ ...projectBasic }];
+    const projects = [createSampleProject()];
     apiClientService.get.and.returnValue(of(projects));
 
     service.getProjects().subscribe((data) => {
@@ -76,32 +52,7 @@ describe('KnowledgeService', () => {
   });
 
   it('should return project data by id', () => {
-    const customerBasic: CUSTOMER = {
-      name: 'Customer 1',
-      location: 'Location 1',
-      last_used_date: new Date('2021-05-01'),
-    };
-    const dateBasic: DATE = {
-      start_date: new Date('2020-01-01'),
-      end_date: new Date('2021-01-01'),
-    };
-    const techBasic: TECH = {
-      name: 'Tech 1',
-      uuid: '1',
-      expertise_level: 'expertise_levelTest',
-      type: 'typeTest',
-    };
-    const projectBasic: PROJECT = {
-      uuid: '1',
-      name: 'Project 1',
-      position: 'Position 1',
-      content: 'Content 1',
-      customers: [customerBasic],
-      dates: [dateBasic],
-      tech: [techBasic],
-      type: 'FEDEV',
-    };
-    const project: PROJECT = { ...projectBasic };
+    const project = createSampleProject();
     const projectId = '1';
     apiClientService.get.and.returnValue(of(project));
 

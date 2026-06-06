@@ -1,21 +1,43 @@
-<div appScrollManager>
-  <div class="anchor" appScrollSection="anchor-top"></div>
+<div appScrollManager class="pm-page">
+  <div
+    class="pm-scroll-progress"
+    aria-hidden="true"
+    [style.transform]="'scaleX(' + scrollProgress() + ')'"
+  ></div>
 
-  <div class="top-scroll-container" *ngIf="showScrollToTop">
-    <app-top-scroller></app-top-scroller>
+  <div class="pm-page-chrome" aria-hidden="true">
+    <div class="pm-page-chrome__status">
+      <span>SYS // PENCIL-ME v1.0</span>
+    </div>
+    <div class="pm-page-chrome__frame"></div>
   </div>
 
-  <div class="layout-container">
+  <div class="anchor" appScrollSection="anchor-top"></div>
+
+  @if (showScrollToTop()) {
+    <div class="top-scroll-container">
+      <app-top-scroller></app-top-scroller>
+    </div>
+  }
+
+  <div class="layout-container pm-layout-shell">
     <div class="header-content">
       <app-navigation></app-navigation>
     </div>
 
-    <div class="main-content">
+    <div class="main-content pm-layout-main">
+      @if (routeLoading.visible()) {
+        <app-route-loading />
+      }
       <router-outlet (deactivate)="onDeactivate()"></router-outlet>
     </div>
 
-    <div class="footer-content">
-      <app-footer></app-footer>
-    </div>
+    @defer (on idle) {
+      <div class="footer-content">
+        <app-footer></app-footer>
+      </div>
+    } @placeholder {
+      <div class="footer-content footer-content--placeholder" aria-hidden="true"></div>
+    }
   </div>
 </div>

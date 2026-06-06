@@ -1,6 +1,17 @@
-.env.dev
-.env.prod
-composer.lock
-.phpunit.result.cache
+# Dependencies
 /vendor/
+composer.lock
+
+# PHPUnit
+.phpunit.result.cache
+
+# Logs
 /logs/*
+
+# Environment (templates: .env.example, src/Inc/.env.example)
+.env
+.env.*
+!.env.example
+src/Inc/.env
+src/Inc/.env.*
+!src/Inc/.env.example

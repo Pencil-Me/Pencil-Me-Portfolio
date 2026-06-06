@@ -1,13 +1,21 @@
 import { TestBed } from '@angular/core/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { Observable, of, throwError } from 'rxjs';
+import type { Observable } from 'rxjs';
+import { of, throwError } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 
 import { KnowledgeEffects } from './knowledge.effects';
 import { KnowledgeService } from '@app/state/knowledge/knowledge.service';
 import { fromKnowledge } from '@app/state/knowledge/index';
-import { Action } from '@ngrx/store';
-import { CUSTOMER, DATE, PROJECT, TECH, TECHSTACK } from '@app/state/knowledge/knowledge.models';
+import type { Action } from '@ngrx/store';
+import type {
+  CUSTOMER,
+  DATE,
+  PROJECT,
+  TECH,
+  TECHSTACK,
+} from '@app/state/knowledge/knowledge.models';
 
 describe('KnowledgeEffects', () => {
   let actions$: Observable<Action>;
@@ -73,6 +81,24 @@ describe('KnowledgeEffects', () => {
         done();
       });
     });
+
+    it('should map HttpErrorResponse to readable message on failure', (done) => {
+      const httpError = new HttpErrorResponse({
+        status: 500,
+        statusText: 'Internal Server Error',
+        error: { message: 'Serverfehler' },
+      });
+      const action = fromKnowledge.actions.GetTechstack();
+      const outcome = fromKnowledge.actions.GetTechstackFailure({ error: 'Serverfehler' });
+
+      actions$ = of(action);
+      knowledgeService.getTechstack.and.returnValue(throwError(httpError));
+
+      effects.getTechstackDataEffect$.subscribe((result) => {
+        expect(result).toEqual(outcome);
+        done();
+      });
+    });
   });
 
   describe('getProjectsDataEffect$', () => {
@@ -100,7 +126,7 @@ describe('KnowledgeEffects', () => {
         customers: [customerBasic],
         dates: [dateBasic],
         tech: [techBasic],
-        type: 'FEDEV',
+        type: 'CUST',
       };
       const projects: PROJECT[] = [projectBasic];
       const action = fromKnowledge.actions.GetProjects();
@@ -155,7 +181,7 @@ describe('KnowledgeEffects', () => {
         customers: [customerBasic],
         dates: [dateBasic],
         tech: [techBasic],
-        type: 'FEDEV',
+        type: 'CUST',
       };
       const project: PROJECT = { ...projectBasic };
       const action = fromKnowledge.actions.GetProject({ id: '1' });

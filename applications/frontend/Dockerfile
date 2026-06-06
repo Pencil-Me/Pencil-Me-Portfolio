@@ -1,6 +1,8 @@
 # Stage 1: Build frontend
 FROM node:20-alpine as angular
 
+ARG BUILD_CONFIGURATION=docker
+
 # make the 'app' folder the current working directory
 WORKDIR /fe-angular-app
 
@@ -11,8 +13,8 @@ RUN npm ci
 
 # copy project files and folders to the current working directory (i.e. 'app' folder)
 COPY . .
-# build app for production with minification
-RUN npm run build
+# docker = lokaler Compose-Stack (/api2), production = externe Prod-API
+RUN npm run build -- --configuration ${BUILD_CONFIGURATION}
 
 # Stage 2: Serve it using Ngnix
 FROM nginx:alpine

@@ -1,60 +1,91 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  inject,
+  signal,
+} from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import type { FormGroup } from '@angular/forms';
 import { ApiClientService } from '@core/services/api/api-client.service';
-import { NgClass, NgIf, NgTemplateOutlet } from '@angular/common';
+import { mapApiError } from '@app/shared/utils/api-error.util';
+import { NgClass, NgTemplateOutlet } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { faEnvelope } from '@fortawesome/free-regular-svg-icons';
+import { ScrollRevealDirective } from '@shared/directives/scroll-reveal.directive';
+import { GibberishRevealDirective } from '@shared/directives/gibberish-reveal.directive';
+
+type ContactFormType = 'GENERALLY' | 'PROJECT';
 
 @Component({
   selector: 'app-contact',
-  imports: [ReactiveFormsModule, NgIf, NgClass, RouterLink, NgTemplateOutlet, FaIconComponent],
+  imports: [
+    ReactiveFormsModule,
+    NgClass,
+    RouterLink,
+    NgTemplateOutlet,
+    FaIconComponent,
+    ScrollRevealDirective,
+    GibberishRevealDirective,
+  ],
   templateUrl: './contact.component.html',
   styleUrl: './contact.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ContactComponent implements OnInit {
+export class ContactComponent {
+  private formBuilder = inject(FormBuilder);
+  private apiClient = inject(ApiClientService);
   private activatedRoute = inject(ActivatedRoute);
+  private destroyRef = inject(DestroyRef);
 
   generally_form: FormGroup;
   project_form: FormGroup;
-  emailIsSend: boolean = false;
-  emailSending: boolean = false;
-  emailHasError: boolean = false;
+
+  readonly emailIsSend = signal(false);
+  readonly emailSending = signal(false);
+  readonly emailHasError = signal(false);
+  readonly emailErrorMessage = signal<string | null>(null);
+  readonly contactForm = signal<ContactFormType | null>(null);
+  readonly isSpecalized = signal(false);
+
   email: string = 'info@pencil-me.de';
   encryptedEmail: string = this.encryptEmail(this.email);
-  contactForm: null | 'GENERALLY' | 'PROJECT' = null;
-  isSpecalized: boolean = false;
   textareaPattern: string = '[a-zA-Z0-9\\/!@#$%^&*(),.?":{}|<>\\- \n\r]*';
   textPattern: string = '[a-zA-Z0-9!@#$%^&*(),.?":{}|<>\\- ]*';
   textStrongPattern: string = '[a-zA-Z, ]*';
   minLength: number = 1;
   maxLength: number = 1000;
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private apiClient: ApiClientService,
-  ) {
+  constructor() {
     this.generally_form = this.createGenerallyForm();
     this.project_form = this.createProjectForm();
-  }
-  ngOnInit() {
-    this.activatedRoute.paramMap.subscribe((params) => {
+
+    this.activatedRoute.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
       const type = params.get('type') ?? '';
-      if (type && type === 'project') {
-        this.contactForm = 'PROJECT';
-        this.isSpecalized = true;
+      if (type === 'project') {
+        this.contactForm.set('PROJECT');
+        this.isSpecalized.set(true);
       }
-      if (type && type === 'general') {
-        this.contactForm = 'GENERALLY';
-        this.isSpecalized = true;
+      if (type === 'general') {
+        this.contactForm.set('GENERALLY');
+        this.isSpecalized.set(true);
       }
     });
   }
 
+  selectContactForm(type: ContactFormType): void {
+    this.contactForm.set(type);
+  }
+
+  clearContactForm(): void {
+    this.contactForm.set(null);
+  }
+
   /**
    * Initializes the contact form with validation rules.
-   * @returns {FormGroup} The initialized form group.
    */
   private createGenerallyForm(): FormGroup {
     return this.formBuilder.group({
@@ -77,7 +108,6 @@ export class ContactComponent implements OnInit {
 
   /**
    * Initializes the contact form with validation rules.
-   * @returns {FormGroup} The initialized form group.
    */
   private createProjectForm(): FormGroup {
     return this.formBuilder.group({
@@ -111,11 +141,6 @@ export class ContactComponent implements OnInit {
     });
   }
 
-  /**
-   * Checks if all required fields in the given form have been touched and are invalid.
-   * @param {FormGroup} form - The form to check.
-   * @returns {boolean} - Returns true if all required fields have been touched and are invalid, otherwise false.
-   */
   allRequiredFieldsTouchedAndInvalid(form: FormGroup): boolean {
     const controls = form.controls;
     for (const name in controls) {
@@ -126,42 +151,26 @@ export class ContactComponent implements OnInit {
     return false;
   }
 
-  /**
-   * Convenience getter for easy access to form controls.
-   * @returns {any} The form controls.
-   */
   get f() {
     return this.generally_form.controls;
   }
 
-  /**
-   * Sends the contact form generally data if the form is valid.
-   * If the form is invalid, it marks all controls as touched to show validation errors.
-   */
   generally_send(): void {
-    if (this.generally_form.invalid || this.generally_form.get('generally_yes')?.value === false) {
+    if (this.isContactSendBlocked(this.generally_form, 'generally_yes')) {
       this.markGenerallyFormAsTouched();
       return;
     }
 
-    const formData = {
-      contactByFax: this.generally_form.get('generally_contactByFax')?.value
-        ? this.generally_form.get('generally_contactByFax')?.value
-        : undefined,
-      email: this.generally_form.get('generally_email')?.value,
-      message: this.generally_form.get('generally_message')?.value,
-      name: this.generally_form.get('generally_name')?.value,
+    this.sendEmail({
+      contactByFax: this.readOptionalFax(this.generally_form, 'generally_contactByFax'),
+      email: this.readFormValue(this.generally_form, 'generally_email'),
+      message: this.readFormValue(this.generally_form, 'generally_message'),
+      name: this.readFormValue(this.generally_form, 'generally_name'),
       sendCopy: this.generally_form.get('generally_sendCopy')?.value,
-    };
-
-    this.sendEmail(formData);
+    });
   }
-  /**
-   * Finds and returns a list of invalid controls in the given form.
-   * @param {FormGroup} form - The form to check for invalid controls.
-   * @returns {Array<{name: string, value: any}>} - An array of objects representing the invalid controls, each containing the control's name and value.
-   */
-  findInvalidControls(form: FormGroup): { name: string; value: any }[] {
+
+  findInvalidControls(form: FormGroup): { name: string; value: unknown }[] {
     const invalid = [];
     const controls = form.controls;
     for (const name in controls) {
@@ -175,68 +184,67 @@ export class ContactComponent implements OnInit {
     return invalid;
   }
 
-  /**
-   * Marks all form controls as touched to trigger validation messages.
-   */
   private markGenerallyFormAsTouched(): void {
     this.generally_form.markAllAsTouched();
   }
 
-  /**
-   * Sends the contact form project data if the form is valid.
-   * If the form is invalid, it marks all controls as touched to show validation errors.
-   */
   project_send(): void {
-    if (this.project_form.invalid || this.project_form.get('project_yes')?.value === false) {
+    if (this.isContactSendBlocked(this.project_form, 'project_yes')) {
       this.markProjectFormAsTouched();
       return;
     }
 
-    const formData = {
-      contactByFax: this.project_form.get('project_contactByFax')?.value
-        ? this.project_form.get('project_contactByFax')?.value
-        : undefined,
-      email: this.project_form.get('project_email')?.value,
-      message: `Unternehmen: ${this.project_form.get('project_company')?.value},
-      Kontaktname: ${this.project_form.get('project_contactName')?.value},
-      Telefon: ${this.project_form.get('project_phone')?.value},
-      Email: ${this.project_form.get('project_email')?.value},
-      Adresse: ${this.project_form.get('project_address')?.value}
-      -------------------------------------------------------
-      Projekttitel: ${this.project_form.get('project_title')?.value},
-      Beschreibung: ${this.project_form.get('project_description')?.value},
-      Timeline: ${this.project_form.get('project_timeline')?.value},
-      `,
-      name: `${this.project_form.get('project_contactName')?.value} - ${this.project_form.get('project_company')?.value}`,
+    this.sendEmail({
+      contactByFax: this.readOptionalFax(this.project_form, 'project_contactByFax'),
+      email: this.readFormValue(this.project_form, 'project_email'),
+      message: this.buildProjectMessage(),
+      name: `${this.readFormValue(this.project_form, 'project_contactName')} - ${this.readFormValue(this.project_form, 'project_company')}`,
       sendCopy: this.project_form.get('project_sendCopy')?.value,
-    };
-    this.sendEmail(formData);
+    });
   }
 
-  /**
-   * Marks all form controls as touched to trigger validation messages.
-   */
+  private isContactSendBlocked(form: FormGroup, consentKey: string): boolean {
+    return form.invalid || form.get(consentKey)?.value === false;
+  }
+
+  private readFormValue(form: FormGroup, key: string): string {
+    return String(form.get(key)?.value ?? '');
+  }
+
+  private readOptionalFax(form: FormGroup, key: string): string | undefined {
+    const value = form.get(key)?.value;
+    return value ? String(value) : undefined;
+  }
+
+  private buildProjectMessage(): string {
+    const form = this.project_form;
+    return [
+      `Firmenname: ${this.readFormValue(form, 'project_company')}`,
+      `Ansprechpartner: ${this.readFormValue(form, 'project_contactName')}`,
+      `Telefonnummer: ${this.readFormValue(form, 'project_phone')}`,
+      `E-Mail: ${this.readFormValue(form, 'project_email')}`,
+      `Anschrift: ${this.readFormValue(form, 'project_address')}`,
+      '-------------------------------------------------------',
+      `Projekttitel: ${this.readFormValue(form, 'project_title')}`,
+      `Projektbeschreibung: ${this.readFormValue(form, 'project_description')}`,
+      `Geplanter Zeitraum: ${this.readFormValue(form, 'project_timeline')}`,
+    ].join('\n');
+  }
+
   private markProjectFormAsTouched(): void {
     this.project_form.markAllAsTouched();
   }
 
-  /**
-   * Sends the form data to the API and handles the response.
-   * @param {any} formData The form data to be sent.
-   */
-  private sendEmail(formData: any): void {
-    this.emailSending = true;
+  private sendEmail(formData: Record<string, unknown>): void {
+    this.emailSending.set(true);
+    this.emailHasError.set(false);
+    this.emailErrorMessage.set(null);
     this.apiClient.post('send_email', this.removeUndefinedKeys(formData)).subscribe({
       next: (data) => this.handleSuccess(data),
       error: (error) => this.handleError(error),
     });
   }
 
-  /**
-   * Removes keys with undefined values from the given object.
-   * @param {object} object - The object from which to remove undefined keys.
-   * @returns {object} - The object with undefined keys removed.
-   */
   private removeUndefinedKeys<T extends object>(object: T): T {
     Object.keys(object).forEach((key) => {
       if (object[key as keyof T] === undefined) {
@@ -246,33 +254,21 @@ export class ContactComponent implements OnInit {
     return object;
   }
 
-  /**
-   * Handles the successful email sending response.
-   * @param {any} data The response data.
-   */
-  private handleSuccess(data: any): void {
-    this.emailIsSend = true;
-    this.emailSending = false;
+  private handleSuccess(_data: unknown): void {
+    this.emailIsSend.set(true);
+    this.emailSending.set(false);
+    this.emailHasError.set(false);
+    this.emailErrorMessage.set(null);
     this.generally_form.reset();
     this.project_form.reset();
   }
 
-  /**
-   * Handles errors that occur during the email sending process.
-   * @param {any} error The error object.
-   */
-  private handleError(error: any): void {
-    this.emailHasError = true;
-    this.emailSending = false;
-    console.error('There was an error!', error);
+  private handleError(error: unknown): void {
+    this.emailHasError.set(true);
+    this.emailSending.set(false);
+    this.emailErrorMessage.set(mapApiError(error));
   }
 
-  /**
-   * Encrypts the email address by replacing '@' with '[at]'.
-   * This is a simple obfuscation technique to prevent spam bots from harvesting the email address.
-   * @param email - The email address to be encrypted.
-   * @returns The encrypted email address.
-   */
   private encryptEmail(email: string): string {
     return email.replace('@', '[at]');
   }

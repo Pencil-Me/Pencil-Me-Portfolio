@@ -1,17 +1,18 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { HttpHeaders } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
-import { Observable } from 'rxjs';
+import type { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiClientService {
+  private http = inject(HttpClient);
+
   baseUrl: string = environment.API_BASE_URL;
   apiKey: string = environment.API_KEY;
-
-  constructor(private http: HttpClient) {}
 
   /**
    * Wrapper for GET method of HTTPClient with composed URL
@@ -88,6 +89,8 @@ export class ApiClientService {
    * @returns the complete URL for API call
    */
   private composeApiUrl(path: string): string {
-    return `${this.baseUrl}/${path}`;
+    const base = this.baseUrl.replace(/\/+$/, '');
+    const route = path.replace(/^\/+/, '');
+    return `${base}/${route}`;
   }
 }

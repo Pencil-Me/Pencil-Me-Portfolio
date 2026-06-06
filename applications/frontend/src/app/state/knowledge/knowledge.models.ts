@@ -1,40 +1,7 @@
-/**
- * Type definition for the title of a tech stack item.
- */
-export type TECHTITLE =
-  | ''
-  | 'FEDEV'
-  | 'BEDEV'
-  | 'FEFRAME'
-  | 'BEFRAME'
-  | 'FEBT'
-  | 'DEVOPS'
-  | 'DB'
-  | 'CMS'
-  | 'TEST'
-  | 'PROJECTTOOL'
-  | 'MISC'
-  | 'DESIGN'
-  | 'LANG';
+import type { LoadStatus } from '@app/shared/models/load-status.model';
+import type { PROJECTTITLE, TECHTITLE } from '@app/shared/domain/portfolio-domain';
 
-/**
- * Type definition for the title of a project item.
- */
-export type PROJECTTITLE =
-  | ''
-  | 'FEDEV'
-  | 'BEDEV'
-  | 'FEFRAME'
-  | 'BEFRAME'
-  | 'FEBT'
-  | 'DEVOPS'
-  | 'DB'
-  | 'CMS'
-  | 'TEST'
-  | 'PROJECTTOOL'
-  | 'MISC'
-  | 'DESIGN'
-  | 'LANG';
+export type { PROJECTTITLE, TECHTITLE };
 
 /**
  * Type definition for a tech stack item.
@@ -95,7 +62,7 @@ export type PROJECT = {
  * Type definition for the state of a single data object.
  */
 export type DATASTATE<T> = {
-  loadStatus: 'PENDING' | 'LOADING' | 'COMPLETED';
+  loadStatus: LoadStatus;
   error: object | string | null;
   data: T;
 };
@@ -104,7 +71,7 @@ export type DATASTATE<T> = {
  * Type definition for the state of multiple data objects.
  */
 export type MULTIDATASTATE<T> = {
-  loadStatus: 'PENDING' | 'LOADING' | 'COMPLETED';
+  loadStatus: LoadStatus;
   error: object | string | null;
   data: T[];
 };

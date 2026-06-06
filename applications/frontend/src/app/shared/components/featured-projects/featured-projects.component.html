@@ -1,0 +1,104 @@
+<section
+  class="pm-featured-projects"
+  [ngClass]="{
+    'pm-featured-projects--home pm-section--featured-band pm-section--offset': variant === 'home',
+    'pm-featured-projects--projects': variant === 'projects',
+  }"
+>
+  <div class="container section-container">
+    <div class="pm-intro-block" appScrollReveal="up">
+      @if (variant === 'home') {
+        <h2 appGibberishReveal>Drei Projekte, die viel über meine Arbeit sagen</h2>
+        <p appGibberishReveal>
+          Nicht die lauteste Showreel-Auswahl — sondern drei typische Situationen: Enterprise-Frontend,
+          komplexe Fachdomäne, echte Hardware am anderen Ende der Leitung.
+        </p>
+      } @else {
+        <h3 appGibberishReveal>Ausgewählte Projekte</h3>
+        <p appGibberishReveal>
+          Kurz zusammengefasst: Ausgangslage, meine Rolle und was am Ende stand. Details und Tech-Stack
+          findest du in der vollständigen Liste darunter.
+        </p>
+      }
+    </div>
+
+    <app-pm-async-content
+      [status]="projectsLoadStatus()"
+      [error]="projectsError()"
+      variant="featured"
+      label="Lade Highlight-Projekte"
+      [showRetry]="true"
+      (retry)="retryProjectsLoad()"
+    >
+      @if (featuredProjects().length > 0) {
+        <ul class="pm-featured-projects__grid">
+        @for (project of featuredProjects(); track project.id; let i = $index) {
+          <li
+            class="pm-featured-projects__item"
+            appScrollReveal="up"
+            [revealDelay]="i * 110"
+          >
+              <article class="pm-panel-brutal pm-highlight-panel">
+                <header class="pm-highlight-panel__header">
+                  <span class="pm-highlight-panel__index" aria-hidden="true">
+                    {{ (i + 1).toString().padStart(2, '0') }}
+                  </span>
+                  <span class="pm-highlight-panel__tag" appGibberishReveal>{{ project.tag }}</span>
+                </header>
+
+                <h4 class="pm-highlight-panel__title">
+                  <button
+                    type="button"
+                    class="pm-highlight-panel__title-btn"
+                    appGibberishReveal
+                    (click)="openProject(project.id)"
+                  >
+                    {{ project.label }}
+                  </button>
+                </h4>
+
+                @if (project.customer) {
+                  <p class="pm-highlight-panel__meta" appGibberishReveal>{{ project.customer }}</p>
+                }
+
+                <dl class="pm-highlight-panel__story">
+                  <div>
+                    <dt appGibberishReveal>Ausgangslage</dt>
+                    <dd appGibberishReveal>{{ project.problem }}</dd>
+                  </div>
+                  <div>
+                    <dt appGibberishReveal>Meine Rolle</dt>
+                    <dd appGibberishReveal>{{ project.role }}</dd>
+                  </div>
+                  @if (variant === 'projects') {
+                    <div>
+                      <dt appGibberishReveal>Ergebnis</dt>
+                      <dd appGibberishReveal>{{ project.outcome }}</dd>
+                    </div>
+                  }
+                </dl>
+
+                @if (project.tech.length > 0) {
+                  <div class="pm-tech-chip-list pm-highlight-panel__tech" aria-label="Technologien">
+                    @for (tech of project.tech.slice(0, variant === 'home' ? 4 : 6); track tech.name) {
+                      <span class="pm-tech-chip" appGibberishReveal>{{ tech.name }}</span>
+                    }
+                  </div>
+                }
+
+                <button
+                  type="button"
+                  class="btn btn-pm-tertiary pm-highlight-panel__cta"
+                  (click)="openProject(project.id)"
+                  [attr.data-text]="'Details ansehen'"
+                >
+                  Details ansehen
+                </button>
+              </article>
+            </li>
+          }
+        </ul>
+      }
+    </app-pm-async-content>
+  </div>
+</section>

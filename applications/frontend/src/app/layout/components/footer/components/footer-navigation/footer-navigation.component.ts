@@ -1,5 +1,4 @@
-import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 export interface NavLink {
@@ -9,9 +8,10 @@ export interface NavLink {
 
 @Component({
   selector: 'app-footer-navigation',
-  imports: [CommonModule, RouterLink],
+  imports: [RouterLink],
   styleUrl: './footer-navigation.component.scss',
   templateUrl: './footer-navigation.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FooterNavigationComponent {
   @Input() navLinks: NavLink[] = [];

@@ -1,0 +1,121 @@
+@use '../effects/cyberpunk' as cyber;
+@use '../effects/fx-cyber' as fx;
+@use '../helpers/variables' as vars;
+
+// Viewport-Rahmen + Status-Streifen (Phase A)
+.pm-page {
+  position: relative;
+  min-height: 100vh;
+}
+
+.pm-page-chrome {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 998;
+
+  &__frame {
+    position: absolute;
+    inset: 0;
+    border: 2px solid var(--pm-chrome-border);
+    box-shadow: inset 0 0 0 1px var(--pm-chrome-border-subtle);
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      width: 1.25rem;
+      height: 1.25rem;
+      pointer-events: none;
+    }
+
+    &::before {
+      top: 0.65rem;
+      left: calc(var(--pm-chrome-status-width) + 0.65rem);
+      border-top: 2px solid var(--pm-chrome-accent);
+      border-left: 2px solid var(--pm-chrome-accent);
+      animation: pm-chrome-corner-pulse 15s steps(1, end) infinite;
+    }
+
+    &::after {
+      right: 0.65rem;
+      bottom: 0.65rem;
+      border-right: 2px solid var(--pm-chrome-accent);
+      border-bottom: 2px solid var(--pm-chrome-accent);
+      animation: pm-chrome-corner-pulse 17s steps(1, end) infinite;
+      animation-delay: 0.4s;
+    }
+  }
+
+  &__status {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: var(--pm-chrome-status-width);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--pm-chrome-status-bg);
+    border-right: 1px solid var(--pm-chrome-border);
+    font-family: var(--pm-font-mono), monospace;
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--pm-chrome-status-text);
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+
+    span {
+      opacity: 0.85;
+      @include fx.pm-neon-text-flicker;
+    }
+  }
+}
+
+.pm-page-chrome__frame {
+  @include fx.pm-fx-motion-safe;
+}
+
+.pm-layout-shell {
+  margin-left: var(--pm-chrome-status-width);
+  min-height: 100vh;
+}
+
+.pm-layout-main {
+  min-width: 0;
+  overflow-x: clip;
+
+  :where(.container) {
+    width: 100%;
+    max-width: vars.$layout-max-width;
+    margin-inline: auto;
+    padding-inline: clamp(1rem, 3vw, 2rem);
+  }
+}
+
+@media (width <= 768px) {
+  .pm-page-chrome {
+    &__status {
+      display: none;
+    }
+
+    &__frame {
+      &::before {
+        left: 0.65rem;
+      }
+    }
+  }
+
+  .pm-layout-shell {
+    margin-left: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pm-page-chrome__frame::before,
+  .pm-page-chrome__frame::after {
+    animation: none;
+  }
+}

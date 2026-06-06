@@ -1,0 +1,192 @@
+@use 'cyberpunk' as cyber;
+
+// CRT / HUD Spielereien — wiederverwendbar, prefers-reduced-motion safe
+
+@keyframes pm-crt-beam-sweep {
+  0% {
+    transform: translateY(-120%);
+    opacity: 0;
+  }
+
+  8% {
+    opacity: 0.45;
+  }
+
+  92% {
+    opacity: 0.35;
+  }
+
+  100% {
+    transform: translateY(120%);
+    opacity: 0;
+  }
+}
+
+@keyframes pm-neon-edge-pulse {
+  0%,
+  88%,
+  100% {
+    box-shadow:
+      4px 0 0 var(--pm-gold-soft),
+      0 0 0 transparent;
+  }
+
+  90% {
+    box-shadow:
+      4px 0 0 var(--pm-gold-bright),
+      0 0 18px var(--pm-glitch-cyan-a22),
+      -2px 0 12px var(--pm-red-a28);
+  }
+
+  93% {
+    box-shadow:
+      4px 0 0 var(--pm-gold-soft),
+      0 0 8px var(--pm-glitch-cyan-a18);
+  }
+}
+
+@keyframes pm-mono-data-flicker {
+  0%,
+  94%,
+  100% {
+    opacity: 1;
+    text-shadow: none;
+  }
+
+  95% {
+    opacity: 0.55;
+    text-shadow: 0 0 8px var(--pm-glitch-cyan-a35);
+  }
+
+  96% {
+    opacity: 0.9;
+    text-shadow: -1px 0 var(--pm-glitch-cyan-a22);
+  }
+}
+
+@keyframes pm-chrome-corner-pulse {
+  0%,
+  92%,
+  100% {
+    opacity: 1;
+    filter: none;
+  }
+
+  93% {
+    opacity: 0.45;
+    filter: drop-shadow(0 0 6px var(--pm-glitch-cyan-a40));
+  }
+
+  95% {
+    opacity: 1;
+    filter: drop-shadow(0 0 4px var(--pm-red-a38));
+  }
+}
+
+@keyframes pm-warn-stripe-scroll {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 2rem 0;
+  }
+}
+
+@keyframes pm-chip-glitch-hover {
+  0%,
+  100% {
+    transform: translate(0, 0);
+    box-shadow: none;
+  }
+
+  35% {
+    transform: translate(-1px, 0);
+    box-shadow: 2px 0 0 var(--pm-glitch-cyan-a35);
+  }
+
+  70% {
+    transform: translate(1px, -1px);
+    box-shadow: -2px 0 0 var(--pm-red-a28);
+  }
+}
+
+@keyframes pm-loader-neon-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 transparent;
+  }
+
+  50% {
+    box-shadow:
+      0 0 10px var(--pm-glitch-cyan-a22),
+      0 0 4px var(--pm-red-a28);
+  }
+}
+
+@mixin pm-crt-scan-overlay($beam: true) {
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.12;
+    @include cyber.pm-scanlines(1px, 4px);
+  }
+
+  @if $beam {
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: -45%;
+      height: 30%;
+      pointer-events: none;
+      z-index: 0;
+      background: linear-gradient(
+        180deg,
+        transparent 0%,
+        var(--pm-glitch-cyan-a18) 42%,
+        var(--pm-white-a25) 50%,
+        var(--pm-glitch-cyan-a18) 58%,
+        transparent 100%
+      );
+      opacity: 0;
+      animation: pm-crt-beam-sweep 9s linear infinite;
+    }
+  }
+}
+
+@mixin pm-panel-cyber-lift {
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease,
+    border-color 220ms ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--pm-primary) 55%, var(--pm-border-strong));
+    box-shadow:
+      4px 0 0 var(--pm-gold-bright),
+      0 0 22px var(--pm-glitch-cyan-a18),
+      0 12px 28px var(--pm-black-a20);
+  }
+}
+
+@mixin pm-neon-text-flicker {
+  animation: pm-mono-data-flicker 14s steps(1, end) infinite;
+}
+
+@mixin pm-fx-motion-safe {
+  @media (prefers-reduced-motion: reduce) {
+    &,
+    &::before,
+    &::after {
+      animation: none !important;
+      transform: none !important;
+      transition: none !important;
+    }
+  }
+}

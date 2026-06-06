@@ -1,0 +1,101 @@
+@use 'sass:color';
+@use 'sass:map';
+
+// 3 UI-Hauptfarben (Glitch separat in $glitch-*)
+$color-red: #922038;
+$color-dark: #0f1014;
+$color-gold: #c9a227;
+
+@function pm-tint($base, $white-pct) {
+  // $white-pct = Anteil Weiss (92% -> 92% weiss, 8% base)
+  @return color.mix($base, #fff, 100% - $white-pct);
+}
+
+@function pm-shade($base, $black-pct) {
+  // $black-pct = Anteil Schwarz (70% -> 70% schwarz, 30% base)
+  @return color.mix($base, #000, 100% - $black-pct);
+}
+
+// ── Bordeaux / Royal-Red shades ──────────────────────────────────
+$red-shades: (
+  50: pm-tint($color-red, 92%),
+  100: pm-tint($color-red, 80%),
+  200: pm-tint($color-red, 50%),
+  300: pm-tint($color-red, 22%),
+  400: pm-tint($color-red, 15%),
+  500: $color-red,
+  600: pm-shade($color-red, 15%),
+  700: pm-shade($color-red, 40%),
+  800: pm-shade($color-red, 55%),
+  900: pm-shade($color-red, 70%),
+);
+
+// ── Dark shades ──────────────────────────────────────────────────
+$dark-shades: (
+  50: pm-tint($color-dark, 93%),
+  100: pm-tint($color-dark, 88%),
+  200: pm-tint($color-dark, 24%),
+  300: pm-tint($color-dark, 14%),
+  400: pm-tint($color-dark, 6%),
+  500: $color-dark,
+  600: pm-shade($color-dark, 10%),
+  700: pm-shade($color-dark, 25%),
+  800: pm-shade($color-dark, 40%),
+  900: pm-shade($color-dark, 55%),
+);
+
+// ── Royal-Gold shades (UI-Akzent) ────────────────────────────────
+$gold-shades: (
+  50: pm-tint($color-gold, 88%),
+  100: pm-tint($color-gold, 72%),
+  200: pm-tint($color-gold, 38%),
+  300: pm-tint($color-gold, 18%),
+  400: pm-tint($color-gold, 10%),
+  500: $color-gold,
+  600: pm-shade($color-gold, 12%),
+  700: pm-shade($color-gold, 28%),
+  800: pm-shade($color-gold, 42%),
+  900: pm-shade($color-gold, 58%),
+);
+
+@function red-shade($step) {
+  @return map.get($red-shades, $step);
+}
+
+@function dark-shade($step) {
+  @return map.get($dark-shades, $step);
+}
+
+@function gold-shade($step) {
+  @return map.get($gold-shades, $step);
+}
+
+$shade-steps: 50, 100, 200, 300, 400, 500, 600, 700, 800, 900;
+
+// Glitch (unveraendert — nicht Teil der UI-Hauptpalette)
+$glitch-red-hot: #ff013c;
+$glitch-gold: #e8c547;
+$glitch-gold-bright: #ffe082;
+$glitch-cyan: #00e6f6;
+$glitch-cyan-bright: #6ee7ff;
+
+// Semantik aus Shade-Stufen
+$color-red-hover: red-shade(400);
+$color-red-deep: red-shade(700);
+$color-red-soft: red-shade(200);
+$color-dark-mid: dark-shade(300);
+$color-dark-light: dark-shade(200);
+$color-dark-surface: dark-shade(50);
+$color-dark-panel: dark-shade(100);
+$color-nav-bg: dark-shade(800);
+$color-text-muted-light: color.mix($color-dark, $color-red, 68%);
+$color-text-on-dark: pm-tint($color-dark, 96%);
+$color-gold-soft: gold-shade(700);
+$color-gold-bright: gold-shade(200);
+
+$hero-radial-start: color.mix(red-shade(700), dark-shade(500), 38%);
+$hero-radial-end: color.mix(red-shade(900), dark-shade(500), 28%);
+$section-tint: color.mix(red-shade(800), dark-shade(500), 22%);
+$hero-text-light: pm-tint($color-dark, 78%);
+$hero-text-dark: pm-tint($color-dark, 85%);
+$manifest-tile: color.mix(red-shade(800), dark-shade(500), 32%);

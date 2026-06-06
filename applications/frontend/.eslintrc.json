@@ -5,9 +5,9 @@
     {
       // === TypeScript Files ===
       "files": ["*.ts"],
+      "plugins": ["@ngrx"],
       "parserOptions": {
         "project": ["tsconfig.json"],
-        "tsconfigRootDir": "./applications/frontend",
         "createDefaultProgram": true
       },
       "extends": [
@@ -16,7 +16,6 @@
         "plugin:@typescript-eslint/recommended-requiring-type-checking", // optional: striktere Regeln
         "plugin:@angular-eslint/recommended",
         "plugin:@angular-eslint/template/process-inline-templates",
-        "plugin:@ngrx/recommended",
         "plugin:prettier/recommended"
       ],
       "rules": {
@@ -43,10 +42,28 @@
         "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
         "@typescript-eslint/no-floating-promises": "error",
         "@typescript-eslint/no-explicit-any": "warn",
-        "@typescript-eslint/consistent-type-imports": "warn",
+        "@typescript-eslint/consistent-type-imports": [
+          "warn",
+          {
+            "prefer": "type-imports",
+            "fixStyle": "separate-type-imports",
+            "disallowTypeAnnotations": false
+          }
+        ],
+        "@typescript-eslint/no-unsafe-assignment": "warn",
+        "@typescript-eslint/no-unsafe-call": "warn",
+        "@typescript-eslint/no-unsafe-member-access": "warn",
+        "@typescript-eslint/no-unsafe-argument": "warn",
+        "@typescript-eslint/no-unsafe-return": "warn",
+        "@typescript-eslint/no-unsafe-enum-comparison": "warn",
+        "@typescript-eslint/unbound-method": "off",
 
-        // === NgRx ===
+        // === NgRx (nur projektrelevante Regel; kein volles plugin:@ngrx/store-Preset) ===
         "@ngrx/no-multiple-global-stores": "error",
+
+        // === Angular 21 ===
+        "@angular-eslint/prefer-inject": "warn",
+        "@angular-eslint/prefer-standalone": "warn",
 
         // === CODE STYLE ===
         "no-console": ["warn", { "allow": ["warn", "error"] }],
@@ -86,7 +103,13 @@
       },
       "rules": {
         "@typescript-eslint/no-explicit-any": "off",
-        "@typescript-eslint/no-empty-function": "off"
+        "@typescript-eslint/no-empty-function": "off",
+        "@typescript-eslint/no-unsafe-assignment": "off",
+        "@typescript-eslint/no-unsafe-call": "off",
+        "@typescript-eslint/no-unsafe-member-access": "off",
+        "@typescript-eslint/no-unsafe-return": "off",
+        "@typescript-eslint/unbound-method": "off",
+        "@typescript-eslint/no-floating-promises": "off"
       }
     }
   ]

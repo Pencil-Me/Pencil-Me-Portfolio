@@ -1,0 +1,16 @@
+:host {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: block;
+}
+
+.pm-route-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 12rem;
+  height: 100%;
+  background: color-mix(in srgb, var(--pm-bg) 88%, transparent);
+  backdrop-filter: blur(2px);
+}

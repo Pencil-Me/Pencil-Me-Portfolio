@@ -6,6 +6,8 @@ services:
     build:
       context: ./applications/frontend
       dockerfile: ./Dockerfile
+      args:
+        BUILD_CONFIGURATION: docker
 
   backend:
     container_name: pm-backend_vue
@@ -47,9 +49,11 @@ services:
     links:
       - db
     ports:
-      - "3001:80"
+      - "3003:80"
     volumes:
       - ./applications/php-rest-api/public:/var/www/html/public
+      - ./applications/php-rest-api/src/Inc/.env.dev:/var/www/html/src/Inc/.env.dev:ro
+      - php_api_logs:/var/www/html/src/logs
 
   php_mailer:
     container_name: pm-mailer_php
@@ -90,3 +94,4 @@ services:
 volumes:
   mysqldata: {}
   data:
+  php_api_logs:

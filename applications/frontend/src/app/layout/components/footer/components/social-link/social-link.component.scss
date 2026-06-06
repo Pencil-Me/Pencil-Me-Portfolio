@@ -1,8 +1,9 @@
 .footer-social-links {
-  --tw-text-opacity: 0.75;
   display: flex;
-  color: rgb(115 115 115 / var(--tw-text-opacity));
-  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  color: var(--pm-social-muted);
+  gap: 0.75rem 1rem;
 
   a {
     color: inherit;
@@ -17,6 +18,13 @@
     &:focus {
       transition-duration: 0.1s;
       color: var(--pm-primary);
+      outline: none;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--pm-focus-ring);
+      outline-offset: 2px;
+      border-radius: 0;
     }
   }
 

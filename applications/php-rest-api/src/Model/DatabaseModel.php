@@ -98,10 +98,11 @@ class DatabaseModel
                 throw new Exception("Unable to prepare statement: " . $query);
             }
 
-            // Bind parameters
-            foreach ($params as $index => &$paramValue) {
-                $paramType = $paramTypes[$index] ?? PDO::PARAM_STR;
-                $stmt->bindParam($index + 1, $paramValue, $paramType);
+            // Bind parameters (unterstuetzt benannte :placeholder und positionale Indizes)
+            foreach ($params as $key => &$paramValue) {
+                $paramType = $paramTypes[$key] ?? PDO::PARAM_STR;
+                $placeholder = is_int($key) ? $key + 1 : $key;
+                $stmt->bindParam($placeholder, $paramValue, $paramType);
             }
 
             // Execute the statement

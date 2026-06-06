@@ -31,6 +31,16 @@ export class ScrollService {
   }
 
   /**
+   * Normalized scroll progress between 0 (top) and 1 (bottom).
+   */
+  getScrollProgress(): number {
+    const doc = document.documentElement;
+    const max = doc.scrollHeight - window.innerHeight;
+    if (max <= 0) return 0;
+    return Math.min(1, Math.max(0, this.getScrollPosition() / max));
+  }
+
+  /**
    * Scrolls to a specific element on the page.
    * @param elementId The ID of the element to scroll to.
    */

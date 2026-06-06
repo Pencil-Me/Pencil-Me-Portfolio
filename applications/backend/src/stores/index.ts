@@ -2,13 +2,9 @@ import ProjectService from '@/services/projects.service'
 import TechStackService from '@/services/techstack.service'
 import CustomerService from '@/services/customer.service'
 import { createStore } from 'vuex'
-import moment from 'moment/moment'
+import formatIsoDate from '@/composables/formatIsoDate'
 import type { TCustomer, TDates, TProject, TProjectType } from '@/views/Projects/ProjectTypes'
 import type { TTechStack, TTechStackTypes } from '@/views/TechStack/TechStackTypes'
-
-function updateLocalStorage(state: State) {
-  localStorage.setItem('projects', JSON.stringify(state))
-}
 
 export enum techStackType {
   'FEDEV' = 'Frontend Development',
@@ -20,7 +16,7 @@ export enum techStackType {
   'DB' = 'Databases',
   'CMS' = 'CMS',
   'TEST' = 'Testing Frameworks',
-  'PROJECTTOO' = 'Project Tools',
+  'PROJECTTOOL' = 'Project Tools',
   'MISC' = 'Misc',
   'DESIGN' = 'Design',
   'LANG' = 'Spoken Languages'
@@ -300,8 +296,8 @@ export default createStore({
         content_short: payload.content_short,
         content_long: payload.content_long,
         dates: payload.dates.map((entry: TDates) => ({
-          start_date: moment(String(entry.start_date)).format('YYYY-MM-DD'),
-          end_date: moment(String(entry.end_date)).format('YYYY-MM-DD')
+          start_date: formatIsoDate(entry.start_date),
+          end_date: formatIsoDate(entry.end_date)
         })),
         tech: cleanedTechObj.sort((a, b) => {
           // Only sort on type if not identical

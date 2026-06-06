@@ -1,13 +1,7 @@
 import { knowledgeReducers, initialState } from './knowledge.reducer';
 import * as actions from './knowledge.actions';
-import {
-  CUSTOMER,
-  DATE,
-  KNOWLEDGESTATE,
-  PROJECT,
-  TECH,
-  TECHSTACK,
-} from '@app/state/knowledge/knowledge.models';
+import type { KNOWLEDGESTATE, PROJECT, TECHSTACK, CUSTOMER } from '@app/state/knowledge/knowledge.models';
+import { createSampleProject } from '../../../testing/knowledge.fixtures';
 
 describe('Knowledge Reducer', () => {
   let state: KNOWLEDGESTATE;
@@ -25,32 +19,7 @@ describe('Knowledge Reducer', () => {
     });
 
     it('should handle GetProjectsSuccess action', () => {
-      const customerBasic: CUSTOMER = {
-        name: 'Customer 1',
-        location: 'Location 1',
-        last_used_date: new Date('2021-05-01'),
-      };
-      const dateBasic: DATE = {
-        start_date: new Date('2020-01-01'),
-        end_date: new Date('2021-01-01'),
-      };
-      const techBasic: TECH = {
-        name: 'Tech 1',
-        uuid: '1',
-        expertise_level: 'expertise_levelTest',
-        type: 'typeTest',
-      };
-      const projectBasic: PROJECT = {
-        uuid: '1',
-        name: 'Project 1',
-        position: 'Position 1',
-        content: 'Content 1',
-        customers: [customerBasic],
-        dates: [dateBasic],
-        tech: [techBasic],
-        type: 'FEDEV',
-      };
-      const projects: PROJECT[] = [{ ...projectBasic }];
+      const projects: PROJECT[] = [createSampleProject()];
       const action = actions.GetProjectsSuccess({ data: projects });
       const nextState = knowledgeReducers(state, action);
 
@@ -64,7 +33,7 @@ describe('Knowledge Reducer', () => {
       const action = actions.GetProjectsFailure({ error });
       const nextState = knowledgeReducers(state, action);
 
-      expect(nextState.projects.loadStatus).toEqual('COMPLETED');
+      expect(nextState.projects.loadStatus).toEqual('ERROR');
       expect(nextState.projects.error).toEqual(error);
     });
   });
@@ -87,32 +56,7 @@ describe('Knowledge Reducer', () => {
     });
 
     it('should handle GetProjectSuccess action', () => {
-      const customerBasic: CUSTOMER = {
-        name: 'Customer 1',
-        location: 'Location 1',
-        last_used_date: new Date('2021-05-01'),
-      };
-      const dateBasic: DATE = {
-        start_date: new Date('2020-01-01'),
-        end_date: new Date('2021-01-01'),
-      };
-      const techBasic: TECH = {
-        name: 'Tech 1',
-        uuid: '1',
-        expertise_level: 'expertise_levelTest',
-        type: 'typeTest',
-      };
-      const projectBasic: PROJECT = {
-        uuid: '1',
-        name: 'Project 1',
-        position: 'Position 1',
-        content: 'Content 1',
-        customers: [customerBasic],
-        dates: [dateBasic],
-        tech: [techBasic],
-        type: 'FEDEV',
-      };
-      const project: PROJECT = { ...projectBasic };
+      const project: PROJECT = createSampleProject();
       const action = actions.GetProjectSuccess({ data: project });
       const nextState = knowledgeReducers(state, action);
 
@@ -126,7 +70,7 @@ describe('Knowledge Reducer', () => {
       const action = actions.GetProjectFailure({ error });
       const nextState = knowledgeReducers(state, action);
 
-      expect(nextState.selectedProject.loadStatus).toEqual('COMPLETED');
+      expect(nextState.selectedProject.loadStatus).toEqual('ERROR');
       expect(nextState.selectedProject.error).toEqual(error);
     });
   });
@@ -163,7 +107,7 @@ describe('Knowledge Reducer', () => {
       const action = actions.GetTechstackFailure({ error });
       const nextState = knowledgeReducers(state, action);
 
-      expect(nextState.techStack.loadStatus).toEqual('COMPLETED');
+      expect(nextState.techStack.loadStatus).toEqual('ERROR');
       expect(nextState.techStack.error).toEqual(error);
     });
   });
@@ -196,7 +140,7 @@ describe('Knowledge Reducer', () => {
       const action = actions.GetCustomersFailure({ error });
       const nextState = knowledgeReducers(state, action);
 
-      expect(nextState.customers.loadStatus).toEqual('COMPLETED');
+      expect(nextState.customers.loadStatus).toEqual('ERROR');
       expect(nextState.customers.error).toEqual(error);
     });
   });

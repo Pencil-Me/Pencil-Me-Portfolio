@@ -3,6 +3,11 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { ApiClientService } from './api-client.service';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
+import { environment } from 'src/environments/environment';
+import { expectHttpJsonResponse } from '../../../../testing/http-test.helpers';
+import type { TestRequest } from '@angular/common/http/testing';
+
+const apiUrl = (path: string) => `${environment.API_BASE_URL}/${path}`;
 const toUrlEncoded = (obj: { [key: string]: string | number }) =>
   Object.keys(obj)
     .map((k) => encodeURIComponent(k) + '=' + encodeURIComponent(obj[k]))
@@ -40,10 +45,9 @@ describe('ApiClientService', () => {
       expect(response).toEqual(testData);
     });
 
-    const req = httpMock.expectOne('https://api.pencil-me.eu/index.php/test');
-    expect(req.request.method).toBe('GET');
-    expect(req.request.headers.get('API-Key')).toBe('apikey123');
-    req.flush(testData);
+    expectHttpJsonResponse(httpMock, apiUrl(path), 'GET', testData, (req: TestRequest) => {
+      expect(req.request.headers.get('API-Key')).toBe('apikey123');
+    });
   });
 
   it('should make a POST request with proper headers and data', () => {
@@ -55,11 +59,10 @@ describe('ApiClientService', () => {
       expect(response).toEqual(testData);
     });
 
-    const req = httpMock.expectOne('https://api.pencil-me.eu/index.php/test');
-    expect(req.request.method).toBe('POST');
-    expect(req.request.headers.get('API-Key')).toBe('apikey123');
-    expect(req.request.body).toEqual(toUrlEncoded(postData));
-    req.flush(testData);
+    expectHttpJsonResponse(httpMock, apiUrl(path), 'POST', testData, (req: TestRequest) => {
+      expect(req.request.headers.get('API-Key')).toBe('apikey123');
+      expect(req.request.body).toEqual(toUrlEncoded(postData));
+    });
   });
 
   it('should make a PUT request with proper headers and data', () => {
@@ -71,11 +74,10 @@ describe('ApiClientService', () => {
       expect(response).toEqual(testData);
     });
 
-    const req = httpMock.expectOne('https://api.pencil-me.eu/index.php/test');
-    expect(req.request.method).toBe('PUT');
-    expect(req.request.headers.get('API-Key')).toBe('apikey123');
-    expect(req.request.body).toEqual(putData);
-    req.flush(testData);
+    expectHttpJsonResponse(httpMock, apiUrl(path), 'PUT', testData, (req: TestRequest) => {
+      expect(req.request.headers.get('API-Key')).toBe('apikey123');
+      expect(req.request.body).toEqual(putData);
+    });
   });
 
   it('should make a DELETE request with proper headers and data', () => {
@@ -86,10 +88,9 @@ describe('ApiClientService', () => {
       expect(response).toEqual(testData);
     });
 
-    const req = httpMock.expectOne('https://api.pencil-me.eu/index.php/test');
-    expect(req.request.method).toBe('DELETE');
-    expect(req.request.headers.get('API-Key')).toBe('apikey123');
-    req.flush(testData);
+    expectHttpJsonResponse(httpMock, apiUrl(path), 'DELETE', testData, (req: TestRequest) => {
+      expect(req.request.headers.get('API-Key')).toBe('apikey123');
+    });
   });
 
   // Add more test cases for other methods (put, delete) similarly...

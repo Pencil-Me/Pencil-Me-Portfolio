@@ -1,119 +1,318 @@
 <section class="hero">
   <div class="hero-container container">
-    <div class="hero-content">
-      <h1>
-        Hi, ich bin Johannes Kromer <br />
+    <div class="old-screen-overlay" [appParallax]="0.04"></div>
+    <div class="hero-content" [appParallax]="-0.07">
+      <h1 class="hero-title">
+        <span class="hero-greeting">Hi, ich bin</span>
+        <span class="glitch name" data-text="Johannes Kromer">Johannes Kromer</span>
+        <br />
         <span class="color">
           ein
-          <span class="role-typscripter">{{ currentRoleVisual }}</span> </span
-        ><br />
-        <span>aus Berlin</span>
+          <span class="role-typscripter" [attr.data-text]="currentRoleVisual()">{{
+            currentRoleVisual()
+          }}</span>
+        </span>
+        <br />
+        aus
+        <span class="glitch location" data-text="Berlin">Berlin</span>
       </h1>
-      <p>
-        Seit zwanzig Jahren arbeite ich Solo und in verschiedensten Teams als Entwickler und
-        Designer.
+
+      <p class="lead">
+        Seit zwanzig Jahren entwickle ich allein und im Team digitale Produkte — Frontend im Fokus,
+        Design und Technik aus einer Hand. Für Agenturen, Konzerne und eigene Ideen.
       </p>
+
       <div class="btn-container">
-        <button type="button" class="btn btn-primary btn-lg" [routerLink]="'/contact/general'">
+        <button
+          type="button"
+          class="btn btn-hero-cta btn-lg"
+          [routerLink]="['/contact/general']"
+          data-text="Kontakt"
+        >
           Kontakt
         </button>
       </div>
     </div>
   </div>
-  <div class="hero-background">
-    <div class="animated_blob _1"></div>
-    <div class="animated_blob _2"></div>
-    <div class="animated_blob _3"></div>
+  <div class="glitch-layer" [appParallax]="0.14"></div>
+  <div class="hero-background" [appParallax]="0.32" aria-hidden="true">
+    <div class="particle-container">
+      <!--
+      x = position y =  position
+      xt = horizontal movement speed
+      yt = vertical movement speed
+      xd = horizontal movement distance
+      yd = vertical movement distance
+      w = width & height
+      d = animation delay
+      -->
+      <span
+        style="--x: 50; --y: 0; --xt: 13; --yt: 12; --xd: 2; --yd: 2; --w: 25; --d: 1; --o: 0.9"
+        class="pt"
+        ><b></b
+      ></span>
+      <span
+        style="--x: 16; --y: 0; --xt: 17; --yt: 10; --xd: 3; --yd: 1; --w: 39; --d: 6; --o: 0.5"
+        class="pt"
+        ><b></b
+      ></span>
+      <span
+        style="--x: 16; --y: 0; --xt: 17; --yt: 10; --xd: 3; --yd: 3; --w: 28; --d: 4; --o: 0.9"
+        class="pt"
+        ><b></b
+      ></span>
+      <span
+        style="--x: 66; --y: 0; --xt: 11; --yt: 13; --xd: 3; --yd: 2; --w: 38; --d: 2; --o: 0.9"
+        class="pt"
+        ><b></b
+      ></span>
+      <span
+        style="--x: 56; --y: -3; --xt: 11; --yt: 10; --xd: 3; --yd: 1; --w: 58; --d: 0; --o: 0.9"
+        class="pt"
+        ><b></b
+      ></span>
+      <span
+        style="--x: 19; --y: 0; --xt: 17; --yt: 10; --xd: 3; --yd: 4; --w: 45; --d: 9; --o: 0.7"
+        class="pt"
+        ><b></b
+      ></span>
+      <span
+        style="--x: 49; --y: 0; --xt: 17; --yt: 10; --xd: 3; --yd: -4; --w: 65; --d: 2; --o: 0.6"
+        class="pt"
+        ><b></b
+      ></span>
+      <span
+        style="--x: 20; --y: 0; --xt: 13; --yt: 12; --xd: 2; --yd: 4; --w: 70; --d: 8; --o: 0.9"
+        class="pt"
+        ><b></b
+      ></span>
+      <span
+        style="--x: 35; --y: 3; --xt: 8; --yt: 16; --xd: 0.5; --yd: 0.8; --w: 190; --d: 5; --o: 0.7"
+        class="pt"
+        ><b></b
+      ></span>
+      <span
+        style="--x: 15; --y: 10; --xt: 18; --yt: 16; --xd: 0.5; --yd: 1; --w: 190; --d: 6; --o: 0.9"
+        class="pt"
+        ><b></b
+      ></span>
+      <span
+        style="--x: 15; --y: 30; --xt: 9; --yt: 22; --xd: 0.5; --yd: 1; --w: 30; --d: 9; --o: 0.4"
+        class="pt"
+        ><b></b
+      ></span>
+      <span
+        style="--x: 4; --y: 20; --xt: 10; --yt: 7; --xd: 1.5; --yd: 1.2; --w: 26; --d: 12; --o: 0.4"
+        class="pt"
+        ><b></b
+      ></span>
+      <span
+        style="--x: 50; --y: 40; --xt: 16; --yt: 6; --xd: 4; --yd: -2; --w: 70; --d: 5; --o: 0.3"
+        class="pt"
+        ><b></b
+      ></span>
+      <span
+        style="--x: 50; --y: 40; --xt: 16; --yt: 6; --xd: 1; --yd: -2; --w: 170; --d: 0; --o: 1"
+        class="pt"
+        ><b></b
+      ></span>
+      <span
+        style="--x: 60; --y: 40; --xt: 16; --yt: 6; --xd: 1; --yd: 2; --w: 70; --d: 5; --o: 0.4"
+        class="pt"
+        ><b></b
+      ></span>
+      <span
+        style="--x: 50; --y: 50; --xt: 12; --yt: 7; --xd: 1; --yd: 1.2; --w: 100; --d: 7; --o: 0.4"
+        class="pt"
+        ><b></b
+      ></span>
+      <span
+        style="--x: 70; --y: 40; --xt: 4; --yt: 1; --xd: 0.5; --yd: 0.2; --w: 100; --d: 7; --o: 0.4"
+        class="pt"
+        ><b></b
+      ></span>
+      <span
+        style="--x: 2; --y: 50; --xt: 10; --yt: 7; --xd: 1; --yd: 1.2; --w: 20; --d: 7; --o: 0.4"
+        class="pt"
+        ><b></b
+      ></span>
+      <span
+        style="--x: 4; --y: 50; --xt: 10; --yt: 7; --xd: 1.5; --yd: 1.2; --w: 16; --d: 12; --o: 0.4"
+        class="pt"
+        ><b></b
+      ></span>
+      <span
+        style="--x: 10; --y: 40; --xt: 10; --yt: 17; --xd: 2; --yd: 1.2; --w: 28; --d: 7; --o: 0.4"
+        class="pt"
+        ><b></b
+      ></span>
+      <span
+        style="--x: 70; --y: 60; --xt: 12; --yt: 6; --xd: 2; --yd: 2; --w: 36; --d: 5; --o: 0.7"
+        class="pt"
+        ><b></b
+      ></span>
+      <span
+        style="--x: 10; --y: 60; --xt: 12; --yt: 16; --xd: -1; --yd: 2.2; --w: 80; --d: 5; --o: 0.7"
+        class="pt"
+        ><b></b
+      ></span>
+      <span
+        style="
+          --x: 10;
+          --y: 70;
+          --xt: 12;
+          --yt: 26;
+          --xd: -1;
+          --yd: 2.2;
+          --w: 110;
+          --d: 5;
+          --o: 0.7;
+        "
+        class="pt"
+        ><b></b
+      ></span>
+      <span
+        style="--x: 19; --y: 70; --xt: 12; --yt: 26; --xd: -1; --yd: 3.2; --w: 20; --d: 5; --o: 0.7"
+        class="pt"
+        ><b></b
+      ></span>
+    </div>
+    <div class="animated_blob blob--big"></div>
+    <div class="animated_blob blob--mid"></div>
+    <div class="animated_blob blob--small"></div>
   </div>
 </section>
 
-<section class="statistics-container" appTrackVisibility (visible)="test($event)">
+<section
+  class="statistics-container pm-section--dark-band pm-section--offset"
+  appTrackVisibility
+  (visible)="onStatsVisible($event)"
+>
   <div class="container">
-    <ul *ngIf="containerIsVisible" class="list-group list-group-horizontal">
-      <li class="list-group-item">
-        <div class="counter" [appCountUp]="counter.years" [duration]="4000">0</div>
-        <div class="domain"><b>Jahre</b> Erfahrung</div>
-      </li>
-      <li class="list-group-item">
-        <div class="counter" [appCountUp]="counter.projects" [duration]="2000">0</div>
-        <div class="domain">erfolgreiche <b>Projekte</b></div>
-      </li>
-      <li class="list-group-item">
-        <div class="counter" [appCountUp]="counter.customers" [duration]="3000">0</div>
-        <div class="domain">zufriedene <b>Kunden</b></div>
-      </li>
-    </ul>
+    @if (containerIsVisible()) {
+      <ul class="list-group list-group-horizontal statistics-grid">
+        <li class="list-group-item pm-stat-panel" appScrollReveal="up" [revealDelay]="0">
+          <div class="counter" [appCountUp]="counter.years" [duration]="4000">0</div>
+          <div class="domain"><b>Jahre</b> Erfahrung</div>
+        </li>
+        <li class="list-group-item pm-stat-panel" appScrollReveal="up" [revealDelay]="120">
+          <div class="counter" [appCountUp]="counter.projects" [duration]="2000">0</div>
+          <div class="domain">Erfolgreiche <b>Projekte</b></div>
+        </li>
+        <li class="list-group-item pm-stat-panel" appScrollReveal="up" [revealDelay]="240">
+          <div class="counter" [appCountUp]="counter.customers" [duration]="3000">0</div>
+          <div class="domain">Zufriedene <b>Kunden</b></div>
+        </li>
+      </ul>
+    }
   </div>
 </section>
 
-<section class="short-about-me">
-  <div class="container section-container">
-    <h2>Über mich</h2>
-    <p>
-      Ich programmiere seit dem ich meinen ersten Computer hatte, ein Sinclair ZX Spectrum (ja ich
-      bin alt). Seit den Anfängen von AngularJS liegt meinem Schwerpunkt auf
-      Javascript-Single-Page-Applications und Styleguide-zentrierte-Frontend-Architekturen. Ich habe
-      an großen Systemen mitgebaut und mag die Vorstellung, dass mein Code den Arbeitsalltag anderer
-      Menschen verbessert.
+<app-featured-projects variant="home" />
+
+<section class="short-about-me pm-surface-light pm-section--offset" appScrollReveal="up">
+  <div class="container section-container pm-intro-block">
+    <h2 appGibberishReveal>Über mich</h2>
+    <p appGibberishReveal>
+      Ich programmiere, seit ich meinen ersten Computer hatte — ein Sinclair ZX Spectrum (ja, ich bin
+      alt). Seit den Anfängen von AngularJS liegt mein Schwerpunkt auf SPAs und Styleguide-zentrierten
+      Frontend-Architekturen. Große Systeme, wartbarer Code — und die Idee, dass Software den Alltag
+      von Menschen verbessert.
     </p>
-    <button type="button" class="mt-3 btn btn-outline-secondary" [routerLink]="'/about'">
+    <button
+      type="button"
+      class="mt-3 btn btn-pm-secondary"
+      [routerLink]="'/about'"
+      data-text="Mehr über mich"
+    >
       Mehr über mich
     </button>
   </div>
 </section>
 
-<section class="customers-container">
-  <div class="mask">
-    <div class="ticker">
-      <ul>
-        <li *ngFor="let customer of customers">
-          <img
-            [ngSrc]="customer.url"
-            [alt]="customer.alt"
-            [width]="709"
-            [height]="354"
-            [priority]="true"
-          />
-        </li>
-      </ul>
-      <ul>
-        <li *ngFor="let customer of customers">
-          <img
-            [ngSrc]="customer.url"
-            [alt]="customer.alt"
-            [width]="709"
-            [height]="354"
-            [priority]="true"
-          />
-        </li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<section class="tech-container">
-  <div class="container section-container">
-    <h2>Technologien und Tools</h2>
-    <h3>genutzt in den letzten 5 Jahre</h3>
-    <p>
-      Mit einer Kombination aus modernsten Technologien und zuverlässiger Open-Source-Software
-      erstelle ich benutzerorientierte, leistungsstarke Apps und Websites für Smartphones, Tablets
-      und Desktops. Hier eine Liste der Technologien die ich zuletzt benutzt habe.
-    </p>
-    <div class="tech-category-container">
-      <div class="tech-category-item" *ngFor="let techCategory of techStack">
-        <h4>{{ techCategory.title }}</h4>
-        <div class="list-group list-group-flush list-group-horizontal flex-wrap">
-          <span
-            class="list-group-item badge text-bg-secondary rounded-pill"
-            *ngFor="let tech of techCategory.data"
-          >
-            {{ tech.label }}
-          </span>
-        </div>
+<section class="customers-container pm-section--dark-band">
+  <app-pm-async-content
+    [status]="customersLoadStatus()"
+    [error]="customersError()"
+    variant="ticker"
+    label="Lade Kunden"
+    [showRetry]="true"
+    (retry)="retryCustomersLoad()"
+  >
+    <div class="mask" appScrollReveal="band">
+      <div class="ticker">
+        <ul>
+          @for (customer of customers(); track customer) {
+            <li>
+              <img
+                [ngSrc]="customer.url"
+                [alt]="customer.alt"
+                [width]="709"
+                [height]="354"
+                [priority]="true"
+              />
+            </li>
+          }
+        </ul>
+        <ul>
+          @for (customer of customers(); track customer) {
+            <li>
+              <img
+                [ngSrc]="customer.url"
+                [alt]="customer.alt"
+                [width]="709"
+                [height]="354"
+                [priority]="true"
+              />
+            </li>
+          }
+        </ul>
       </div>
     </div>
-    <button type="button" class="mt-4 btn btn-outline-secondary" [routerLink]="'/projects'">
+  </app-pm-async-content>
+</section>
+
+<section class="tech-container pm-surface-light pm-section--offset">
+  <div class="container section-container">
+    <div class="pm-intro-block" appScrollReveal="left">
+      <h2 appGibberishReveal>Technologien und Tools</h2>
+    <h3 appGibberishReveal>Genutzt in den letzten 5 Jahren</h3>
+    <p appGibberishReveal>
+      Die Stacks, mit denen ich zuletzt produktiv war — nicht als Buzzword-Wand, sondern mit Projekten
+      dahinter. Open Source, wo es passt; bewährte Tools, wo sie Zeit sparen.
+    </p>
+    </div>
+    <app-pm-async-content
+      [status]="techLoadStatus()"
+      [error]="techError()"
+      variant="skill-grid"
+      label="Lade Technologien"
+      [showRetry]="true"
+      (retry)="retryTechLoad()"
+    >
+      <div class="tech-category-container">
+        @for (techCategory of techStack(); track techCategory; let i = $index) {
+          <div
+            class="tech-category-item pm-panel-brutal pm-skill-panel"
+            appScrollReveal="up"
+            [revealDelay]="i * 90"
+          >
+            <h4 appGibberishReveal>{{ techCategory.title }}</h4>
+            <div class="pm-tech-chip-list">
+              @for (tech of techCategory.data; track tech) {
+                <span class="pm-tech-chip" appGibberishReveal>{{ tech.label }}</span>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </app-pm-async-content>
+    <button
+      type="button"
+      class="mt-4 btn btn-pm-secondary"
+      [routerLink]="'/projects'"
+      data-text="Alle Projekte"
+    >
       Alle Projekte
     </button>
   </div>

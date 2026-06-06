@@ -1,4 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 
 import { ImpressumComponent } from './impressum.component';
 
@@ -9,6 +11,7 @@ describe('ImpressumComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ImpressumComponent],
+      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ImpressumComponent);

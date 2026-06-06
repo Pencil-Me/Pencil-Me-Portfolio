@@ -626,7 +626,7 @@ INSERT INTO `techstack` (`id`, `uuid`, `name`, `type`, `expertise_level`, `flag_
 
 CREATE TABLE `techstack_type` (
   `id` int NOT NULL,
-  `type` varchar(10) NOT NULL
+  `type` varchar(12) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -643,7 +643,7 @@ INSERT INTO `techstack_type` (`id`, `type`) VALUES
 (7, 'DB'),
 (8, 'CMS'),
 (9, 'TEST'),
-(10, 'PROJECTTOO'),
+(10, 'PROJECTTOOL'),
 (11, 'MISC'),
 (12, 'DESIGN'),
 (13, 'LANG');

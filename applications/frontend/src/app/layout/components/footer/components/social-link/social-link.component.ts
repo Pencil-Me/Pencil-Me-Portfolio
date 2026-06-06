@@ -1,5 +1,4 @@
-import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 export interface SocialLink {
   name: string;
@@ -10,9 +9,10 @@ export interface SocialLink {
 
 @Component({
   selector: 'app-social-links',
-  imports: [CommonModule],
+  imports: [],
   styleUrl: './social-link.component.scss',
   templateUrl: './social-link.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SocialLinkComponent {
   @Input() socialLinks: SocialLink[] = [];

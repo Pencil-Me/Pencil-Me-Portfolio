@@ -1,5 +1,12 @@
 @use 'sass:math';
-@use 'sass:color';
+@use '../../../sass/helpers/variables' as vars;
+
+:root {
+  --glitch-c1: var(--pm-glitch-cyan-bright);
+  --glitch-c2: var(--pm-glitch-red-hot);
+  --dystopic-bg: var(--pm-dark);
+  --text-muted: var(--pm-hero-text);
+}
 
 $content-width: 1000px;
 
@@ -15,13 +22,7 @@ $content-width: 1000px;
 }
 
 @mixin hero-bg {
-  background: radial-gradient(
-    farthest-corner at top,
-    rgb(108, 41, 41),
-    rgba(56, 6, 6, 1),
-    rgb(28, 4, 4)
-  );
-  filter: blur(50px);
+  background: var(--pm-hero-bg-radial);
 }
 
 @mixin gradient-background($angle, $colors...) {
@@ -36,13 +37,277 @@ $content-width: 1000px;
   max-height: 800px;
   align-items: center;
   justify-content: center;
-  background: rgb(36, 0, 0);
-  z-index: 1;
-  color: #cba0a0;
+  background: var(--pm-hero-bg);
+  color: var(--pm-hero-text);
   overflow: hidden;
+  z-index: 1;
+  padding: 3rem 1rem;
 
+  .hero-container {
+    z-index: 4;
+    max-width: 1100px;
+    width: 100%;
+  }
+
+  .hero-content {
+    max-width: 720px;
+  }
+
+  .hero-title {
+    font-family: var(--pm-font-heading), sans-serif;
+    font-weight: var(--pm-font-weight-regular);
+    font-size: clamp(4rem, 3vw, 6rem);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin: 0 0 1rem;
+    position: relative;
+    text-shadow:
+      -1px 0 var(--pm-hero-title-shadow-accent),
+      1px 0 var(--pm-hero-title-shadow-neon);
+  }
+
+  .hero-greeting {
+    font-weight: var(--pm-font-weight-regular);
+    margin-right: 0.25rem;
+  }
+
+  @mixin gitchText($offset, $speed, $delay) {
+    content: attr(data-text);
+    position: absolute;
+    white-space: nowrap;
+    left: $offset;
+    top: $offset;
+    clip: rect(0, 900px, 0, 0);
+    animation:
+      glitch 3s infinite alternate-reverse,
+      glitch-2 $speed steps(2, end) infinite;
+    animation-delay: $delay;
+  }
+
+
+  .glitch-layer {
+    position: absolute;
+    top: -25%; left: -25%; right: -25%;
+    width: 150%;
+    height: 150%;
+    background-size: 300%;
+    background-position: 50% 50%;
+    background-image: url('/assets/root/utilitarian-graphics.webp');
+    mix-blend-mode: overlay;
+    opacity: 0;
+    pointer-events: none;
+    transform-origin: center;
+    filter: contrast(180%) brightness(150%) saturate(140%);
+    animation: glitch-layer-flicker 28s infinite steps(3, end);
+  }
+
+  @keyframes glitch-layer-flicker {
+    0%, 7%, 20%, 50%, 95%, 100% {
+      opacity: 0;
+      background-position: 50% 50%;
+      transform: translate(0, 0) rotate(0deg);
+    }
+
+    5% {
+      opacity: 0.15;
+      background-position: 20% 80%;
+      transform: translate(10px, -8px) rotate(22deg);
+    }
+
+    10% {
+      opacity: 0.18;
+      background-position: 70% 10%;
+      transform: translate(-12px, 4px) rotate(-23deg);
+    }
+
+    40% {
+      opacity: 0.14;
+      background-position: 40% 60%;
+      transform: translate(6px, 2px) rotate(11deg);
+    }
+
+    75% {
+      opacity: 0.16;
+      background-position: 85% 45%;
+      transform: translate(-5px, -6px) rotate(-11deg);
+    }
+  }
+
+  --slice-0: inset(50% 50% 50% 50%);
+  --slice-1: inset(80% -6px 0 0);
+  --slice-2: inset(50% -6px 30% 0);
+  --slice-3: inset(10% -6px 85% 0);
+  --slice-4: inset(40% -6px 43% 0);
+  --slice-5: inset(80% -6px 5% 0);
+
+  .glitch {
+    display: inline-block;
+    text-transform: none;
+    font-weight: var(--pm-font-weight-bold);
+    margin-left: 0.25rem;
+    position: relative;
+
+    &:nth-of-type(3n + 1) {
+      --glitch-delay: 1.3s;
+      --glitch-speed: 4.8s;
+    }
+
+    &:nth-of-type(3n + 2) {
+      --glitch-delay: 2.5s;
+      --glitch-speed: 5.2s;
+    }
+
+    &:nth-of-type(3n + 3) {
+      --glitch-delay: 0.7s;
+      --glitch-speed: 4.6s;
+    }
+
+    &::after {
+      z-index: -1;
+      color: var(--pm-red-hover);
+      opacity: 0.75;
+
+      @include gitchText(1px, var(--glitch-speed), var(--glitch-delay));
+    }
+
+    &::before {
+      z-index: -1;
+      color: var(--pm-secondary);
+      opacity: 0.75;
+
+      @include gitchText(-1px, var(--glitch-speed), var(--glitch-delay));
+    }
+  }
+
+  @keyframes glitch {
+    $steps: 20;
+
+    @for $i from 0 through $steps {
+      #{math.percentage(math.div($i, $steps))} {
+        clip: rect(math.random(100) + px, 9999px, math.random(100) + px, 0);
+      }
+    }
+  }
+
+  @keyframes glitch-2 {
+    0% {
+      clip-path: var(--slice-1);
+      transform: translate(-1%, -2%);
+    }
+
+    10% {
+      clip-path: var(--slice-3);
+      transform: translate(2%, 3%);
+    }
+
+    20% {
+      clip-path: var(--slice-1);
+      transform: translate(-3%, 3%);
+    }
+
+    30% {
+      clip-path: var(--slice-3);
+      transform: translate(0%, 1%);
+    }
+
+    40% {
+      clip-path: var(--slice-2);
+      transform: translate(-1%, 0%);
+    }
+
+    50% {
+      clip-path: var(--slice-3);
+      transform: translate(1%, 0%);
+    }
+
+    60% {
+      clip-path: var(--slice-4);
+      transform: translate(1%, 3%);
+    }
+
+    70% {
+      clip-path: var(--slice-2);
+      transform: translate(-2%, 2%);
+    }
+
+    80% {
+      clip-path: var(--slice-5);
+      transform: translate(4%, -2%);
+    }
+
+    90% {
+      clip-path: var(--slice-1);
+      transform: translate(-2%, 0%);
+    }
+
+    100% {
+      clip-path: var(--slice-1);
+      transform: translate(0);
+    }
+  }
+
+  .role-typscripter {
+    display: inline-block;
+    font-weight: var(--pm-font-weight-bold);
+    font-size: 1.1em;
+    position: relative;
+    padding-right: 0.25rem;
+
+    &::after {
+      content: '|';
+      margin-left: 0.15rem;
+      animation: blink-cursor 1s steps(1) infinite;
+    }
+
+    &::before {
+      content: attr(data-text);
+      position: absolute;
+      opacity: 0.5;
+      z-index: -1;
+      color: var(--pm-secondary);
+      animation: glitch-2 3s steps(2, end) infinite;
+    }
+
+    &::before,
+    &::after {
+      pointer-events: none;
+    }
+  }
+
+  @keyframes blink-cursor {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
+  }
+
+  .lead {
+    margin-top: 1rem;
+    font-size: 1.5rem;
+    font-weight: var(--pm-font-weight-regular);
+    max-width: 60ch;
+  }
+
+  .btn-container {
+    margin-top: 1.5rem;
+  }
+
+  .old-screen-overlay {
+    pointer-events: none;
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      var(--pm-hero-scanline-strong),
+      var(--pm-hero-scanline-soft) 2px,
+      transparent 2px,
+      transparent 4px
+    );
+  }
+
+  /* ---------- Background blobs (dystopic) ---------- */
   .hero-background {
     @include hero-bg;
+
     position: absolute;
     inset: 0;
     z-index: -1;
@@ -53,6 +318,7 @@ $content-width: 1000px;
         background-position: 100%;
         background-size: 50%;
       }
+
       to {
         background-position: -100%;
         background-size: 150%;
@@ -62,27 +328,111 @@ $content-width: 1000px;
     .animated_blob {
       border-radius: 50%;
       position: absolute;
+      filter: blur(30px) saturate(120%);
+      mix-blend-mode: screen;
+      opacity: 0.9;
+      transform-origin: center;
+    }
 
-      &._1 {
-        top: 20%;
-        width: 40%;
-        animation: ap-1 7s alternate infinite both cubic-bezier(1, 0.1, 0.58, 1);
-        background: radial-gradient(rgb(63, 9, 9), rgb(33, 3, 3));
-        z-index: 0;
+    .blob--big {
+      width: 70vw; height: 50vh; left: -10%; top: 5%;
+      background: var(--pm-hero-blob-big);
+      animation: floatBig 14s ease-in-out infinite;
+    }
+
+    .blob--mid {
+      width: 45vw; height: 35vh; right: -5%; top: 15%;
+      background: var(--pm-hero-blob-mid);
+      animation: floatMid 11s ease-in-out infinite;
+    }
+
+    .blob--small {
+      width: 30vw; height: 25vh; left: 15%; bottom: -5%;
+      background: var(--pm-hero-blob-small);
+      animation: floatSmall 9s ease-in-out infinite;
+    }
+
+    @keyframes floatBig {
+      0% { transform: translateY(0) scale(.75); }
+      50% { transform: translateY(-60%) scale(1.02); }
+      75% { transform: translateY(-20%) scale(1); }
+      100% { transform: translateY(0) scale(.75); }
+    }
+
+    @keyframes floatMid {
+      0% { transform: translate(0,0) rotate(0deg); }
+      50% { transform: translate(-40%, 45%) rotate(20deg); }
+      100% { transform: translate(0,0) rotate(0deg); }
+    }
+
+    @keyframes floatSmall {
+      0% { transform: translateX(0) scale(1); }
+      50% { transform: translateX(5%) scale(0.98); }
+      100% { transform: translateX(0) scale(1); }
+    }
+  }
+
+  .particle-container {
+    filter: blur(5px);
+    position:absolute;
+    z-index: 1;
+    top:0;
+    left:0;
+    bottom:0;
+    width:100%;
+
+    --timescale:0.5s;
+
+    .pt {
+      display: block;
+      position: absolute;
+      left: calc(var(--x) * 1%);
+      top: calc(var(--y) * 1%);
+      height: 50px;
+      animation: moveUpDown calc(var(--timescale) * var(--yt)) infinite cubic-bezier(.45, .05, .55, .95) alternate;
+      animation-delay: calc(-1s * var(--d, 0));
+
+      b {
+        background: var(--pm-hero-particle);
+        display: block;
+        border-radius: 100%;
+        filter: blur(2px) brightness(1.2);
+        width: calc(.15px * var(--w));
+        height: calc(.15px * var(--w));
+        position: absolute;
+        opacity: .25;
+        animation: moveRightLeft calc(var(--timescale) * var(--xt)) infinite cubic-bezier(.45, .05, .55, .95) alternate; // , flicker calc(2s * var(--xd)) infinite alternate cubic-bezier(.45, .05, .55, .95);
+        animation-delay: calc(-1s * var(--d, 0)), calc(-0.2s * var(--d, 0));
+      }
+    }
+
+    @keyframes moveUpDown {
+      0% {
+        transform: translateY(0);
       }
 
-      &._2 {
-        height: 30%;
-        width: 30%;
-        animation: ap-2 9s alternate infinite both;
-        background: radial-gradient(rgb(80, 31, 31), rgb(108, 41, 41));
-        z-index: 1;
+      100% {
+        transform: translateY(calc(50% * var(--yd, 3)));
+      }
+    }
+
+    @keyframes moveRightLeft {
+      0% {
+        transform: translateX(calc(-50% * var(--xd, 3)));
       }
 
-      &._3 {
-        animation: ap-3 10s alternate infinite both;
-        background: radial-gradient(rgb(108, 41, 41), rgb(79, 20, 20));
-        z-index: 2;
+      100% {
+        transform: translateX(calc(50% * var(--xd, 3)));
+      }
+    }
+
+    @keyframes flicker {
+      0% {
+        opacity: calc(var(--o, 1) - 0.1);
+      }
+
+      100% {
+        opacity: calc(var(--o, 1) + 0.1);
       }
     }
   }
@@ -97,6 +447,7 @@ $content-width: 1000px;
       left: calc(-1 * math.random(51) / 2) + px;
       height: 60%;
     }
+
     to {
       left: math.random(2) * 40%;
       height: 40%;
@@ -109,6 +460,7 @@ $content-width: 1000px;
       left: math.random(50) - 16%;
       top: math.random(2) - 54%;
     }
+
     to {
       opacity: 1;
       left: math.random(2) * 54%;
@@ -124,6 +476,7 @@ $content-width: 1000px;
       left: math.random(20) * 10%;
       top: math.random(4) * 4%;
     }
+
     to {
       width: 80%;
       height: 40%;
@@ -137,46 +490,82 @@ $content-width: 1000px;
     from {
       filter: hue-rotate(0);
     }
+
     to {
       filter: hue-rotate(80deg);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .glitch-layer,
+    .glitch,
+    .role-typscripter {
+      animation: none !important;
+
+      &::before,
+      &::after {
+        animation: none !important;
+      }
     }
   }
 }
 
 .statistics-container {
-  @include gradient-background(319deg, rgb(14, 0, 0), rgb(38, 8, 8) 67%, rgb(19, 13, 0) 96%);
-  color: #b5b5b5;
-  padding: 2rem 0;
+  color: var(--pm-text-on-dark-a78);
+  padding: 2.5rem 2rem 3rem;
+
+  .statistics-grid {
+    gap: 1rem;
+  }
 
   .list-group.list-group-horizontal {
+    flex-wrap: wrap;
     justify-content: space-between;
-    @media (max-width: 731px) {
+    gap: 1rem;
+
+    @media (width <= 731px) {
       flex-direction: column;
     }
   }
 
   .list-group-item {
     color: inherit;
-    background-color: transparent;
-    border: none;
     display: flex;
     align-items: center;
+    gap: 0.75rem;
+    flex: 1 1 12rem;
+    min-width: 0;
+    padding-top: 1.5rem;
+    padding-bottom: 1rem;
 
     .domain {
-      width: 6rem;
+      flex: 1 1 auto;
+      min-width: 0;
+      width: auto;
+      max-width: 8rem;
       line-height: 1.15rem;
+      font-family: var(--pm-font-mono), monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
 
       b {
-        font-size: 1.5rem;
+        display: block;
+        font-family: var(--pm-font-heading), sans-serif;
+        font-size: 1.15rem;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        color: var(--pm-on-dark);
       }
     }
 
     .counter {
-      font-size: 4rem;
+      font-size: 3.5rem;
       line-height: 1.5rem;
-      font-weight: bolder;
+      font-weight: var(--pm-font-weight-bold);
+      color: var(--pm-gold-bright);
 
-      &:after {
+      &::after {
         content: '+';
         font-size: 2rem;
         margin-right: 0.25rem;
@@ -188,24 +577,25 @@ $content-width: 1000px;
 }
 
 .customers-container {
-  @include gradient-background(319deg, rgb(14, 0, 0), rgb(23, 12, 12) 96%);
-  color: white;
-  padding: 2rem 0;
+  color: var(--pm-gold-bright);
+  padding: 2.5rem 0 3rem;
   overflow: hidden;
   box-sizing: content-box;
 
   .mask {
-    max-width: 1500px;
+    max-width: vars.$layout-max-width;
     margin: 0 auto;
-    -webkit-mask-image: linear-gradient(90deg, transparent, #fff 20%, #fff 80%, transparent);
+    mask-image: linear-gradient(90deg, transparent, var(--pm-white) 20%, var(--pm-white) 80%, transparent);
+    filter: drop-shadow(0 0 18px var(--pm-glitch-cyan-a18));
   }
 
   .ticker {
     --time: 20s;
+
     position: relative;
     display: flex;
     width: 100%;
-    max-width: 1500px;
+    max-width: vars.$layout-max-width;
     margin: 0 auto;
     overflow: hidden;
 
@@ -241,6 +631,7 @@ $content-width: 1000px;
   0% {
     transform: translateX(100%);
   }
+
   100% {
     transform: translateX(-100%);
   }
@@ -250,101 +641,55 @@ $content-width: 1000px;
   0% {
     transform: translateX(0);
   }
+
   100% {
     transform: translateX(-200%);
   }
 }
 
 .tech-container {
-  background: linear-gradient(
-    319deg,
-    rgb(224, 224, 224) 0%,
-    rgb(255, 255, 255) 67%,
-    rgb(218, 218, 218) 96%
-  );
-
-  h2 {
-    line-height: 1em;
-  }
-  h3 {
-    margin-bottom: 1.5rem;
-  }
+  background: var(--pm-surface-gradient);
+  color: var(--pm-text);
 
   .tech-category-container {
     @include responsive-grid(1);
 
-    @media (min-width: 576px) {
+    @media (width >= 576px) {
       grid-template-columns: repeat(2, 1fr);
     }
-    @media (min-width: 992px) {
+
+    @media (width >= 992px) {
       grid-template-columns: repeat(3, 1fr);
     }
-    @media (min-width: 1200px) {
+
+    @media (width >= 1200px) {
       grid-template-columns: repeat(4, 1fr);
     }
   }
 
   .tech-category-item {
-    border: 1px solid rgba(91, 39, 39, 0.25);
-    padding: 1rem;
-    border-radius: 1rem;
+    h4 {
+      margin: 0 0 0.85rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--pm-border);
+    }
   }
 
-  .list-group {
-    border-top: 1px solid rgba(91, 39, 39, 0.25);
+  .pm-tech-chip-list {
+    border-top: 1px solid var(--pm-border-subtle);
     padding-top: 0.75rem;
   }
-
-  .list-group-item {
-    padding: 0 0.75rem;
-    margin: 0 0.25rem 0.5rem 0;
-  }
-}
-
-.btn-container {
-  display: flex;
-  gap: 1rem;
 }
 
 .short-about-me {
-  background: linear-gradient(
-    319deg,
-    rgb(224, 224, 224) 0%,
-    rgb(255, 255, 255) 67%,
-    rgb(218, 218, 218) 96%
-  );
+  background: var(--pm-surface-gradient);
+  color: var(--pm-text);
 }
 
 .section-container {
   @include section-padding;
-
-  h2 {
-    font-size: 3rem;
-    letter-spacing: -0.045em;
-    text-transform: uppercase;
-  }
 }
 
 .color {
-  color: var(--pm-primary);
-}
-
-.role-typscripter {
-  font-weight: bolder;
-  font-size: 1.75em;
-
-  &::after {
-    animation: blink-cursor 1s infinite step-start;
-    content: '|';
-  }
-}
-
-@keyframes blink-cursor {
-  0%,
-  100% {
-    color: transparent;
-  }
-  50% {
-    color: inherit;
-  }
+  color: var(--pm-gold);
 }

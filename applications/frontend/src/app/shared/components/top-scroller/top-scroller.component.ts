@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ScrollAnchorDirective } from '@shared/directives/scroll-anchor.directive';
 
 @Component({
@@ -6,5 +6,6 @@ import { ScrollAnchorDirective } from '@shared/directives/scroll-anchor.directiv
   imports: [ScrollAnchorDirective],
   templateUrl: './top-scroller.component.html',
   styleUrl: './top-scroller.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TopScrollerComponent {}

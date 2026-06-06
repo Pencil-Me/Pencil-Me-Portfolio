@@ -1,12 +1,12 @@
 import { ProjectDetailsComponent } from '@modules/projects/details/details.component';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, of } from 'rxjs';
-import { IProject } from '@modules/projects/projects.models';
+import { of } from 'rxjs';
 import { ProjectsService } from '@modules/projects/projects.service';
 
 class MockProjectsService {
-  project$: Observable<IProject> = of({
+  project$ = of({
     id: 'testID',
     label: 'testLabel',
     position: 'testPosition',
@@ -16,9 +16,10 @@ class MockProjectsService {
     org_dates: [],
     dates: [],
     tech: [],
-  } as IProject);
-  selectProject(id: string) {
-    console.log(id);
+  });
+  projectState$ = of({ loadStatus: 'COMPLETED' as const, error: null, data: {} });
+  selectProject(_id?: string) {
+    return;
   }
 }
 describe('DetailsComponent', () => {

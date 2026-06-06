@@ -1,11 +1,11 @@
 html {
   box-sizing: border-box;
-  background: white;
+  background: var(--pm-bg);
 }
 
 *,
-*:before,
-*:after {
+*::before,
+*::after {
   box-sizing: inherit;
 }
 
@@ -21,7 +21,7 @@ img {
   // used with shape-outside
   shape-margin: 1rem;
 
-  //max-width: 100%;
+  // max-width: 100%;
   height: auto;
   vertical-align: middle;
 }

@@ -1,5 +1,7 @@
-import { TestBed, ComponentFixture } from '@angular/core/testing';
-import { Component, DebugElement, Directive } from '@angular/core';
+import type { ComponentFixture } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
+import type { DebugElement } from '@angular/core';
+import { Component, Directive } from '@angular/core';
 import { ScrollAnchorDirective } from './scroll-anchor.directive';
 import { By } from '@angular/platform-browser';
 import { ScrollManagerDirective } from '@shared/directives/scroll-manager.directive';
@@ -42,7 +44,7 @@ describe('ScrollAnchorDirective', () => {
     fixture.detectChanges();
 
     divEl = fixture.debugElement.query(By.directive(ScrollAnchorDirective));
-    scrollManager = TestBed.inject(ScrollManagerDirective) as MockScrollManagerDirective; // ScrollManagerDirective injizieren
+    scrollManager = TestBed.inject(ScrollManagerDirective); // ScrollManagerDirective injizieren
 
     spyOn(scrollManager, 'scroll').and.callThrough();
   });

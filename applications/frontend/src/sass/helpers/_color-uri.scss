@@ -1,0 +1,6 @@
+@use 'sass:string';
+
+/// Hex-Farbe (#rrggbb) fuer SVG data-URI encodieren (%23rrggbb).
+@function hex-uri($color) {
+  @return '%23' + string.to-lower-case(string.slice(#{$color}, 2));
+}

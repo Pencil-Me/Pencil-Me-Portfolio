@@ -1,0 +1,68 @@
+@use '../effects/fx-cyber' as fx;
+
+.pm-tech-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.5rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.pm-tech-chip {
+  display: inline-block;
+  padding: 0.35em 0.65em;
+  font-size: 0.75em;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  vertical-align: baseline;
+  text-align: center;
+  color: var(--pm-tech-item-text);
+  background-color: transparent;
+  border: 1px solid var(--pm-tech-item-border);
+  border-radius: 0;
+  text-decoration: none;
+  transition:
+    color 200ms ease,
+    background-color 200ms ease,
+    border-color 200ms ease;
+
+  &.is-selected {
+    color: var(--pm-on-primary);
+    background: var(--pm-primary-hover);
+  }
+}
+
+.pm-tech-chip--interactive {
+  cursor: pointer;
+  appearance: none;
+
+  &:hover {
+    color: var(--pm-on-primary);
+    background-color: var(--pm-tech-item-hover-bg);
+    animation: pm-chip-glitch-hover 0.45s steps(2, end) 1;
+    box-shadow:
+      0 0 10px var(--pm-glitch-cyan-a18),
+      inset 0 0 0 1px var(--pm-gold-a38);
+  }
+
+  &.is-selected {
+    color: var(--pm-on-primary);
+    background: var(--pm-primary-hover);
+    box-shadow:
+      2px 0 0 var(--pm-gold-bright),
+      0 0 12px var(--pm-red-a28);
+  }
+
+  @include fx.pm-fx-motion-safe;
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pm-focus-ring);
+    outline-offset: 2px;
+  }
+}

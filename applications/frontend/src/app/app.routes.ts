@@ -1,6 +1,8 @@
-import { Routes } from '@angular/router';
+import type { Routes } from '@angular/router';
 import { BasicComponent } from '@layout/basic/basic.component';
 import { SeoGuard } from '@core/guards/seo.guard';
+import { routeLoaders } from '@core/routing/route-loaders';
+import { HomeComponent } from '@modules/home/home.component';
 
 // Route configurations for the application
 export const routes: Routes = [
@@ -11,93 +13,91 @@ export const routes: Routes = [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       {
         path: 'home',
-        loadComponent: () => import('@modules/home/home.component').then((c) => c.HomeComponent),
+        component: HomeComponent,
         canActivate: [SeoGuard],
         data: {
-          title: 'Home - Pencil&Me',
+          title: 'Start – Pencil&Me',
           description:
-            'Willkommen auf der Startseite von Pencil&Me. Hier finden Sie das Portfolio von Johannes Kromer.',
-          keywords: 'Portfolio, Pencil&Me, Johannes Kromer, Startseite',
-          ogTitle: 'Home - Pencil&Me',
+            'Portfolio von Johannes Kromer: Über 20 Jahre Frontend-Entwicklung aus Berlin – digitale Produkte, UI/UX und Projekte von Enterprise bis IoT.',
+          keywords:
+            'Johannes Kromer, Frontend-Entwickler, Portfolio, Pencil&Me, Berlin, Angular, UI/UX',
+          ogTitle: 'Johannes Kromer – Frontend-Entwickler aus Berlin | Pencil&Me',
           ogDescription:
-            'Willkommen auf der Startseite von Pencil&Me. Hier finden Sie das Portfolio von Johannes Kromer.',
+            'Portfolio von Johannes Kromer: Über 20 Jahre Frontend-Entwicklung aus Berlin – digitale Produkte, UI/UX und Projekte von Enterprise bis IoT.',
           ogUrl: 'https://www.pencil-me.de/home',
           ogType: 'website',
         },
       },
       {
         path: 'contact',
-        loadComponent: () =>
-          import('@modules/contact/contact.component').then((c) => c.ContactComponent),
+        loadComponent: routeLoaders.contact,
         canActivate: [SeoGuard],
         data: {
-          title: 'Kontakt - Pencil&Me',
+          title: 'Kontakt – Pencil&Me',
           description:
-            'Kontaktieren Sie Johannes Kromer, Freelance Frontend Developer bei Pencil&Me.',
-          keywords: 'Kontakt, Pencil&Me, Johannes Kromer, Frontend Developer',
-          ogTitle: 'Kontakt - Pencil&Me',
+            'Schreib mir für allgemeine Anfragen oder eine Projektanfrage. Freelance Frontend-Entwicklung aus Berlin – ich melde mich zeitnah zurück.',
+          keywords:
+            'Kontakt, Projektanfrage, Johannes Kromer, Frontend-Entwickler, Pencil&Me, Berlin',
+          ogTitle: 'Kontakt – Pencil&Me',
           ogDescription:
-            'Kontaktieren Sie Johannes Kromer, Freelance Frontend Developer bei Pencil&Me.',
+            'Schreib mir für allgemeine Anfragen oder eine Projektanfrage. Freelance Frontend-Entwicklung aus Berlin – ich melde mich zeitnah zurück.',
           ogUrl: 'https://www.pencil-me.de/contact',
           ogType: 'website',
         },
       },
       {
         path: 'contact/:type',
-        loadComponent: () =>
-          import('@modules/contact/contact.component').then((c) => c.ContactComponent),
+        loadComponent: routeLoaders.contact,
       },
       {
         path: 'about',
-        loadComponent: () => import('@modules/about/about.component').then((c) => c.AboutComponent),
+        loadComponent: routeLoaders.about,
         canActivate: [SeoGuard],
         data: {
-          title: 'Über Mich - Pencil&Me',
+          title: 'Über mich – Pencil&Me',
           description:
-            'Erfahren Sie mehr über Johannes Kromer und Pencil&Me, sein Portfolio und seine Projekte.',
-          keywords: 'Über uns, Pencil&Me, Johannes Kromer, Projekte',
-          ogTitle: 'Über Uns - Pencil&Me',
+            'Web- und Mobile-Entwickler mit über 20 Jahren Erfahrung: Arbeitsweise, Tech-Skills und Hintergrund – von Agentur über Konzern bis Einzelprojekte.',
+          keywords:
+            'Über mich, Johannes Kromer, Frontend-Entwickler, Tech-Skills, Pencil&Me, Berlin',
+          ogTitle: 'Über mich – Pencil&Me',
           ogDescription:
-            'Erfahren Sie mehr über Johannes Kromer und Pencil&Me, sein Portfolio und seine Projekte.',
+            'Web- und Mobile-Entwickler mit über 20 Jahren Erfahrung: Arbeitsweise, Tech-Skills und Hintergrund – von Agentur über Konzern bis Einzelprojekte.',
           ogUrl: 'https://www.pencil-me.de/about',
           ogType: 'website',
         },
       },
       {
         path: 'projects',
-        loadComponent: () =>
-          import('@modules/projects/projects.component').then((c) => c.ProjectsComponent),
+        loadComponent: routeLoaders.projects,
         canActivate: [SeoGuard],
         data: {
-          title: 'Projekte - Pencil&Me',
-          description: 'Entdecken Sie die Projekte von Johannes Kromer bei Pencil&Me.',
-          keywords: 'Projekte, Pencil&Me, Johannes Kromer, Portfolio',
-          ogTitle: 'Projekte - Pencil&Me',
-          ogDescription: 'Entdecken Sie die Projekte von Johannes Kromer bei Pencil&Me.',
+          title: 'Projekte – Pencil&Me',
+          description:
+            'Über 90 Referenzprojekte in E-Commerce, Versicherung, IoT und Enterprise-Frontend – filterbar nach Technologie, mit Tech-Stack und Details.',
+          keywords:
+            'Projekte, Portfolio, Johannes Kromer, Frontend, Angular, E-Commerce, IoT, Pencil&Me',
+          ogTitle: 'Projekte – Pencil&Me',
+          ogDescription:
+            'Über 90 Referenzprojekte in E-Commerce, Versicherung, IoT und Enterprise-Frontend – filterbar nach Technologie, mit Tech-Stack und Details.',
           ogUrl: 'https://www.pencil-me.de/projects',
           ogType: 'website',
         },
       },
       {
         path: 'projects/:id',
-        loadComponent: () =>
-          import('@modules/projects/details/details.component').then(
-            (c) => c.ProjectDetailsComponent,
-          ),
+        loadComponent: routeLoaders['project-details'],
       },
       {
         path: 'impressum',
-        loadComponent: () =>
-          import('@modules/impressum/impressum.component').then((c) => c.ImpressumComponent),
+        loadComponent: routeLoaders.impressum,
       },
       {
         path: 'datenschutz',
-        loadComponent: () =>
-          import('@modules/datenschutz/datenschutz.component').then((c) => c.DatenschutzComponent),
+        loadComponent: routeLoaders.datenschutz,
       },
       {
         path: 'error',
-        loadChildren: () => import('@modules/error/error.module').then((m) => m.ErrorModule),
+        loadChildren: () => import('@modules/error/error.routes').then((m) => m.errorRoutes),
       },
       { path: '**', redirectTo: 'error', pathMatch: 'full' },
     ],

@@ -1,4 +1,19 @@
 venv/
 uploads/
 __pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+
+# Local config / secrets
 /source_code/configs/config.py
+.env
+.env.*
+
+# IDEs
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db

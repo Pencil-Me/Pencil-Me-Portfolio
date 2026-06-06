@@ -1,17 +1,70 @@
 .section-container {
   padding-top: 2rem;
   padding-bottom: 5rem;
+}
 
-  h2 {
-    font-size: 3rem;
-    letter-spacing: -0.045em;
-    text-transform: uppercase;
+.pm-work-process {
+  margin-top: 2rem;
+
+  &__intro {
+    max-width: 68ch;
+    margin-bottom: 1.5rem;
+    line-height: 1.65;
   }
 
-  h3 {
-    font-size: 2rem;
-    letter-spacing: -0.045em;
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  &__item {
+    min-width: 0;
+  }
+}
+
+.pm-workflow-panel {
+  height: 100%;
+
+  &__step {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-family: var(--pm-font-mono), monospace;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    color: var(--pm-gold-bright);
+  }
+
+  &__title {
+    margin: 0 0 0.5rem;
+    font-family: var(--pm-font-mono), monospace;
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
+    color: var(--pm-secondary);
+  }
+
+  &__text {
+    margin: 0;
+    line-height: 1.6;
+    font-size: 0.95rem;
+  }
+}
+
+@media (width >= 768px) {
+  .pm-work-process__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (width >= 1200px) {
+  .pm-work-process__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
@@ -26,49 +79,43 @@ ul {
 .tech-card-container {
   .tech-card {
     margin-bottom: 2rem;
-
-    h4 {
-      font-size: 1.5rem;
-      letter-spacing: -0.045em;
-      text-transform: uppercase;
-    }
   }
 
-  ul {
-    padding: 0;
-    margin: 0;
-    list-style-type: none;
+  .pm-skill-panel {
+    ul {
+      padding: 0;
+      margin: 0;
+      list-style-type: none;
 
-    li {
-      padding-bottom: 0.25rem;
-      margin-bottom: 0.25rem;
+      li {
+        padding-bottom: 0.25rem;
+        margin-bottom: 0.25rem;
 
-      &:not(:last-child) {
-        border-bottom: 1px solid #cbcbcb;
-      }
+        &:not(:last-child) {
+          border-bottom: 1px solid var(--pm-border);
+        }
 
-      .tech_name {
-        color: var(--pm-primary);
-        font-weight: 700;
-      }
-      .tech_info-box {
-        color: var(--pm-secondary);
-        display: flex;
-        gap: 0.5rem;
-        font-size: 0.65em;
-
-        span {
-          font-size: 1.25em;
+        .tech_name {
+          color: var(--pm-primary);
           font-weight: 500;
         }
 
-        .tech_project-count {
-        }
+        .tech_info-box {
+          color: var(--pm-secondary);
+          display: flex;
+          gap: 0.5rem;
+          font-size: 0.65em;
 
-        .tech_year-count {
-        }
+          span {
+            font-size: 1.25em;
+            font-weight: 500;
+          }
 
-        .tech_last-touch {
+          .tech_project-count,
+          .tech_year-count,
+          .tech_last-touch {
+            display: block;
+          }
         }
       }
     }

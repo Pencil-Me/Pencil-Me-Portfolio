@@ -1,11 +1,15 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { AboutComponent } from './about.component';
-import { Observable, of } from 'rxjs';
-import { ITechCategory } from '@modules/about/about.models';
+import type { Observable } from 'rxjs';
+import { of } from 'rxjs';
+import type { ITechCategory } from '@modules/about/about.models';
 import { AboutService } from '@modules/about/about.service';
+import type { LoadStatus } from '@app/shared/models/load-status.model';
 
 class MockAboutService {
   tech$: Observable<ITechCategory[]> = of([]);
+  techState$ = of({ loadStatus: 'COMPLETED' as LoadStatus, error: null, data: [] });
 }
 
 describe('AboutComponent', () => {
@@ -27,5 +31,12 @@ describe('AboutComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should format experience years and months', () => {
+    expect(component.years(2)).toBe('2+ Jahre');
+    expect(component.years(1)).toBe('1+ Jahr');
+    expect(component.years(0.083)).toBe('1 Monat');
+    expect(component.years(0)).toBe('');
   });
 });

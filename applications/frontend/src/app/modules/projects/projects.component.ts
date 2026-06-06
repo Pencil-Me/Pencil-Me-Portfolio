@@ -1,87 +1,79 @@
-import { Component, inject } from '@angular/core';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { NgClass } from '@angular/common';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { ProjectsService } from '@modules/projects/projects.service';
-import { Observable } from 'rxjs';
-import { IProjectsCategory, IProjectTech } from '@modules/projects/projects.models';
+import type { IProjectsCategory } from '@modules/projects/projects.models';
 import { Router } from '@angular/router';
+import { FeaturedProjectsComponent } from '@shared/components/featured-projects/featured-projects.component';
+import { ProjectDateRangeComponent } from '@shared/components/project-date-range/project-date-range.component';
+import { PmAsyncContentComponent } from '@shared/components/pm-async-content/pm-async-content.component';
+import { ScrollRevealDirective } from '@shared/directives/scroll-reveal.directive';
+import { GibberishRevealDirective } from '@shared/directives/gibberish-reveal.directive';
+import { toLoadStatusSignals } from '@app/shared/models/load-status.signals';
 
-/**
- * Component to display projects.
- */
 @Component({
   selector: 'app-projects',
-  imports: [NgForOf, NgIf, NgClass],
+  imports: [NgClass, FeaturedProjectsComponent, ProjectDateRangeComponent, PmAsyncContentComponent, ScrollRevealDirective, GibberishRevealDirective],
   templateUrl: './projects.component.html',
   styleUrls: ['./projects.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectsComponent {
   private projectsService = inject(ProjectsService);
   private router = inject(Router);
 
-  techs$: Observable<IProjectTech[]> = this.projectsService.tech$;
-  projectcategories$: Observable<IProjectsCategory[]> = this.projectsService.projects$;
+  readonly techs = toSignal(this.projectsService.tech$, { initialValue: [] });
+  private readonly projectsLoad = toLoadStatusSignals(this.projectsService.projectsState$);
+  readonly projectsLoadStatus = this.projectsLoad.loadStatus;
+  readonly projectsError = this.projectsLoad.error;
 
-  projectcategories: IProjectsCategory[] = [];
-  filteredProjectCategories: IProjectsCategory[] = [];
-  techs: IProjectTech[] = [];
+  private readonly techLoad = toLoadStatusSignals(this.projectsService.techState$);
+  readonly techLoadStatus = this.techLoad.loadStatus;
+  readonly techError = this.techLoad.error;
 
-  filterTech: string[] = [];
+  readonly filterTech = signal<string[]>([]);
 
-  /**
-   * Constructor to initialize ProjectsComponent.
-   */
-  constructor() {
-    this.projectcategories$.subscribe((e) => {
-      this.projectcategories = e;
-      this.filteredProjectCategories = e;
-    });
-    this.techs$.subscribe((e) => {
-      this.techs = e;
-    });
+  private readonly projectcategories = toSignal(this.projectsService.projects$, {
+    initialValue: [] as IProjectsCategory[],
+  });
+
+  readonly filteredProjectCategories = computed(() => {
+    const categories = this.projectcategories();
+    const filters = this.filterTech();
+
+    if (filters.length === 0) {
+      return categories;
+    }
+
+    return categories
+      .map((category) => ({
+        title: category.title,
+        data: category.data.filter((project) =>
+          project.tech.some((tech) => filters.includes(tech.name)),
+        ),
+      }))
+      .filter((category) => category.data.length > 0);
+  });
+
+  openProject(id: string): void {
+    void this.router.navigate(['/projects', id]);
   }
 
-  /**
-   * Opens the project details page.
-   * @param id The ID of the project to open.
-   */
-  openProject(id: string) {
-    this.router.navigate(['/projects', id]);
+  resetFilterProjects(): void {
+    this.filterTech.set([]);
   }
 
-  /**
-   * Resets the applied filters.
-   */
-  resetFilterProjects() {
-    this.filterTech = [];
-    this.filterProjectsBySetFilter();
+  filterProjectsBy(tech: string): void {
+    this.filterTech.update((current) =>
+      current.includes(tech) ? current.filter((value) => value !== tech) : [...current, tech],
+    );
   }
 
-  /**
-   * Filters projects by a given technology.
-   * @param tech The technology name to filter projects.
-   */
-  filterProjectsBy(tech: string) {
-    if (!this.filterTech.includes(tech)) this.filterTech.push(tech);
-    else this.filterTech = this.filterTech.filter((v) => v !== tech);
-
-    this.filterProjectsBySetFilter();
+  retryProjectsLoad(): void {
+    this.projectsService.reloadProjects();
   }
 
-  /**
-   * Filters projects based on the applied technology filter.
-   */
-  filterProjectsBySetFilter() {
-    const filteredProjectCategories = [...this.projectcategories];
-    this.filteredProjectCategories =
-      this.filterTech.length > 0
-        ? filteredProjectCategories
-            .map((category) => ({
-              title: category.title,
-              data: category.data.filter((project) =>
-                project.tech.some((tech) => this.filterTech.includes(tech.name)),
-              ),
-            }))
-            .filter((category) => category.data.length > 0)
-        : filteredProjectCategories;
+  retryTechLoad(): void {
+    this.projectsService.reloadTechstack();
   }
 }

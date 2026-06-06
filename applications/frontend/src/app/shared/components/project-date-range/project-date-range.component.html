@@ -1,0 +1,11 @@
+@if (dates.length > 0) {
+  <aside class="project-panel__meta" [attr.aria-label]="ariaLabel">
+    @for (date of dates; track $index) {
+      <div class="project-panel__date">
+        <span class="project-panel__date-start">{{ date.start_date }}</span>
+        <span class="project-panel__date-sep" aria-hidden="true">—</span>
+        <span class="project-panel__date-end">{{ date.end_date }}</span>
+      </div>
+    }
+  </aside>
+}

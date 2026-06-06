@@ -2,7 +2,6 @@
 
 namespace Inc;
 
-use Cors;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 

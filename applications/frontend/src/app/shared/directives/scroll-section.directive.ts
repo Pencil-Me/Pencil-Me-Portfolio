@@ -1,4 +1,5 @@
-import { Directive, ElementRef, Input, OnDestroy, OnInit } from '@angular/core';
+import { Directive, ElementRef, Input, inject } from '@angular/core';
+import type { OnDestroy, OnInit } from '@angular/core';
 import { ScrollManagerDirective } from './scroll-manager.directive';
 
 // Directive for scrolling to a specific section
@@ -7,12 +8,10 @@ import { ScrollManagerDirective } from './scroll-manager.directive';
   standalone: true, // Indicating that the directive is standalone
 })
 export class ScrollSectionDirective implements OnInit, OnDestroy {
-  @Input('appScrollSection') id: string | number = ''; // Input property to specify the section ID
+  private host = inject<ElementRef<HTMLElement>>(ElementRef);
+  private manager = inject(ScrollManagerDirective);
 
-  constructor(
-    private host: ElementRef<HTMLElement>, // Reference to the host element
-    private manager: ScrollManagerDirective, // Reference to the scroll manager directive
-  ) {}
+  @Input('appScrollSection') id: string | number = '';
 
   // Lifecycle hook called after Angular initializes the directive
   ngOnInit() {

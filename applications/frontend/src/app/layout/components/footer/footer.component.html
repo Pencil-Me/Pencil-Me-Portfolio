@@ -1,17 +1,34 @@
 <footer>
+  <div class="footer-warn-band" aria-hidden="true"></div>
+
   <div class="top-scroller">
     <app-top-scroller></app-top-scroller>
   </div>
 
-  <div class="footer-content">
-    <div class="project-request" routerLink="/contact/project">Projektanfrage</div>
+  <div class="footer-content container pm-container-brutal">
+    <div class="footer-grid">
+      <section class="footer-grid__legal" aria-label="Rechtliches und Navigation">
+        <p class="footer-zone-label">// LEGAL</p>
+        <app-footer-navigation [navLinks]="navLinks"></app-footer-navigation>
+        <span class="footer-copyright">© {{ getCurrentYear() }} Johannes Kromer</span>
+        <app-footer-disclaimer [techStack]="techStackForPortfolio"></app-footer-disclaimer>
+      </section>
 
-    <app-social-links [socialLinks]="socialLinks"></app-social-links>
+      <section class="footer-grid__social" aria-label="Social Media">
+        <p class="footer-zone-label">// SOCIAL</p>
+        <app-social-links [socialLinks]="socialLinks"></app-social-links>
+      </section>
 
-    <span class="footer-copyright">© Copyright {{ getCurrentYear() }} Johannes Kromer</span>
-
-    <app-footer-navigation [navLinks]="navLinks"></app-footer-navigation>
-
-    <app-footer-disclaimer [techStack]="techStackForPortfolio"></app-footer-disclaimer>
+      <section class="footer-grid__cta" aria-label="Projektanfrage">
+        <p class="footer-zone-label">// CONTACT</p>
+        <a
+          class="project-request btn btn-pm-primary"
+          routerLink="/contact/project"
+          data-text="Projektanfrage"
+        >
+          Projektanfrage
+        </a>
+      </section>
+    </div>
   </div>
 </footer>

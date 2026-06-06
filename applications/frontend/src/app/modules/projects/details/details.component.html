@@ -1,36 +1,62 @@
-<section class="container section-container">
-  <button type="button" class="mt-4 btn btn-outline-secondary" [routerLink]="'/projects'">
+<section class="container section-container pm-surface-light pm-section--offset">
+  <button
+    type="button"
+    class="mt-4 btn btn-pm-tertiary"
+    [routerLink]="'/projects'"
+    data-text="Zurück"
+  >
     Zurück
   </button>
-  <div class="row">
-    <ng-container *ngIf="!!projectdetail">
-      <h3 class="mt-3">{{ projectdetail.position }}</h3>
-      <div class="project-list_item_dates" *ngIf="projectdetail.dates.length > 0">
-        <div *ngFor="let date of projectdetail.dates">
-          <span>{{ date.start_date }}</span> bis <span>{{ date.end_date }}</span>
+
+  <app-pm-async-content
+    [status]="projectLoadStatus()"
+    [error]="projectError()"
+    variant="detail"
+    label="Lade Projektdetails"
+    [showRetry]="true"
+    (retry)="retryProjectLoad()"
+  >
+    @if (projectdetail(); as project) {
+      <article
+        class="pm-panel-brutal project-panel project-detail-panel mt-4"
+        appScrollReveal="scale"
+        [class.project-panel--has-meta]="project.dates.length > 0"
+      >
+        <app-project-date-range [dates]="project.dates" />
+
+        <div class="project-panel__body">
+          @if (project.position) {
+            <p class="project-detail-panel__position" appGibberishReveal>{{ project.position }}</p>
+          }
+          <h2 appGibberishReveal>{{ project.label }}</h2>
+          @if (project.customer) {
+            <p class="project-detail-panel__customer" appGibberishReveal>{{ project.customer }}</p>
+          }
+          @if (project.location) {
+            <span class="project-list_item_main-info_location" appGibberishReveal>{{
+              project.location
+            }}</span>
+          }
+
+          @if (content()) {
+            <div class="pm-section-divider" role="separator" aria-hidden="true"></div>
+            <pre class="project-detail-panel__content" appGibberishReveal>{{ content() }}</pre>
+          }
+
+          @if (project.tech.length > 0) {
+            <div class="project-list_item_tech mt-4">
+              <span class="project-list_item_tech_title" appGibberishReveal
+                >Verwendete Technologien</span
+              >
+              <ul class="tech-container pm-tech-chip-list">
+                @for (tech of project.tech; track tech) {
+                  <li class="pm-tech-chip" appGibberishReveal>{{ tech.name }}</li>
+                }
+              </ul>
+            </div>
+          }
         </div>
-      </div>
-      <h2 class="mt-3">{{ projectdetail.label }}</h2>
-      <ng-container *ngIf="projectdetail.customer">
-        <h5>{{ projectdetail.customer }}</h5>
-      </ng-container>
-      <ng-container *ngIf="projectdetail.location">
-        <span class="project-list_item_main-info_location">{{ projectdetail.location }}</span>
-      </ng-container>
-
-      <hr class="mt-3" />
-
-      <ng-container *ngIf="content">
-        <pre>{{ content }}</pre>
-      </ng-container>
-
-      <hr class="mt-3" />
-      <div class="project-list_item_tech" *ngIf="projectdetail.tech.length > 0">
-        <span class="project-list_item_tech_title">Verwendete Technologien</span>
-        <ul class="tech-container">
-          <li *ngFor="let tech of projectdetail.tech">{{ tech.name }}</li>
-        </ul>
-      </div>
-    </ng-container>
-  </div>
+      </article>
+    }
+  </app-pm-async-content>
 </section>

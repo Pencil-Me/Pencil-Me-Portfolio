@@ -5,27 +5,27 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Pencil&Me - das Portfolio von Johannes Kromer - Freelance Frontend Developer</title>
+    <title>Johannes Kromer – Frontend-Entwickler aus Berlin | Pencil&Me</title>
 
     <!-- Meta Tags -->
     <meta
       name="description"
-      content="Ich entwickle Websites und bringe digitale Ideen ins Web. Ich arbeite u.a. mit Angular, Vue und Typescript und gebe hier einen Einblick in mein Portfolio."
+      content="Portfolio von Johannes Kromer: Über 20 Jahre Frontend-Entwicklung aus Berlin – digitale Produkte mit Angular, Vue und TypeScript, UI/UX und Projekte von Enterprise bis IoT."
     />
     <meta
       name="keywords"
-      content="Portfolio, Pencil&Me, Pencil-Me, pencil me, Johannes Kromer, Frontendentwickler, Grafikdesigner, Projekte"
+      content="Johannes Kromer, Frontend-Entwickler, Portfolio, Pencil&Me, Berlin, Angular, Vue, TypeScript, UI/UX, Freelance"
     />
     <meta name="author" content="Johannes Kromer" />
 
     <!-- Open Graph Meta Tags for Social Media -->
     <meta
       property="og:title"
-      content="Pencil&Me - Freelance Frontend Developer - das Portfolio von Johannes Kromer"
+      content="Johannes Kromer – Frontend-Entwickler aus Berlin | Pencil&Me"
     />
     <meta
       property="og:description"
-      content="Ich entwickle Websites und bringe digitale Ideen ins Web. Ich arbeite u.a. mit Angular, Vue und Typescript und gebe hier einen Einblick in mein Portfolio."
+      content="Portfolio von Johannes Kromer: Über 20 Jahre Frontend-Entwicklung aus Berlin – digitale Produkte mit Angular, Vue und TypeScript, UI/UX und Projekte von Enterprise bis IoT."
     />
     <meta property="og:url" content="https://www.pencil-me.de" />
     <meta property="og:type" content="website" />
@@ -33,11 +33,11 @@
     <!-- Twitter Card Meta Tags -->
     <meta
       name="twitter:title"
-      content="Pencil&Me - Freelance Frontend Developer - das Portfolio von Johannes Kromer"
+      content="Johannes Kromer – Frontend-Entwickler aus Berlin | Pencil&Me"
     />
     <meta
       name="twitter:description"
-      content="Ich entwickle Websites und bringe digitale Ideen ins Web. Ich arbeite u.a. mit Angular, Vue und Typescript und gebe hier einen Einblick in mein Portfolio."
+      content="Portfolio von Johannes Kromer: Über 20 Jahre Frontend-Entwicklung aus Berlin – digitale Produkte mit Angular, Vue und TypeScript, UI/UX und Projekte von Enterprise bis IoT."
     />
 
     <!-- Favicon and Icons -->
@@ -47,12 +47,70 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#2f0000" />
-    <meta name="msapplication-TileColor" content="#2f0000" />
-    <meta name="theme-color" content="#ffffff" />
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="var(--pm-manifest-tile, #1a0408)" />
+    <meta name="msapplication-TileColor" content="#1a0408" />
+    <meta name="theme-color" content="#eeeeef" />
 
     <!-- Base URL -->
     <base href="/" />
+
+    <!-- Kritische Tokens vor App-Bundle (sync mit sass/helpers/_variables.scss) -->
+    <style id="pm-critical-tokens">
+      :root,
+      [data-bs-theme='light'] {
+        --pm-red-shade-500: #922038;
+        --pm-dark-shade-500: #0f1014;
+        --pm-gold-shade-500: #c9a227;
+        --pm-dark-shade-50: #f5f3f0;
+        --pm-theme-color: #f5f3f0;
+        --pm-loader-bg: #0f1014;
+        --pm-loader-stroke: #6b1e32;
+        --pm-manifest-tile: #1a0408;
+      }
+
+      [data-bs-theme='dark'] {
+        --pm-theme-color: #0f1014;
+        --pm-loader-stroke: #e0e4f0;
+      }
+
+      html,
+      body {
+        font-family: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', roboto, sans-serif;
+      }
+    </style>
+
+    <script>
+      (function () {
+        var key = 'pm-theme';
+        var stored = localStorage.getItem(key);
+        var theme =
+          stored === 'light' || stored === 'dark'
+            ? stored
+            : window.matchMedia('(prefers-color-scheme: dark)').matches
+              ? 'dark'
+              : 'light';
+        document.documentElement.setAttribute('data-bs-theme', theme);
+        document.documentElement.style.colorScheme = theme;
+
+        var themeColor = getComputedStyle(document.documentElement)
+          .getPropertyValue('--pm-theme-color')
+          .trim();
+        var meta = document.querySelector('meta[name="theme-color"]');
+
+        if (meta && themeColor) {
+          meta.setAttribute('content', themeColor);
+        }
+
+        var tileColor = getComputedStyle(document.documentElement)
+          .getPropertyValue('--pm-manifest-tile')
+          .trim();
+        var tileMeta = document.querySelector('meta[name="msapplication-TileColor"]');
+
+        if (tileMeta && tileColor) {
+          tileMeta.setAttribute('content', tileColor);
+        }
+      })();
+    </script>
 
     <!-- Styles -->
     <style>
@@ -63,7 +121,7 @@
         margin: 0;
       }
       .loader {
-        background: #000;
+        background: var(--pm-loader-bg);
         position: relative;
         display: flex;
         flex-direction: column;
@@ -88,7 +146,7 @@
         stroke-dashoffset: 0;
         animation: dash 1.5s ease-in-out infinite;
         stroke-linecap: round;
-        stroke: #ddd;
+        stroke: var(--pm-loader-stroke);
       }
 
       @keyframes rotate {
@@ -112,31 +170,33 @@
       }
     </style>
 
-    <!-- Matomo -->
+    <!-- Matomo (nach App-Load, blockiert Initial-Parsing nicht) -->
     <script>
-      var _paq = (window._paq = window._paq || []);
-      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-      _paq.push(['trackPageView']);
-      _paq.push(['enableLinkTracking']);
-      (function () {
-        var u = '//analytics.pencil-me.eu/';
-        _paq.push(['setTrackerUrl', u + 'matomo.php']);
-        _paq.push(['setSiteId', '2']);
-        var d = document,
-          g = d.createElement('script'),
-          s = d.getElementsByTagName('script')[0];
-        g.async = true;
-        g.src = u + 'matomo.js';
-        s.parentNode.insertBefore(g, s);
-      })();
+      window.addEventListener(
+        'load',
+        function () {
+          var _paq = (window._paq = window._paq || []);
+          _paq.push(['trackPageView']);
+          _paq.push(['enableLinkTracking']);
+          var u = '//analytics.pencil-me.eu/';
+          _paq.push(['setTrackerUrl', u + 'matomo.php']);
+          _paq.push(['setSiteId', '2']);
+          var d = document,
+            g = d.createElement('script'),
+            s = d.getElementsByTagName('script')[0];
+          g.async = true;
+          g.src = u + 'matomo.js';
+          s.parentNode.insertBefore(g, s);
+        },
+        { once: true },
+      );
     </script>
-    <!-- End Matomo Code -->
   </head>
   <body>
     <noscript>
       <strong>
-        We're sorry but the webpage of Pencil&Me doesn't work properly without JavaScript enabled.
-        Please enable it to continue.
+        Ohne JavaScript funktioniert diese Seite leider nicht richtig. Bitte aktiviere JavaScript in
+        deinem Browser.
       </strong>
     </noscript>
 

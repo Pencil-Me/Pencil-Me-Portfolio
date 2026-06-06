@@ -1,4 +1,5 @@
-import { Directive, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
+import { Directive, ElementRef, Input, Renderer2, inject } from '@angular/core';
+import type { OnInit } from '@angular/core';
 import {
   animationFrameScheduler,
   BehaviorSubject,
@@ -21,6 +22,9 @@ const easeOutQuad = (x: number): number => x * (2 - x);
   standalone: true,
 })
 export class CountUpDirective implements OnInit {
+  private readonly elementRef = inject(ElementRef);
+  private readonly renderer = inject(Renderer2);
+
   private readonly count$ = new BehaviorSubject(0);
   private readonly duration$ = new BehaviorSubject(2000);
 
@@ -49,11 +53,6 @@ export class CountUpDirective implements OnInit {
   set duration(duration: number) {
     this.duration$.next(duration);
   }
-
-  constructor(
-    private readonly elementRef: ElementRef,
-    private readonly renderer: Renderer2,
-  ) {}
 
   ngOnInit(): void {
     this.displayCurrentCount();

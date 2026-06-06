@@ -1,91 +1,97 @@
-<section class="container section-container">
-  <h2>Kontakt</h2>
+<section class="container section-container pm-surface-light pm-section--offset">
+  <h2 appScrollReveal="up" appGibberishReveal>Kontakt</h2>
 
-  <ng-container *ngIf="emailIsSend">
+  @if (emailIsSend()) {
     <div class="container mt-5">
       <div class="row">
-        <div class="col-md-6 offset-md-3">
-          <div class="card">
-            <div class="card-body">
-              <h1 class="text-center mb-4">Erfolgreich gesendet!</h1>
-              <p class="text-center">
-                Vielen Dank für deine Nachricht. Wir haben deine Anfrage erhalten und werden uns
-                bald mit dir in Verbindung setzen.
-              </p>
-              <div class="text-center mt-4">
-                <a routerLink="/" class="btn btn-primary">Zurück zur Startseite</a>
-              </div>
-            </div>
+        <div class="col-md-8 offset-md-2 col-lg-6 offset-lg-3">
+          <div class="pm-panel-brutal pm-contact-success" appScrollReveal="up">
+            <h1 appGibberishReveal>Erfolgreich gesendet!</h1>
+            <p appGibberishReveal>
+              Vielen Dank für deine Nachricht. Ich habe deine Anfrage erhalten und melde mich bald
+              bei dir.
+            </p>
+            <a routerLink="/" class="btn btn-pm-tertiary" data-text="Zurück zur Startseite">Zurück zur Startseite</a>
           </div>
         </div>
       </div>
     </div>
-  </ng-container>
+  }
 
-  <ng-container *ngIf="!emailIsSend">
+  @if (!emailIsSend()) {
     <div class="row mt-5">
-      <div class="col-md-6">
-        <h3>
+      <div class="col-md-6" appScrollReveal="up">
+        <h3 appGibberishReveal>
           Danke, dass du dir die Zeit genommen hast, mich zu kontaktieren. Wie kann ich dir heute
           helfen?
         </h3>
-
-        <ng-container *ngIf="!isSpecalized">
-          <p>Wähle aus</p>
+        @if (!isSpecalized()) {
+          <p appGibberishReveal>Wähle eine Kontaktart:</p>
           <div class="d-flex flex-column mb-5">
             <button
-              (click)="contactForm = 'GENERALLY'"
-              [ngClass]="{ active: contactForm === 'GENERALLY' }"
+              (click)="selectContactForm('GENERALLY')"
+              [ngClass]="{ active: contactForm() === 'GENERALLY' }"
               type="submit"
-              class="btn btn-primary btn-lg mb-2"
+              class="btn btn-pm-primary btn-lg mb-2"
+              data-text="Allgemeiner Kontakt"
             >
               Allgemeiner Kontakt
             </button>
             <button
-              (click)="contactForm = 'PROJECT'"
-              [ngClass]="{ active: contactForm === 'PROJECT' }"
+              (click)="selectContactForm('PROJECT')"
+              [ngClass]="{ active: contactForm() === 'PROJECT' }"
               type="submit"
-              class="btn btn-primary btn-lg"
+              class="btn btn-pm-primary btn-lg"
+              data-text="Projektanfrage"
             >
               Projektanfrage
             </button>
           </div>
-
-          <p>
+          <p appGibberishReveal>
             Alternativ kannst du mir eine E-Mail schreiben an:
             <a href="mailto:{{ email }}">{{ encryptedEmail }}</a>
           </p>
-        </ng-container>
-
+        }
         <div class="btn-container mt-5">
-          <a routerLink="/" class="btn btn-outline-secondary btn-lg">Zurück zur Startseite</a>
+          <a routerLink="/" class="btn btn-pm-tertiary btn-lg" data-text="Zurück zur Startseite"
+            >Zurück zur Startseite</a
+          >
         </div>
       </div>
-      <div class="col-md-6 position-relative">
-        <div class="alert alert-danger" *ngIf="emailHasError">
-          Ein Fehler beim Senden der Anfrage ist aufgetreten. Versuche es zu einem späteren
-          Zeitpunkt erneut oder sende direkt eine E-Mail an
-          <a href="mailto:{{ email }}">{{ encryptedEmail }}</a
-          >.
-        </div>
-        <div class="spinner-overlay" *ngIf="emailSending">
-          <div class="spinner-border" role="status">
-            <span class="sr-only">Loading...</span>
+      <div class="col-md-6 position-relative" appScrollReveal="up" [revealDelay]="120">
+        @if (emailHasError()) {
+          <div class="pm-alert pm-alert--danger" role="alert">
+            <p class="mb-2">
+              Ein Fehler beim Senden der Anfrage ist aufgetreten.
+              @if (emailErrorMessage()) {
+                <span>{{ emailErrorMessage() }}</span>
+              }
+            </p>
+            <p class="mb-0">
+              Versuche es zu einem späteren Zeitpunkt erneut oder sende direkt eine E-Mail an
+              <a href="mailto:{{ email }}">{{ encryptedEmail }}</a
+              >.
+            </p>
           </div>
-        </div>
-        <ng-container *ngIf="!contactForm">
+        }
+        @if (emailSending()) {
+          <div class="spinner-overlay" role="status" aria-live="polite" aria-label="Nachricht wird gesendet">
+            <div class="pm-loader">
+              <span class="pm-loader__ring" aria-hidden="true"></span>
+              <span class="pm-loader__label">Sende Nachricht</span>
+            </div>
+          </div>
+        }
+        @if (!contactForm()) {
           <div class="spinner-overlay">
             <fa-icon [icon]="faEnvelope" size="lg"></fa-icon>
           </div>
-        </ng-container>
-        <ng-container *ngIf="contactForm === 'GENERALLY'">
-          <div
-            class="alert alert-warning"
-            *ngIf="allRequiredFieldsTouchedAndInvalid(generally_form)"
-          >
-            Überprüfe deine Eingabe.
-          </div>
-          <form [formGroup]="generally_form" (ngSubmit)="generally_send()" class="row">
+        }
+        @if (contactForm() === 'GENERALLY') {
+          @if (allRequiredFieldsTouchedAndInvalid(generally_form)) {
+            <div class="pm-alert pm-alert--warning">Überprüfe deine Eingabe.</div>
+          }
+          <form [formGroup]="generally_form" (ngSubmit)="generally_send()" class="row pm-form">
             <ng-container
               [ngTemplateOutlet]="textInput"
               [ngTemplateOutletContext]="{
@@ -99,7 +105,7 @@
             <ng-container
               [ngTemplateOutlet]="emailInput"
               [ngTemplateOutletContext]="{
-                label: 'Deine Email',
+                label: 'Deine E-Mail',
                 variable: 'generally_email',
                 form: generally_form,
                 required: true,
@@ -116,7 +122,6 @@
                 class: 'mb-4',
               }"
             ></ng-container>
-
             <input
               type="checkbox"
               formControlName="generally_contactByFax"
@@ -126,7 +131,6 @@
               tabindex="-1"
               autocomplete="off"
             />
-
             <ng-container
               [ngTemplateOutlet]="confirmInput"
               [ngTemplateOutletContext]="{
@@ -135,7 +139,6 @@
                 class: 'mb-5',
               }"
             ></ng-container>
-
             <ng-container
               [ngTemplateOutlet]="confirmButtons"
               [ngTemplateOutletContext]="{
@@ -143,18 +146,17 @@
               }"
             ></ng-container>
           </form>
-        </ng-container>
-
-        <ng-container *ngIf="contactForm === 'PROJECT'">
-          <div class="alert alert-warning" *ngIf="allRequiredFieldsTouchedAndInvalid(project_form)">
-            Überprüfe deine Eingabe.
-          </div>
-          <form [formGroup]="project_form" (ngSubmit)="project_send()" class="row">
-            <h4>Kontaktdaten</h4>
+        }
+        @if (contactForm() === 'PROJECT') {
+          @if (allRequiredFieldsTouchedAndInvalid(project_form)) {
+            <div class="pm-alert pm-alert--warning">Überprüfe deine Eingabe.</div>
+          }
+          <form [formGroup]="project_form" (ngSubmit)="project_send()" class="row pm-form">
+            <h4 appGibberishReveal>Kontaktdaten</h4>
             <ng-container
               [ngTemplateOutlet]="textInput"
               [ngTemplateOutletContext]="{
-                label: 'Unternehmen',
+                label: 'Firmenname',
                 variable: 'project_company',
                 form: project_form,
                 required: true,
@@ -184,7 +186,7 @@
             <ng-container
               [ngTemplateOutlet]="textInput"
               [ngTemplateOutletContext]="{
-                label: 'Telefon',
+                label: 'Telefonnummer',
                 variable: 'project_phone',
                 form: project_form,
                 required: false,
@@ -194,19 +196,18 @@
             <ng-container
               [ngTemplateOutlet]="emailInput"
               [ngTemplateOutletContext]="{
-                label: 'E-Mail',
+                label: 'E-Mail-Adresse',
                 variable: 'project_email',
                 form: project_form,
                 required: true,
                 class: 'mb-4 col-md-6',
               }"
             ></ng-container>
-
-            <h4>Allgemeine Informationen zum Projekt</h4>
+            <h4 appGibberishReveal>Projektinformationen</h4>
             <ng-container
               [ngTemplateOutlet]="textInput"
               [ngTemplateOutletContext]="{
-                label: 'Titel des Projekts',
+                label: 'Projekttitel',
                 variable: 'project_title',
                 form: project_form,
                 required: false,
@@ -216,7 +217,7 @@
             <ng-container
               [ngTemplateOutlet]="textInput"
               [ngTemplateOutletContext]="{
-                label: 'Welcher Zeitraum ist für das Projekt eingeplant? Gibt es eine Deadline?',
+                label: 'Geplanter Zeitraum',
                 variable: 'project_timeline',
                 form: project_form,
                 required: true,
@@ -226,14 +227,13 @@
             <ng-container
               [ngTemplateOutlet]="textareaInput"
               [ngTemplateOutletContext]="{
-                label: 'Beschreibe das Projekt stichpunktartig',
+                label: 'Projektbeschreibung',
                 variable: 'project_description',
                 form: project_form,
                 required: true,
                 class: 'mb-4',
               }"
             ></ng-container>
-
             <input
               type="checkbox"
               formControlName="project_contactByFax"
@@ -243,7 +243,6 @@
               tabindex="-1"
               autocomplete="off"
             />
-
             <ng-container
               [ngTemplateOutlet]="confirmInput"
               [ngTemplateOutletContext]="{
@@ -252,7 +251,6 @@
                 class: 'mb-4',
               }"
             ></ng-container>
-
             <ng-container
               [ngTemplateOutlet]="confirmButtons"
               [ngTemplateOutletContext]="{
@@ -260,10 +258,10 @@
               }"
             ></ng-container>
           </form>
-        </ng-container>
+        }
       </div>
     </div>
-  </ng-container>
+  }
 </section>
 
 <ng-template
@@ -272,48 +270,52 @@
   let-variable="variable"
   let-form="form"
   let-required="required"
-  let-class="class"
+  let-fieldClass="class"
 >
-  <div
-    *ngIf="form.controls[variable]"
-    class="form-group has-validation {{ class }}"
-    [formGroup]="form"
-    [ngClass]="{
-      'was-validated': form.controls[variable].dirty || form.controls[variable].touched,
-      'is-invalid':
-        form.controls[variable].invalid &&
-        (form.controls[variable].dirty || form.controls[variable].touched),
-      'is-valid':
-        form.controls[variable].valid &&
-        (form.controls[variable].dirty || form.controls[variable].touched),
-    }"
-  >
-    <label [for]="variable" class="leading-7 text-sm text-gray-600">
-      {{ label }} <span *ngIf="!required">(optional)</span>
-    </label>
-    <input
-      [required]="required"
-      [formControlName]="variable"
-      type="text"
-      [id]="variable"
-      [name]="variable"
-      class="form-control"
-    />
-
+  @if (form.controls[variable]) {
     <div
-      class="invalid-feedback"
-      *ngIf="
+      class="form-group has-validation {{ fieldClass }}"
+      [formGroup]="form"
+      [ngClass]="{
+        'was-validated': form.controls[variable].dirty || form.controls[variable].touched,
+        'is-invalid':
+          form.controls[variable].invalid &&
+          (form.controls[variable].dirty || form.controls[variable].touched),
+        'is-valid':
+          form.controls[variable].valid &&
+          (form.controls[variable].dirty || form.controls[variable].touched),
+      }"
+    >
+      <label [for]="variable" class="pm-form__label" appGibberishReveal>
+        {{ label }}
+        @if (!required) {
+          <span>(Optional)</span>
+        }
+      </label>
+      <input
+        [required]="required"
+        [formControlName]="variable"
+        type="text"
+        [id]="variable"
+        [name]="variable"
+        class="form-control"
+      />
+      @if (
         form.controls[variable].errors &&
         form.controls[variable].invalid &&
         (form.controls[variable].dirty || form.controls[variable].touched)
-      "
-    >
-      <div *ngIf="!!form.controls[variable].errors?.['required']">"{{ label }}" ist benötigt</div>
-      <div *ngIf="!!form.controls[variable].errors?.['pattern']">
-        Falsches Format für "{{ label }}"
-      </div>
+      ) {
+        <div class="invalid-feedback">
+          @if (!!form.controls[variable].errors?.['required']) {
+            <div>Dieses Feld ist erforderlich</div>
+          }
+          @if (!!form.controls[variable].errors?.['pattern']) {
+            <div>Bitte überprüfe deine Eingabe</div>
+          }
+        </div>
+      }
     </div>
-  </div>
+  }
 </ng-template>
 
 <ng-template
@@ -322,53 +324,55 @@
   let-variable="variable"
   let-form="form"
   let-required="required"
-  let-class="class"
+  let-fieldClass="class"
 >
-  <div
-    *ngIf="form.controls[variable]"
-    class="form-group has-validation {{ class }}"
-    [formGroup]="form"
-    [ngClass]="{
-      'was-validated': form.controls[variable].dirty || form.controls[variable].touched,
-      'is-invalid':
-        form.controls[variable].invalid &&
-        (form.controls[variable].dirty || form.controls[variable].touched),
-      'is-valid':
-        form.controls[variable].valid &&
-        (form.controls[variable].dirty || form.controls[variable].touched),
-    }"
-  >
-    <label [for]="variable" class="leading-7 text-sm text-gray-600">
-      {{ label }} <span *ngIf="!required">(optional)</span>
-    </label>
-    <input
-      [required]="required"
-      [formControlName]="variable"
-      type="email"
-      [id]="variable"
-      [name]="variable"
-      class="form-control"
-    />
-
+  @if (form.controls[variable]) {
     <div
-      class="invalid-feedback"
-      *ngIf="
+      class="form-group has-validation {{ fieldClass }}"
+      [formGroup]="form"
+      [ngClass]="{
+        'was-validated': form.controls[variable].dirty || form.controls[variable].touched,
+        'is-invalid':
+          form.controls[variable].invalid &&
+          (form.controls[variable].dirty || form.controls[variable].touched),
+        'is-valid':
+          form.controls[variable].valid &&
+          (form.controls[variable].dirty || form.controls[variable].touched),
+      }"
+    >
+      <label [for]="variable" class="pm-form__label" appGibberishReveal>
+        {{ label }}
+        @if (!required) {
+          <span>(Optional)</span>
+        }
+      </label>
+      <input
+        [required]="required"
+        [formControlName]="variable"
+        type="email"
+        [id]="variable"
+        [name]="variable"
+        class="form-control"
+      />
+      @if (
         form.controls[variable].errors &&
         form.controls[variable].invalid &&
         (form.controls[variable].dirty || form.controls[variable].touched)
-      "
-    >
-      <div *ngIf="!!form.controls[variable].errors?.['required']">"{{ label }}" ist benötigt</div>
-      <div
-        *ngIf="
-          !!form.controls[variable].errors?.['pattern'] ||
-          !!form.controls[variable].errors?.['email']
-        "
-      >
-        Falsches Format für "{{ label }}"
-      </div>
+      ) {
+        <div class="invalid-feedback">
+          @if (!!form.controls[variable].errors?.['required']) {
+            <div>Dieses Feld ist erforderlich</div>
+          }
+          @if (
+            !!form.controls[variable].errors?.['pattern'] ||
+            !!form.controls[variable].errors?.['email']
+          ) {
+            <div>Bitte gib eine gültige E-Mail-Adresse ein</div>
+          }
+        </div>
+      }
     </div>
-  </div>
+  }
 </ng-template>
 
 <ng-template
@@ -377,10 +381,10 @@
   let-variable="variable"
   let-form="form"
   let-required="required"
-  let-class="class"
+  let-fieldClass="class"
 >
   <div
-    class="form-group has-validation {{ class }}"
+    class="form-group has-validation {{ fieldClass }}"
     [formGroup]="form"
     [ngClass]="{
       'was-validated': form.controls[variable].dirty || form.controls[variable].touched,
@@ -392,8 +396,11 @@
         (form.controls[variable].dirty || form.controls[variable].touched),
     }"
   >
-    <label [for]="variable" class="leading-7 text-sm text-gray-600">
-      {{ label }} <span *ngIf="!required">(optional)</span>
+    <label [for]="variable" class="pm-form__label" appGibberishReveal>
+      {{ label }}
+      @if (!required) {
+        <span>(Optional)</span>
+      }
     </label>
     <textarea
       [required]="required"
@@ -408,28 +415,29 @@
       {{ form.controls[variable].value?.length || 0 }}/{{ maxLength || '∞' }}
     </div>
 
-    <div
-      class="invalid-feedback"
-      *ngIf="
-        form.controls[variable].errors &&
-        form.controls[variable].invalid &&
-        (form.controls[variable].dirty || form.controls[variable].touched)
-      "
-    >
-      <div *ngIf="!!form.controls[variable].errors?.['required']">"{{ label }}" ist benötigt</div>
-      <div *ngIf="!!form.controls[variable].errors?.['pattern']">
-        Falsches Format für "{{ label }}"
+    @if (
+      form.controls[variable].errors &&
+      form.controls[variable].invalid &&
+      (form.controls[variable].dirty || form.controls[variable].touched)
+    ) {
+      <div class="invalid-feedback">
+        @if (!!form.controls[variable].errors?.['required']) {
+          <div>Dieses Feld ist erforderlich</div>
+        }
+        @if (!!form.controls[variable].errors?.['pattern']) {
+          <div>Bitte überprüfe deine Eingabe</div>
+        }
+        @if (!!form.controls[variable].errors?.['maxlength']) {
+          <div>Maximal {{ maxLength }} Zeichen erlaubt</div>
+        }
       </div>
-      <div *ngIf="!!form.controls[variable].errors?.['maxlength']">
-        Maximale Länge für "{{ label }}" ist {{ maxLength }} Zeichen
-      </div>
-    </div>
+    }
   </div>
 </ng-template>
 
-<ng-template #confirmInput let-variable="variable" let-form="form" let-class="class">
+<ng-template #confirmInput let-variable="variable" let-form="form" let-fieldClass="class">
   <div
-    class="form-group has-validation checkbox {{ class }}"
+    class="form-group has-validation checkbox {{ fieldClass }}"
     [formGroup]="form"
     [ngClass]="{
       'was-validated': form.controls[variable].dirty || form.controls[variable].touched,
@@ -450,38 +458,45 @@
       value="1"
       autocomplete="off"
     />
-    <label [for]="variable" class="leading-7 text-sm text-gray-600">
+    <label [for]="variable" class="pm-form__label" appGibberishReveal>
       Ich stimme zu, dass meine Angaben aus dem Formular zur Beantwortung der Anfrage erhoben und
-      verarbeitet werden. Die Daten werden nach abgeschlossener Bearbeitung Ihrer Anfrage gelöscht.
-      Sie können Ihre Einwilligung jederzeit für die Zukunft per E-Mail an
+      verarbeitet werden. Die Daten werden nach abgeschlossener Bearbeitung deiner Anfrage gelöscht.
+      Du kannst deine Einwilligung jederzeit für die Zukunft per E-Mail an
       <a href="mailto:{{ email }}">{{ encryptedEmail }}</a> widerrufen. Detaillierte Informationen
-      zum Umgang mit Nutzerdaten finden Sie in unserer
+      zum Umgang mit Nutzerdaten findest du in der
       <a routerLink="/datenschutz">Datenschutzerklärung</a>.
     </label>
 
-    <div
-      class="invalid-feedback"
-      *ngIf="
-        form.controls[variable].errors &&
-        form.controls[variable].invalid &&
-        (form.controls[variable].dirty || form.controls[variable].touched)
-      "
-    >
-      <div *ngIf="form.controls[variable].errors?.['required']">Zustimmung ist benötigt</div>
-    </div>
+    @if (
+      form.controls[variable].errors &&
+      form.controls[variable].invalid &&
+      (form.controls[variable].dirty || form.controls[variable].touched)
+    ) {
+      <div class="invalid-feedback">
+        @if (form.controls[variable].errors?.['required']) {
+          <div>Zustimmung ist erforderlich</div>
+        }
+      </div>
+    }
   </div>
 </ng-template>
 
 <ng-template #copy>
   <p class="mb-5">
-    Deine Anfrage ist kostenlos und wird verschlüsselt übermittelt. Du erhälsten eine Kopie an die
+    Deine Anfrage ist kostenlos und wird verschlüsselt übermittelt. Du erhältst eine Kopie an die
     oben angegebene E-Mail-Adresse.
   </p>
 </ng-template>
 
-<ng-template #confirmButtons let-form="form">
+<ng-template #confirmButtons>
   <div class="btn-container">
-    <button (click)="contactForm = null" class="btn btn-outline-secondary btn-lg">Abbrechen</button>
-    <button type="submit" class="btn btn-primary btn-lg">Senden</button>
+    <button
+      (click)="clearContactForm()"
+      class="btn btn-pm-tertiary btn-lg"
+      data-text="Abbrechen"
+    >
+      Abbrechen
+    </button>
+    <button type="submit" class="btn btn-pm-primary btn-lg" data-text="Senden">Senden</button>
   </div>
 </ng-template>

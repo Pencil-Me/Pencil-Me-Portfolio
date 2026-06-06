@@ -1,13 +1,8 @@
 <div class="header-buffer"></div>
 
-<header [ngClass]="{ 'fixed-header': sticky }">
-  <section class="header-content navbar navbar-expand-md container">
-    <div class="logo">
-      <a [routerLink]="'/'">
-        Pencil&Me
-        <span>CREATIVE DEVELOPER</span>
-      </a>
-    </div>
+<header [ngClass]="{ 'fixed-header': sticky() }">
+  <section class="header-content navbar navbar-expand-md container pm-container-brutal">
+    <app-pm-logo [compact]="sticky()" />
 
     <button
       class="navbar-toggler"
@@ -16,20 +11,37 @@
       data-target="#navbarColor03"
       aria-controls="navbarColor03"
       aria-expanded="false"
-      aria-label="Toggle navigation"
-      (click)="isCollapsed = !isCollapsed"
+      aria-label="Navigation ein- oder ausblenden"
+      (click)="toggleCollapsed()"
     >
       <fa-icon [icon]="faBars" size="lg"></fa-icon>
     </button>
 
-    <nav id="navbarColor03" class="collapse navbar-collapse" [ngbCollapse]="isCollapsed">
+    <nav id="navbarColor03" class="collapse navbar-collapse" [ngbCollapse]="isCollapsed()">
       <ul class="navbar-nav mr-auto">
-        <ng-container *ngFor="let item of navItems; index as i">
+        @for (item of navItems; track item; let i = $index) {
           <li class="nav-item" [routerLinkActive]="['active']">
-            <a [routerLink]="item.target" class="nav-link">{{ item.label }}</a>
+            <a
+              [routerLink]="item.target"
+              class="nav-link"
+              (mouseenter)="prefetchRoute(item.target)"
+              (focus)="prefetchRoute(item.target)"
+            >
+              <span class="nav-link__index" aria-hidden="true">{{ formatNavIndex(i) }}</span>
+              <span class="nav-link__label">{{ item.label }}</span>
+            </a>
           </li>
-        </ng-container>
+        }
       </ul>
+      <button
+        type="button"
+        class="theme-toggle"
+        (click)="toggleTheme()"
+        [attr.aria-label]="themeService.theme() === 'dark' ? 'Helles Farbschema aktivieren' : 'Dunkles Farbschema aktivieren'"
+        [attr.title]="themeService.theme() === 'dark' ? 'Helles Farbschema' : 'Dunkles Farbschema'"
+      >
+        <fa-icon [icon]="themeService.theme() === 'dark' ? faSun : faMoon"></fa-icon>
+      </button>
     </nav>
   </section>
 </header>

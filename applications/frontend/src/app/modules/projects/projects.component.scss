@@ -1,18 +1,8 @@
+@use '../../../sass/helpers/variables' as vars;
+
 .section-container {
   padding-top: 2rem;
   padding-bottom: 5rem;
-
-  h2 {
-    font-size: 3rem;
-    letter-spacing: -0.045em;
-    text-transform: uppercase;
-  }
-
-  h3 {
-    font-size: 2rem;
-    letter-spacing: -0.045em;
-    text-transform: uppercase;
-  }
 }
 
 .tech-group-container {
@@ -22,41 +12,6 @@
   margin: 0 0 1rem;
   list-style-type: none;
   gap: 0.25rem 0.5rem;
-
-  .tech-item {
-    background-color: transparent;
-    position: relative;
-    color: var(--bs-secondary-rgb);
-    padding: var(--bs-list-group-item-padding-y) var(--bs-list-group-item-padding-x);
-    text-decoration: none;
-    border: var(--bs-list-group-border-width) solid
-      RGBA(var(--bs-secondary-rgb), var(--bs-bg-opacity, 1));
-    border-radius: var(--bs-border-radius-pill) !important;
-    --bs-badge-padding-x: 0.65em;
-    --bs-badge-padding-y: 0.35em;
-    --bs-badge-font-size: 0.75em;
-    --bs-badge-font-weight: 700;
-    --bs-badge-color: #fff;
-    --bs-badge-border-radius: var(--bs-border-radius);
-    display: inline-block;
-    font-size: var(--bs-badge-font-size);
-    font-weight: var(--bs-badge-font-weight);
-    line-height: 1;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: baseline;
-
-    &.tech-item_selected {
-      color: #fff;
-      background: var(--pm-primary-hover);
-    }
-
-    &:hover {
-      cursor: pointer;
-      color: #fff;
-      background-color: RGBA(var(--bs-secondary-rgb), var(--bs-bg-opacity, 1));
-    }
-  }
 }
 
 .category-card-container {
@@ -78,75 +33,90 @@
       .project-list_item {
         margin-bottom: 2rem;
 
-        .project-list_item_main-info {
-          &.bottom-border {
-            border-bottom: 1px solid #c2c2c2;
-            margin-bottom: 0.5rem;
-            padding-bottom: 0.5rem;
-          }
-
-          .project-list_item_main-info_label {
-            font-size: 1.75rem;
-            display: block;
-            border-bottom: 1px solid #606060;
-            margin-bottom: 0.5rem;
-            padding-bottom: 0.5rem;
-            &:hover {
-              cursor: pointer;
-              color: var(--pm-primary-hover);
-              transition: 0.25s ease-in-out all;
-            }
-          }
-          .project-list_item_main-info_position {
-            display: block;
-            font-size: 1.5rem;
-          }
-          .project-list_item_main-info_customer {
-            display: block;
-            font-size: 1.25rem;
-          }
-          .project-list_item_main-info_location {
-            display: block;
-          }
-        }
-        .project-list_item_dates {
-          border-bottom: 1px solid #c2c2c2;
-          margin-bottom: 0.5rem;
-          padding-bottom: 0.5rem;
-
-          .project-list_item_dates_title {
-            font-weight: bold;
-          }
-        }
-        .project-list_item_tech {
-          .project-list_item_tech_title {
-            font-weight: bold;
-          }
-          .tech-container {
-            display: flex;
-            flex-wrap: wrap;
-            padding: 0;
-            margin: 0.4rem 0 1rem;
-            list-style-type: none;
-            gap: 0.25rem 0.5rem;
-
-            li {
-              --border: #a9a9a9;
-              line-height: 1;
-              padding: 0.425rem 0.5rem;
-              border: 2px solid var(--border);
-              border-radius: 10ch;
-              white-space: nowrap;
-
-              &.tech-container-li_selected {
-                background: var(--pm-primary-hover);
-                color: #fff;
-                transition: 0.25s ease-in-out all;
-              }
-            }
-          }
+        @media (min-width: vars.$layout-max-width) {
+          flex: 0 0 auto;
+          width: 33.33333333%;
         }
       }
     }
+  }
+}
+
+.project-list_item_main-info {
+  &.bottom-border {
+    border-bottom: 1px solid var(--pm-border);
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .project-list_item_main-info_label {
+    font-family: var(--pm-font-heading), sans-serif;
+    font-size: 1.35rem;
+    font-weight: var(--pm-font-weight-bold);
+    letter-spacing: 0.02em;
+    display: block;
+    width: 100%;
+    padding: 0 0 0.5rem;
+    border: none;
+    border-bottom: 1px solid var(--pm-border-strong);
+    margin-bottom: 0.5rem;
+    background: none;
+    color: inherit;
+    text-align: left;
+    text-transform: uppercase;
+
+    &:hover {
+      cursor: pointer;
+      color: var(--pm-primary-hover);
+      transition: color 0.25s ease-in-out;
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--pm-focus-ring);
+      outline-offset: 2px;
+    }
+  }
+
+  .project-list_item_main-info_position {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 500;
+  }
+
+  .project-list_item_main-info_customer {
+    display: block;
+    font-size: 0.95rem;
+    color: var(--pm-secondary);
+  }
+
+  .project-list_item_main-info_location {
+    display: block;
+    font-family: var(--pm-font-mono), monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--pm-text-muted);
+  }
+}
+
+.project-list_item_tech {
+  .project-list_item_tech_title {
+    display: block;
+    margin-bottom: 0.45rem;
+    font-family: var(--pm-font-mono), monospace;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--pm-gold-a58);
+  }
+
+  .tech-container {
+    padding: 0;
+    margin: 0;
   }
 }

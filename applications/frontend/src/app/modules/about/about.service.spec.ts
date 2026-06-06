@@ -1,19 +1,18 @@
 import { TestBed } from '@angular/core/testing';
 
 import { AboutService } from './about.service';
-import { of } from 'rxjs';
-import { TECHSTACK, TECHSTACKDATASTATE } from '@app/state/knowledge/knowledge.models';
+import { mapTechStackForAbout } from '@app/state/knowledge/mappers/tech-stack.mapper';
+import type { TECHSTACK } from '@app/state/knowledge/knowledge.models';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { AppState } from '@app/state';
+import type { AppState } from '@app/state';
+import type { ITechCategory } from '@modules/about/about.models';
 import { fromKnowledge } from '@app/state/knowledge';
-import { ITechCategory } from '@modules/about/about.models';
 
 describe('AboutService', () => {
   let service: AboutService;
-  let store: MockStore<AppState>;
+  let store: MockStore;
 
-  const initialState = {
-    // Initialize the necessary properties in the store state
+  const initialState: AppState = {
     knowledge: {
       techStack: {
         error: null,
@@ -25,6 +24,21 @@ describe('AboutService', () => {
         loadStatus: 'PENDING',
         data: [],
       },
+      selectedProject: {
+        loadStatus: 'PENDING',
+        error: null,
+        data: {
+          uuid: '',
+          type: '',
+          name: '',
+          dates: [],
+          customers: undefined,
+          location: undefined,
+          position: undefined,
+          content: undefined,
+          tech: [],
+        },
+      },
       customers: {
         error: null,
         loadStatus: 'PENDING',
@@ -35,33 +49,56 @@ describe('AboutService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        provideMockStore({ initialState }), // Provide mock store with initial state
-      ],
+      providers: [provideMockStore({ initialState })],
     });
+    TestBed.inject(MockStore);
     store = TestBed.inject(MockStore);
-    spyOn(store, 'dispatch');
     service = TestBed.inject(AboutService);
+  });
+
+  it('should expose mapped tech from store state', (done) => {
+    const techStack: TECHSTACK[] = [
+      {
+        type: 'FEDEV',
+        name: 'Angular',
+        expertise_level: 80,
+        last_usage_date: new Date('2024-02-05'),
+        flag_important: false,
+        project_count: 4,
+        project_dates: [],
+      },
+    ];
+    store.setState({
+      ...initialState,
+      knowledge: {
+        ...initialState.knowledge,
+        techStack: {
+          error: null,
+          loadStatus: 'COMPLETED',
+          data: techStack,
+        },
+      },
+    });
+
+    service.tech$.subscribe((result) => {
+      expect(result).toEqual(mapTechStackForAbout(techStack));
+      done();
+    });
+  });
+
+  it('should dispatch reload action', () => {
+    const dispatchSpy = spyOn(store, 'dispatch');
+
+    service.reloadTechstack();
+
+    expect(dispatchSpy).toHaveBeenCalledWith(fromKnowledge.actions.GetTechstack());
   });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should dispatch GetTechstack action on creation', () => {
-    expect(store.dispatch).toHaveBeenCalledWith(fromKnowledge.actions.GetTechstack());
-  });
-
-  it('should subscribe to techstack store and update tech$ behavior subject', () => {
-    const techData: TECHSTACKDATASTATE = { error: null, loadStatus: 'PENDING', data: [] };
-    spyOn(store, 'select').and.returnValue(of(techData));
-
-    service.store$.subscribe((data) => {
-      expect(data).toEqual(techData);
-    });
-  });
-
-  describe('convertAndSortTechStack', () => {
+  describe('mapTechStackForAbout', () => {
     it('should convert and sort tech stack correctly', () => {
       const simpTech: TECHSTACK[] = [
         {
@@ -152,9 +189,9 @@ describe('AboutService', () => {
         },
       ];
 
-      const toTest: ITechCategory[] = service['convertAndSortTechStack'](simpTech);
+      const toTest: ITechCategory[] = mapTechStackForAbout(simpTech);
 
-      expect(toTest).toEqual(expectedResult); // Make sure the result matches the expected result
+      expect(toTest).toEqual(expectedResult);
     });
   });
 });

@@ -1,6 +1,6 @@
 import { createSelector } from '@ngrx/store';
-import { AppState } from '@app/state';
-import { KNOWLEDGESTATE } from '@app/state/knowledge/knowledge.models';
+import type { AppState } from '@app/state';
+import type { KNOWLEDGESTATE } from '@app/state/knowledge/knowledge.models';
 
 /**
  * Selector function to retrieve the knowledge state from the app state.

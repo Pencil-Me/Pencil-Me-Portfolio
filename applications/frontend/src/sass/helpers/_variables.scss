@@ -1,22 +1,68 @@
+@use 'sass:color';
+@use './palette' as palette;
+
 // *******************************
-// Color Variables
+// Typography
 // *******************************
 
-$primary: #c50000;
-$secondary: #460000;
+$font-family-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", roboto, sans-serif;
+$font-family-heading: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", roboto, sans-serif;
+$font-family-logo: "Segoe UI", Arial, sans-serif;
+$font-family-mono: "IBM Plex Mono", ui-monospace, "Cascadia Code", consolas, monospace;
 
-$primary-hover: #fa0000;
-$secondary-hover: #7a0000;
+$font-weight-regular: 400;
+$font-weight-bold: 800;
 
-$background: #1a1a1a;
-$contrast: #ffffff;
+$white: #fff;
+$black: #000;
+
+// *******************************
+// UI: Bordeaux-Rot + Dark + Gold | Glitch: separat in _palette.scss
+// *******************************
+
+$color-red: palette.$color-red;
+$color-dark: palette.$color-dark;
+$color-gold: palette.$color-gold;
+
+$glitch-red-hot: palette.$glitch-red-hot;
+$glitch-gold: palette.$glitch-gold;
+$glitch-gold-bright: palette.$glitch-gold-bright;
+$glitch-cyan: palette.$glitch-cyan;
+$glitch-cyan-bright: palette.$glitch-cyan-bright;
+
+$color-red-hover: palette.$color-red-hover;
+$color-red-deep: palette.$color-red-deep;
+$color-red-soft: palette.$color-red-soft;
+$color-dark-mid: palette.$color-dark-mid;
+$color-dark-light: palette.$color-dark-light;
+$color-dark-surface: palette.$color-dark-surface;
+$color-dark-panel: palette.$color-dark-panel;
+$color-nav-bg: palette.$color-nav-bg;
+$color-text-muted-light: palette.$color-text-muted-light;
+$color-text-on-dark: palette.$color-text-on-dark;
+$color-gold-soft: palette.$color-gold-soft;
+$color-gold-bright: palette.$color-gold-bright;
+$hero-radial-start: palette.$hero-radial-start;
+$hero-radial-end: palette.$hero-radial-end;
+$section-tint: palette.$section-tint;
+$hero-text-light: palette.$hero-text-light;
+$hero-text-dark: palette.$hero-text-dark;
+$manifest-tile: palette.$manifest-tile;
+
+// Bootstrap / Brand
+$primary: $color-red;
+$secondary: color.mix($color-red, $color-dark, 25%);
+$primary-hover: $color-red-hover;
+$secondary-hover: $color-red-deep;
+$background: $color-dark;
+$contrast: $color-text-on-dark;
+$light: $color-dark-panel;
+$dark: $color-dark-mid;
 
 $success: #198754;
 $info: #0dcaf0;
 $warning: #ffc107;
 $danger: #dc3545;
-$light: #f8f9fa;
-$dark: #212529;
 
 $theme-colors: (
   'primary': $primary,
@@ -28,3 +74,6 @@ $theme-colors: (
   'light': $light,
   'dark': $dark,
 );
+
+// Layout
+$layout-max-width: 1400px;

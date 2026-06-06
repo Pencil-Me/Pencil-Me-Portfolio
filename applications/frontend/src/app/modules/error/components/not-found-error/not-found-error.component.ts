@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 /**
@@ -9,15 +9,14 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-not-found',
   templateUrl: './not-found-error.component.html',
-  standalone: false,
 })
 export class NotFoundErrorComponent {
-  constructor(private router: Router) {}
+  private router = inject(Router);
 
   /**
    * Navigates the user back to the home page.
    */
   returnToHome() {
-    this.router.navigate(['/']);
+    void this.router.navigate(['/']);
   }
 }
