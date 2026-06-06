@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
-import { RoutePrefetchService } from './route-prefetch.service';
 import { routeLoaders } from './route-loaders';
+import { RoutePrefetchService } from './route-prefetch.service';
 
 describe('RoutePrefetchService', () => {
   let service: RoutePrefetchService;

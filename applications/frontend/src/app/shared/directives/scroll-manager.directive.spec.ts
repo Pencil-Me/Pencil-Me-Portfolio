@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import type { ComponentFixture } from '@angular/core/testing';
-import { TestBed } from '@angular/core/testing';
+import { TestBed, type ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { ScrollManagerDirective } from './scroll-manager.directive';
+
 import { ScrollSectionDirective } from '@shared/directives/scroll-section.directive';
+
+import { ScrollManagerDirective } from './scroll-manager.directive';
 
 @Component({
   template: `

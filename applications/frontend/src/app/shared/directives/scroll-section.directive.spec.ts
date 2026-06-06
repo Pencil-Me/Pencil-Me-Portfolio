@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import type { ComponentFixture } from '@angular/core/testing';
-import { TestBed } from '@angular/core/testing';
-import { ScrollSectionDirective } from './scroll-section.directive';
+import { TestBed, type ComponentFixture } from '@angular/core/testing';
+
 import { ScrollManagerDirective } from './scroll-manager.directive';
+import { ScrollSectionDirective } from './scroll-section.directive';
 
 @Component({
   template: `<div appScrollSection="section1"></div>`,

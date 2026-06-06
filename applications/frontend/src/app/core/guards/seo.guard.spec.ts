@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { Meta, Title } from '@angular/platform-browser';
 import type { ActivatedRouteSnapshot } from '@angular/router';
+
 import { SeoGuard } from './seo.guard';
 
 describe('SeoGuard', () => {

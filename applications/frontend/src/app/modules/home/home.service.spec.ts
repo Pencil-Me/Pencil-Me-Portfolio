@@ -1,14 +1,16 @@
 import { TestBed } from '@angular/core/testing';
-import { provideMockStore, MockStore } from '@ngrx/store/testing';
-import type { AppState } from '@app/state';
-import type { CUSTOMERSDATASTATE, TECHSTACKDATASTATE } from '@app/state/knowledge/knowledge.models';
-import { fromKnowledge } from '@app/state/knowledge';
-import { HomeService } from './home.service';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
+
 import type { ITechCategories } from '@modules/home/home.models';
+import type { AppState } from '@app/state';
+import { fromKnowledge } from '@app/state/knowledge';
+import type { CUSTOMERSDATASTATE, TECHSTACKDATASTATE } from '@app/state/knowledge/knowledge.models';
+
 import {
   createHomeTechStackFixture,
   createMockAppState,
 } from '../../../testing/knowledge.fixtures';
+import { HomeService } from './home.service';
 
 describe('HomeService', () => {
   let service: HomeService;

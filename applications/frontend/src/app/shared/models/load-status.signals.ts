@@ -1,6 +1,7 @@
 import type { Signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map, type Observable } from 'rxjs';
+
 import type { LoadStatus } from './load-status.model';
 
 export type LoadStatusSlice = {

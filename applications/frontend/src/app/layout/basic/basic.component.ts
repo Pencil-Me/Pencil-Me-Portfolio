@@ -1,14 +1,14 @@
 import { ChangeDetectionStrategy, Component, HostListener, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-
-import { NavigationComponent } from '@layout/components/navigation/navigation.component';
 import { FooterComponent } from '@layout/components/footer/footer.component';
-import { TopScrollerComponent } from '@shared/components/top-scroller/top-scroller.component';
-import { ScrollSectionDirective } from '@shared/directives/scroll-section.directive';
-import { ScrollManagerDirective } from '@shared/directives/scroll-manager.directive';
-import { ScrollService } from '@shared/services/scroll.service';
+import { NavigationComponent } from '@layout/components/navigation/navigation.component';
+
 import { RouteLoadingComponent } from '@core/routing/route-loading.component';
 import { RouteLoadingService } from '@core/routing/route-loading.service';
+import { TopScrollerComponent } from '@shared/components/top-scroller/top-scroller.component';
+import { ScrollManagerDirective } from '@shared/directives/scroll-manager.directive';
+import { ScrollSectionDirective } from '@shared/directives/scroll-section.directive';
+import { ScrollService } from '@shared/services/scroll.service';
 
 @Component({
   selector: 'app-basic',

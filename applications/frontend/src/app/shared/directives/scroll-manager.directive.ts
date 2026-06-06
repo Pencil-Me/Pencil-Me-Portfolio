@@ -1,4 +1,5 @@
 import { Directive } from '@angular/core';
+
 import type { ScrollSectionDirective } from './scroll-section.directive';
 
 // Directive for managing scroll sections

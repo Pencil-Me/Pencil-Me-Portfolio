@@ -1,4 +1,5 @@
 import { createSelector } from '@ngrx/store';
+
 import type { AppState } from '@app/state';
 import type { KNOWLEDGESTATE } from '@app/state/knowledge/knowledge.models';
 

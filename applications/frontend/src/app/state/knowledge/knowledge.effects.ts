@@ -1,25 +1,25 @@
-import { Injectable, inject } from '@angular/core';
-import { Actions } from '@ngrx/effects';
-import { createEffect, ofType } from '@ngrx/effects';
+import { inject, Injectable } from '@angular/core';
+import { catchError, map, mergeMap, of, type Observable } from 'rxjs';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import type { Action } from '@ngrx/store';
+
+import { mapApiError } from '@app/shared/utils/api-error.util';
+import { KnowledgeService } from '@app/state/knowledge/knowledge.service';
+
 import {
   GetCustomers,
   GetCustomersFailure,
   GetCustomersSuccess,
   GetProject,
   GetProjectFailure,
-  GetProjectSuccess,
   GetProjects,
   GetProjectsFailure,
   GetProjectsSuccess,
+  GetProjectSuccess,
   GetTechstack,
   GetTechstackFailure,
   GetTechstackSuccess,
 } from './knowledge.actions';
-import { catchError, map, mergeMap, of } from 'rxjs';
-import { KnowledgeService } from '@app/state/knowledge/knowledge.service';
-import { mapApiError } from '@app/shared/utils/api-error.util';
-import type { Observable } from 'rxjs';
-import type { Action } from '@ngrx/store';
 
 @Injectable()
 export class KnowledgeEffects {

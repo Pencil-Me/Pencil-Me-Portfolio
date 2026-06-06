@@ -1,11 +1,11 @@
-import type { ComponentFixture } from '@angular/core/testing';
-import { TestBed } from '@angular/core/testing';
+import { TestBed, type ComponentFixture } from '@angular/core/testing';
 import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import { of, Subject } from 'rxjs';
 
-import { NavigationComponent } from './navigation.component';
-import { ThemeService } from '@app/core/services/theme/theme.service';
 import { RoutePrefetchService } from '@core/routing/route-prefetch.service';
+import { ThemeService } from '@app/core/services/theme/theme.service';
+
+import { NavigationComponent } from './navigation.component';
 
 describe('NavigationComponent', () => {
   let component: NavigationComponent;

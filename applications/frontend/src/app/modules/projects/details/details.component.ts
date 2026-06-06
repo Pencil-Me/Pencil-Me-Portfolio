@@ -8,15 +8,15 @@ import {
   type OnInit,
 } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { map } from 'rxjs';
 
-import { ProjectsService } from '@modules/projects/projects.service';
-import type { IProject } from '@modules/projects/projects.models';
-import { ActivatedRoute, RouterLink } from '@angular/router';
 import { PmAsyncContentComponent } from '@shared/components/pm-async-content/pm-async-content.component';
 import { ProjectDateRangeComponent } from '@shared/components/project-date-range/project-date-range.component';
-import { ScrollRevealDirective } from '@shared/directives/scroll-reveal.directive';
 import { GibberishRevealDirective } from '@shared/directives/gibberish-reveal.directive';
+import { ScrollRevealDirective } from '@shared/directives/scroll-reveal.directive';
+import type { IProject } from '@modules/projects/projects.models';
+import { ProjectsService } from '@modules/projects/projects.service';
 import { toLoadStatusSignals } from '@app/shared/models/load-status.signals';
 
 @Component({

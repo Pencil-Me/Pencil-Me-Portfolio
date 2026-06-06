@@ -1,9 +1,8 @@
-import type { ComponentFixture } from '@angular/core/testing';
-import { fakeAsync, TestBed, tick } from '@angular/core/testing';
-
-import { BasicComponent } from './basic.component';
+import { fakeAsync, TestBed, tick, type ComponentFixture } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
+
+import { BasicComponent } from './basic.component';
 
 describe('BasicComponent', () => {
   let component: BasicComponent;

@@ -1,28 +1,27 @@
-import { knowledgeReducers } from './knowledge.reducer';
-import { KnowledgeEffects } from './knowledge.effects';
 import {
+  GetCustomers,
+  GetCustomersFailure,
+  GetCustomersSuccess,
+  GetProject,
+  GetProjectFailure,
   // Importing action creators
   GetProjects,
   GetProjectsFailure,
   GetProjectsSuccess,
-  GetProject,
-  ResetProject,
-  GetProjectFailure,
   GetProjectSuccess,
   GetTechstack,
   GetTechstackFailure,
   GetTechstackSuccess,
-  GetCustomers,
-  GetCustomersSuccess,
-  GetCustomersFailure,
+  ResetProject,
 } from './knowledge.actions';
-
+import { KnowledgeEffects } from './knowledge.effects';
+import { knowledgeReducers } from './knowledge.reducer';
 import {
+  selectCustomersState,
   // Importing selector functions
   selectProjectsState,
   selectProjectState,
   selectTechstackState,
-  selectCustomersState,
 } from './knowledge.selectors';
 
 // Bundle of knowledge-related actions, selectors, reducers, and effects

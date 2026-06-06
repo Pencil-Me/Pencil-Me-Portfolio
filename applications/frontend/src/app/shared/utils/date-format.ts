@@ -1,5 +1,5 @@
-import type { DATE } from '@app/state/knowledge/knowledge.models';
 import type { IProjectDate } from '@modules/projects/projects.models';
+import type { DATE } from '@app/state/knowledge/knowledge.models';
 
 const INVALID_DATE_LABEL = '—';
 export const PROJECT_END_DATE_LABEL = 'heute';

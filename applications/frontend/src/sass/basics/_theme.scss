@@ -2,7 +2,9 @@
 @use '../helpers/variables' as *;
 @use '../helpers/palette' as palette;
 
-$pm-alpha-steps: 4, 6, 8, 10, 12, 14, 18, 22, 28, 32, 35, 38, 40, 42, 45, 48, 50, 55, 58, 68, 72, 80, 85, 88, 90, 95;
+$pm-alpha-steps:
+  4, 6, 8, 10, 12, 14, 18, 22, 28, 32, 35, 38, 40, 42, 45, 48, 50, 55, 58, 68, 72, 80, 85, 88, 90,
+  95;
 $pm-glitch-alpha-steps: 18, 22, 32, 35, 40, 42, 45, 50, 58, 80;
 
 :root {
@@ -44,7 +46,11 @@ $pm-glitch-alpha-steps: 18, 22, 32, 35, 40, 42, 45, 50, 58, 80;
   @each $step in $pm-glitch-alpha-steps {
     $mix-percent: $step * 1%;
 
-    --pm-glitch-cyan-a#{$step}: color-mix(in srgb, var(--pm-glitch-cyan-bright) #{$mix-percent}, transparent);
+    --pm-glitch-cyan-a#{$step}: color-mix(
+      in srgb,
+      var(--pm-glitch-cyan-bright) #{$mix-percent},
+      transparent
+    );
   }
 
   // ── Alpha-Shades (UI-Hauptfarben) ──────────────────────────────
@@ -128,11 +134,7 @@ $pm-glitch-alpha-steps: 18, 22, 32, 35, 40, 42, 45, 50, 58, 80;
   );
   --pm-hero-radial-start: #{$hero-radial-start};
   --pm-hero-radial-end: #{$hero-radial-end};
-  --pm-hero-blob-big: radial-gradient(
-    circle at 30% 30%,
-    var(--pm-red-a95),
-    var(--pm-dark-a55)
-  );
+  --pm-hero-blob-big: radial-gradient(circle at 30% 30%, var(--pm-red-a95), var(--pm-dark-a55));
   --pm-hero-blob-mid: radial-gradient(
     circle at 40% 20%,
     var(--pm-gold-a38),
@@ -322,9 +324,17 @@ $pm-glitch-alpha-steps: 18, 22, 32, 35, 40, 42, 45, 50, 58, 80;
   --pm-heading-glitch-accent: var(--pm-glitch-cyan-a40);
   --pm-heading-glitch-neon: var(--pm-red-a55);
   --pm-heading-prefix-glow: var(--pm-red-a55);
-  --pm-heading-prefix-color: color-mix(in srgb, var(--pm-red-shade-800) 55%, var(--pm-gold-shade-800));
+  --pm-heading-prefix-color: color-mix(
+    in srgb,
+    var(--pm-red-shade-800) 55%,
+    var(--pm-gold-shade-800)
+  );
   --pm-heading-hud-corner-accent: var(--pm-gold-shade-800);
-  --pm-heading-hud-corner-base: color-mix(in srgb, var(--pm-red-shade-800) 45%, var(--pm-gold-shade-900));
+  --pm-heading-hud-corner-base: color-mix(
+    in srgb,
+    var(--pm-red-shade-800) 45%,
+    var(--pm-gold-shade-900)
+  );
   --pm-heading-hud-shadow: color-mix(in srgb, var(--pm-red-shade-800) 48%, transparent);
 
   // Buttons auf hellen Flächen

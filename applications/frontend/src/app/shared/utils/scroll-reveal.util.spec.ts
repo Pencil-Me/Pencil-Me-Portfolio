@@ -1,8 +1,8 @@
 import {
-  SCROLL_REVEAL_BAND_TRANSITION_MS,
-  SCROLL_REVEAL_TRANSITION_MS,
   findScrollRevealHost,
   getScrollRevealTransitionMs,
+  SCROLL_REVEAL_BAND_TRANSITION_MS,
+  SCROLL_REVEAL_TRANSITION_MS,
 } from './scroll-reveal.util';
 
 describe('scroll-reveal.util', () => {

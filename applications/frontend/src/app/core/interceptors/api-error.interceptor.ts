@@ -1,7 +1,7 @@
+import { HttpErrorResponse, type HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import type { HttpInterceptorFn } from '@angular/common/http';
-import { HttpErrorResponse } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
+
 import { ApiLogService } from '@core/services/api-log.service';
 import { mapApiError } from '@app/shared/utils/api-error.util';
 

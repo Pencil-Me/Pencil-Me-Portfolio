@@ -1,5 +1,6 @@
 import type { Routes } from '@angular/router';
 import { BasicComponent } from '@layout/basic/basic.component';
+
 import { SeoGuard } from '@core/guards/seo.guard';
 import { routeLoaders } from '@core/routing/route-loaders';
 import { HomeComponent } from '@modules/home/home.component';

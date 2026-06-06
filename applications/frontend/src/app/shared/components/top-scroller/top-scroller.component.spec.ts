@@ -1,9 +1,9 @@
-import type { ComponentFixture } from '@angular/core/testing';
-import { TestBed } from '@angular/core/testing';
+import { TestBed, type ComponentFixture } from '@angular/core/testing';
+import { of } from 'rxjs';
+
+import { ScrollManagerDirective } from '@shared/directives/scroll-manager.directive';
 
 import { TopScrollerComponent } from './top-scroller.component';
-import { ScrollManagerDirective } from '@shared/directives/scroll-manager.directive';
-import { of } from 'rxjs';
 
 describe('TopScrollerComponent', () => {
   let component: TopScrollerComponent;

@@ -1,5 +1,7 @@
-import type { TECHSTACK } from '@app/state/knowledge/knowledge.models';
 import type { ITechCategory } from '@modules/about/about.models';
+import type { TECHSTACK } from '@app/state/knowledge/knowledge.models';
+
+import { createTechStackMapperFixture } from '../../../../testing/knowledge.fixtures';
 import {
   ABOUT_MAX_IDLE_YEARS,
   HOME_RECENT_USAGE_YEARS,
@@ -9,7 +11,6 @@ import {
   mapTechStackForAbout,
   mapTechStackForHome,
 } from './tech-stack.mapper';
-import { createTechStackMapperFixture } from '../../../../testing/knowledge.fixtures';
 
 describe('tech-stack.mapper', () => {
   const homeFixture: TECHSTACK[] = createTechStackMapperFixture();

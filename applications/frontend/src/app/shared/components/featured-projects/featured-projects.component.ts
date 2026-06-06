@@ -1,16 +1,17 @@
 import { NgClass } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { map } from 'rxjs';
 import { Router } from '@angular/router';
-import { ProjectsService } from '@modules/projects/projects.service';
+import { map } from 'rxjs';
+
+import { PmAsyncContentComponent } from '@shared/components/pm-async-content/pm-async-content.component';
+import { GibberishRevealDirective } from '@shared/directives/gibberish-reveal.directive';
+import { ScrollRevealDirective } from '@shared/directives/scroll-reveal.directive';
 import {
   resolveFeaturedProjects,
   type IFeaturedProject,
 } from '@modules/projects/featured-projects.config';
-import { PmAsyncContentComponent } from '@shared/components/pm-async-content/pm-async-content.component';
-import { ScrollRevealDirective } from '@shared/directives/scroll-reveal.directive';
-import { GibberishRevealDirective } from '@shared/directives/gibberish-reveal.directive';
+import { ProjectsService } from '@modules/projects/projects.service';
 import { toLoadStatusSignals } from '@app/shared/models/load-status.signals';
 
 @Component({

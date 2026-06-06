@@ -1,12 +1,14 @@
 import { createReducer } from '@ngrx/store';
 import { immerOn } from 'ngrx-immer/store';
-import * as actions from './knowledge.actions';
+
 import type {
   CUSTOMER,
   KNOWLEDGESTATE,
   PROJECT,
   TECHSTACK,
 } from '@app/state/knowledge/knowledge.models';
+
+import * as actions from './knowledge.actions';
 
 /**
  * Titles for different sections of the tech stack.

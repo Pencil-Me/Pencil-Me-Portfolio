@@ -1,7 +1,9 @@
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { provideMockStore, MockStore } from '@ngrx/store/testing';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
+
 import type { AppState } from '@app/state';
 import { fromKnowledge } from '@app/state/knowledge';
+
 import { KnowledgeBootstrapService } from './knowledge-bootstrap.service';
 
 describe('KnowledgeBootstrapService', () => {

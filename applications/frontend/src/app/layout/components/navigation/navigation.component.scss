@@ -108,13 +108,7 @@ header {
         color: var(--pm-on-primary);
         cursor: pointer;
         border-radius: 0;
-        clip-path: polygon(
-          0 0,
-          calc(100% - 6px) 0,
-          100% 6px,
-          100% 100%,
-          0 100%
-        );
+        clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);
         transition:
           background 200ms ease,
           border-color 200ms ease,

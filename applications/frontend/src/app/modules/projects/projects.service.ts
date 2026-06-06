@@ -1,16 +1,16 @@
-import { Injectable, inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
+import { map, shareReplay, type Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
-import type { AppState } from '@app/state';
-import { map, shareReplay } from 'rxjs';
-import type { Observable } from 'rxjs';
-import { fromKnowledge } from '@app/state/knowledge';
+
 import type { IProject, IProjectsCategory, IProjectTech } from '@modules/projects/projects.models';
+import type { AppState } from '@app/state';
+import { fromKnowledge } from '@app/state/knowledge';
+import type { PROJECT } from '@app/state/knowledge/knowledge.models';
 import {
   selectProjectsState,
   selectProjectState,
   selectTechstackState,
 } from '@app/state/knowledge/knowledge.selectors';
-import type { PROJECT } from '@app/state/knowledge/knowledge.models';
 import { convertProject, convertProjects } from '@app/state/knowledge/mappers/project.mapper';
 import { mapTechFilterList } from '@app/state/knowledge/mappers/tech-stack.mapper';
 

@@ -1,5 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/prettierrc",
+  "plugins": ["@ianvs/prettier-plugin-sort-imports"],
   "singleQuote": true,
   "printWidth": 100,
   "tabWidth": 2,
@@ -8,17 +9,19 @@
   "bracketSpacing": true,
   "arrowParens": "always",
   "endOfLine": "auto",
-
   "importOrder": [
     "^@angular/(.*)$",
     "^rxjs",
     "<THIRD_PARTY_MODULES>",
+    "",
     "^@gov/(.*)$",
     "^@core/(.*)$",
     "^@shared/(.*)$",
+    "^@modules/(.*)$",
+    "^@app/(.*)$",
+    "",
     "^[./]"
   ],
-  "importOrderSeparation": true,
-  "importOrderSortSpecifiers": true,
-  "importOrderParserPlugins": ["typescript", "decorators-legacy"]
+  "importOrderParserPlugins": ["typescript", "decorators-legacy"],
+  "importOrderTypeScriptVersion": "5.0.0"
 }

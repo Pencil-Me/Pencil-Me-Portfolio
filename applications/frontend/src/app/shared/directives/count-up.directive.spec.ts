@@ -1,8 +1,13 @@
-import type { DebugElement } from '@angular/core';
-import { Component, Renderer2 } from '@angular/core';
-import type { ComponentFixture } from '@angular/core/testing';
-import { TestBed, fakeAsync, tick, waitForAsync } from '@angular/core/testing';
+import { Component, Renderer2, type DebugElement } from '@angular/core';
+import {
+  fakeAsync,
+  TestBed,
+  tick,
+  waitForAsync,
+  type ComponentFixture,
+} from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+
 import { CountUpDirective } from './count-up.directive';
 
 @Component({

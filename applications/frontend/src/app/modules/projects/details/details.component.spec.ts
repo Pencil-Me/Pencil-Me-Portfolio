@@ -1,8 +1,8 @@
-import { ProjectDetailsComponent } from '@modules/projects/details/details.component';
-import type { ComponentFixture } from '@angular/core/testing';
-import { TestBed } from '@angular/core/testing';
+import { TestBed, type ComponentFixture } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
+
+import { ProjectDetailsComponent } from '@modules/projects/details/details.component';
 import { ProjectsService } from '@modules/projects/projects.service';
 
 class MockProjectsService {

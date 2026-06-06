@@ -1,11 +1,14 @@
-import { TestBed } from '@angular/core/testing';
-import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { ApiClientService } from './api-client.service';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-
+import {
+  HttpTestingController,
+  provideHttpClientTesting,
+  type TestRequest,
+} from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
+
 import { expectHttpJsonResponse } from '../../../../testing/http-test.helpers';
-import type { TestRequest } from '@angular/common/http/testing';
+import { ApiClientService } from './api-client.service';
 
 const apiUrl = (path: string): string => `${environment.API_BASE_URL}/${path}`;
 const toUrlEncoded = (obj: Record<string, string | number>): string =>

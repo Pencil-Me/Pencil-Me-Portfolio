@@ -1,6 +1,6 @@
-import type { ComponentFixture } from '@angular/core/testing';
-import { TestBed } from '@angular/core/testing';
+import { TestBed, type ComponentFixture } from '@angular/core/testing';
 import { Router } from '@angular/router';
+
 import { NotFoundErrorComponent } from './not-found-error.component';
 
 describe('NotFoundErrorComponent', () => {

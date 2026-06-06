@@ -1,13 +1,13 @@
-import type { ComponentFixture } from '@angular/core/testing';
-import { TestBed } from '@angular/core/testing';
-
-import { HomeComponent } from './home.component';
+import { TestBed, type ComponentFixture } from '@angular/core/testing';
+import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, of } from 'rxjs';
+
 import type { ITechCategories } from '@modules/home/home.models';
 import { HomeService } from '@modules/home/home.service';
 import { ProjectsService } from '@modules/projects/projects.service';
-import { ActivatedRoute } from '@angular/router';
 import type { LoadStatus } from '@app/shared/models/load-status.model';
+
+import { HomeComponent } from './home.component';
 
 class MockHomeService {
   tech$ = of([] as ITechCategories[]);

@@ -1,14 +1,15 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { NgClass } from '@angular/common';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { ProjectsService } from '@modules/projects/projects.service';
-import type { IProjectsCategory } from '@modules/projects/projects.models';
 import { Router } from '@angular/router';
+
 import { FeaturedProjectsComponent } from '@shared/components/featured-projects/featured-projects.component';
-import { ProjectDateRangeComponent } from '@shared/components/project-date-range/project-date-range.component';
 import { PmAsyncContentComponent } from '@shared/components/pm-async-content/pm-async-content.component';
-import { ScrollRevealDirective } from '@shared/directives/scroll-reveal.directive';
+import { ProjectDateRangeComponent } from '@shared/components/project-date-range/project-date-range.component';
 import { GibberishRevealDirective } from '@shared/directives/gibberish-reveal.directive';
+import { ScrollRevealDirective } from '@shared/directives/scroll-reveal.directive';
+import type { IProjectsCategory } from '@modules/projects/projects.models';
+import { ProjectsService } from '@modules/projects/projects.service';
 import { toLoadStatusSignals } from '@app/shared/models/load-status.signals';
 
 @Component({

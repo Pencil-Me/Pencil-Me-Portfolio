@@ -1,6 +1,7 @@
 import type { Action, ActionReducer } from '@ngrx/store';
-import { KnowledgeEffects } from '@app/state/knowledge/knowledge.effects';
+
 import { fromKnowledge } from '@app/state/knowledge';
+import { KnowledgeEffects } from '@app/state/knowledge/knowledge.effects';
 import type { KNOWLEDGESTATE } from '@app/state/knowledge/knowledge.models';
 
 // Define the shape of the entire application state

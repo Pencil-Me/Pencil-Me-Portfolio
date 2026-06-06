@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import type { PreloadingStrategy, Route } from '@angular/router';
-import type { Observable } from 'rxjs';
-import { Observable as RxObservable } from 'rxjs';
+import { Observable as RxObservable, type Observable } from 'rxjs';
 
 /**
  * Laedt Lazy-Routes erst nach Idle, damit Initial-Bundle und Home nicht konkurrieren.

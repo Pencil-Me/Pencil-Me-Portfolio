@@ -1,8 +1,7 @@
-import type { DebugElement } from '@angular/core';
-import { Component } from '@angular/core';
-import type { ComponentFixture } from '@angular/core/testing';
-import { TestBed, waitForAsync } from '@angular/core/testing';
+import { Component, type DebugElement } from '@angular/core';
+import { TestBed, waitForAsync, type ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+
 import {
   installIntersectionObserverSpy,
   type IntersectionObserverSpyState,

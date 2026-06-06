@@ -1,5 +1,14 @@
-import { Directive, ElementRef, Input, NgZone, inject } from '@angular/core';
-import type { AfterViewInit, OnDestroy, OnInit } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  inject,
+  Input,
+  NgZone,
+  type AfterViewInit,
+  type OnDestroy,
+  type OnInit,
+} from '@angular/core';
+
 import { randomMs, scrambleText, tickScramble } from '@app/shared/utils/gibberish-text.util';
 import {
   findScrollRevealHost,

@@ -1,9 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
-import { KnowledgeService } from './knowledge.service';
+
 import { ApiClientService } from '@core/services/api/api-client.service';
-import type { TECHSTACK, CUSTOMER } from '@app/state/knowledge/knowledge.models';
+import type { CUSTOMER, TECHSTACK } from '@app/state/knowledge/knowledge.models';
+
 import { createSampleProject } from '../../../testing/knowledge.fixtures';
+import { KnowledgeService } from './knowledge.service';
 
 describe('KnowledgeService', () => {
   let service: KnowledgeService;

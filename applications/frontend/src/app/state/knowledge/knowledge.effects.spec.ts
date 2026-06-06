@@ -1,14 +1,11 @@
-import { TestBed } from '@angular/core/testing';
-import { provideMockActions } from '@ngrx/effects/testing';
-import { provideMockStore } from '@ngrx/store/testing';
-import type { Observable } from 'rxjs';
-import { of, throwError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
-
-import { KnowledgeEffects } from './knowledge.effects';
-import { KnowledgeService } from '@app/state/knowledge/knowledge.service';
-import { fromKnowledge } from '@app/state/knowledge/index';
+import { TestBed } from '@angular/core/testing';
+import { of, throwError, type Observable } from 'rxjs';
+import { provideMockActions } from '@ngrx/effects/testing';
 import type { Action } from '@ngrx/store';
+import { provideMockStore } from '@ngrx/store/testing';
+
+import { fromKnowledge } from '@app/state/knowledge/index';
 import type {
   CUSTOMER,
   DATE,
@@ -16,6 +13,9 @@ import type {
   TECH,
   TECHSTACK,
 } from '@app/state/knowledge/knowledge.models';
+import { KnowledgeService } from '@app/state/knowledge/knowledge.service';
+
+import { KnowledgeEffects } from './knowledge.effects';
 
 describe('KnowledgeEffects', () => {
   let actions$: Observable<Action>;

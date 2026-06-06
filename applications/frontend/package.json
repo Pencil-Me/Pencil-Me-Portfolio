@@ -11,7 +11,9 @@
     "test": "ng test",
     "ci-test": "ng test --no-watch --no-progress --browsers=ChromeHeadless --code-coverage",
     "lint": "ng lint && npm run lint:styles",
-    "lint-fix": "ng lint --fix && npm run lint:styles -- --fix",
+    "lint-fix": "npm run format && ng lint --fix && npm run lint:styles -- --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "lint:styles": "stylelint \"src/**/*.{css,scss}\"",
     "fallow": "fallow",
     "fallow:ci": "npm run ci-test && fallow dead-code && fallow dupes && fallow health --coverage coverage/portfolio/coverage-final.json --fail-on-issues"
@@ -50,6 +52,7 @@
     "@angular/cli": "^21.2.13",
     "@angular/compiler-cli": "^21.2.15",
     "@angular/localize": "^21.2.15",
+    "@ianvs/prettier-plugin-sort-imports": "^4.7.0",
     "@ngrx/eslint-plugin": "^21.1.0",
     "@types/jasmine": "~5.1.0",
     "@typescript-eslint/eslint-plugin": "^8.34.0",

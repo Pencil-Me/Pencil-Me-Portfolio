@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import type { ComponentFixture } from '@angular/core/testing';
-import { TestBed } from '@angular/core/testing';
+import { TestBed, type ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+
 import type { LoadStatus } from '@app/shared/models/load-status.model';
+
 import { PmAsyncContentComponent, type PmAsyncVariant } from './pm-async-content.component';
 
 @Component({

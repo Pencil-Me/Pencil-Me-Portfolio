@@ -1,5 +1,12 @@
-import { Directive, ElementRef, Input, NgZone, inject } from '@angular/core';
-import type { OnDestroy, OnInit } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  inject,
+  Input,
+  NgZone,
+  type OnDestroy,
+  type OnInit,
+} from '@angular/core';
 
 export type ParallaxMode = 'viewport' | 'scroll';
 

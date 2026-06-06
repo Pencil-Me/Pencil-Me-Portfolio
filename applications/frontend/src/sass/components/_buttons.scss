@@ -103,37 +103,13 @@
 
 @mixin pm-button-cyber-clip($size: 6px, $corner: bottom-right) {
   @if $corner == top-left {
-    clip-path: polygon(
-      0 $size,
-      $size 0,
-      100% 0,
-      100% 100%,
-      0 100%
-    );
+    clip-path: polygon(0 $size, $size 0, 100% 0, 100% 100%, 0 100%);
   } @else if $corner == top-right {
-    clip-path: polygon(
-      0 0,
-      calc(100% - #{$size}) 0,
-      100% $size,
-      100% 100%,
-      0 100%
-    );
+    clip-path: polygon(0 0, calc(100% - #{$size}) 0, 100% $size, 100% 100%, 0 100%);
   } @else if $corner == bottom-left {
-    clip-path: polygon(
-      0 0,
-      100% 0,
-      100% 100%,
-      $size 100%,
-      0 calc(100% - #{$size})
-    );
+    clip-path: polygon(0 0, 100% 0, 100% 100%, $size 100%, 0 calc(100% - #{$size}));
   } @else {
-    clip-path: polygon(
-      0 0,
-      100% 0,
-      100% calc(100% - #{$size}),
-      calc(100% - #{$size}) 100%,
-      0 100%
-    );
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - #{$size}), calc(100% - #{$size}) 100%, 0 100%);
   }
 }
 
@@ -172,7 +148,7 @@
   }
 
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: -100%;
@@ -238,7 +214,9 @@
       var(--pm-bordeaux-hover) 5%
     );
     box-shadow: 8px 0 0 var(--pm-accent);
-    text-shadow: -3px -3px 0 var(--pm-accent-bright), 3px 3px 0 var(--pm-accent);
+    text-shadow:
+      -3px -3px 0 var(--pm-accent-bright),
+      3px 3px 0 var(--pm-accent);
     color: var(--pm-on-primary);
   }
 
@@ -289,7 +267,9 @@
       var(--pm-bordeaux-hover) 5%
     );
     box-shadow: 6px 0 0 var(--pm-accent);
-    text-shadow: -3px -3px 0 var(--pm-accent-bright), 3px 3px 0 var(--pm-accent);
+    text-shadow:
+      -3px -3px 0 var(--pm-accent-bright),
+      3px 3px 0 var(--pm-accent);
     color: var(--pm-on-primary);
   }
 
@@ -337,7 +317,9 @@
       var(--pm-btn-outline-hot) 5%
     );
     box-shadow: 4px 0 0 var(--pm-btn-outline-accent);
-    text-shadow: -2px -2px 0 var(--pm-accent-a80), 2px 2px 0 var(--pm-accent);
+    text-shadow:
+      -2px -2px 0 var(--pm-accent-a80),
+      2px 2px 0 var(--pm-accent);
     color: var(--pm-btn-outline-text);
   }
 

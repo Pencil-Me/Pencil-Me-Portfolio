@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 
-import { AboutService } from '@modules/about/about.service';
-import type { ITechCategory } from '@modules/about/about.models';
 import { PmAsyncContentComponent } from '@shared/components/pm-async-content/pm-async-content.component';
-import { ScrollRevealDirective } from '@shared/directives/scroll-reveal.directive';
 import { GibberishRevealDirective } from '@shared/directives/gibberish-reveal.directive';
+import { ScrollRevealDirective } from '@shared/directives/scroll-reveal.directive';
+import type { ITechCategory } from '@modules/about/about.models';
+import { AboutService } from '@modules/about/about.service';
 import { toLoadStatusSignals } from '@app/shared/models/load-status.signals';
 
 @Component({

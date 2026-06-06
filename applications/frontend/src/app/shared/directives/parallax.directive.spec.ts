@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import type { ComponentFixture } from '@angular/core/testing';
-import { TestBed } from '@angular/core/testing';
+import { TestBed, type ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+
 import { installMatchMediaSpy } from '../../../testing/dom-test.helpers';
 import { ParallaxDirective } from './parallax.directive';
 

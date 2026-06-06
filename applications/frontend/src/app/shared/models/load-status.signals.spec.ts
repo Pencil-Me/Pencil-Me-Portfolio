@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { BehaviorSubject } from 'rxjs';
+
 import { toLoadStatusSignals, type LoadStatusSlice } from './load-status.signals';
 
 describe('toLoadStatusSignals', () => {

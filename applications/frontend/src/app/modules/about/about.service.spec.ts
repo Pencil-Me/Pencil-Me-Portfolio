@@ -1,12 +1,13 @@
 import { TestBed } from '@angular/core/testing';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
+
+import type { ITechCategory } from '@modules/about/about.models';
+import type { AppState } from '@app/state';
+import { fromKnowledge } from '@app/state/knowledge';
+import type { TECHSTACK } from '@app/state/knowledge/knowledge.models';
+import { mapTechStackForAbout } from '@app/state/knowledge/mappers/tech-stack.mapper';
 
 import { AboutService } from './about.service';
-import { mapTechStackForAbout } from '@app/state/knowledge/mappers/tech-stack.mapper';
-import type { TECHSTACK } from '@app/state/knowledge/knowledge.models';
-import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import type { AppState } from '@app/state';
-import type { ITechCategory } from '@modules/about/about.models';
-import { fromKnowledge } from '@app/state/knowledge';
 
 describe('AboutService', () => {
   let service: AboutService;

@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+
 import { ScrollAnchorDirective } from '@shared/directives/scroll-anchor.directive';
 
 @Component({

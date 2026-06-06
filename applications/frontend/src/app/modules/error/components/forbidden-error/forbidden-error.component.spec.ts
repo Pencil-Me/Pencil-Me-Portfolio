@@ -1,5 +1,5 @@
-import type { ComponentFixture } from '@angular/core/testing';
-import { TestBed } from '@angular/core/testing';
+import { TestBed, type ComponentFixture } from '@angular/core/testing';
+
 import { ForbiddenErrorComponent } from './forbidden-error.component';
 
 describe('ForbiddenErrorComponent', () => {

@@ -1,13 +1,20 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { formatYear } from '@app/shared/utils/date-format';
-import { TopScrollerComponent } from '@shared/components/top-scroller/top-scroller.component';
 import { RouterLink } from '@angular/router';
-import type { TechStack } from '@layout/components/footer/components/footer-disclaimer/footer-disclaimer.component';
-import type { SocialLink } from '@layout/components/footer/components/social-link/social-link.component';
-import type { NavLink } from '@layout/components/footer/components/footer-navigation/footer-navigation.component';
-import { SocialLinkComponent } from '@layout/components/footer/components/social-link/social-link.component';
-import { FooterNavigationComponent } from '@layout/components/footer/components/footer-navigation/footer-navigation.component';
-import { FooterDisclaimerComponent } from '@layout/components/footer/components/footer-disclaimer/footer-disclaimer.component';
+import {
+  FooterDisclaimerComponent,
+  type TechStack,
+} from '@layout/components/footer/components/footer-disclaimer/footer-disclaimer.component';
+import {
+  FooterNavigationComponent,
+  type NavLink,
+} from '@layout/components/footer/components/footer-navigation/footer-navigation.component';
+import {
+  SocialLinkComponent,
+  type SocialLink,
+} from '@layout/components/footer/components/social-link/social-link.component';
+
+import { TopScrollerComponent } from '@shared/components/top-scroller/top-scroller.component';
+import { formatYear } from '@app/shared/utils/date-format';
 
 @Component({
   selector: 'app-footer',

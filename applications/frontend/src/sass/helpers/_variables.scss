@@ -5,10 +5,22 @@
 // Typography
 // *******************************
 
-$font-family-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", roboto, sans-serif;
-$font-family-heading: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", roboto, sans-serif;
-$font-family-logo: "Segoe UI", arial, sans-serif;
-$font-family-mono: "IBM Plex Mono", ui-monospace, "Cascadia Code", consolas, monospace;
+$font-family-body:
+  'IBM Plex Sans',
+  system-ui,
+  -apple-system,
+  'Segoe UI',
+  roboto,
+  sans-serif;
+$font-family-heading:
+  'IBM Plex Sans',
+  system-ui,
+  -apple-system,
+  'Segoe UI',
+  roboto,
+  sans-serif;
+$font-family-logo: 'Segoe UI', arial, sans-serif;
+$font-family-mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Code', consolas, monospace;
 $font-weight-regular: 400;
 $font-weight-bold: 800;
 $white: #fff;

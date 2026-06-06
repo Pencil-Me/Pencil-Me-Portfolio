@@ -1,10 +1,10 @@
-import type { ComponentFixture } from '@angular/core/testing';
-import { TestBed } from '@angular/core/testing';
-import type { DebugElement } from '@angular/core';
-import { Component, Directive } from '@angular/core';
-import { ScrollAnchorDirective } from './scroll-anchor.directive';
+import { Component, Directive, type DebugElement } from '@angular/core';
+import { TestBed, type ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+
 import { ScrollManagerDirective } from '@shared/directives/scroll-manager.directive';
+
+import { ScrollAnchorDirective } from './scroll-anchor.directive';
 
 @Component({
   selector: 'app-test-host',

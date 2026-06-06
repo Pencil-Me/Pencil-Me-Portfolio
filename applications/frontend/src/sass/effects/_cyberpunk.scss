@@ -158,7 +158,7 @@ $heading-tertiary-size: 1.5rem;
 }
 
 @mixin pm-heading-hud-corner {
-  content: "";
+  content: '';
   position: absolute;
   left: 0;
   top: 0.1em;
@@ -172,30 +172,22 @@ $heading-tertiary-size: 1.5rem;
 }
 
 @mixin pm-heading-hud-rule($width: min(100%, 22rem)) {
-  content: "";
+  content: '';
   display: block;
   width: $width;
   height: 4px;
   margin-top: 0.65rem;
-  background:
-    linear-gradient(
-      90deg,
-      var(--pm-heading-hud-corner-base) 0,
-      var(--pm-heading-hud-corner-base) 2.75rem,
-      transparent 2.75rem,
-      transparent 2.9rem,
-      var(--pm-primary) 2.9rem,
-      var(--pm-primary) calc(100% - 1.25rem),
-      transparent calc(100% - 1.25rem)
-    );
-  clip-path: polygon(
-    0 0,
-    100% 0,
-    100% 100%,
-    calc(100% - 5px) 100%,
-    calc(100% - 9px) 55%,
-    0 55%
+  background: linear-gradient(
+    90deg,
+    var(--pm-heading-hud-corner-base) 0,
+    var(--pm-heading-hud-corner-base) 2.75rem,
+    transparent 2.75rem,
+    transparent 2.9rem,
+    var(--pm-primary) 2.9rem,
+    var(--pm-primary) calc(100% - 1.25rem),
+    transparent calc(100% - 1.25rem)
   );
+  clip-path: polygon(0 0, 100% 0, 100% 100%, calc(100% - 5px) 100%, calc(100% - 9px) 55%, 0 55%);
   animation: pm-heading-rule-glitch 12s ease-in-out infinite;
 }
 
@@ -236,7 +228,7 @@ $heading-tertiary-size: 1.5rem;
   animation: pm-heading-text-flicker-soft 14s steps(1, end) infinite;
 
   &::before {
-    content: "//";
+    content: '//';
     position: absolute;
     left: 0;
     top: 0.08em;
@@ -251,7 +243,7 @@ $heading-tertiary-size: 1.5rem;
   }
 
   &::after {
-    content: "";
+    content: '';
     display: block;
     width: min(100%, 14rem);
     height: 3px;
@@ -286,7 +278,7 @@ $heading-tertiary-size: 1.5rem;
   animation: pm-heading-text-flicker-soft 17s steps(1, end) infinite;
 
   &::before {
-    content: ">";
+    content: '>';
     position: absolute;
     left: 0;
     top: 0;
@@ -354,7 +346,7 @@ $heading-tertiary-size: 1.5rem;
   color: var(--pm-text);
 
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     inset: 0;
     pointer-events: none;
@@ -367,7 +359,7 @@ $heading-tertiary-size: 1.5rem;
   }
 
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     inset: 0;
     pointer-events: none;
@@ -403,7 +395,7 @@ $heading-tertiary-size: 1.5rem;
   color: var(--pm-text);
 
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     inset: 0;
     pointer-events: none;

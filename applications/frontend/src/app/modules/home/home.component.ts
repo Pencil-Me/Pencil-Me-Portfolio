@@ -1,17 +1,18 @@
 import { NgOptimizedImage } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, type OnDestroy, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal, type OnDestroy } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { HomeService } from '@modules/home/home.service';
 import { RouterLink } from '@angular/router';
-import type { ITechCategories } from '@modules/home/home.models';
-import { CountUpDirective } from '@shared/directives/count-up.directive';
-import { TrackVisibilityDirective } from '@shared/directives/track-visibility.directive';
+
 import { FeaturedProjectsComponent } from '@shared/components/featured-projects/featured-projects.component';
 import { PmAsyncContentComponent } from '@shared/components/pm-async-content/pm-async-content.component';
-import { toLoadStatusSignals } from '@app/shared/models/load-status.signals';
+import { CountUpDirective } from '@shared/directives/count-up.directive';
+import { GibberishRevealDirective } from '@shared/directives/gibberish-reveal.directive';
 import { ParallaxDirective } from '@shared/directives/parallax.directive';
 import { ScrollRevealDirective } from '@shared/directives/scroll-reveal.directive';
-import { GibberishRevealDirective } from '@shared/directives/gibberish-reveal.directive';
+import { TrackVisibilityDirective } from '@shared/directives/track-visibility.directive';
+import type { ITechCategories } from '@modules/home/home.models';
+import { HomeService } from '@modules/home/home.service';
+import { toLoadStatusSignals } from '@app/shared/models/load-status.signals';
 
 @Component({
   selector: 'app-home',

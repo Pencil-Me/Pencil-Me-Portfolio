@@ -1,7 +1,8 @@
-import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import type { AppState } from '@app/state';
-import { ProjectsService } from './projects.service';
 import { TestBed } from '@angular/core/testing';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
+
+import type { LoadStatus } from '@app/shared/models/load-status.model';
+import type { AppState } from '@app/state';
 import { fromKnowledge } from '@app/state/knowledge';
 import type {
   CUSTOMERSDATASTATE,
@@ -10,14 +11,14 @@ import type {
   TECHSTACK,
   TECHSTACKDATASTATE,
 } from '@app/state/knowledge/knowledge.models';
-
-import type { LoadStatus } from '@app/shared/models/load-status.model';
 import { convertProject, convertProjects } from '@app/state/knowledge/mappers/project.mapper';
+
 import {
   createHomeTechStackFixture,
   createSampleCustomer,
   createSampleProject,
 } from '../../../testing/knowledge.fixtures';
+import { ProjectsService } from './projects.service';
 
 describe('ProjectsService', () => {
   let service: ProjectsService;

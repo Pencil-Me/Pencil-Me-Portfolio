@@ -1,7 +1,7 @@
 import {
   hasLoadError,
-  isLoadSuccessful,
   isLoadingStatus,
+  isLoadSuccessful,
   toErrorMessage,
   type LoadStatus,
 } from './load-status.model';

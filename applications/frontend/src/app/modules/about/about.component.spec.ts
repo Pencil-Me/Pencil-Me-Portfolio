@@ -1,10 +1,10 @@
-import type { ComponentFixture } from '@angular/core/testing';
-import { TestBed } from '@angular/core/testing';
-import { AboutComponent } from './about.component';
-import type { Observable } from 'rxjs';
-import { of } from 'rxjs';
+import { TestBed, type ComponentFixture } from '@angular/core/testing';
+import { of, type Observable } from 'rxjs';
+
 import type { ITechCategory } from '@modules/about/about.models';
 import { AboutService } from '@modules/about/about.service';
+
+import { AboutComponent } from './about.component';
 
 class MockAboutService {
   tech$: Observable<ITechCategory[]> = of([]);

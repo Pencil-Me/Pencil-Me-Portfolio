@@ -25,11 +25,11 @@ npm install
 
 ## Backend-Anbindung (Umgebungen)
 
-| Profil | Datei | `API_BASE_URL` | Build / Start |
-|--------|-------|----------------|---------------|
-| **Lokal (ng serve)** | `environment.development.ts` | `/api2` | `npm start` |
-| **Docker Compose** | `environment.docker.ts` | `/api2` | `docker compose up --build` |
-| **Production** | `environment.production.ts` | `https://api.pencil-me.eu/index.php` | `npm run build:prod` |
+| Profil               | Datei                        | `API_BASE_URL`                       | Build / Start               |
+| -------------------- | ---------------------------- | ------------------------------------ | --------------------------- |
+| **Lokal (ng serve)** | `environment.development.ts` | `/api2`                              | `npm start`                 |
+| **Docker Compose**   | `environment.docker.ts`      | `/api2`                              | `docker compose up --build` |
+| **Production**       | `environment.production.ts`  | `https://api.pencil-me.eu/index.php` | `npm run build:prod`        |
 
 `API_KEY` muss mit `API_KEY_FE` in der PHP-API übereinstimmen (lokal: `apikey123` in `.env.dev`).
 
@@ -57,15 +57,15 @@ Vorlage für eigene Werte: `environment.example.ts`
 
 ## NPM-Scripts
 
-| Befehl | Beschreibung |
-|--------|--------------|
-| `npm start` | Dev-Server [http://localhost:4200](http://localhost:4200) + API-Proxy |
-| `npm run build` / `build:prod` | Production-Build |
-| `npm run build:docker` | Build für lokalen Docker-Stack |
-| `npm test` | Unit-Tests (Karma, interaktiv) |
-| `npm run ci-test` | Tests headless mit Coverage (CI) |
-| `npm run lint` | ESLint + Stylelint |
-| `npm run lint-fix` | Lint mit Auto-Fix |
+| Befehl                         | Beschreibung                                                          |
+| ------------------------------ | --------------------------------------------------------------------- |
+| `npm start`                    | Dev-Server [http://localhost:4200](http://localhost:4200) + API-Proxy |
+| `npm run build` / `build:prod` | Production-Build                                                      |
+| `npm run build:docker`         | Build für lokalen Docker-Stack                                        |
+| `npm test`                     | Unit-Tests (Karma, interaktiv)                                        |
+| `npm run ci-test`              | Tests headless mit Coverage (CI)                                      |
+| `npm run lint`                 | ESLint + Stylelint                                                    |
+| `npm run lint-fix`             | Lint mit Auto-Fix                                                     |
 
 ## Projektstruktur (Auszug)
 

@@ -1,13 +1,12 @@
-import type { ComponentFixture } from '@angular/core/testing';
-import { TestBed } from '@angular/core/testing';
+import { TestBed, type ComponentFixture } from '@angular/core/testing';
+import { Router } from '@angular/router';
+import { of, type Observable } from 'rxjs';
+
+import type { IProjectsCategory, IProjectTech } from '@modules/projects/projects.models';
+import { ProjectsService } from '@modules/projects/projects.service';
+import type { LoadStatus } from '@app/shared/models/load-status.model';
 
 import { ProjectsComponent } from './projects.component';
-import type { Observable } from 'rxjs';
-import { of } from 'rxjs';
-import { ProjectsService } from '@modules/projects/projects.service';
-import type { IProjectsCategory, IProjectTech } from '@modules/projects/projects.models';
-import { Router } from '@angular/router';
-import type { LoadStatus } from '@app/shared/models/load-status.model';
 
 const completedState = { loadStatus: 'COMPLETED' as LoadStatus, error: null, data: [] };
 

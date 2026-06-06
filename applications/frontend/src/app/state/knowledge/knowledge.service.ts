@@ -1,7 +1,8 @@
-import { Injectable, inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
+import type { Observable } from 'rxjs';
+
 import { ApiClientService } from '@core/services/api/api-client.service';
 import type { CUSTOMER, PROJECT, TECHSTACK } from '@app/state/knowledge/knowledge.models';
-import type { Observable } from 'rxjs';
 
 /**
  * KnowledgeService is responsible for fetching data related to tech stacks, projects, and customers.

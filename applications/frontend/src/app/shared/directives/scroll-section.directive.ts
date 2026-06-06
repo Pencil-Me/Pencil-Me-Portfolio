@@ -1,5 +1,5 @@
-import { Directive, ElementRef, Input, inject } from '@angular/core';
-import type { OnDestroy, OnInit } from '@angular/core';
+import { Directive, ElementRef, inject, Input, type OnDestroy, type OnInit } from '@angular/core';
+
 import { ScrollManagerDirective } from './scroll-manager.directive';
 
 // Directive for scrolling to a specific section

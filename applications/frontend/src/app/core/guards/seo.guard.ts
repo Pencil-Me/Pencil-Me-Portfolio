@@ -1,6 +1,6 @@
-import { Injectable, inject } from '@angular/core';
-import type { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { inject, Injectable } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
+import type { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot } from '@angular/router';
 
 type RouteSeoData = {
   title?: string | ((route: ActivatedRouteSnapshot) => string);

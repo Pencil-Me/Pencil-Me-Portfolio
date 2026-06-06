@@ -84,10 +84,11 @@ $content-width: 1000px;
     animation-delay: $delay;
   }
 
-
   .glitch-layer {
     position: absolute;
-    top: -25%; left: -25%; right: -25%;
+    top: -25%;
+    left: -25%;
+    right: -25%;
     width: 150%;
     height: 150%;
     background-size: 300%;
@@ -102,7 +103,12 @@ $content-width: 1000px;
   }
 
   @keyframes glitch-layer-flicker {
-    0%, 7%, 20%, 50%, 95%, 100% {
+    0%,
+    7%,
+    20%,
+    50%,
+    95%,
+    100% {
       opacity: 0;
       background-position: 50% 50%;
       transform: translate(0, 0) rotate(0deg);
@@ -275,8 +281,14 @@ $content-width: 1000px;
   }
 
   @keyframes blink-cursor {
-    0%, 100% { opacity: 0; }
-    50% { opacity: 1; }
+    0%,
+    100% {
+      opacity: 0;
+    }
+
+    50% {
+      opacity: 1;
+    }
   }
 
   .lead {
@@ -335,53 +347,89 @@ $content-width: 1000px;
     }
 
     .blob--big {
-      width: 70vw; height: 50vh; left: -10%; top: 5%;
+      width: 70vw;
+      height: 50vh;
+      left: -10%;
+      top: 5%;
       background: var(--pm-hero-blob-big);
       animation: floatBig 14s ease-in-out infinite;
     }
 
     .blob--mid {
-      width: 45vw; height: 35vh; right: -5%; top: 15%;
+      width: 45vw;
+      height: 35vh;
+      right: -5%;
+      top: 15%;
       background: var(--pm-hero-blob-mid);
       animation: floatMid 11s ease-in-out infinite;
     }
 
     .blob--small {
-      width: 30vw; height: 25vh; left: 15%; bottom: -5%;
+      width: 30vw;
+      height: 25vh;
+      left: 15%;
+      bottom: -5%;
       background: var(--pm-hero-blob-small);
       animation: floatSmall 9s ease-in-out infinite;
     }
 
     @keyframes floatBig {
-      0% { transform: translateY(0) scale(.75); }
-      50% { transform: translateY(-60%) scale(1.02); }
-      75% { transform: translateY(-20%) scale(1); }
-      100% { transform: translateY(0) scale(.75); }
+      0% {
+        transform: translateY(0) scale(0.75);
+      }
+
+      50% {
+        transform: translateY(-60%) scale(1.02);
+      }
+
+      75% {
+        transform: translateY(-20%) scale(1);
+      }
+
+      100% {
+        transform: translateY(0) scale(0.75);
+      }
     }
 
     @keyframes floatMid {
-      0% { transform: translate(0,0) rotate(0deg); }
-      50% { transform: translate(-40%, 45%) rotate(20deg); }
-      100% { transform: translate(0,0) rotate(0deg); }
+      0% {
+        transform: translate(0, 0) rotate(0deg);
+      }
+
+      50% {
+        transform: translate(-40%, 45%) rotate(20deg);
+      }
+
+      100% {
+        transform: translate(0, 0) rotate(0deg);
+      }
     }
 
     @keyframes floatSmall {
-      0% { transform: translateX(0) scale(1); }
-      50% { transform: translateX(5%) scale(0.98); }
-      100% { transform: translateX(0) scale(1); }
+      0% {
+        transform: translateX(0) scale(1);
+      }
+
+      50% {
+        transform: translateX(5%) scale(0.98);
+      }
+
+      100% {
+        transform: translateX(0) scale(1);
+      }
     }
   }
 
   .particle-container {
     filter: blur(5px);
-    position:absolute;
+    position: absolute;
     z-index: 1;
-    top:0;
-    left:0;
-    bottom:0;
-    width:100%;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 100%;
 
-    --timescale:0.5s;
+    --timescale: 0.5s;
 
     .pt {
       display: block;
@@ -389,7 +437,8 @@ $content-width: 1000px;
       left: calc(var(--x) * 1%);
       top: calc(var(--y) * 1%);
       height: 50px;
-      animation: moveUpDown calc(var(--timescale) * var(--yt)) infinite cubic-bezier(.45, .05, .55, .95) alternate;
+      animation: moveUpDown calc(var(--timescale) * var(--yt)) infinite
+        cubic-bezier(0.45, 0.05, 0.55, 0.95) alternate;
       animation-delay: calc(-1s * var(--d, 0));
 
       b {
@@ -397,11 +446,12 @@ $content-width: 1000px;
         display: block;
         border-radius: 100%;
         filter: blur(2px) brightness(1.2);
-        width: calc(.15px * var(--w));
-        height: calc(.15px * var(--w));
+        width: calc(0.15px * var(--w));
+        height: calc(0.15px * var(--w));
         position: absolute;
-        opacity: .25;
-        animation: moveRightLeft calc(var(--timescale) * var(--xt)) infinite cubic-bezier(.45, .05, .55, .95) alternate; // , flicker calc(2s * var(--xd)) infinite alternate cubic-bezier(.45, .05, .55, .95);
+        opacity: 0.25;
+        animation: moveRightLeft calc(var(--timescale) * var(--xt)) infinite
+          cubic-bezier(0.45, 0.05, 0.55, 0.95) alternate; // , flicker calc(2s * var(--xd)) infinite alternate cubic-bezier(.45, .05, .55, .95);
         animation-delay: calc(-1s * var(--d, 0)), calc(-0.2s * var(--d, 0));
       }
     }
@@ -585,7 +635,13 @@ $content-width: 1000px;
   .mask {
     max-width: vars.$layout-max-width;
     margin: 0 auto;
-    mask-image: linear-gradient(90deg, transparent, var(--pm-white) 20%, var(--pm-white) 80%, transparent);
+    mask-image: linear-gradient(
+      90deg,
+      transparent,
+      var(--pm-white) 20%,
+      var(--pm-white) 80%,
+      transparent
+    );
     filter: drop-shadow(0 0 18px var(--pm-glitch-cyan-a18));
   }
 

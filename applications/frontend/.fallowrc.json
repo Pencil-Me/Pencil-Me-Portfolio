@@ -1,11 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/fallow-rs/fallow/main/schema.json",
-  "entry": [
-    "src/main.ts",
-    "karma.conf.js",
-    "src/**/*.spec.ts",
-    "src/testing/**/*.ts"
-  ],
+  "entry": ["src/main.ts", "karma.conf.js", "src/**/*.spec.ts", "src/testing/**/*.ts"],
   "usedClassMembers": [
     {
       "implements": "PreloadingStrategy",

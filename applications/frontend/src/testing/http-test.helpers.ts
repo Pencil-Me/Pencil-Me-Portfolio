@@ -1,5 +1,4 @@
-import type { HttpTestingController } from '@angular/common/http/testing';
-import type { TestRequest } from '@angular/common/http/testing';
+import type { HttpTestingController, TestRequest } from '@angular/common/http/testing';
 
 export function expectHttpJsonResponse<T>(
   httpMock: HttpTestingController,

@@ -1,7 +1,7 @@
-import { ProjectTitle } from '@app/state/knowledge/knowledge.reducer';
-import type { PROJECT, DATE } from '@app/state/knowledge/knowledge.models';
 import type { IProject, IProjectsCategory } from '@modules/projects/projects.models';
 import { mapProjectDates } from '@app/shared/utils/date-format';
+import type { DATE, PROJECT } from '@app/state/knowledge/knowledge.models';
+import { ProjectTitle } from '@app/state/knowledge/knowledge.reducer';
 
 function formatCustomerNames(project: PROJECT): string {
   return project.customers?.map((entry) => entry.name.replace('&amp;', '&')).join(', ') ?? '';

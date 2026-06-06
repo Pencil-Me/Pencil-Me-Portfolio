@@ -1,21 +1,21 @@
-import { Injectable, inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
+import { map, shareReplay, type Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { map, shareReplay } from 'rxjs';
-import type { Observable } from 'rxjs';
-import type { AppState } from '@app/state';
+
 import type { ITechCategories } from '@modules/home/home.models';
+import { isLoadSuccessful } from '@app/shared/models/load-status.model';
+import type { AppState } from '@app/state';
 import { fromKnowledge } from '@app/state/knowledge';
+import type { CUSTOMERSDATASTATE } from '@app/state/knowledge/knowledge.models';
 import {
   selectCustomersState,
   selectTechstackState,
 } from '@app/state/knowledge/knowledge.selectors';
-import type { CUSTOMERSDATASTATE } from '@app/state/knowledge/knowledge.models';
-import { isLoadSuccessful } from '@app/shared/models/load-status.model';
-import { mapTechStackForHome } from '@app/state/knowledge/mappers/tech-stack.mapper';
 import {
   mapCustomersToLogos,
   type CustomerLogo,
 } from '@app/state/knowledge/mappers/customer-logos.mapper';
+import { mapTechStackForHome } from '@app/state/knowledge/mappers/tech-stack.mapper';
 
 @Injectable({
   providedIn: 'root',

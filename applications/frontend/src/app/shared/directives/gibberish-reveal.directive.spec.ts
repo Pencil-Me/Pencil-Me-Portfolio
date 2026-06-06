@@ -1,16 +1,23 @@
 import { Component } from '@angular/core';
-import type { ComponentFixture } from '@angular/core/testing';
-import { TestBed, fakeAsync, tick, waitForAsync } from '@angular/core/testing';
+import {
+  fakeAsync,
+  TestBed,
+  tick,
+  waitForAsync,
+  type ComponentFixture,
+} from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+
+import { SCROLL_REVEAL_TRANSITION_MS } from '@app/shared/utils/scroll-reveal.util';
+
 import {
   installIntersectionObserverSpy,
   installMatchMediaSpy,
   installRequestAnimationFrameSpy,
   type IntersectionObserverSpyState,
 } from '../../../testing/dom-test.helpers';
-import { ScrollRevealDirective } from './scroll-reveal.directive';
 import { GibberishRevealDirective } from './gibberish-reveal.directive';
-import { SCROLL_REVEAL_TRANSITION_MS } from '@app/shared/utils/scroll-reveal.util';
+import { ScrollRevealDirective } from './scroll-reveal.directive';
 
 @Component({
   template: `

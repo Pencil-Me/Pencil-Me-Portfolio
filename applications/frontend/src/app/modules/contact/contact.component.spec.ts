@@ -1,11 +1,12 @@
-import type { ComponentFixture } from '@angular/core/testing';
-import { TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule, FormGroup } from '@angular/forms';
-import { ActivatedRoute, convertToParamMap } from '@angular/router';
-import { ContactComponent } from './contact.component';
-import { ApiClientService } from '@core/services/api/api-client.service';
-import { of, Subject, throwError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
+import { TestBed, type ComponentFixture } from '@angular/core/testing';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import { of, Subject, throwError } from 'rxjs';
+
+import { ApiClientService } from '@core/services/api/api-client.service';
+
+import { ContactComponent } from './contact.component';
 
 describe('ContactComponent', () => {
   let component: ContactComponent;

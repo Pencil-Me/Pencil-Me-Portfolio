@@ -1,4 +1,5 @@
 import type { CUSTOMER } from '@app/state/knowledge/knowledge.models';
+
 import {
   mapCustomersToLogos,
   normalizeCustomerName,

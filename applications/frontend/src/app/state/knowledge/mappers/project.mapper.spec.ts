@@ -1,5 +1,5 @@
-import { convertProject, convertProjects, sortProjects } from './project.mapper';
 import { createSampleProject } from '../../../../testing/knowledge.fixtures';
+import { convertProject, convertProjects, sortProjects } from './project.mapper';
 
 describe('project.mapper', () => {
   const projectBasic = createSampleProject();

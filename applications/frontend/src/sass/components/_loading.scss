@@ -16,14 +16,7 @@
     animation:
       pm-loader-spin 0.85s linear infinite,
       pm-loader-neon-pulse 2.2s ease-in-out infinite;
-    clip-path: polygon(
-      0 0,
-      calc(100% - 6px) 0,
-      100% 6px,
-      100% 100%,
-      6px 100%,
-      0 calc(100% - 6px)
-    );
+    clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
   }
 
   &__label {
@@ -125,14 +118,7 @@
     min-height: 9rem;
     padding: 1.25rem;
     box-shadow: 3px 0 0 var(--pm-border-subtle);
-    clip-path: polygon(
-      0 0,
-      calc(100% - 8px) 0,
-      100% 8px,
-      100% 100%,
-      8px 100%,
-      0 calc(100% - 8px)
-    );
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
   }
 
   &--logo {

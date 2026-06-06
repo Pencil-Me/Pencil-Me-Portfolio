@@ -1,8 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { fromKnowledge } from '@app/state/knowledge';
-import type { AppState } from '@app/state';
+
 import { scheduleAfterPaint, scheduleIdleWork } from '@app/shared/utils/schedule-idle';
+import type { AppState } from '@app/state';
+import { fromKnowledge } from '@app/state/knowledge';
 
 /**
  * Laedt Portfolio-Daten einmalig beim App-Start.

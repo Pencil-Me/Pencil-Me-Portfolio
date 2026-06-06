@@ -1,5 +1,5 @@
-import type { LoadStatus } from '@app/shared/models/load-status.model';
 import type { PROJECTTITLE, TECHTITLE } from '@app/shared/domain/portfolio-domain';
+import type { LoadStatus } from '@app/shared/models/load-status.model';
 
 export type { PROJECTTITLE, TECHTITLE };
 

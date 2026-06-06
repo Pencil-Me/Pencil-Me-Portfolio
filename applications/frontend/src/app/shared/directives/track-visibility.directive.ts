@@ -1,5 +1,14 @@
-import { Directive, ElementRef, EventEmitter, NgZone, Output, inject } from '@angular/core';
-import type { AfterViewInit, OnDestroy, OnInit } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  EventEmitter,
+  inject,
+  NgZone,
+  Output,
+  type AfterViewInit,
+  type OnDestroy,
+  type OnInit,
+} from '@angular/core';
 
 @Directive({
   selector: '[appTrackVisibility]',

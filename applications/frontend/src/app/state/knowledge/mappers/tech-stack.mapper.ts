@@ -1,9 +1,9 @@
-import { TechStackTitle } from '@app/state/knowledge/knowledge.reducer';
-import type { DATE, TECHSTACK } from '@app/state/knowledge/knowledge.models';
 import type { ITech, ITechCategory } from '@modules/about/about.models';
 import type { ISimpTech, ITechCategories } from '@modules/home/home.models';
 import type { IProjectTech } from '@modules/projects/projects.models';
 import { formatYear, parseDate, yearsSince } from '@app/shared/utils/date-format';
+import type { DATE, TECHSTACK } from '@app/state/knowledge/knowledge.models';
+import { TechStackTitle } from '@app/state/knowledge/knowledge.reducer';
 
 /** Home zeigt Tech mit Nutzung in den letzten N Jahren. */
 export const HOME_RECENT_USAGE_YEARS = 5;

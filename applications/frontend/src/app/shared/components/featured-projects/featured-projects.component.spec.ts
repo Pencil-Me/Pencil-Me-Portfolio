@@ -1,12 +1,12 @@
-import type { ComponentFixture } from '@angular/core/testing';
-import { TestBed } from '@angular/core/testing';
+import { TestBed, type ComponentFixture } from '@angular/core/testing';
 import { Router } from '@angular/router';
-import type { Observable } from 'rxjs';
-import { BehaviorSubject, of } from 'rxjs';
-import { FeaturedProjectsComponent } from './featured-projects.component';
-import { ProjectsService } from '@modules/projects/projects.service';
+import { BehaviorSubject, of, type Observable } from 'rxjs';
+
 import type { IProjectsCategory } from '@modules/projects/projects.models';
+import { ProjectsService } from '@modules/projects/projects.service';
 import type { LoadStatus } from '@app/shared/models/load-status.model';
+
+import { FeaturedProjectsComponent } from './featured-projects.component';
 
 class MockProjectsService {
   private projectsStateSubject = new BehaviorSubject<{

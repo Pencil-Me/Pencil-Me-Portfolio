@@ -1,3 +1,4 @@
+import { NgClass } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -7,16 +8,15 @@ import {
   signal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { filter } from 'rxjs';
 import { NavigationStart, Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { NgClass } from '@angular/common';
+import { filter } from 'rxjs';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faBars, faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
+import { PmLogoComponent } from '@layout/components/navigation/components/pm-logo/pm-logo.component';
 import { NgbCollapse } from '@ng-bootstrap/ng-bootstrap';
 
-import { ThemeService } from '@app/core/services/theme/theme.service';
-import { PmLogoComponent } from '@layout/components/navigation/components/pm-logo/pm-logo.component';
 import { RoutePrefetchService } from '@core/routing/route-prefetch.service';
+import { ThemeService } from '@app/core/services/theme/theme.service';
 
 @Component({
   selector: 'app-navigation',

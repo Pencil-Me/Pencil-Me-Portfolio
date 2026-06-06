@@ -1,15 +1,14 @@
-import { Directive, ElementRef, Input, Renderer2, inject } from '@angular/core';
-import type { OnInit } from '@angular/core';
+import { Directive, ElementRef, inject, Input, Renderer2, type OnInit } from '@angular/core';
 import {
   animationFrameScheduler,
   BehaviorSubject,
   combineLatest,
-  switchMap,
-  map,
-  interval,
-  takeWhile,
-  endWith,
   distinctUntilChanged,
+  endWith,
+  interval,
+  map,
+  switchMap,
+  takeWhile,
 } from 'rxjs';
 
 /**

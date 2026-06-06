@@ -1,16 +1,22 @@
+import { NgClass, NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import type { FormGroup, AbstractControl } from '@angular/forms';
-import { ApiClientService } from '@core/services/api/api-client.service';
-import { mapApiError } from '@app/shared/utils/api-error.util';
-import { NgClass, NgTemplateOutlet } from '@angular/common';
+import {
+  FormBuilder,
+  ReactiveFormsModule,
+  Validators,
+  type AbstractControl,
+  type FormGroup,
+} from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { faEnvelope } from '@fortawesome/free-regular-svg-icons';
-import { ScrollRevealDirective } from '@shared/directives/scroll-reveal.directive';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
+
+import { ApiClientService } from '@core/services/api/api-client.service';
 import { GibberishRevealDirective } from '@shared/directives/gibberish-reveal.directive';
+import { ScrollRevealDirective } from '@shared/directives/scroll-reveal.directive';
+import { mapApiError } from '@app/shared/utils/api-error.util';
 
 type ContactFormType = 'GENERALLY' | 'PROJECT';
 

@@ -1,4 +1,5 @@
-import { Directive, HostListener, Input, inject } from '@angular/core';
+import { Directive, HostListener, inject, Input } from '@angular/core';
+
 import { ScrollManagerDirective } from './scroll-manager.directive';
 
 // Directive for handling scroll anchor behavior
