@@ -132,6 +132,7 @@
     pointer-events: none;
     z-index: 0;
     opacity: 0.12;
+
     @include cyber.pm-scanlines(1px, 4px);
   }
 

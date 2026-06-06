@@ -29,9 +29,10 @@ describe('dom-test.helpers', () => {
 
   describe('installIntersectionObserverSpy', () => {
     it('captures callback and returns observer stub', () => {
-      const state: { callback: IntersectionObserverCallback; options?: IntersectionObserverInit } = {
-        callback: () => undefined,
-      };
+      const state: { callback: IntersectionObserverCallback; options?: IntersectionObserverInit } =
+        {
+          callback: () => undefined,
+        };
       installIntersectionObserverSpy(state);
 
       const observer = new IntersectionObserver(state.callback, { threshold: 0.5 });

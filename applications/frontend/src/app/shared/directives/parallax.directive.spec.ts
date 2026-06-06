@@ -50,7 +50,7 @@ describe('ParallaxDirective', () => {
       x: 0,
       y: 200,
       toJSON: () => ({}),
-    } as DOMRect);
+    });
 
     fixture.detectChanges();
 

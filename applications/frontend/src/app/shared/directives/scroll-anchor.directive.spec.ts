@@ -22,8 +22,8 @@ class TestComponent {}
   standalone: false,
 })
 class MockScrollManagerDirective {
-  scroll(id: string | number) {
-    console.log(id);
+  scroll(_id: string | number): void {
+    // mock implementation
   }
 }
 

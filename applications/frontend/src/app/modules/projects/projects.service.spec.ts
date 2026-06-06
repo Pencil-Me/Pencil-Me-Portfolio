@@ -13,7 +13,11 @@ import type {
 
 import type { LoadStatus } from '@app/shared/models/load-status.model';
 import { convertProject, convertProjects } from '@app/state/knowledge/mappers/project.mapper';
-import { createHomeTechStackFixture, createSampleCustomer, createSampleProject } from '../../../testing/knowledge.fixtures';
+import {
+  createHomeTechStackFixture,
+  createSampleCustomer,
+  createSampleProject,
+} from '../../../testing/knowledge.fixtures';
 
 describe('ProjectsService', () => {
   let service: ProjectsService;

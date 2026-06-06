@@ -5,11 +5,10 @@ import type { Observable } from 'rxjs';
 import { of } from 'rxjs';
 import type { ITechCategory } from '@modules/about/about.models';
 import { AboutService } from '@modules/about/about.service';
-import type { LoadStatus } from '@app/shared/models/load-status.model';
 
 class MockAboutService {
   tech$: Observable<ITechCategory[]> = of([]);
-  techState$ = of({ loadStatus: 'COMPLETED' as LoadStatus, error: null, data: [] });
+  techState$ = of({ loadStatus: 'COMPLETED', error: null, data: [] });
 }
 
 describe('AboutComponent', () => {

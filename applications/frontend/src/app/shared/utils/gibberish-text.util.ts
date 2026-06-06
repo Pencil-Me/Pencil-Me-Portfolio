@@ -1,4 +1,5 @@
-const GIBBERISH_CHARS = '!<>-_\\/[]{}—=+*^?#@&%0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+const GIBBERISH_CHARS =
+  '!<>-_\\/[]{}—=+*^?#@&%0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
 export function randomGibberishChar(): string {
   return GIBBERISH_CHARS[Math.floor(Math.random() * GIBBERISH_CHARS.length)] ?? '#';
@@ -9,9 +10,7 @@ export function randomMs(min: number, max: number): number {
 }
 
 export function scrambleText(text: string): string {
-  return [...text]
-    .map((char) => (isPreservedChar(char) ? char : randomGibberishChar()))
-    .join('');
+  return [...text].map((char) => (isPreservedChar(char) ? char : randomGibberishChar())).join('');
 }
 
 export function tickScramble(current: string, lettersPerTick = 1): string {
@@ -50,7 +49,7 @@ function pickRandomLetterIndices(chars: string[], count: number): number[] {
 
   while (picks.length < count && pool.length > 0) {
     const pickIndex = Math.floor(Math.random() * pool.length);
-    picks.push(pool[pickIndex] ?? pool[0]!);
+    picks.push(pool[pickIndex] ?? pool[0]);
     pool.splice(pickIndex, 1);
   }
 

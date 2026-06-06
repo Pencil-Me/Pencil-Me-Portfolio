@@ -10,14 +10,14 @@
       @if (variant === 'home') {
         <h2 appGibberishReveal>Drei Projekte, die viel über meine Arbeit sagen</h2>
         <p appGibberishReveal>
-          Nicht die lauteste Showreel-Auswahl — sondern drei typische Situationen: Enterprise-Frontend,
-          komplexe Fachdomäne, echte Hardware am anderen Ende der Leitung.
+          Nicht die lauteste Showreel-Auswahl — sondern drei typische Situationen:
+          Enterprise-Frontend, komplexe Fachdomäne, echte Hardware am anderen Ende der Leitung.
         </p>
       } @else {
         <h3 appGibberishReveal>Ausgewählte Projekte</h3>
         <p appGibberishReveal>
-          Kurz zusammengefasst: Ausgangslage, meine Rolle und was am Ende stand. Details und Tech-Stack
-          findest du in der vollständigen Liste darunter.
+          Kurz zusammengefasst: Ausgangslage, meine Rolle und was am Ende stand. Details und
+          Tech-Stack findest du in der vollständigen Liste darunter.
         </p>
       }
     </div>
@@ -32,12 +32,8 @@
     >
       @if (featuredProjects().length > 0) {
         <ul class="pm-featured-projects__grid">
-        @for (project of featuredProjects(); track project.id; let i = $index) {
-          <li
-            class="pm-featured-projects__item"
-            appScrollReveal="up"
-            [revealDelay]="i * 110"
-          >
+          @for (project of featuredProjects(); track project.id; let i = $index) {
+            <li class="pm-featured-projects__item" appScrollReveal="up" [revealDelay]="i * 110">
               <article class="pm-panel-brutal pm-highlight-panel">
                 <header class="pm-highlight-panel__header">
                   <span class="pm-highlight-panel__index" aria-hidden="true">
@@ -80,7 +76,10 @@
 
                 @if (project.tech.length > 0) {
                   <div class="pm-tech-chip-list pm-highlight-panel__tech" aria-label="Technologien">
-                    @for (tech of project.tech.slice(0, variant === 'home' ? 4 : 6); track tech.name) {
+                    @for (
+                      tech of project.tech.slice(0, variant === 'home' ? 4 : 6);
+                      track tech.name
+                    ) {
                       <span class="pm-tech-chip" appGibberishReveal>{{ tech.name }}</span>
                     }
                   </div>

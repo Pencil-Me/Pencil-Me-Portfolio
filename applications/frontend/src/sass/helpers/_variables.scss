@@ -7,12 +7,10 @@
 
 $font-family-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", roboto, sans-serif;
 $font-family-heading: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", roboto, sans-serif;
-$font-family-logo: "Segoe UI", Arial, sans-serif;
+$font-family-logo: "Segoe UI", arial, sans-serif;
 $font-family-mono: "IBM Plex Mono", ui-monospace, "Cascadia Code", consolas, monospace;
-
 $font-weight-regular: 400;
 $font-weight-bold: 800;
-
 $white: #fff;
 $black: #000;
 
@@ -23,13 +21,11 @@ $black: #000;
 $color-red: palette.$color-red;
 $color-dark: palette.$color-dark;
 $color-gold: palette.$color-gold;
-
 $glitch-red-hot: palette.$glitch-red-hot;
 $glitch-gold: palette.$glitch-gold;
 $glitch-gold-bright: palette.$glitch-gold-bright;
 $glitch-cyan: palette.$glitch-cyan;
 $glitch-cyan-bright: palette.$glitch-cyan-bright;
-
 $color-red-hover: palette.$color-red-hover;
 $color-red-deep: palette.$color-red-deep;
 $color-red-soft: palette.$color-red-soft;
@@ -58,12 +54,10 @@ $background: $color-dark;
 $contrast: $color-text-on-dark;
 $light: $color-dark-panel;
 $dark: $color-dark-mid;
-
 $success: #198754;
 $info: #0dcaf0;
 $warning: #ffc107;
 $danger: #dc3545;
-
 $theme-colors: (
   'primary': $primary,
   'secondary': $secondary,

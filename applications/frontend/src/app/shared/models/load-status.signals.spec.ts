@@ -1,7 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { BehaviorSubject } from 'rxjs';
 import { toLoadStatusSignals, type LoadStatusSlice } from './load-status.signals';
-import type { LoadStatus } from './load-status.model';
 
 describe('toLoadStatusSignals', () => {
   beforeEach(() => {
@@ -10,7 +9,7 @@ describe('toLoadStatusSignals', () => {
 
   it('should expose initial PENDING and null error', () => {
     const state$ = new BehaviorSubject<LoadStatusSlice>({
-      loadStatus: 'COMPLETED' as LoadStatus,
+      loadStatus: 'COMPLETED',
       error: null,
     });
 
@@ -22,7 +21,7 @@ describe('toLoadStatusSignals', () => {
 
   it('should update when state emits', () => {
     const state$ = new BehaviorSubject<LoadStatusSlice>({
-      loadStatus: 'LOADING' as LoadStatus,
+      loadStatus: 'LOADING',
       error: null,
     });
 

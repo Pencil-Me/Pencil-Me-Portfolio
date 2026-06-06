@@ -13,7 +13,14 @@ import { toLoadStatusSignals } from '@app/shared/models/load-status.signals';
 
 @Component({
   selector: 'app-projects',
-  imports: [NgClass, FeaturedProjectsComponent, ProjectDateRangeComponent, PmAsyncContentComponent, ScrollRevealDirective, GibberishRevealDirective],
+  imports: [
+    NgClass,
+    FeaturedProjectsComponent,
+    ProjectDateRangeComponent,
+    PmAsyncContentComponent,
+    ScrollRevealDirective,
+    GibberishRevealDirective,
+  ],
   templateUrl: './projects.component.html',
   styleUrls: ['./projects.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

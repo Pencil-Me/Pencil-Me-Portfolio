@@ -10,7 +10,7 @@ export function getScrollRevealTransitionMs(element: HTMLElement): number {
   const base = isBand ? SCROLL_REVEAL_BAND_TRANSITION_MS : SCROLL_REVEAL_TRANSITION_MS;
   const delayRaw = getComputedStyle(element).getPropertyValue('--pm-reveal-delay').trim();
   const delayMatch = delayRaw.match(/^(\d+(?:\.\d+)?)ms$/);
-  const delay = delayMatch ? Number.parseFloat(delayMatch[1]!) : 0;
+  const delay = delayMatch ? Number.parseFloat(delayMatch[1]) : 0;
 
   return base + delay;
 }

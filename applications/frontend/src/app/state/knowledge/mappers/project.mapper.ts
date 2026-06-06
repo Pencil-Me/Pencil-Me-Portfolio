@@ -54,7 +54,9 @@ export function convertProjects(projects: PROJECT[]): IProjectsCategory[] {
 
 export function sortProjects(projects: IProject[]): IProject[] {
   const sorted = [...projects];
-  sorted.sort((a, b) => latestProjectEndTimestamp(b.org_dates) - latestProjectEndTimestamp(a.org_dates));
+  sorted.sort(
+    (a, b) => latestProjectEndTimestamp(b.org_dates) - latestProjectEndTimestamp(a.org_dates),
+  );
   return sorted;
 }
 

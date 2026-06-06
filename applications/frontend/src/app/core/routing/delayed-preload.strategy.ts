@@ -12,7 +12,7 @@ export class DelayedPreloadStrategy implements PreloadingStrategy {
 
   preload(_route: Route, load: () => Observable<unknown>): Observable<unknown> {
     return new RxObservable((subscriber) => {
-      const startLoad = () => {
+      const startLoad = (): void => {
         load().subscribe({
           next: (value) => subscriber.next(value),
           error: (error) => subscriber.error(error),

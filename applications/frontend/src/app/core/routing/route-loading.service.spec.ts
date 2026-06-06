@@ -1,12 +1,7 @@
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import {
-  NavigationCancel,
-  NavigationEnd,
-  NavigationError,
-  NavigationStart,
-} from '@angular/router';
+import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart } from '@angular/router';
 
 import { RouteLoadingService } from './route-loading.service';
 

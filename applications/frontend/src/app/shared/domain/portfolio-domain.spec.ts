@@ -1,8 +1,4 @@
-import {
-  LOAD_STATUSES,
-  PROJECT_TYPES,
-  TECH_STACK_TYPES,
-} from './portfolio-domain';
+import { LOAD_STATUSES, PROJECT_TYPES, TECH_STACK_TYPES } from './portfolio-domain';
 
 describe('portfolio-domain', () => {
   it('should expose canonical project types', () => {

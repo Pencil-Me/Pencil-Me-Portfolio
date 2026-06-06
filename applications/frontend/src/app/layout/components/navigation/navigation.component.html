@@ -37,7 +37,11 @@
         type="button"
         class="theme-toggle"
         (click)="toggleTheme()"
-        [attr.aria-label]="themeService.theme() === 'dark' ? 'Helles Farbschema aktivieren' : 'Dunkles Farbschema aktivieren'"
+        [attr.aria-label]="
+          themeService.theme() === 'dark'
+            ? 'Helles Farbschema aktivieren'
+            : 'Dunkles Farbschema aktivieren'
+        "
         [attr.title]="themeService.theme() === 'dark' ? 'Helles Farbschema' : 'Dunkles Farbschema'"
       >
         <fa-icon [icon]="themeService.theme() === 'dark' ? faSun : faMoon"></fa-icon>

@@ -1,11 +1,5 @@
 import { NgOptimizedImage } from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  type OnDestroy,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, type OnDestroy, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { HomeService } from '@modules/home/home.service';
 import { RouterLink } from '@angular/router';
@@ -101,7 +95,7 @@ export class HomeComponent implements OnDestroy {
   }
 
   typeWriter = {
-    add: () => {
+    add: (): void => {
       if (this.typewriterConfig.positionIndex < this.currentRole.length) {
         this.currentRoleVisual.update(
           (value) => value + this.currentRole.charAt(this.typewriterConfig.positionIndex),
@@ -113,7 +107,7 @@ export class HomeComponent implements OnDestroy {
       }
     },
 
-    remove: () => {
+    remove: (): void => {
       if (this.typewriterConfig.positionIndex > 0) {
         this.currentRoleVisual.update((value) => value.slice(0, -1));
         this.typewriterConfig.positionIndex--;
@@ -123,7 +117,7 @@ export class HomeComponent implements OnDestroy {
       }
     },
 
-    selectNext: () => {
+    selectNext: (): void => {
       let role = this.typeWriter.getRandomRole();
       while (role === this.currentRole) role = this.typeWriter.getRandomRole();
       this.currentRole = role;
@@ -132,7 +126,7 @@ export class HomeComponent implements OnDestroy {
       this.typeWriter.add();
     },
 
-    getRandomRole: () => {
+    getRandomRole: (): string => {
       return this.roles[Math.floor(Math.random() * this.roles.length)];
     },
   };

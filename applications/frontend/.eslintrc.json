@@ -7,8 +7,7 @@
       "files": ["*.ts"],
       "plugins": ["@ngrx"],
       "parserOptions": {
-        "project": ["tsconfig.json"],
-        "createDefaultProgram": true
+        "projectService": true
       },
       "extends": [
         "eslint:recommended",
@@ -99,7 +98,7 @@
       // === SPEC FILES ===
       "files": ["*.spec.ts", "*.spec.tsx", "*.spec.js", "*.spec.jsx"],
       "env": {
-        "jest": true
+        "jasmine": true
       },
       "rules": {
         "@typescript-eslint/no-explicit-any": "off",
@@ -109,7 +108,9 @@
         "@typescript-eslint/no-unsafe-member-access": "off",
         "@typescript-eslint/no-unsafe-return": "off",
         "@typescript-eslint/unbound-method": "off",
-        "@typescript-eslint/no-floating-promises": "off"
+        "@typescript-eslint/no-floating-promises": "off",
+        "@typescript-eslint/explicit-function-return-type": "off",
+        "@angular-eslint/prefer-standalone": "off"
       }
     }
   ]

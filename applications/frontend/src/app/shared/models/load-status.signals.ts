@@ -17,7 +17,7 @@ export type LoadStatusSignals = {
 export function toLoadStatusSignals(state$: Observable<LoadStatusSlice>): LoadStatusSignals {
   return {
     loadStatus: toSignal(state$.pipe(map((state) => state.loadStatus)), {
-      initialValue: 'PENDING' as LoadStatus,
+      initialValue: 'PENDING',
     }),
     error: toSignal(state$.pipe(map((state) => state.error)), {
       initialValue: null,

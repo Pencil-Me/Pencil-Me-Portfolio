@@ -16,7 +16,7 @@ export class NotFoundErrorComponent {
   /**
    * Navigates the user back to the home page.
    */
-  returnToHome() {
+  returnToHome(): void {
     void this.router.navigate(['/']);
   }
 }

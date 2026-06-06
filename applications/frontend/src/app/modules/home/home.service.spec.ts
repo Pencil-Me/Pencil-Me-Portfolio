@@ -5,7 +5,10 @@ import type { CUSTOMERSDATASTATE, TECHSTACKDATASTATE } from '@app/state/knowledg
 import { fromKnowledge } from '@app/state/knowledge';
 import { HomeService } from './home.service';
 import type { ITechCategories } from '@modules/home/home.models';
-import { createHomeTechStackFixture, createMockAppState } from '../../../testing/knowledge.fixtures';
+import {
+  createHomeTechStackFixture,
+  createMockAppState,
+} from '../../../testing/knowledge.fixtures';
 
 describe('HomeService', () => {
   let service: HomeService;

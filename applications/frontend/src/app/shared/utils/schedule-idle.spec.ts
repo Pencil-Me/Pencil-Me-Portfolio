@@ -35,8 +35,11 @@ describe('schedule-idle', () => {
   }));
 
   it('should fall back to timeout when requestAnimationFrame is unavailable', fakeAsync(() => {
-    (window as unknown as { requestAnimationFrame: typeof window.requestAnimationFrame | undefined })
-      .requestAnimationFrame = undefined;
+    (
+      window as unknown as {
+        requestAnimationFrame: typeof window.requestAnimationFrame | undefined;
+      }
+    ).requestAnimationFrame = undefined;
     const work = jasmine.createSpy('work');
 
     scheduleAfterPaint(work);
@@ -48,7 +51,7 @@ describe('schedule-idle', () => {
   it('should run idle work via requestIdleCallback', fakeAsync(() => {
     const work = jasmine.createSpy('work');
     spyOn(window, 'requestIdleCallback').and.callFake((callback: IdleRequestCallback) => {
-      callback({ didTimeout: false, timeRemaining: () => 50 } as IdleDeadline);
+      callback({ didTimeout: false, timeRemaining: () => 50 });
       return 1;
     });
 
@@ -59,8 +62,9 @@ describe('schedule-idle', () => {
   }));
 
   it('should fall back to timeout when requestIdleCallback is unavailable', fakeAsync(() => {
-    (window as unknown as { requestIdleCallback: typeof window.requestIdleCallback | undefined })
-      .requestIdleCallback = undefined;
+    (
+      window as unknown as { requestIdleCallback: typeof window.requestIdleCallback | undefined }
+    ).requestIdleCallback = undefined;
     const work = jasmine.createSpy('work');
 
     scheduleIdleWork(work);

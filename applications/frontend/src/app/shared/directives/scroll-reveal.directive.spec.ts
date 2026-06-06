@@ -61,7 +61,7 @@ describe('ScrollRevealDirective', () => {
       x: 0,
       y: 100,
       toJSON: () => ({}),
-    } as DOMRect);
+    });
 
     fixture.detectChanges();
 
@@ -79,7 +79,7 @@ describe('ScrollRevealDirective', () => {
       x: 0,
       y: 2000,
       toJSON: () => ({}),
-    } as DOMRect);
+    });
 
     fixture.detectChanges();
     expect(hostElement.classList.contains('is-revealed')).toBeFalse();

@@ -47,10 +47,18 @@ export class ApiClientService {
    * @param data object with complete model
    * @returns URL-encoded form data
    */
-  private encodeFormData(data?: { [key: string]: any }): string {
+  private encodeFormData(data?: object): string {
     if (!data) return '';
-    return Object.keys(data)
-      .map((key) => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
+    return Object.entries(data)
+      .map(([key, value]) => {
+        const encoded =
+          value === null || value === undefined
+            ? ''
+            : typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean'
+              ? String(value)
+              : '';
+        return encodeURIComponent(key) + '=' + encodeURIComponent(encoded);
+      })
       .join('&');
   }
 

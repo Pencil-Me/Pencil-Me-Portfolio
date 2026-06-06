@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 
-import { isPrefetchableRoute, routeLoaders, type PrefetchableRoute } from '@core/routing/route-loaders';
+import {
+  isPrefetchableRoute,
+  routeLoaders,
+  type PrefetchableRoute,
+} from '@core/routing/route-loaders';
 
 function normalizeRoutePath(path: string): string {
   return path.replace(/^\/+/, '').split('/')[0] ?? '';

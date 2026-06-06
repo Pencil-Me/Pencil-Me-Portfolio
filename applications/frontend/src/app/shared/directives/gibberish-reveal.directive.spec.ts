@@ -15,7 +15,9 @@ import { SCROLL_REVEAL_TRANSITION_MS } from '@app/shared/utils/scroll-reveal.uti
 @Component({
   template: `
     <div appScrollReveal="up" class="is-revealed">
-      <p appGibberishReveal [gibberishMinDelay]="delay" [gibberishMaxDelay]="delay">Lesbarer Text</p>
+      <p appGibberishReveal [gibberishMinDelay]="delay" [gibberishMaxDelay]="delay">
+        Lesbarer Text
+      </p>
     </div>
   `,
   imports: [ScrollRevealDirective, GibberishRevealDirective],
@@ -35,7 +37,9 @@ class RevealedScrollHostComponent {
 class DelayedScrollHostComponent {}
 
 @Component({
-  template: `<p appGibberishReveal [gibberishMinDelay]="delay" [gibberishMaxDelay]="delay">Lesbarer Text</p>`,
+  template: `<p appGibberishReveal [gibberishMinDelay]="delay" [gibberishMaxDelay]="delay">
+    Lesbarer Text
+  </p>`,
   imports: [GibberishRevealDirective],
 })
 class ViewportHostComponent {
@@ -132,7 +136,7 @@ describe('GibberishRevealDirective', () => {
         x: 0,
         y: 2000,
         toJSON: () => ({}),
-      } as DOMRect);
+      });
 
       fixture.detectChanges();
       expect(hostElement.textContent?.trim()).not.toBe('Lesbarer Text');

@@ -46,11 +46,11 @@ describe('CountUpDirective', () => {
     fixture.detectChanges();
 
     tick(1000);
-    const innerHTMLAfter1Second = parseInt(debugElement.nativeElement.innerHTML);
+    const innerHTMLAfter1Second = parseInt(String(debugElement.nativeElement.innerHTML), 10);
     expect(innerHTMLAfter1Second).toEqual(jasmine.any(Number));
 
     tick(1000);
-    const innerHTMLAfter2Seconds = parseInt(debugElement.nativeElement.innerHTML);
+    const innerHTMLAfter2Seconds = parseInt(String(debugElement.nativeElement.innerHTML), 10);
     expect(innerHTMLAfter2Seconds).toEqual(100);
   }));
 });

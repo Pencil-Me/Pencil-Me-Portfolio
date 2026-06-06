@@ -2,16 +2,30 @@ import type { Type } from '@angular/core';
 
 type RouteComponentLoader = () => Promise<Type<unknown>>;
 
+function lazyRoute(
+  importFn: () => Promise<Record<string, Type<unknown>>>,
+  exportName: string,
+): RouteComponentLoader {
+  return () => importFn().then((module) => module[exportName]);
+}
+
 /** Zentrale Lazy-Load-Funktionen fuer Routes und Prefetch (Home ist eager). */
 export const routeLoaders = {
-  contact: () => import('@modules/contact/contact.component').then((c) => c.ContactComponent),
-  about: () => import('@modules/about/about.component').then((c) => c.AboutComponent),
-  projects: () => import('@modules/projects/projects.component').then((c) => c.ProjectsComponent),
-  'project-details': () =>
-    import('@modules/projects/details/details.component').then((c) => c.ProjectDetailsComponent),
-  impressum: () => import('@modules/impressum/impressum.component').then((c) => c.ImpressumComponent),
-  datenschutz: () =>
-    import('@modules/datenschutz/datenschutz.component').then((c) => c.DatenschutzComponent),
+  contact: lazyRoute(() => import('@modules/contact/contact.component'), 'ContactComponent'),
+  about: lazyRoute(() => import('@modules/about/about.component'), 'AboutComponent'),
+  projects: lazyRoute(() => import('@modules/projects/projects.component'), 'ProjectsComponent'),
+  'project-details': lazyRoute(
+    () => import('@modules/projects/details/details.component'),
+    'ProjectDetailsComponent',
+  ),
+  impressum: lazyRoute(
+    () => import('@modules/impressum/impressum.component'),
+    'ImpressumComponent',
+  ),
+  datenschutz: lazyRoute(
+    () => import('@modules/datenschutz/datenschutz.component'),
+    'DatenschutzComponent',
+  ),
 } satisfies Record<string, RouteComponentLoader>;
 
 export type PrefetchableRoute = keyof typeof routeLoaders;

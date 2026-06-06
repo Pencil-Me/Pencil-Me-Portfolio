@@ -62,6 +62,7 @@ footer {
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--pm-gold-bright);
+
   @include fx.pm-neon-text-flicker;
 }
 

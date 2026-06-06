@@ -373,6 +373,7 @@ $heading-tertiary-size: 1.5rem;
     pointer-events: none;
     z-index: 0;
     opacity: 0.05;
+
     @include pm-scanlines(1px, 5px);
   }
 

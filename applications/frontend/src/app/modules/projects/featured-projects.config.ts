@@ -32,8 +32,7 @@ const FEATURED_PROJECT_NARRATIVES: FeaturedProjectNarrative[] = [
     problem:
       'Grenzkontroll-Workflows mit sensiblen Dokumentdaten — Oberfläche muss unter Echtzeitdruck zuverlässig bleiben.',
     role: 'Technical Lead Frontend: Architektur, Interpol-Workflow, Reporting, Schulung und Kundenkontakt.',
-    outcome:
-      'Schnellere Dokumentenprüfung, erweitertes Reporting, geschultes Team vor Ort.',
+    outcome: 'Schnellere Dokumentenprüfung, erweitertes Reporting, geschultes Team vor Ort.',
   },
   {
     nameMatch: 'Produktion-Manager direkt im Werk',
@@ -41,8 +40,7 @@ const FEATURED_PROJECT_NARRATIVES: FeaturedProjectNarrative[] = [
     problem:
       'Produktionsanlage im Werk — Steuerung und Live-Daten aus der SPS in einer verständlichen Web-Oberfläche.',
     role: 'Frontend und Architektur: Angular-Screens, Python-Anbindung, Werksdarstellung mit Echtzeitdaten.',
-    outcome:
-      'Bedienung direkt am Band, transparente Anlagenübersicht für Produktion und Technik.',
+    outcome: 'Bedienung direkt am Band, transparente Anlagenübersicht für Produktion und Technik.',
   },
 ];
 

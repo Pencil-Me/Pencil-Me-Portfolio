@@ -26,17 +26,12 @@ class MockProjectsService {
     // spy target in specs
   }
 
-  setProjectsState(state: {
-    loadStatus: LoadStatus;
-    error: string | null;
-    data: unknown[];
-  }): void {
+  setProjectsState(state: { loadStatus: LoadStatus; error: string | null; data: unknown[] }): void {
     this.projectsStateSubject.next(state);
   }
 }
 
 describe('FeaturedProjectsComponent', () => {
-  let component: FeaturedProjectsComponent;
   let fixture: ComponentFixture<FeaturedProjectsComponent>;
   let mockProjectsService: MockProjectsService;
   let routerSpy: jasmine.SpyObj<Router>;
@@ -55,7 +50,6 @@ describe('FeaturedProjectsComponent', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(FeaturedProjectsComponent);
-    component = fixture.componentInstance;
   });
 
   it('should show loading placeholder while projects are pending', () => {

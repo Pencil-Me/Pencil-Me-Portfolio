@@ -26,7 +26,11 @@ describe('tech-stack.mapper', () => {
     });
 
     it(`should exclude tech older than ${HOME_RECENT_USAGE_YEARS} years`, () => {
-      expect(mapTechStackForHome(homeFixture).flatMap((c) => c.data).some((t) => t.label === 'OldTech')).toBeFalse();
+      expect(
+        mapTechStackForHome(homeFixture)
+          .flatMap((c) => c.data)
+          .some((t) => t.label === 'OldTech'),
+      ).toBeFalse();
     });
 
     it('should exclude tech without projects and use unknown category titles', () => {
@@ -55,7 +59,9 @@ describe('tech-stack.mapper', () => {
       expect(result).toEqual([
         {
           title: 'CUSTOM',
-          data: [{ label: 'Rust', lastTouch: String(recentDate.getFullYear()), numberOfProjects: '2' }],
+          data: [
+            { label: 'Rust', lastTouch: String(recentDate.getFullYear()), numberOfProjects: '2' },
+          ],
         },
       ]);
     });

@@ -1,6 +1,5 @@
 @use '../effects/cyberpunk' as cyber;
 @use '../effects/fx-cyber' as fx;
-
 @use '../helpers/variables' as vars;
 
 // Section-Modifikatoren (Phase A)
@@ -19,6 +18,7 @@
   overflow: hidden;
   background: var(--pm-section-dark-gradient);
   color: var(--pm-on-dark);
+
   @include fx.pm-crt-scan-overlay(true);
 
   > * {
@@ -28,6 +28,7 @@
 
   border-bottom: 1px solid var(--pm-border-strong);
   box-shadow: inset 0 3px 0 0 var(--pm-gold-a38);
+
   @include fx.pm-fx-motion-safe;
 }
 
@@ -36,6 +37,7 @@
   overflow: hidden;
   background: var(--pm-section-featured-gradient);
   color: var(--pm-text);
+
   @include fx.pm-crt-scan-overlay(false);
 
   > * {
@@ -45,6 +47,7 @@
 
   border-bottom: 1px solid var(--pm-border);
   box-shadow: inset 0 3px 0 0 var(--pm-gold-a28);
+
   @include fx.pm-fx-motion-safe;
 
   &::before {
@@ -144,6 +147,7 @@
     10px 100%,
     0 calc(100% - 10px)
   );
+
   @include fx.pm-panel-cyber-lift;
 
   &::before {
@@ -168,6 +172,7 @@
     z-index: 0;
     opacity: 0;
     transition: opacity 220ms ease;
+
     @include cyber.pm-scanlines(1px, 3px);
   }
 
@@ -212,6 +217,7 @@
     text-transform: uppercase;
     color: var(--pm-gold-bright);
     text-shadow: 0 0 8px var(--pm-glitch-cyan-a18);
+
     @include fx.pm-neon-text-flicker;
   }
 
@@ -289,8 +295,7 @@
     grid-template-columns: 1fr;
 
     .project-panel__meta {
-      flex-direction: row;
-      flex-wrap: wrap;
+      flex-flow: row wrap;
       align-items: center;
       padding-right: 0;
       padding-bottom: 0.75rem;

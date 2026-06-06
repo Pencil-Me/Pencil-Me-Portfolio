@@ -7,7 +7,7 @@ function isJasmineSpy(value: unknown): value is jasmine.Spy {
 }
 
 export function installMatchMediaSpy(getPrefersReducedMotion: () => boolean): void {
-  const impl = (query: string) =>
+  const impl = (query: string): MediaQueryList =>
     ({
       matches: getPrefersReducedMotion() && query.includes('reduce'),
       media: query,
@@ -37,7 +37,7 @@ export function installIntersectionObserverSpy(state: IntersectionObserverSpySta
     this: void,
     callback: IntersectionObserverCallback,
     options?: IntersectionObserverInit,
-  ) {
+  ): IntersectionObserver {
     state.callback = callback;
     state.options = options;
     return {
@@ -48,7 +48,7 @@ export function installIntersectionObserverSpy(state: IntersectionObserverSpySta
       rootMargin: '',
       thresholds: [],
       takeRecords: () => [],
-    } as IntersectionObserver;
+    };
   };
 
   const intersectionObserver = window.IntersectionObserver as unknown;
@@ -62,7 +62,7 @@ export function installIntersectionObserverSpy(state: IntersectionObserverSpySta
 }
 
 export function installRequestAnimationFrameSpy(): void {
-  const impl = (cb: FrameRequestCallback) => {
+  const impl = (cb: FrameRequestCallback): number => {
     cb(0);
     return 0;
   };

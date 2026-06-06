@@ -39,10 +39,7 @@ export function formatYear(value: Date | string): string {
   return date ? String(date.getFullYear()) : INVALID_DATE_LABEL;
 }
 
-export function yearsSince(
-  value: Date | string | undefined,
-  reference: Date = new Date(),
-): number {
+export function yearsSince(value: Date | string | undefined, reference: Date = new Date()): number {
   const date = value ? parseDate(value) : reference;
   if (!date) {
     return 0;

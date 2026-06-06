@@ -18,7 +18,7 @@ export class ParallaxDirective implements OnInit, OnDestroy {
 
   private rafId = 0;
   private disabled = false;
-  private readonly onScroll = () => {
+  private readonly onScroll = (): void => {
     cancelAnimationFrame(this.rafId);
     this.rafId = requestAnimationFrame(() => this.updateTransform());
   };
@@ -45,9 +45,7 @@ export class ParallaxDirective implements OnInit, OnDestroy {
   private updateTransform(): void {
     const element = this.host.nativeElement;
     const offset =
-      this.parallaxMode === 'scroll'
-        ? this.getScrollOffset()
-        : this.getViewportOffset(element);
+      this.parallaxMode === 'scroll' ? this.getScrollOffset() : this.getViewportOffset(element);
 
     const clamped = Math.max(-this.parallaxMax, Math.min(this.parallaxMax, offset));
     element.style.transform = `translate3d(0, ${clamped}px, 0)`;

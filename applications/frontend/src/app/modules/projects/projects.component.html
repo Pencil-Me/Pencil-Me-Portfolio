@@ -26,7 +26,9 @@
         [showRetry]="true"
         (retry)="retryTechLoad()"
       >
-        <div class="tech-group-container list-group list-group-flush list-group-horizontal mt-2 mb-4">
+        <div
+          class="tech-group-container list-group list-group-flush list-group-horizontal mt-2 mb-4"
+        >
           @for (tech of techs(); track tech) {
             <button
               type="button"
@@ -60,16 +62,20 @@
         (retry)="retryProjectsLoad()"
       >
         <div class="category-card-container">
-        @for (projectcategory of filteredProjectCategories(); track projectcategory; let c = $index) {
-          <div class="category-card" appScrollReveal="band" [revealDelay]="c * 60">
+          @for (
+            projectcategory of filteredProjectCategories();
+            track projectcategory;
+            let c = $index
+          ) {
+            <div class="category-card" appScrollReveal="band" [revealDelay]="c * 60">
               <h3 class="category-card_title" appGibberishReveal>{{ projectcategory.title }}</h3>
               <ul class="row project-list">
-              @for (project of projectcategory.data; track project; let p = $index) {
-                <li
-                  class="project-list_item col-12 col-lg-6"
-                  appScrollReveal="up"
-                  [revealDelay]="(p % 3) * 90"
-                >
+                @for (project of projectcategory.data; track project; let p = $index) {
+                  <li
+                    class="project-list_item col-12 col-lg-6"
+                    appScrollReveal="up"
+                    [revealDelay]="(p % 3) * 90"
+                  >
                     <article
                       class="pm-panel-brutal project-panel"
                       [class.project-panel--has-meta]="project.dates.length > 0"
@@ -80,7 +86,8 @@
                         <div
                           class="project-list_item_main-info"
                           [ngClass]="{
-                            'bottom-border': project.position || project.customer || project.location,
+                            'bottom-border':
+                              project.position || project.customer || project.location,
                           }"
                         >
                           <button

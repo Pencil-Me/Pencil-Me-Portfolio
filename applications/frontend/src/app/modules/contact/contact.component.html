@@ -11,7 +11,9 @@
               Vielen Dank für deine Nachricht. Ich habe deine Anfrage erhalten und melde mich bald
               bei dir.
             </p>
-            <a routerLink="/" class="btn btn-pm-tertiary" data-text="Zurück zur Startseite">Zurück zur Startseite</a>
+            <a routerLink="/" class="btn btn-pm-tertiary" data-text="Zurück zur Startseite"
+              >Zurück zur Startseite</a
+            >
           </div>
         </div>
       </div>
@@ -75,7 +77,12 @@
           </div>
         }
         @if (emailSending()) {
-          <div class="spinner-overlay" role="status" aria-live="polite" aria-label="Nachricht wird gesendet">
+          <div
+            class="spinner-overlay"
+            role="status"
+            aria-live="polite"
+            aria-label="Nachricht wird gesendet"
+          >
             <div class="pm-loader">
               <span class="pm-loader__ring" aria-hidden="true"></span>
               <span class="pm-loader__label">Sende Nachricht</span>
@@ -490,11 +497,7 @@
 
 <ng-template #confirmButtons>
   <div class="btn-container">
-    <button
-      (click)="clearContactForm()"
-      class="btn btn-pm-tertiary btn-lg"
-      data-text="Abbrechen"
-    >
+    <button (click)="clearContactForm()" class="btn btn-pm-tertiary btn-lg" data-text="Abbrechen">
       Abbrechen
     </button>
     <button type="submit" class="btn btn-pm-primary btn-lg" data-text="Senden">Senden</button>

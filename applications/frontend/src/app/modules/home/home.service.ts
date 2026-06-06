@@ -5,7 +5,10 @@ import type { Observable } from 'rxjs';
 import type { AppState } from '@app/state';
 import type { ITechCategories } from '@modules/home/home.models';
 import { fromKnowledge } from '@app/state/knowledge';
-import { selectCustomersState, selectTechstackState } from '@app/state/knowledge/knowledge.selectors';
+import {
+  selectCustomersState,
+  selectTechstackState,
+} from '@app/state/knowledge/knowledge.selectors';
 import type { CUSTOMERSDATASTATE } from '@app/state/knowledge/knowledge.models';
 import { isLoadSuccessful } from '@app/shared/models/load-status.model';
 import { mapTechStackForHome } from '@app/state/knowledge/mappers/tech-stack.mapper';

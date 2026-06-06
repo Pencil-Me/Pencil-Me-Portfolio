@@ -92,7 +92,6 @@ $color-text-muted-light: color.mix($color-dark, $color-red, 68%);
 $color-text-on-dark: pm-tint($color-dark, 96%);
 $color-gold-soft: gold-shade(700);
 $color-gold-bright: gold-shade(200);
-
 $hero-radial-start: color.mix(red-shade(700), dark-shade(500), 38%);
 $hero-radial-end: color.mix(red-shade(900), dark-shade(500), 28%);
 $section-tint: color.mix(red-shade(800), dark-shade(500), 22%);

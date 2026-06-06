@@ -10,17 +10,15 @@ export class ScrollManagerDirective {
   private sections = new Map<string | number, ScrollSectionDirective>(); // Map to store scroll sections
 
   // Method to scroll to a specific section by its ID
-  scroll(id: string | number) {
-    this.sections.get(id)!.scroll(); // Invoking the scroll method of the corresponding scroll section
+  scroll(id: string | number): void {
+    this.sections.get(id)!.scroll();
   }
 
-  // Method to register a scroll section
-  register(section: ScrollSectionDirective) {
-    this.sections.set(section.id, section); // Adding the scroll section to the map
+  register(section: ScrollSectionDirective): void {
+    this.sections.set(section.id, section);
   }
 
-  // Method to remove a scroll section
-  remove(section: ScrollSectionDirective) {
-    this.sections.delete(section.id); // Removing the scroll section from the map
+  remove(section: ScrollSectionDirective): void {
+    this.sections.delete(section.id);
   }
 }

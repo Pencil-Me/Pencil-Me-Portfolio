@@ -11,7 +11,7 @@ function readObjectMessage(body: unknown): string | null {
     return null;
   }
 
-  const message = (body as { message: unknown }).message;
+  const message = body.message;
   return typeof message === 'string' ? message : null;
 }
 

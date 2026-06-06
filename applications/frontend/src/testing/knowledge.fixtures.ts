@@ -84,9 +84,7 @@ function createEmptyKnowledgeState(): KNOWLEDGESTATE {
   };
 }
 
-export function createMockAppState(
-  knowledgeOverrides: Partial<KNOWLEDGESTATE> = {},
-): AppState {
+export function createMockAppState(knowledgeOverrides: Partial<KNOWLEDGESTATE> = {}): AppState {
   return {
     knowledge: {
       ...createEmptyKnowledgeState(),

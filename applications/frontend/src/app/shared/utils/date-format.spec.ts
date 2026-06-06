@@ -66,9 +66,7 @@ describe('yearsSince', () => {
 describe('mapProjectDates', () => {
   it('should map API dates to display strings', () => {
     expect(
-      mapProjectDates([
-        { start_date: new Date('2020-01-01'), end_date: new Date('2021-01-01') },
-      ]),
+      mapProjectDates([{ start_date: new Date('2020-01-01'), end_date: new Date('2021-01-01') }]),
     ).toEqual([{ start_date: 'Jan.2020', end_date: 'Jan.2021' }]);
   });
 

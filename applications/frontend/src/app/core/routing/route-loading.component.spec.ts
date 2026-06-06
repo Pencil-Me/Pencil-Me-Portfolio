@@ -12,10 +12,7 @@ describe('RouteLoadingComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [RouteLoadingComponent],
-      providers: [
-        RouteLoadingService,
-        { provide: Router, useValue: { events: new Subject() } },
-      ],
+      providers: [RouteLoadingService, { provide: Router, useValue: { events: new Subject() } }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(RouteLoadingComponent);

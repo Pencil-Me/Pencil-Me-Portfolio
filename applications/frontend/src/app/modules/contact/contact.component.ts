@@ -1,13 +1,7 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  DestroyRef,
-  inject,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import type { FormGroup } from '@angular/forms';
+import type { FormGroup, AbstractControl } from '@angular/forms';
 import { ApiClientService } from '@core/services/api/api-client.service';
 import { mapApiError } from '@app/shared/utils/api-error.util';
 import { NgClass, NgTemplateOutlet } from '@angular/common';
@@ -151,7 +145,7 @@ export class ContactComponent {
     return false;
   }
 
-  get f() {
+  get f(): { [key: string]: AbstractControl } {
     return this.generally_form.controls;
   }
 
@@ -177,7 +171,7 @@ export class ContactComponent {
       if (controls[name].invalid) {
         invalid.push({
           name: name,
-          value: controls[name].value,
+          value: controls[name].value as unknown,
         });
       }
     }
@@ -212,8 +206,11 @@ export class ContactComponent {
   }
 
   private readOptionalFax(form: FormGroup, key: string): string | undefined {
-    const value = form.get(key)?.value;
-    return value ? String(value) : undefined;
+    const value: unknown = form.get(key)?.value;
+    if (typeof value !== 'string' || !value) {
+      return undefined;
+    }
+    return value;
   }
 
   private buildProjectMessage(): string {

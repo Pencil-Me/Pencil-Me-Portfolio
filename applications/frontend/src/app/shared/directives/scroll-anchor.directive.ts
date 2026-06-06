@@ -14,7 +14,7 @@ export class ScrollAnchorDirective {
   // Host listener for the 'click' event
   @HostListener('click')
   // Method to scroll to the associated section when the anchor is clicked
-  scroll() {
-    this.manager.scroll(this.id); // Invoking the scroll method of the scroll manager with the specified ID
+  scroll(): void {
+    this.manager.scroll(this.id);
   }
 }

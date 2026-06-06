@@ -26,6 +26,7 @@ header {
     inset: 0;
     pointer-events: none;
     opacity: 0.35;
+
     @include cyber.pm-scanlines(1px, 3px);
   }
 
@@ -220,11 +221,13 @@ header {
               inset: 0;
               pointer-events: none;
               opacity: 0.14;
+
               @include cyber.pm-scanlines(1px, 3px);
             }
 
             .nav-link__index {
               color: var(--pm-gold-bright);
+
               @include fx.pm-neon-text-flicker;
             }
           }

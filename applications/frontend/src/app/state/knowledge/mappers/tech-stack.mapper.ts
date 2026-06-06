@@ -3,11 +3,7 @@ import type { DATE, TECHSTACK } from '@app/state/knowledge/knowledge.models';
 import type { ITech, ITechCategory } from '@modules/about/about.models';
 import type { ISimpTech, ITechCategories } from '@modules/home/home.models';
 import type { IProjectTech } from '@modules/projects/projects.models';
-import {
-  formatYear,
-  parseDate,
-  yearsSince,
-} from '@app/shared/utils/date-format';
+import { formatYear, parseDate, yearsSince } from '@app/shared/utils/date-format';
 
 /** Home zeigt Tech mit Nutzung in den letzten N Jahren. */
 export const HOME_RECENT_USAGE_YEARS = 5;
@@ -106,9 +102,7 @@ function countUsageTimeInMonth(dates: DATE[]): number {
     return 0;
   }
 
-  const sortedDates = filteredDates.sort(
-    (a, b) => a.start_date.getTime() - b.start_date.getTime(),
-  );
+  const sortedDates = filteredDates.sort((a, b) => a.start_date.getTime() - b.start_date.getTime());
 
   const mergedPeriods: { start_date: Date; end_date: Date }[] = [];
   let currentPeriod = sortedDates[0];

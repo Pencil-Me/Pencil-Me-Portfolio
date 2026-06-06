@@ -1,6 +1,11 @@
 import { knowledgeReducers, initialState } from './knowledge.reducer';
 import * as actions from './knowledge.actions';
-import type { KNOWLEDGESTATE, PROJECT, TECHSTACK, CUSTOMER } from '@app/state/knowledge/knowledge.models';
+import type {
+  KNOWLEDGESTATE,
+  PROJECT,
+  TECHSTACK,
+  CUSTOMER,
+} from '@app/state/knowledge/knowledge.models';
 import { createSampleProject } from '../../../testing/knowledge.fixtures';
 
 describe('Knowledge Reducer', () => {

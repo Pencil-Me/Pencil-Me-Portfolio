@@ -12,10 +12,7 @@ export function isLoadSuccessful(status: LoadStatus | null | undefined): boolean
   return status === 'COMPLETED';
 }
 
-export function hasLoadError(
-  status: LoadStatus | null | undefined,
-  error: unknown,
-): boolean {
+export function hasLoadError(status: LoadStatus | null | undefined, error: unknown): boolean {
   if (status === 'ERROR') {
     return true;
   }

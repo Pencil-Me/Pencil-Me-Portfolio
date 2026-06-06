@@ -1,10 +1,6 @@
 import { Directive, ElementRef, Input, NgZone, inject } from '@angular/core';
 import type { AfterViewInit, OnDestroy, OnInit } from '@angular/core';
-import {
-  randomMs,
-  scrambleText,
-  tickScramble,
-} from '@app/shared/utils/gibberish-text.util';
+import { randomMs, scrambleText, tickScramble } from '@app/shared/utils/gibberish-text.util';
 import {
   findScrollRevealHost,
   getScrollRevealTransitionMs,
@@ -97,7 +93,7 @@ export class GibberishRevealDirective implements OnInit, AfterViewInit, OnDestro
   }
 
   private waitForScrollReveal(scrollHost: HTMLElement, element: HTMLElement): void {
-    const startAfterTransition = () => {
+    const startAfterTransition = (): void => {
       this.scrollRevealWaitId = setTimeout(() => {
         this.ngZone.run(() => this.startScramble(element));
       }, getScrollRevealTransitionMs(scrollHost));

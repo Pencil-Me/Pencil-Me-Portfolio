@@ -7,11 +7,15 @@ import { environment } from 'src/environments/environment';
 import { expectHttpJsonResponse } from '../../../../testing/http-test.helpers';
 import type { TestRequest } from '@angular/common/http/testing';
 
-const apiUrl = (path: string) => `${environment.API_BASE_URL}/${path}`;
-const toUrlEncoded = (obj: { [key: string]: string | number }) =>
+const apiUrl = (path: string): string => `${environment.API_BASE_URL}/${path}`;
+const toUrlEncoded = (obj: Record<string, string | number>): string =>
   Object.keys(obj)
     .map((k) => encodeURIComponent(k) + '=' + encodeURIComponent(obj[k]))
     .join('&');
+interface ApiMessage {
+  message: string;
+}
+
 describe('ApiClientService', () => {
   let service: ApiClientService;
   let httpMock: HttpTestingController;
@@ -38,10 +42,10 @@ describe('ApiClientService', () => {
   });
 
   it('should make a GET request with proper headers', () => {
-    const testData = { message: 'Test data' };
+    const testData: ApiMessage = { message: 'Test data' };
     const path = 'test';
 
-    service.get<any>(path).subscribe((response) => {
+    service.get<ApiMessage>(path).subscribe((response) => {
       expect(response).toEqual(testData);
     });
 
@@ -51,11 +55,11 @@ describe('ApiClientService', () => {
   });
 
   it('should make a POST request with proper headers and data', () => {
-    const testData = { message: 'Test data' };
+    const testData: ApiMessage = { message: 'Test data' };
     const path = 'test';
     const postData = { name: 'John', age: 30 };
 
-    service.post<any>(path, postData).subscribe((response) => {
+    service.post<ApiMessage>(path, postData).subscribe((response) => {
       expect(response).toEqual(testData);
     });
 
@@ -66,11 +70,11 @@ describe('ApiClientService', () => {
   });
 
   it('should make a PUT request with proper headers and data', () => {
-    const testData = { message: 'Test data' };
+    const testData: ApiMessage = { message: 'Test data' };
     const path = 'test';
     const putData = { name: 'John', age: 30 };
 
-    service.put<any>(path, putData).subscribe((response) => {
+    service.put<ApiMessage>(path, putData).subscribe((response) => {
       expect(response).toEqual(testData);
     });
 
@@ -81,10 +85,10 @@ describe('ApiClientService', () => {
   });
 
   it('should make a DELETE request with proper headers and data', () => {
-    const testData = { message: 'Test data' };
+    const testData: ApiMessage = { message: 'Test data' };
     const path = 'test';
 
-    service.delete<any>(path).subscribe((response) => {
+    service.delete<ApiMessage>(path).subscribe((response) => {
       expect(response).toEqual(testData);
     });
 

@@ -17,12 +17,12 @@ class MockHomeService {
     error: string | null;
     data: unknown[];
   }>({
-    loadStatus: 'COMPLETED' as LoadStatus,
+    loadStatus: 'COMPLETED',
     error: null,
     data: [],
   });
   techState$ = this.techStateSubject.asObservable();
-  customersState$ = of({ loadStatus: 'COMPLETED' as LoadStatus, error: null, data: [] });
+  customersState$ = of({ loadStatus: 'COMPLETED', error: null, data: [] });
 
   setTechState(state: { loadStatus: LoadStatus; error: string | null; data: unknown[] }): void {
     this.techStateSubject.next(state);
@@ -39,7 +39,7 @@ class MockHomeService {
 
 class MockProjectsService {
   projects$ = of([]);
-  projectsState$ = of({ loadStatus: 'COMPLETED' as LoadStatus, error: null, data: [] });
+  projectsState$ = of({ loadStatus: 'COMPLETED', error: null, data: [] });
 }
 
 describe('HomeComponent', () => {

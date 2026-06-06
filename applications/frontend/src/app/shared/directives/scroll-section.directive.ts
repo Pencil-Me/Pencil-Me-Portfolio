@@ -14,17 +14,15 @@ export class ScrollSectionDirective implements OnInit, OnDestroy {
   @Input('appScrollSection') id: string | number = '';
 
   // Lifecycle hook called after Angular initializes the directive
-  ngOnInit() {
-    this.manager.register(this); // Registering the directive with the scroll manager
+  ngOnInit(): void {
+    this.manager.register(this);
   }
 
-  // Lifecycle hook called before Angular destroys the directive
-  ngOnDestroy() {
-    this.manager.remove(this); // Removing the directive from the scroll manager
+  ngOnDestroy(): void {
+    this.manager.remove(this);
   }
 
-  // Method to scroll to the section
-  scroll() {
+  scroll(): void {
     this.host.nativeElement.scrollIntoView({
       // Using native JavaScript scrollIntoView method
       behavior: 'smooth', // Scroll behavior: smooth

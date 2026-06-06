@@ -37,7 +37,7 @@ export class ProjectDetailsComponent implements OnInit, OnDestroy {
   private activatedRoute = inject(ActivatedRoute);
   private destroyRef = inject(DestroyRef);
 
-  private   readonly projectLoad = toLoadStatusSignals(this.projectsService.projectState$);
+  private readonly projectLoad = toLoadStatusSignals(this.projectsService.projectState$);
   readonly projectLoadStatus = this.projectLoad.loadStatus;
   readonly projectError = this.projectLoad.error;
 
@@ -61,11 +61,9 @@ export class ProjectDetailsComponent implements OnInit, OnDestroy {
   });
 
   ngOnInit(): void {
-    this.activatedRoute.paramMap
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((params) => {
-        this.projectsService.selectProject(params.get('id') ?? '');
-      });
+    this.activatedRoute.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
+      this.projectsService.selectProject(params.get('id') ?? '');
+    });
   }
 
   ngOnDestroy(): void {
