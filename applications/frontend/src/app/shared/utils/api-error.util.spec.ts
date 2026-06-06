@@ -66,6 +66,16 @@ describe('mapApiError', () => {
     expect(mapApiError(error)).toContain('500');
   });
 
+  it('should ignore whitespace-only plain-text bodies', () => {
+    const error = new HttpErrorResponse({
+      status: 400,
+      statusText: 'Bad Request',
+      error: '   ',
+    });
+
+    expect(mapApiError(error)).toContain('400');
+  });
+
   it('should handle Error instances', () => {
     expect(mapApiError(new Error('Timeout'))).toBe('Timeout');
   });

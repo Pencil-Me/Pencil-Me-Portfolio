@@ -32,6 +32,14 @@ module.exports = function (config) {
         { type: 'text-summary' },
         { type: 'json', subdir: '.', file: 'coverage-final.json' },
       ],
+      check: {
+        global: {
+          statements: 90,
+          branches: 74,
+          functions: 90,
+          lines: 90,
+        },
+      },
     },
     reporters: ['progress', 'kjhtml'],
     browsers: ['Chrome'],

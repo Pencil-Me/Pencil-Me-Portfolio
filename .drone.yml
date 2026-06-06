@@ -3,9 +3,16 @@ type: docker
 name: default
 
 steps:
-  - name: test
-    image: node:18
+  - name: frontend-quality
+    image: node:20
     commands:
       - cd applications/frontend
-      - npm install
-      - npm run ci-test
+      - npm ci
+      - npm run quality:ci
+
+  - name: frontend-e2e
+    image: mcr.microsoft.com/playwright:v1.50.0-noble
+    commands:
+      - cd applications/frontend
+      - npm ci
+      - npm run e2e:ci

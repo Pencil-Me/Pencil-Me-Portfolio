@@ -100,5 +100,45 @@ describe('ApiClientService', () => {
     });
   });
 
-  // Add more test cases for other methods (put, delete) similarly...
+  it('should POST with an empty body when no data is provided', () => {
+    const testData: ApiMessage = { message: 'ok' };
+    const path = 'test';
+
+    service.post<ApiMessage>(path).subscribe((response) => {
+      expect(response).toEqual(testData);
+    });
+
+    expectHttpJsonResponse(httpMock, apiUrl(path), 'POST', testData, (req: TestRequest) => {
+      expect(req.request.body).toBe('');
+    });
+  });
+
+  it('should encode null, boolean, and unsupported values in form data', () => {
+    const testData: ApiMessage = { message: 'ok' };
+    const path = 'test';
+    const postData = {
+      active: true,
+      note: null,
+      meta: { ignored: true },
+    };
+
+    service.post<ApiMessage>(path, postData).subscribe((response) => {
+      expect(response).toEqual(testData);
+    });
+
+    expectHttpJsonResponse(httpMock, apiUrl(path), 'POST', testData, (req: TestRequest) => {
+      expect(req.request.body).toBe('active=true&note=&meta=');
+    });
+  });
+
+  it('should normalize trailing slashes when composing API URLs', () => {
+    service.baseUrl = 'https://example.com/api/';
+    const testData: ApiMessage = { message: 'ok' };
+
+    service.get<ApiMessage>('/test/').subscribe((response) => {
+      expect(response).toEqual(testData);
+    });
+
+    expectHttpJsonResponse(httpMock, 'https://example.com/api/test/', 'GET', testData);
+  });
 });

@@ -1,9 +1,0 @@
-{
-  "applications/backend/**": {
-    "framework": "vue"
-  },
-  "applications/frontend/**": {
-    "framework": "angular",
-    "angular-template-syntax": "V_17"
-  }
-}

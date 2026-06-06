@@ -233,6 +233,41 @@ describe('ContactComponent', () => {
     expect(component.f).toBe(component.generally_form.controls);
   });
 
+  it('should show mapped error message when project API returns 500', () => {
+    apiClientService.post.and.returnValue(
+      throwError(
+        () =>
+          new HttpErrorResponse({
+            status: 500,
+            statusText: 'Internal Server Error',
+            error: { message: 'SMTP failure' },
+          }),
+      ),
+    );
+
+    fillValidProjectForm();
+    component.project_send();
+
+    expect(component.emailHasError()).toBeTrue();
+    expect(component.emailErrorMessage()).toBe('SMTP failure');
+  });
+
+  it('should ignore unknown route type params', () => {
+    paramMap$.next(convertToParamMap({ type: 'unknown' }));
+
+    expect(component.contactForm()).toBeNull();
+    expect(component.isSpecalized()).toBeFalse();
+  });
+
+  it('should block generally send when consent is missing despite valid fields', () => {
+    fillValidGenerallyForm();
+    component.generally_form.controls['generally_yes'].setValue(false);
+
+    component.generally_send();
+
+    expect(apiClientService.post).not.toHaveBeenCalled();
+  });
+
   it('should encrypt email for display', () => {
     expect(component.encryptedEmail).toBe('info[at]pencil-me.de');
   });

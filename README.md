@@ -53,8 +53,9 @@ Jede Anwendung kann einzeln gestartet werden. Typischer Ablauf:
 
 1. MySQL starten (`applications/db`) oder Docker nur für `db` + `phpmyadmin`
 2. PHP REST API und Mailer konfigurieren und starten
-3. Angular-Frontend: `cd applications/frontend && npm install && npm start` → [http://localhost:4200](http://localhost:4200)
-4. Vue-Backend: `cd applications/backend && npm install && npm run dev`
+3. **Optional (Pre-commit-Hooks):** im Repo-Root `npm install` — aktiviert Husky + lint-staged für Frontend-Dateien
+4. Angular-Frontend: `cd applications/frontend && npm install && npm start` → [http://localhost:4200](http://localhost:4200)
+5. Vue-Backend: `cd applications/backend && npm install && npm run dev`
 
 **Frontend ↔ API:**
 
@@ -88,6 +89,25 @@ Zentrale Dateien:
 | `nginx.middle.conf` | Routing zwischen Frontend, Backend und APIs |
 
 API-Authentifizierung erfolgt über den Header `API-Key` (Frontend: `fe_key`, Backend: `be_key`). Die Keys müssen in allen beteiligten `.env`-Dateien identisch sein.
+
+## CI / Qualitätssicherung
+
+Die Drone-Pipeline (`.drone.yml`) prüft das Angular-Frontend in zwei Schritten:
+
+| Step | Befehl | Inhalt |
+|------|--------|--------|
+| `frontend-quality` | `npm run quality:ci` | Prettier, ESLint, Stylelint, Unit-Tests + Coverage, Production-Build, Fallow |
+| `frontend-e2e` | `npm run e2e:ci` | Playwright E2E (Chromium) gegen `ng serve` |
+
+Lokal dieselbe Qualitäts-Pipeline:
+
+```bash
+cd applications/frontend
+npm run quality:ci   # ohne E2E
+npm run e2e:ci       # E2E separat (Port 4200 muss frei sein)
+```
+
+Details zu Scripts, Coverage-Schwellen und Pre-commit-Hooks: [applications/frontend/README.md](applications/frontend/README.md)
 
 ## Autor
 

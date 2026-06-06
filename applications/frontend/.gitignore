@@ -30,7 +30,7 @@ pnpm-debug.log
 .history/*
 
 # Angular / build tooling
-/.angular/cache
+/.angular
 .sass-cache/
 /connect.lock
 /libpeerconnection.log
@@ -42,6 +42,9 @@ testem.log
 /coverage
 .nyc_output
 .fallow/
+playwright-report/
+test-results/
+blob-report/
 
 # Environment
 /src/environments/.env

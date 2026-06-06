@@ -6,3 +6,11 @@
 /src/Inc/.env
 /src/Inc/.env.*
 !src/Inc/.env.example
+
+# IDEs
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db

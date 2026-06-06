@@ -1,3 +1,19 @@
+# Dependencies
+node_modules/
+
+# Build / test artifacts (monorepo-wide)
+dist/
+coverage/
+.angular/
+.fallow/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
 # JetBrains IDEs (PhpStorm, WebStorm, IntelliJ, …)
 .idea/
 *.iml
@@ -9,9 +25,21 @@ out/
 .vscode/*
 !.vscode/extensions.json
 
+# Cursor / workspace context (local IDE metadata)
+.cursor/
+.ws-context
+
+# ESLint
+.eslintcache
+
 # OS
 .DS_Store
 Thumbs.db
+
+# Playwright
+playwright-report/
+test-results/
+blob-report/
 
 # Environment / secrets (keep *.example templates)
 .env

@@ -30,6 +30,10 @@ coverage
 .env.*
 !.env.example
 
+# IDEs
+.idea/
+*.iml
+
 # OS
 .DS_Store
 Thumbs.db

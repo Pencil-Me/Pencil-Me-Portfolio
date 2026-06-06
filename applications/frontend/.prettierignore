@@ -28,6 +28,8 @@ out-tsc/
 # Optional: Ignore test snapshots or reports
 *.snap
 test-results/
+playwright-report/
+blob-report/
 reports/
 
 # Optional: Ignore generated files
