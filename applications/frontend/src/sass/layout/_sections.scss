@@ -176,6 +176,41 @@
   }
 }
 
+.pm-tech-category-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+
+  &--compact {
+    gap: 0.75rem;
+  }
+
+  @media (width >= 576px) {
+    &:not(.pm-tech-category-grid--compact) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (width >= 992px) {
+    &:not(.pm-tech-category-grid--compact) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (width >= 1200px) {
+    &:not(.pm-tech-category-grid--compact) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+}
+
+.pm-tech-category-item {
+  .pm-tech-chip-list {
+    border-top: 1px solid var(--pm-border-subtle);
+    padding-top: 0.75rem;
+  }
+}
+
 .project-panel {
   display: grid;
   grid-template-columns: 1fr;

@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { map, shareReplay, type Observable } from 'rxjs';
+import { combineLatest, map, shareReplay, type Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 
 import type { IProject, IProjectsCategory, IProjectTech } from '@modules/projects/projects.models';
@@ -24,8 +24,13 @@ export class ProjectsService {
   readonly projectState$ = this.store.select(selectProjectState);
   readonly techState$ = this.store.select(selectTechstackState);
 
-  readonly projects$: Observable<IProjectsCategory[]> = this.projectsState$.pipe(
-    map((state) => convertProjects(state.data ?? [])),
+  readonly projects$: Observable<IProjectsCategory[]> = combineLatest([
+    this.projectsState$,
+    this.techState$,
+  ]).pipe(
+    map(([projectsState, techState]) =>
+      convertProjects(projectsState.data ?? [], techState.data ?? []),
+    ),
     shareReplay({ bufferSize: 1, refCount: true }),
   );
 
@@ -34,8 +39,13 @@ export class ProjectsService {
     shareReplay({ bufferSize: 1, refCount: true }),
   );
 
-  readonly project$: Observable<IProject> = this.projectState$.pipe(
-    map((state) => convertProject(state.data ?? ({} as PROJECT))),
+  readonly project$: Observable<IProject> = combineLatest([
+    this.projectState$,
+    this.techState$,
+  ]).pipe(
+    map(([projectState, techState]) =>
+      convertProject(projectState.data ?? ({} as PROJECT), techState.data ?? []),
+    ),
     shareReplay({ bufferSize: 1, refCount: true }),
   );
 

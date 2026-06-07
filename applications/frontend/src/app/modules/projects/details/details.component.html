@@ -18,42 +18,145 @@
   >
     @if (projectdetail(); as project) {
       <article
-        class="pm-panel-brutal project-panel project-detail-panel mt-4"
+        class="pm-panel-brutal project-detail-panel mt-4"
         appScrollReveal="scale"
-        [class.project-panel--has-meta]="project.dates.length > 0"
+        [class.project-detail-panel--has-meta]="project.dates.length > 0"
       >
         <app-project-date-range [dates]="project.dates" />
 
-        <div class="project-panel__body">
-          @if (project.position) {
-            <p class="project-detail-panel__position" appGibberishReveal>{{ project.position }}</p>
+        <header class="project-detail-panel__header">
+          @if (project.featured_tag) {
+            <div class="project-detail-panel__tag-row">
+              @if (project.featured_rank) {
+                <span class="project-detail-panel__index" aria-hidden="true">
+                  {{ project.featured_rank.toString().padStart(2, '0') }}
+                </span>
+              }
+              <span class="project-detail-panel__tag" appGibberishReveal>{{
+                project.featured_tag
+              }}</span>
+            </div>
           }
-          <h2 appGibberishReveal>{{ project.label }}</h2>
+
+          <h1 class="project-detail-panel__title" appGibberishReveal>{{ project.label }}</h1>
+
           @if (project.customer) {
             <p class="project-detail-panel__customer" appGibberishReveal>{{ project.customer }}</p>
           }
-          @if (project.location) {
-            <span class="project-list_item_main-info_location" appGibberishReveal>{{
-              project.location
-            }}</span>
+
+          <dl class="project-detail-panel__meta">
+            @if (project.position) {
+              <div>
+                <dt appGibberishReveal>Rolle</dt>
+                <dd appGibberishReveal>{{ project.position }}</dd>
+              </div>
+            }
+            @if (project.customer) {
+              <div>
+                <dt appGibberishReveal>Kunde</dt>
+                <dd appGibberishReveal>{{ project.customer }}</dd>
+              </div>
+            }
+            @if (project.location) {
+              <div>
+                <dt appGibberishReveal>Ort</dt>
+                <dd appGibberishReveal>{{ project.location }}</dd>
+              </div>
+            }
+          </dl>
+
+          @if (summary()) {
+            <p class="project-detail-panel__lead" appGibberishReveal>{{ summary() }}</p>
+          }
+        </header>
+
+        <div class="project-detail-panel__body">
+          @if (hasStory()) {
+            <section
+              class="project-detail-panel__section project-detail-panel__section--story"
+              aria-label="Projektstory"
+            >
+              <dl class="project-detail-panel__story">
+                @if (project.featured_problem) {
+                  <div>
+                    <dt appGibberishReveal>Ausgangslage</dt>
+                    <dd appGibberishReveal>{{ project.featured_problem }}</dd>
+                  </div>
+                }
+                @if (project.featured_role) {
+                  <div>
+                    <dt appGibberishReveal>Meine Rolle</dt>
+                    <dd appGibberishReveal>{{ project.featured_role }}</dd>
+                  </div>
+                }
+                @if (project.featured_outcome) {
+                  <div>
+                    <dt appGibberishReveal>Ergebnis</dt>
+                    <dd appGibberishReveal>{{ project.featured_outcome }}</dd>
+                  </div>
+                }
+              </dl>
+            </section>
           }
 
-          @if (content()) {
-            <div class="pm-section-divider" role="separator" aria-hidden="true"></div>
-            <pre class="project-detail-panel__content" appGibberishReveal>{{ content() }}</pre>
+          @if (narrative()) {
+            <section
+              class="project-detail-panel__section"
+              aria-labelledby="project-narrative-heading"
+            >
+              <h2
+                id="project-narrative-heading"
+                class="project-detail-panel__section-title"
+                appGibberishReveal
+              >
+                Im Detail
+              </h2>
+              <p class="project-detail-panel__narrative" appGibberishReveal>{{ narrative() }}</p>
+            </section>
+          }
+
+          @if (taskItems().length > 0) {
+            <section class="project-detail-panel__section" aria-labelledby="project-tasks-heading">
+              <h2
+                id="project-tasks-heading"
+                class="project-detail-panel__section-title"
+                appGibberishReveal
+              >
+                Was ich umgesetzt habe
+              </h2>
+              <ul class="project-detail-panel__tasks">
+                @for (item of taskItems(); track item) {
+                  <li appGibberishReveal>{{ item }}</li>
+                }
+              </ul>
+            </section>
           }
 
           @if (project.tech.length > 0) {
-            <div class="project-list_item_tech mt-4">
-              <span class="project-list_item_tech_title" appGibberishReveal
-                >Verwendete Technologien</span
+            <section class="project-detail-panel__section" aria-labelledby="project-tech-heading">
+              <h2
+                id="project-tech-heading"
+                class="project-detail-panel__section-title"
+                appGibberishReveal
               >
-              <ul class="tech-container pm-tech-chip-list">
-                @for (tech of project.tech; track tech) {
-                  <li class="pm-tech-chip" appGibberishReveal>{{ tech.name }}</li>
+                Technologien und Tools
+              </h2>
+              <dl class="project-detail-panel__tech">
+                @for (
+                  techCategory of mapProjectTechCategories(project.tech);
+                  track techCategory.title
+                ) {
+                  <div class="project-detail-panel__tech-row">
+                    <dt appGibberishReveal>{{ techCategory.title }}</dt>
+                    <dd>
+                      @for (tech of techCategory.data; track tech.label) {
+                        <span class="pm-tech-chip" appGibberishReveal>{{ tech.label }}</span>
+                      }
+                    </dd>
+                  </div>
                 }
-              </ul>
-            </div>
+              </dl>
+            </section>
           }
         </div>
       </article>

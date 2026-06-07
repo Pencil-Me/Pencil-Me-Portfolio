@@ -13,6 +13,7 @@ import {
 } from '@modules/projects/featured-projects.config';
 import { ProjectsService } from '@modules/projects/projects.service';
 import { toLoadStatusSignals } from '@app/shared/models/load-status.signals';
+import { mapProjectTechByCategory } from '@app/state/knowledge/mappers/tech-stack.mapper';
 
 @Component({
   selector: 'app-featured-projects',
@@ -26,6 +27,8 @@ export class FeaturedProjectsComponent {
   private router = inject(Router);
 
   @Input() variant: 'home' | 'projects' = 'projects';
+
+  readonly mapProjectTechCategories = mapProjectTechByCategory;
 
   private readonly projectsLoad = toLoadStatusSignals(this.projectsService.projectsState$);
   readonly projectsLoadStatus = this.projectsLoad.loadStatus;

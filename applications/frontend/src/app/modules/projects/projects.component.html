@@ -5,7 +5,7 @@
       <p appGibberishReveal>
         Über neunzig Projekte in Agenturen, bei Konzernen und für eigene Kunden — von E-Commerce und
         Versicherung bis IoT und internen Tools. Meist war ich für Frontend-Architektur, UI und die
-        Umsetzung verantwortlich. Filtere nach Technologie oder stöbere durch die Kategorien.
+        Umsetzung verantwortlich.
       </p>
     </div>
 
@@ -19,41 +19,6 @@
 
     <div class="col-12">
       <app-pm-async-content
-        [status]="techLoadStatus()"
-        [error]="techError()"
-        variant="chips"
-        label="Lade Technologie-Filter"
-        [showRetry]="true"
-        (retry)="retryTechLoad()"
-      >
-        <div
-          class="tech-group-container list-group list-group-flush list-group-horizontal mt-2 mb-4"
-        >
-          @for (tech of techs(); track tech) {
-            <button
-              type="button"
-              class="pm-tech-chip pm-tech-chip--interactive tech-item"
-              [ngClass]="{ 'is-selected': filterTech().includes(tech.name) }"
-              (click)="filterProjectsBy(tech.name)"
-            >
-              {{ tech.name }}
-            </button>
-          }
-        </div>
-      </app-pm-async-content>
-
-      @if (filterTech().length > 0 && techLoadStatus() === 'COMPLETED') {
-        <button
-          type="button"
-          class="btn btn-pm-tertiary mb-4"
-          (click)="resetFilterProjects()"
-          data-text="Filter entfernen"
-        >
-          Filter entfernen
-        </button>
-      }
-
-      <app-pm-async-content
         [status]="projectsLoadStatus()"
         [error]="projectsError()"
         variant="project-grid"
@@ -61,88 +26,194 @@
         [showRetry]="true"
         (retry)="retryProjectsLoad()"
       >
-        <div class="category-card-container">
-          @for (
-            projectcategory of filteredProjectCategories();
-            track projectcategory;
-            let c = $index
-          ) {
-            <div class="category-card" appScrollReveal="band" [revealDelay]="c * 60">
-              <h3 class="category-card_title" appGibberishReveal>{{ projectcategory.title }}</h3>
-              <ul class="row project-list">
-                @for (project of projectcategory.data; track project; let p = $index) {
-                  <li
-                    class="project-list_item col-12 col-lg-6"
-                    appScrollReveal="up"
-                    [revealDelay]="(p % 3) * 90"
-                  >
-                    <article
-                      class="pm-panel-brutal project-panel"
-                      [class.project-panel--has-meta]="project.dates.length > 0"
-                    >
-                      <app-project-date-range [dates]="project.dates" />
+        @if (techFilterCategories().length > 0) {
+          <section
+            class="projects-filter"
+            aria-labelledby="projects-filter-heading"
+            appScrollReveal="up"
+          >
+            <div class="projects-filter__header">
+              <h3 id="projects-filter-heading" class="projects-filter__title" appGibberishReveal>
+                Technologie
+              </h3>
+              <p class="projects-filter__hint" appGibberishReveal>
+                Mehrfach wählbar · Projekte mit mindestens einer Auswahl. Ausgewählte Projekte oben
+                bleiben ungefiltert.
+              </p>
+            </div>
 
-                      <div class="project-panel__body">
-                        <div
-                          class="project-list_item_main-info"
-                          [ngClass]="{
-                            'bottom-border':
-                              project.position || project.customer || project.location,
-                          }"
-                        >
-                          <button
-                            type="button"
-                            class="project-list_item_main-info_label"
-                            appGibberishReveal
-                            (click)="openProject(project.id)"
+            @if (hasActiveFilter()) {
+              <div class="projects-filter__bar" role="status" aria-live="polite">
+                <span class="projects-filter__count">
+                  @if (filteredProjectCount() === 0) {
+                    0/{{ totalProjectCount() }}
+                  } @else {
+                    {{ filteredProjectCount() }}/{{ totalProjectCount() }}
+                  }
+                </span>
+                <ul class="projects-filter__active-list pm-tech-chip-list">
+                  @for (tech of filterTech(); track tech) {
+                    <li>
+                      <button
+                        type="button"
+                        class="pm-tech-chip pm-tech-chip--interactive is-selected projects-filter__active-chip"
+                        [attr.aria-label]="tech + ' aus Filter entfernen'"
+                        (click)="removeTechFilter(tech)"
+                      >
+                        {{ tech }}
+                        <span class="projects-filter__remove" aria-hidden="true">×</span>
+                      </button>
+                    </li>
+                  }
+                </ul>
+                <button
+                  type="button"
+                  class="btn btn-pm-tertiary projects-filter__reset"
+                  (click)="resetFilterProjects()"
+                  data-text="Alle"
+                >
+                  Alle
+                </button>
+              </div>
+            }
+
+            <div class="projects-filter__groups">
+              @for (techCategory of techFilterCategories(); track techCategory.title) {
+                <div class="projects-filter__group">
+                  <span class="projects-filter__group-label">{{ techCategory.title }}</span>
+                  <div class="pm-tech-chip-list projects-filter__chips">
+                    @for (tech of techCategory.data; track tech.label) {
+                      <button
+                        type="button"
+                        class="pm-tech-chip pm-tech-chip--interactive"
+                        [class.is-selected]="filterTech().includes(tech.label)"
+                        [attr.aria-pressed]="filterTech().includes(tech.label)"
+                        (click)="toggleTechFilter(tech.label)"
+                      >
+                        {{ tech.label }}
+                      </button>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          </section>
+        }
+
+        @if (hasActiveFilter() && filteredProjectCount() === 0) {
+          <div class="projects-filter__empty" appScrollReveal="up">
+            <p appGibberishReveal>
+              Für die gewählte Kombination gibt es keine Treffer. Entferne einzelne Technologien
+              oder setze den Filter zurück.
+            </p>
+            <button
+              type="button"
+              class="btn btn-pm-secondary"
+              (click)="resetFilterProjects()"
+              data-text="Alle Projekte anzeigen"
+            >
+              Alle Projekte anzeigen
+            </button>
+          </div>
+        } @else {
+          <div class="category-card-container">
+            @for (
+              projectcategory of filteredProjectCategories();
+              track projectcategory;
+              let c = $index
+            ) {
+              <div class="category-card" appScrollReveal="band" [revealDelay]="c * 60">
+                <h3 class="category-card_title" appGibberishReveal>{{ projectcategory.title }}</h3>
+                <ul class="row project-list">
+                  @for (project of projectcategory.data; track project; let p = $index) {
+                    <li
+                      class="project-list_item col-12 col-lg-6"
+                      appScrollReveal="up"
+                      [revealDelay]="(p % 3) * 90"
+                    >
+                      <article
+                        class="pm-panel-brutal project-panel"
+                        [class.project-panel--has-meta]="project.dates.length > 0"
+                      >
+                        <app-project-date-range [dates]="project.dates" />
+
+                        <div class="project-panel__body">
+                          <div
+                            class="project-list_item_main-info"
+                            [ngClass]="{
+                              'bottom-border':
+                                project.position || project.customer || project.location,
+                            }"
                           >
-                            {{ project.label }}
-                          </button>
-                          @if (project.position) {
-                            <span class="project-list_item_main-info_position" appGibberishReveal>{{
-                              project.position
-                            }}</span>
-                          }
-                          @if (project.customer) {
-                            <span class="project-list_item_main-info_customer" appGibberishReveal>{{
-                              project.customer
-                            }}</span>
-                          }
-                          @if (project.location) {
-                            <span class="project-list_item_main-info_location" appGibberishReveal>{{
-                              project.location
-                            }}</span>
+                            <button
+                              type="button"
+                              class="project-list_item_main-info_label"
+                              appGibberishReveal
+                              (click)="openProject(project.id)"
+                            >
+                              {{ project.label }}
+                            </button>
+                            @if (project.position) {
+                              <span
+                                class="project-list_item_main-info_position"
+                                appGibberishReveal
+                                >{{ project.position }}</span
+                              >
+                            }
+                            @if (project.customer) {
+                              <span
+                                class="project-list_item_main-info_customer"
+                                appGibberishReveal
+                                >{{ project.customer }}</span
+                              >
+                            }
+                            @if (project.location) {
+                              <span
+                                class="project-list_item_main-info_location"
+                                appGibberishReveal
+                                >{{ project.location }}</span
+                              >
+                            }
+                          </div>
+
+                          @if (project.tech.length > 0) {
+                            <div class="project-list_item_tech">
+                              <span class="project-list_item_tech_title" appGibberishReveal
+                                >Verwendete Technologien</span
+                              >
+                              <ul class="tech-container pm-tech-chip-list">
+                                @for (tech of project.tech; track tech) {
+                                  <li>
+                                    <button
+                                      type="button"
+                                      class="pm-tech-chip pm-tech-chip--interactive"
+                                      [class.is-selected]="filterTech().includes(tech.name)"
+                                      [attr.aria-pressed]="filterTech().includes(tech.name)"
+                                      [attr.aria-label]="
+                                        filterTech().includes(tech.name)
+                                          ? tech.name + ' aus Filter entfernen'
+                                          : 'Nach ' + tech.name + ' filtern'
+                                      "
+                                      (click)="
+                                        toggleTechFilter(tech.name); $event.stopPropagation()
+                                      "
+                                    >
+                                      {{ tech.name }}
+                                    </button>
+                                  </li>
+                                }
+                              </ul>
+                            </div>
                           }
                         </div>
-
-                        @if (project.tech.length > 0) {
-                          <div class="project-list_item_tech">
-                            <span class="project-list_item_tech_title" appGibberishReveal
-                              >Verwendete Technologien</span
-                            >
-                            <ul class="tech-container pm-tech-chip-list">
-                              @for (tech of project.tech; track tech) {
-                                <li
-                                  class="pm-tech-chip"
-                                  appGibberishReveal
-                                  [ngClass]="{
-                                    'is-selected': filterTech().includes(tech.name),
-                                  }"
-                                >
-                                  {{ tech.name }}
-                                </li>
-                              }
-                            </ul>
-                          </div>
-                        }
-                      </div>
-                    </article>
-                  </li>
-                }
-              </ul>
-            </div>
-          }
-        </div>
+                      </article>
+                    </li>
+                  }
+                </ul>
+              </div>
+            }
+          </div>
+        }
       </app-pm-async-content>
     </div>
   </div>

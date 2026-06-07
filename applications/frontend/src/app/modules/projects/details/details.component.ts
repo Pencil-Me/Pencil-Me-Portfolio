@@ -18,6 +18,8 @@ import { ScrollRevealDirective } from '@shared/directives/scroll-reveal.directiv
 import type { IProject } from '@modules/projects/projects.models';
 import { ProjectsService } from '@modules/projects/projects.service';
 import { toLoadStatusSignals } from '@app/shared/models/load-status.signals';
+import { parseProjectBulletItems } from '@app/shared/utils/project-content.util';
+import { mapProjectTechByCategory } from '@app/state/knowledge/mappers/tech-stack.mapper';
 
 @Component({
   selector: 'app-project-details',
@@ -37,6 +39,8 @@ export class ProjectDetailsComponent implements OnInit, OnDestroy {
   private activatedRoute = inject(ActivatedRoute);
   private destroyRef = inject(DestroyRef);
 
+  readonly mapProjectTechCategories = mapProjectTechByCategory;
+
   private readonly projectLoad = toLoadStatusSignals(this.projectsService.projectState$);
   readonly projectLoadStatus = this.projectLoad.loadStatus;
   readonly projectError = this.projectLoad.error;
@@ -55,9 +59,19 @@ export class ProjectDetailsComponent implements OnInit, OnDestroy {
     return project.id ? project : null;
   });
 
-  readonly content = computed(() => {
+  readonly summary = computed(() => this.projectdetail()?.content_short ?? '');
+
+  readonly narrative = computed(() => this.projectdetail()?.content_long ?? '');
+
+  readonly taskItems = computed(() => parseProjectBulletItems(this.projectdetail()?.content));
+
+  readonly hasStory = computed(() => {
     const project = this.projectdetail();
-    return project ? this.renderNewLines(project.content) : '';
+    if (!project) {
+      return false;
+    }
+
+    return Boolean(project.featured_problem && project.featured_role && project.featured_outcome);
   });
 
   ngOnInit(): void {
@@ -75,9 +89,5 @@ export class ProjectDetailsComponent implements OnInit, OnDestroy {
     if (id) {
       this.projectsService.selectProject(id);
     }
-  }
-
-  private renderNewLines(text: string): string {
-    return text.replace(/\\n/g, '<br>');
   }
 }

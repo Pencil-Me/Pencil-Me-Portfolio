@@ -19,6 +19,7 @@ export interface IProjectDate_Org {
  */
 export interface IProjectTech {
   name: string;
+  type?: string;
 }
 
 /**
@@ -31,9 +32,17 @@ export interface IProject {
   customer: string;
   location: string;
   content: string;
+  content_short?: string;
+  content_long?: string;
+  category?: string;
   org_dates: IProjectDate_Org[];
   dates: IProjectDate[];
   tech: IProjectTech[];
+  featured_rank?: number | null;
+  featured_tag?: string | null;
+  featured_problem?: string | null;
+  featured_role?: string | null;
+  featured_outcome?: string | null;
 }
 
 /**

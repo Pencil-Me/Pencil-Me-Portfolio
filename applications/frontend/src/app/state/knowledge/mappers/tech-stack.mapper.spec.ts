@@ -4,12 +4,15 @@ import type { TECHSTACK } from '@app/state/knowledge/knowledge.models';
 import { createTechStackMapperFixture } from '../../../../testing/knowledge.fixtures';
 import {
   ABOUT_MAX_IDLE_YEARS,
+  collectProjectTechForFilter,
   HOME_RECENT_USAGE_YEARS,
   isOutdatedTechForAbout,
   isRecentUsageForHome,
+  mapProjectTechByCategory,
   mapTechFilterList,
   mapTechStackForAbout,
   mapTechStackForHome,
+  normalizeProjectTechType,
 } from './tech-stack.mapper';
 
 describe('tech-stack.mapper', () => {
@@ -255,6 +258,130 @@ describe('tech-stack.mapper', () => {
         'NoProjects',
         'OldTech',
       ]);
+    });
+  });
+
+  describe('normalizeProjectTechType', () => {
+    it('should map numeric type ids and string codes', () => {
+      expect(normalizeProjectTechType(3)).toBe('FEFRAME');
+      expect(normalizeProjectTechType('3')).toBe('FEFRAME');
+      expect(normalizeProjectTechType('FEDEV')).toBe('FEDEV');
+    });
+  });
+
+  describe('mapProjectTechByCategory', () => {
+    it('should group tech by category title in canonical order', () => {
+      const result = mapProjectTechByCategory([
+        { name: 'Docker', type: 'DEVOPS' },
+        { name: 'Angular', type: 'FEFRAME' },
+        { name: 'TypeScript', type: 'FEDEV' },
+        { name: 'Node.js', type: 'BEDEV' },
+      ]);
+
+      expect(result.map((group) => group.title)).toEqual([
+        'Frontend Development',
+        'Backend Development',
+        'Frontend Frameworks',
+        'Devops',
+      ]);
+      expect(result[0]?.data.map((item) => item.label)).toEqual(['TypeScript']);
+      expect(result[2]?.data.map((item) => item.label)).toEqual(['Angular']);
+    });
+
+    it('should sort items alphabetically within each group', () => {
+      const result = mapProjectTechByCategory([
+        { name: 'Vue', type: 'FEFRAME' },
+        { name: 'Angular', type: 'FEFRAME' },
+      ]);
+
+      expect(result[0]?.data.map((item) => item.label)).toEqual(['Angular', 'Vue']);
+    });
+
+    it('should return empty array for no tech', () => {
+      expect(mapProjectTechByCategory([])).toEqual([]);
+    });
+
+    it('should tolerate non-string type values without throwing', () => {
+      const result = mapProjectTechByCategory([
+        { name: 'Angular', type: 'FEFRAME' },
+        { name: 'Legacy', type: 3 as unknown as string },
+      ]);
+
+      expect(result.length).toBe(1);
+      expect(result[0]?.title).toBe('Frontend Frameworks');
+      expect(result[0]?.data.map((item) => item.label)).toEqual(['Angular', 'Legacy']);
+    });
+  });
+
+  describe('collectProjectTechForFilter', () => {
+    it('should collect unique tech from all projects and group by category', () => {
+      const result = collectProjectTechForFilter([
+        {
+          title: 'Cat A',
+          data: [
+            {
+              id: '1',
+              label: 'P1',
+              tech: [
+                { name: 'Angular', type: 'FEFRAME' },
+                { name: 'TypeScript', type: 'FEDEV' },
+              ],
+              position: '',
+              customer: '',
+              location: '',
+              content: '',
+              org_dates: [],
+              dates: [],
+            },
+          ],
+        },
+        {
+          title: 'Cat B',
+          data: [
+            {
+              id: '2',
+              label: 'P2',
+              tech: [
+                { name: 'Angular', type: 'FEFRAME' },
+                { name: 'Docker', type: 'DEVOPS' },
+              ],
+              position: '',
+              customer: '',
+              location: '',
+              content: '',
+              org_dates: [],
+              dates: [],
+            },
+          ],
+        },
+      ]);
+
+      const labels = result.flatMap((group) => group.data.map((item) => item.label));
+      expect(labels.sort()).toEqual(['Angular', 'Docker', 'TypeScript']);
+      expect(result.find((group) => group.title === 'Frontend Frameworks')?.data.length).toBe(1);
+    });
+
+    it('should return empty array when no projects have tech', () => {
+      expect(
+        collectProjectTechForFilter([
+          {
+            title: 'Empty',
+            data: [
+              {
+                id: '1',
+                label: 'P1',
+                tech: [],
+                position: '',
+                customer: '',
+                location: '',
+                content: '',
+                org_dates: [],
+                dates: [],
+              },
+            ],
+          },
+        ]),
+      ).toEqual([]);
     });
   });
 });

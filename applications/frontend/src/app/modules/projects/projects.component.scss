@@ -5,13 +5,132 @@
   padding-bottom: 5rem;
 }
 
-.tech-group-container {
-  display: flex;
-  flex-wrap: wrap;
-  padding: 0;
-  margin: 0 0 1rem;
-  list-style-type: none;
-  gap: 0.25rem 0.5rem;
+.projects-filter {
+  margin-bottom: 1.75rem;
+
+  &__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.35rem 0.75rem;
+    margin-bottom: 0.6rem;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  &__hint {
+    margin: 0;
+    font-size: 0.72rem;
+    color: var(--pm-text-muted);
+  }
+
+  &__bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem 0.5rem;
+    margin-bottom: 0.6rem;
+    padding: 0.4rem 0.55rem;
+    border: 1px solid var(--pm-border);
+    background: var(--pm-surface-elevated, var(--pm-surface));
+  }
+
+  &__count {
+    flex-shrink: 0;
+    font-family: var(--pm-font-mono), monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--pm-gold-a58);
+  }
+
+  &__active-list {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  &__active-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  &__remove {
+    font-size: 1.05em;
+    line-height: 1;
+    opacity: 0.85;
+  }
+
+  &__reset {
+    flex-shrink: 0;
+    margin-left: auto;
+    padding: 0.25rem 0.55rem;
+    font-size: 0.72rem;
+  }
+
+  &__groups {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  &__group {
+    display: grid;
+    grid-template-columns: minmax(6.5rem, 8.5rem) 1fr;
+    align-items: baseline;
+    gap: 0.35rem 0.65rem;
+    padding-bottom: 0.35rem;
+    border-bottom: 1px solid var(--pm-border-subtle, var(--pm-border));
+
+    &:last-child {
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+  }
+
+  &__group-label {
+    font-size: 0.62rem;
+    font-weight: 500;
+    line-height: 1.3;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--pm-text-muted);
+  }
+
+  &__chips {
+    gap: 0.2rem 0.35rem;
+  }
+
+  .pm-tech-chip {
+    padding: 0.25em 0.5em;
+    font-size: 0.68em;
+  }
+
+  &__empty {
+    padding: 1.75rem 1rem;
+    text-align: center;
+    border: 1px dashed var(--pm-border);
+
+    p {
+      margin-bottom: 1rem;
+      max-width: 32rem;
+      margin-inline: auto;
+      font-size: 0.92rem;
+      color: var(--pm-text-muted);
+    }
+  }
+
+  @media (width < 576px) {
+    &__group {
+      grid-template-columns: 1fr;
+      gap: 0.25rem;
+    }
+  }
 }
 
 .category-card-container {

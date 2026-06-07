@@ -25,13 +25,20 @@ describe('convertTProjectToSendPayload', () => {
           flag_important: false
         }
       ],
-      customers: [{ id: 'c1', name: 'ACME', location: 'Berlin' }]
+      customers: [{ id: 'c1', name: 'ACME', location: 'Berlin' }],
+      featured_rank: 1,
+      featured_tag: 'Enterprise · Angular',
+      featured_problem: 'Problem',
+      featured_role: 'Role',
+      featured_outcome: 'Outcome'
     }
 
     const payload = convertTProjectToSendPayload(project)
 
     expect(payload.uuid).toBe('abc')
     expect(payload.public).toBe(1)
+    expect(payload.featured_rank).toBe(1)
+    expect(payload.featured_tag).toBe('Enterprise · Angular')
     expect(payload.name).toBe('Portfolio')
     expect(payload.dates).toHaveLength(1)
     expect(payload.tech[0].name).toBe('Vue')

@@ -79,7 +79,19 @@ class TechstackModel extends DatabaseModel
     private function fetchTechstackRows(array $techstackUuids): array
     {
         $placeholders = implode(', ', array_fill(0, count($techstackUuids), 'UUID_TO_BIN(?)'));
-        $techstackQuery = "SELECT BIN_TO_UUID(uuid) as uuid, name, type, expertise_level FROM techstack WHERE uuid IN ($placeholders)";
+        $techstackQuery = "
+            SELECT
+                BIN_TO_UUID(t.uuid) AS uuid,
+                t.name,
+                (
+                    SELECT tt.type
+                    FROM techstack_type tt
+                    WHERE tt.id = t.type
+                ) AS type,
+                t.expertise_level
+            FROM techstack t
+            WHERE t.uuid IN ($placeholders)
+        ";
         return $this->fetchAll($techstackQuery, $techstackUuids);
     }
 

@@ -16,6 +16,36 @@ describe('project.mapper', () => {
     expect(project.dates[0].end_date).toBe('Jan.2021');
   });
 
+  it('should resolve numeric tech type ids from the API', () => {
+    const project = convertProject({
+      ...projectBasic,
+      tech: [{ uuid: '1', name: 'Angular', expertise_level: '5', type: 3 as unknown as string }],
+    });
+
+    expect(project.tech[0].type).toBe('FEFRAME');
+  });
+
+  it('should fall back to techstack lookup by name when project type is missing', () => {
+    const project = convertProject(
+      {
+        ...projectBasic,
+        tech: [{ uuid: '1', name: 'Angular', expertise_level: '5', type: '' }],
+      },
+      [
+        {
+          type: 'FEFRAME',
+          name: 'Angular',
+          expertise_level: 80,
+          flag_important: false,
+          project_count: 2,
+          project_dates: [],
+        },
+      ],
+    );
+
+    expect(project.tech[0].type).toBe('FEFRAME');
+  });
+
   it('should use heute when project end date is missing', () => {
     const project = convertProject({
       ...projectBasic,
@@ -23,6 +53,16 @@ describe('project.mapper', () => {
     });
 
     expect(project.dates[0].end_date).toBe('heute');
+  });
+
+  it('should derive content_short from first bullet when API field is empty', () => {
+    const project = convertProject({
+      ...projectBasic,
+      content: '•Angular migration\n•Cypress E2E',
+      content_short: '',
+    });
+
+    expect(project.content_short).toBe('Angular migration');
   });
 
   it('should convert projects into categorized groups', () => {

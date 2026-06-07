@@ -1,6 +1,7 @@
 import type { ITech, ITechCategory } from '@modules/about/about.models';
 import type { ISimpTech, ITechCategories } from '@modules/home/home.models';
-import type { IProjectTech } from '@modules/projects/projects.models';
+import type { IProjectsCategory, IProjectTech } from '@modules/projects/projects.models';
+import { TECH_STACK_TYPES, type TechStackType } from '@app/shared/domain/portfolio-domain';
 import { formatYear, parseDate, yearsSince } from '@app/shared/utils/date-format';
 import type { DATE, TECHSTACK } from '@app/state/knowledge/knowledge.models';
 import { TechStackTitle } from '@app/state/knowledge/knowledge.reducer';
@@ -13,6 +14,64 @@ export const ABOUT_MAX_IDLE_YEARS = 7;
 
 function resolveTechCategoryTitle(type: string): string {
   return TechStackTitle[type] ?? type;
+}
+
+/** DB techstack_type.id → Code (applications/db/init-scripts/dll.sql). */
+const TECHSTACK_TYPE_ID_TO_CODE: Record<number, TechStackType> = {
+  1: 'FEDEV',
+  2: 'BEDEV',
+  3: 'FEFRAME',
+  4: 'BEFRAME',
+  5: 'FEBT',
+  6: 'DEVOPS',
+  7: 'DB',
+  8: 'CMS',
+  9: 'TEST',
+  10: 'PROJECTTOOL',
+  11: 'MISC',
+  12: 'DESIGN',
+  13: 'LANG',
+};
+
+const TECHSTACK_TYPE_CODE_SET = new Set<string>(TECH_STACK_TYPES);
+
+function isTechStackTypeCode(value: string): value is TechStackType {
+  return TECHSTACK_TYPE_CODE_SET.has(value);
+}
+
+export function normalizeProjectTechType(type: unknown): string | undefined {
+  if (typeof type === 'number' && Number.isInteger(type)) {
+    return TECHSTACK_TYPE_ID_TO_CODE[type];
+  }
+
+  if (typeof type === 'string') {
+    const trimmed = type.trim();
+    if (trimmed.length === 0) {
+      return undefined;
+    }
+    if (isTechStackTypeCode(trimmed)) {
+      return trimmed;
+    }
+    const numericId = Number(trimmed);
+    if (!Number.isNaN(numericId) && Number.isInteger(numericId)) {
+      return TECHSTACK_TYPE_ID_TO_CODE[numericId];
+    }
+    return trimmed;
+  }
+
+  return undefined;
+}
+
+/** Tech-Name → Typ-Code aus all_techstacks (Fallback wenn Projekt-API nur ID liefert). */
+export function buildTechStackTypeByName(techStack: TECHSTACK[]): Map<string, string> {
+  const byName = new Map<string, string>();
+  for (const item of techStack) {
+    const typeCode = normalizeProjectTechType(item.type);
+    if (typeCode) {
+      byName.set(item.name, typeCode);
+    }
+  }
+  return byName;
 }
 
 export function isRecentUsageForHome(
@@ -82,7 +141,56 @@ export function mapTechStackForAbout(techStack: TECHSTACK[]): ITechCategory[] {
 export function mapTechFilterList(techStack: TECHSTACK[]): IProjectTech[] {
   return [...techStack]
     .sort((a, b) => a.name.localeCompare(b.name))
-    .map((item) => ({ name: item.name }));
+    .map((item) => ({ name: item.name, type: item.type }));
+}
+
+/** Eindeutige Tech aus allen Projekten, gruppiert fuer den Projects-Filter. */
+export function collectProjectTechForFilter(categories: IProjectsCategory[]): ITechCategories[] {
+  const techMap = new Map<string, IProjectTech>();
+
+  for (const category of categories) {
+    for (const project of category.data) {
+      for (const tech of project.tech) {
+        if (!techMap.has(tech.name)) {
+          techMap.set(tech.name, tech);
+        }
+      }
+    }
+  }
+
+  return mapProjectTechByCategory([...techMap.values()]);
+}
+
+/** Gruppiert Projekt-Tech wie Home „Technologien und Tools“ (ITechCategories). */
+export function mapProjectTechByCategory(tech: IProjectTech[]): ITechCategories[] {
+  if (tech.length === 0) {
+    return [];
+  }
+
+  const typeOrder = new Map<string, number>(TECH_STACK_TYPES.map((type, index) => [type, index]));
+
+  const sorted = [...tech].sort((a, b) => {
+    const typeA = normalizeProjectTechType(a.type) ?? 'MISC';
+    const typeB = normalizeProjectTechType(b.type) ?? 'MISC';
+    const orderDiff =
+      (typeOrder.get(typeA) ?? Number.MAX_SAFE_INTEGER) -
+      (typeOrder.get(typeB) ?? Number.MAX_SAFE_INTEGER);
+    if (orderDiff !== 0) {
+      return orderDiff;
+    }
+    return a.name.localeCompare(b.name);
+  });
+
+  const categories: ITechCategories[] = [];
+  for (const item of sorted) {
+    addToTechCategory(categories, normalizeProjectTechType(item.type) ?? 'MISC', {
+      label: item.name,
+      lastTouch: '',
+      numberOfProjects: '',
+    });
+  }
+
+  return categories;
 }
 
 function countUsageTimeInMonth(dates: DATE[]): number {

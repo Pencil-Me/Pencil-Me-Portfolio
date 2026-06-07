@@ -14,7 +14,9 @@ Datenbankname: **`portfolio_db`**
 | Tabelle | Inhalt |
 |---------|--------|
 | `customers` | Kunden (UUID, Name, Standort) |
-| `projects` | Portfolio-Projekte |
+| `projects` | Portfolio-Projekte (inkl. Highlight-Felder für Startseite) |
+
+**Highlight-Seed (Startseite):** In `dll.sql` sind drei öffentliche Projekte mit `featured_rank` 1–3 vorbelegt (NetworX, Bordercontrol Kambodscha, Produktion-Manager). Alle übrigen Projekte haben `featured_* = NULL`.
 | `techstack` | Technologien / Skills |
 | `project_types`, `techstack_types` | Lookup-Tabellen |
 | Verknüpfungstabellen | n:m zwischen Projekten, Kunden, Tech-Stack |
@@ -65,7 +67,17 @@ Compose nutzt das Volume `data` für `/var/lib/mysql`. Beim ersten Start führt 
 
 ## Schema aktualisieren (Migrations-Strategie)
 
-**Aktuell:** Init-only via `init-scripts/dll.sql` beim ersten Container-Start.
+**Aktuell:** Init-only via `init-scripts/dll.sql` beim ersten Container-Start; inkrementelle SQL unter `init-scripts/migrations/`.
+
+| Migration | Inhalt |
+|-----------|--------|
+| `001-techstack-type-projecttool.sql` | Typ-Code PROJECTTOOL |
+| `002-project-featured-fields.sql` | Highlight-Spalten auf `projects` |
+| `002-project-featured-fields-seed.sql` | Highlight-Texte (UTF-8, nach 002) |
+| `003-project-detail-content-seed.sql` | Kurz- und Langtexte für Projektdetail |
+| `005-project-story-fields-10y.sql` | Story-Felder (Tag, Ausgangslage, Rolle, Ergebnis) ab 2016 |
+
+**Migration unter Windows:** SQL nicht per `Get-Content | docker exec` pipen (Umlaute werden zu `?`). Stattdessen `docker cp` + `mysql --default-character-set=utf8mb4 … source /tmp/….sql` (Kommentare in den Migrationsdateien).
 
 | Szenario | Vorgehen |
 |----------|----------|

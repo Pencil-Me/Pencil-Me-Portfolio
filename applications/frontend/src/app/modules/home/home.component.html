@@ -290,10 +290,10 @@
       [showRetry]="true"
       (retry)="retryTechLoad()"
     >
-      <div class="tech-category-container">
+      <div class="pm-tech-category-grid">
         @for (techCategory of techStack(); track techCategory; let i = $index) {
           <div
-            class="tech-category-item pm-panel-brutal pm-skill-panel"
+            class="pm-tech-category-item pm-panel-brutal pm-skill-panel"
             appScrollReveal="up"
             [revealDelay]="i * 90"
           >

@@ -8,10 +8,10 @@
   <div class="container section-container">
     <div class="pm-intro-block" appScrollReveal="up">
       @if (variant === 'home') {
-        <h2 appGibberishReveal>Drei Projekte, die viel über meine Arbeit sagen</h2>
+        <h2 appGibberishReveal>Drei Projekte — drei typische Herausforderungen</h2>
         <p appGibberishReveal>
-          Nicht die lauteste Showreel-Auswahl — sondern drei typische Situationen:
-          Enterprise-Frontend, komplexe Fachdomäne, echte Hardware am anderen Ende der Leitung.
+          Enterprise-Skalierung, Behördensoftware unter Echtzeitdruck, Industrie-IoT am Band:
+          Ausgangslage, meine Rolle, was am Ende für Kunde und Nutzer stand.
         </p>
       } @else {
         <h3 appGibberishReveal>Ausgewählte Projekte</h3>
@@ -66,23 +66,28 @@
                     <dt appGibberishReveal>Meine Rolle</dt>
                     <dd appGibberishReveal>{{ project.role }}</dd>
                   </div>
-                  @if (variant === 'projects') {
-                    <div>
-                      <dt appGibberishReveal>Ergebnis</dt>
-                      <dd appGibberishReveal>{{ project.outcome }}</dd>
-                    </div>
-                  }
+                  <div>
+                    <dt appGibberishReveal>Ergebnis</dt>
+                    <dd appGibberishReveal>{{ project.outcome }}</dd>
+                  </div>
                 </dl>
 
                 @if (project.tech.length > 0) {
-                  <div class="pm-tech-chip-list pm-highlight-panel__tech" aria-label="Technologien">
+                  <dl class="pm-highlight-panel__tech" aria-label="Technologien">
                     @for (
-                      tech of project.tech.slice(0, variant === 'home' ? 4 : 6);
-                      track tech.name
+                      techCategory of mapProjectTechCategories(project.tech);
+                      track techCategory.title
                     ) {
-                      <span class="pm-tech-chip" appGibberishReveal>{{ tech.name }}</span>
+                      <div class="pm-highlight-panel__tech-row">
+                        <dt appGibberishReveal>{{ techCategory.title }}</dt>
+                        <dd>
+                          @for (tech of techCategory.data; track tech.label) {
+                            <span class="pm-tech-chip" appGibberishReveal>{{ tech.label }}</span>
+                          }
+                        </dd>
+                      </div>
                     }
-                  </div>
+                  </dl>
                 }
 
                 <button

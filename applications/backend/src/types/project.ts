@@ -34,6 +34,11 @@ export interface IProject {
   tech?: ITech[]
   type?: number
   uuid?: string
+  featured_rank?: number | null
+  featured_tag?: string
+  featured_problem?: string
+  featured_role?: string
+  featured_outcome?: string
 }
 
 export type TProject = Required<
@@ -44,6 +49,11 @@ export type TProject = Required<
   dates: TDates[]
   tech: TTech[]
   show: number
+  featured_rank: number
+  featured_tag: string
+  featured_problem: string
+  featured_role: string
+  featured_outcome: string
 }
 
 export function convertIProjectToTProject(payload: IProject): TProject {
@@ -60,6 +70,11 @@ export function convertIProjectToTProject(payload: IProject): TProject {
     content_long: payload.content_long ?? '',
     dates: payload.dates?.map((entry) => convertIDatesToTDates(entry)) ?? [],
     tech: payload.tech?.map((entry) => convertITechToTTech(entry)) ?? [],
-    customers: payload.customers?.map((entry) => convertICustomerToTCustomer(entry)) ?? []
+    customers: payload.customers?.map((entry) => convertICustomerToTCustomer(entry)) ?? [],
+    featured_rank: payload.featured_rank ?? 0,
+    featured_tag: payload.featured_tag ?? '',
+    featured_problem: payload.featured_problem ?? '',
+    featured_role: payload.featured_role ?? '',
+    featured_outcome: payload.featured_outcome ?? ''
   }
 }

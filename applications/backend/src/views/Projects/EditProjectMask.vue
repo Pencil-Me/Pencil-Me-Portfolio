@@ -37,6 +37,12 @@ export default {
         { label: 'Nein', value: 0 },
         { label: 'Ja', value: 1 }
       ],
+      featured_rank_options: [
+        { label: 'Nicht auf Startseite', value: 0 },
+        { label: 'Highlight Platz 1', value: 1 },
+        { label: 'Highlight Platz 2', value: 2 },
+        { label: 'Highlight Platz 3', value: 3 }
+      ],
       mutableProject: {} as TProject
     }
   },
@@ -224,13 +230,63 @@ export default {
         </div>
       </div>
       <div class="mb-4">
-        <textarea-input label="Kurztext" name="content_short" v-model="mutableProject.content_short" />
+        <textarea-input
+          label="Kurztext"
+          name="content_short"
+          v-model="mutableProject.content_short"
+        />
       </div>
       <div class="mb-4">
-        <textarea-input label="Langtext" name="content_long" v-model="mutableProject.content_long" />
+        <textarea-input
+          label="Langtext"
+          name="content_long"
+          v-model="mutableProject.content_long"
+        />
       </div>
       <div class="mb-4">
         <textarea-input label="Alt-Text" name="content" v-model="mutableProject.content" />
+      </div>
+
+      <div class="mb-6 border border-gray-700 rounded p-4">
+        <h3 class="text-lg font-semibold mb-4">Projektstory (Detailseite)</h3>
+        <div class="mb-4">
+          <text-input
+            label="Tag (z. B. GovTech · Interpol · Lead)"
+            v-model="mutableProject.featured_tag"
+          />
+        </div>
+        <div class="mb-4">
+          <textarea-input
+            label="Ausgangslage"
+            name="featured_problem"
+            v-model="mutableProject.featured_problem"
+          />
+        </div>
+        <div class="mb-4">
+          <textarea-input
+            label="Meine Rolle"
+            name="featured_role"
+            v-model="mutableProject.featured_role"
+          />
+        </div>
+        <div class="mb-4">
+          <textarea-input
+            label="Ergebnis"
+            name="featured_outcome"
+            v-model="mutableProject.featured_outcome"
+          />
+        </div>
+      </div>
+
+      <div class="mb-6 border border-gray-700 rounded p-4">
+        <h3 class="text-lg font-semibold mb-4">Highlight auf Startseite</h3>
+        <div class="mb-4">
+          <select-input
+            label="Highlight-Platz (1–3, leer = nicht auf Startseite)"
+            v-model="mutableProject.featured_rank"
+            :options="featured_rank_options"
+          />
+        </div>
       </div>
 
       <div class="mb-6">

@@ -22,6 +22,11 @@ class Project:
         self.customers = data.get('customers', [])
         self.type = data.get('type', 1)
         self.public = data.get('public', 0)
+        self.featured_rank = self.__clean_optional_rank(data.get('featured_rank'))
+        self.featured_tag = data.get('featured_tag', '')
+        self.featured_problem = data.get('featured_problem', '')
+        self.featured_role = data.get('featured_role', '')
+        self.featured_outcome = data.get('featured_outcome', '')
 
     def to_dict(self):
         return {
@@ -36,7 +41,12 @@ class Project:
             'customers': self.__clean_string_array(self.customers),
             'dates': self.__clean_date_array(self.dates),
             'type': self.__clean_number(self.type),
-            'public': self.__clean_boolean(self.public)
+            'public': self.__clean_boolean(self.public),
+            'featured_rank': self.featured_rank,
+            'featured_tag': self.__clean_string(self.featured_tag),
+            'featured_problem': self.__clean_string(self.featured_problem),
+            'featured_role': self.__clean_string(self.featured_role),
+            'featured_outcome': self.__clean_string(self.featured_outcome),
         }
     def to_disp(self):
         return {
@@ -52,6 +62,11 @@ class Project:
             'customers': self.__revert_object_array(self.customers),
             'dates': self.dates,
             'type': self.type,
+            'featured_rank': self.featured_rank,
+            'featured_tag': helper.revert_string_from_db(self.featured_tag),
+            'featured_problem': helper.revert_string_from_db(self.featured_problem),
+            'featured_role': helper.revert_string_from_db(self.featured_role),
+            'featured_outcome': helper.revert_string_from_db(self.featured_outcome),
         }
 
     @staticmethod
@@ -67,6 +82,12 @@ class Project:
     @staticmethod
     def __clean_boolean(data):
         return bool(data)
+
+    @staticmethod
+    def __clean_optional_rank(data):
+        if data is None or data == '' or data == 0:
+            return None
+        return int(data)
 
     @staticmethod
     def __clean_string_array(data):

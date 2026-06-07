@@ -38,6 +38,12 @@ export function convertTProjectToSendPayload(payload: TProject) {
     content_long: payload.content_long ?? '',
     dates: payload.dates.map((entry) => convertTDatesToSendPayload(entry)),
     tech: payload.tech.map((entry) => convertTTechToSendPayload(entry)),
-    customers: payload.customers.map((entry) => convertTCustomerToSendPayloadNested(entry))
+    customers: payload.customers.map((entry) => convertTCustomerToSendPayloadNested(entry)),
+    featured_rank:
+      payload.featured_rank && payload.featured_rank > 0 ? payload.featured_rank : null,
+    featured_tag: payload.featured_tag ?? '',
+    featured_problem: payload.featured_problem ?? '',
+    featured_role: payload.featured_role ?? '',
+    featured_outcome: payload.featured_outcome ?? ''
   }
 }

@@ -47,6 +47,13 @@ export type PortfolioApiProject = {
   location?: string;
   position?: string;
   content?: string;
+  content_short?: string | null;
+  content_long?: string | null;
+  featured_rank?: number | null;
+  featured_tag?: string | null;
+  featured_problem?: string | null;
+  featured_role?: string | null;
+  featured_outcome?: string | null;
   tech: PortfolioApiTech[];
 };
 

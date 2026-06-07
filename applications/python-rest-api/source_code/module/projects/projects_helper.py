@@ -22,6 +22,13 @@ class ProjectHelper(SqlBase):
                 p.location,
                 p.position,
                 p.content,
+                p.content_short,
+                p.content_long,
+                p.featured_rank,
+                p.featured_tag,
+                p.featured_problem,
+                p.featured_role,
+                p.featured_outcome,
                 GROUP_CONCAT(DISTINCT BIN_TO_UUID(pt.techstack_id)) as techstack_uuids,
                 GROUP_CONCAT(DISTINCT BIN_TO_UUID(pc.customer_id)) as customer_uuids
             FROM
@@ -37,7 +44,14 @@ class ProjectHelper(SqlBase):
                 p.name,
                 p.location,
                 p.position,
-                p.content
+                p.content,
+                p.content_short,
+                p.content_long,
+                p.featured_rank,
+                p.featured_tag,
+                p.featured_problem,
+                p.featured_role,
+                p.featured_outcome
         """
         return self.select_all(query)
 
@@ -102,7 +116,14 @@ class ProjectHelper(SqlBase):
                 p.location,
                 p.position,
                 p.content,
+                p.content_short,
+                p.content_long,
                 p.type,
+                p.featured_rank,
+                p.featured_tag,
+                p.featured_problem,
+                p.featured_role,
+                p.featured_outcome,
                 GROUP_CONCAT(DISTINCT BIN_TO_UUID(pt.techstack_id)) as techstack_uuids,
                 GROUP_CONCAT(DISTINCT BIN_TO_UUID(pc.customer_id)) as customer_uuids
             FROM
@@ -117,10 +138,18 @@ class ProjectHelper(SqlBase):
                 p.id,
                 uuid,
                 p.name,
+                p.public,
                 p.type,
                 p.location,
                 p.position,
-                p.content
+                p.content,
+                p.content_short,
+                p.content_long,
+                p.featured_rank,
+                p.featured_tag,
+                p.featured_problem,
+                p.featured_role,
+                p.featured_outcome
         """
         # Führe die SQL-Abfrage aus und erhalte das Ergebnis
         return self.select_one(query, [project_uuid])
@@ -228,8 +257,15 @@ class ProjectHelper(SqlBase):
             'location': data['location'],
             'position': data['position'],
             'content': data['content'],
+            'content_short': data.get('content_short', ''),
+            'content_long': data.get('content_long', ''),
             'type': data['type'],
-            'public': data['public']
+            'public': data['public'],
+            'featured_rank': data.get('featured_rank'),
+            'featured_tag': data.get('featured_tag', ''),
+            'featured_problem': data.get('featured_problem', ''),
+            'featured_role': data.get('featured_role', ''),
+            'featured_outcome': data.get('featured_outcome', ''),
         }]
 
         uuid_keys = ['uuid']

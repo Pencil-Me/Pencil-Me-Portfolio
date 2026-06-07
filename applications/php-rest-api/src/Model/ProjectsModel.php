@@ -29,7 +29,14 @@ class ProjectsModel extends DatabaseModel
                     p.location,
                     p.position,
                     p.content,
+                    p.content_short,
+                    p.content_long,
                     p.type,
+                    p.featured_rank,
+                    p.featured_tag,
+                    p.featured_problem,
+                    p.featured_role,
+                    p.featured_outcome,
                     GROUP_CONCAT(DISTINCT BIN_TO_UUID(pt.techstack_id)) as techstack_uuids,
                     GROUP_CONCAT(DISTINCT BIN_TO_UUID(pc.customer_id)) as customer_uuids
                 FROM
@@ -47,7 +54,14 @@ class ProjectsModel extends DatabaseModel
                     p.type,
                     p.location,
                     p.position,
-                    p.content
+                    p.content,
+                    p.content_short,
+                    p.content_long,
+                    p.featured_rank,
+                    p.featured_tag,
+                    p.featured_problem,
+                    p.featured_role,
+                    p.featured_outcome
             ";
 
             // Define the parameters for the query
@@ -91,6 +105,13 @@ class ProjectsModel extends DatabaseModel
                     p.location,
                     p.position,
                     p.content,
+                    p.content_short,
+                    p.content_long,
+                    p.featured_rank,
+                    p.featured_tag,
+                    p.featured_problem,
+                    p.featured_role,
+                    p.featured_outcome,
                     GROUP_CONCAT(DISTINCT BIN_TO_UUID(pt.techstack_id)) as techstack_uuids,
                     GROUP_CONCAT(DISTINCT BIN_TO_UUID(pc.customer_id)) as customer_uuids
                 FROM
@@ -107,7 +128,14 @@ class ProjectsModel extends DatabaseModel
                     p.name,
                     p.location,
                     p.position,
-                    p.content
+                    p.content,
+                    p.content_short,
+                    p.content_long,
+                    p.featured_rank,
+                    p.featured_tag,
+                    p.featured_problem,
+                    p.featured_role,
+                    p.featured_outcome
                 LIMIT :limit
             ";
 
