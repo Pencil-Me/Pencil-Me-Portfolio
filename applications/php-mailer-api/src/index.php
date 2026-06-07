@@ -5,23 +5,26 @@
  */
 
 use Inc\AppLogger;
+use Inc\Bootstrap;
 use Inc\RequestPath;
 use Inc\Router;
 
 require dirname(__DIR__) . '/vendor/autoload.php';
 require __DIR__ . '/Inc/Bootstrap.php';
 
+Bootstrap::init();
+
 $routes = [
     '/send_email' => ['POST' => ['controller' => 'Controller\Api\MailController', 'method' => 'sendEmail']],
     '/healthcheck' => ['GET' => ['controller' => 'Controller\Api\HealthController', 'method' => 'getHealthcheck']],
 ];
 $protectedRoutes = [
-    '/send_email' => ['POST' => true, 'required_key' => 'fe_key'],
+    '/send_email' => ['POST' => true, 'required_key' => 'be_key'],
 ];
 
 try {
     $method = $_SERVER['REQUEST_METHOD'] ?? null;
-    $path = RequestPath::parse($_SERVER['REQUEST_URI']);
+    $path = RequestPath::parse($_SERVER['REQUEST_URI'] ?? '');
     $api_key = $_SERVER['HTTP_API_KEY'] ?? '';
 
     if ($method === null || $path === null) {

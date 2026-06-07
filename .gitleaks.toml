@@ -1,0 +1,13 @@
+title = "Pencil-Me-Portfolio gitleaks"
+
+[allowlist]
+description = "Dokumentierte Dev-Beispielwerte und htpasswd-Template"
+paths = [
+  '''(?i)\.env\.example$''',
+  '''(?i)secrets/nginx\.htpasswd\.example$''',
+  '''(?i)docs/refactoring/''',
+]
+
+[allowlist.regexes]
+secretApiFEkey = '''secretApiFEkey'''
+secretApiBEkey = '''secretApiBEkey'''

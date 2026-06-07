@@ -3,18 +3,27 @@
 namespace Controller\Api;
 
 use Inc\AppLogger;
-use Inc\Config;
-use PHPMailer\PHPMailer\Exception;
-use PHPMailer\PHPMailer\PHPMailer;
+use Inc\MailSendException;
+use Inc\MailSenderInterface;
+use Inc\PhpmailerMailSender;
 
 /**
- * MailController class handles functionality related to sending emails via API.
+ * Sends emails via injectable SMTP transport.
+ * Honeypot and rate limiting live in php-rest-api (gateway).
  */
 class MailController extends BaseController
 {
-    /**
-     * Sends an email using the provided parameters.
-     */
+    private const MAX_SUBJECT_LENGTH = 200;
+
+    private const MAX_MESSAGE_LENGTH = 10000;
+
+    private MailSenderInterface $mailSender;
+
+    public function __construct(?MailSenderInterface $mailSender = null)
+    {
+        $this->mailSender = $mailSender ?? new PhpmailerMailSender();
+    }
+
     public function sendEmail(): void
     {
         try {
@@ -22,40 +31,26 @@ class MailController extends BaseController
                 $this->sendMethodNotAllowedResponse();
             }
 
-            $mail = new PHPMailer(true);
-
-            $sender = $_POST["sender"] ?? null;
-            $recipient = $_POST["recipient"] ?? null;
-            $subject = $_POST["subject"] ?? null;
-            $message = $_POST["message"] ?? null;
+            $sender = $this->getPostField('sender');
+            $recipient = $this->getPostField('recipient');
+            $subject = $this->getPostField('subject');
+            $message = $this->getPostField('message');
 
             if (!$this->validateParameters($sender, $recipient, $subject, $message)) {
                 return;
             }
 
-            $this->configureMailer($mail);
+            $this->mailSender->send(
+                trim((string) $sender),
+                trim((string) $recipient),
+                trim((string) $subject),
+                trim((string) $message)
+            );
 
-            $mail->setFrom($mail->Username);
-            $mail->addAddress($recipient);
-
-            $mail->Subject = $subject;
-            $mail->Body = "Sender: $sender\n\nMessage:\n$message";
-
-            try {
-                $mail->send();
-                $this->sendSuccessResponse(['message' => 'Email sent']);
-            } catch (Exception $e) {
-                AppLogger::error('PHPMailer send failed', [
-                    'error_info' => $mail->ErrorInfo,
-                    'exception' => $e->getMessage(),
-                ]);
-                $this->sendGenericErrorResponse(
-                    'E-Mail konnte nicht gesendet werden.',
-                    500
-                );
-            }
-        } catch (Exception $exception) {
-            AppLogger::error('MailController unexpected error', [
+            $this->sendSuccessResponse(['message' => 'Email sent']);
+        } catch (MailSendException $exception) {
+            AppLogger::error('PHPMailer send failed', [
+                'error_info' => $exception->errorInfo,
                 'exception' => $exception->getMessage(),
             ]);
             $this->sendGenericErrorResponse(
@@ -65,37 +60,47 @@ class MailController extends BaseController
         }
     }
 
-    /**
-     * Validates the required parameters for sending an email.
-     *
-     * @param string|null $sender The email sender.
-     * @param string|null $recipient The email recipient.
-     * @param string|null $subject The email subject.
-     * @param string|null $message The email message.
-     * @return bool Returns true if parameters are valid, false otherwise.
-     */
-    private function validateParameters(?string $sender, ?string $recipient, ?string $subject, ?string $message): bool
+    protected function getPostField(string $key): mixed
     {
-        if (!$sender || !$recipient || !$subject || !$message) {
+        return $_POST[$key] ?? null;
+    }
+
+    private function validateParameters(
+        mixed $sender,
+        mixed $recipient,
+        mixed $subject,
+        mixed $message
+    ): bool {
+        if (!is_string($sender) || !is_string($recipient) || !is_string($subject) || !is_string($message)) {
             $this->sendOutput(['message' => 'Missing required parameters'], 400);
             return false;
         }
-        return true;
-    }
 
-    /**
-     * Configures PHPMailer for sending emails.
-     *
-     * @param PHPMailer $mail The PHPMailer instance.
-     */
-    private function configureMailer(PHPMailer $mail): void
-    {
-        $mail->isSMTP();
-        $mail->Host = Config::$mailHost;
-        $mail->SMTPAuth = true;
-        $mail->Username = Config::$mailUsername;
-        $mail->Password = Config::$mailPassword;
-        $mail->SMTPSecure = 'tls';
-        $mail->Port = (int) Config::$mailPort;
+        $sender = trim($sender);
+        $recipient = trim($recipient);
+        $subject = trim($subject);
+        $message = trim($message);
+
+        if ($sender === '' || $recipient === '' || $subject === '' || $message === '') {
+            $this->sendOutput(['message' => 'Missing required parameters'], 400);
+            return false;
+        }
+
+        if (!filter_var($sender, FILTER_VALIDATE_EMAIL) || !filter_var($recipient, FILTER_VALIDATE_EMAIL)) {
+            $this->sendOutput(['message' => 'Invalid email address'], 400);
+            return false;
+        }
+
+        if (strlen($subject) > self::MAX_SUBJECT_LENGTH) {
+            $this->sendOutput(['message' => 'Subject too long'], 400);
+            return false;
+        }
+
+        if (strlen($message) > self::MAX_MESSAGE_LENGTH) {
+            $this->sendOutput(['message' => 'Message too long'], 400);
+            return false;
+        }
+
+        return true;
     }
 }

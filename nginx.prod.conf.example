@@ -1,0 +1,76 @@
+# Production-Nginx (Beispiel) — nutzt docker-compose.prod.yml.example
+# Abweichungen zu nginx.middle.conf:
+#   - Basic Auth vor /backend/ (F-01)
+#   - Kein /mailer (wie middle.conf)
+#   - Rate-Limit /api (wie middle.conf)
+#
+# htpasswd erzeugen:
+#   docker run --rm httpd:2.4-alpine htpasswd -nbB admin IHR_PASSWORT > secrets/nginx.htpasswd
+# Mount in Compose: secrets/nginx.htpasswd:/etc/nginx/htpasswd/admin:ro
+
+limit_req_zone $binary_remote_addr zone=contact_form:10m rate=10r/m;
+limit_req_zone $binary_remote_addr zone=admin_api:10m rate=60r/m;
+
+server {
+  listen 80;
+
+  gzip on;
+  gzip_vary on;
+  gzip_min_length 256;
+  gzip_types application/json application/javascript text/css text/plain;
+
+  add_header X-Content-Type-Options nosniff always;
+  add_header X-Frame-Options DENY always;
+  add_header Referrer-Policy strict-origin-when-cross-origin always;
+
+  location = /api2/send_email {
+    limit_req zone=contact_form burst=5 nodelay;
+    rewrite ^/api2(.*) /index.php$1 break;
+    proxy_pass http://pm-api_php:80;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+  }
+
+  location /api2 {
+    rewrite ^/api2(.*) /index.php$1 break;
+    proxy_pass http://pm-api_php:80;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+  }
+
+  location /api {
+    limit_req zone=admin_api burst=20 nodelay;
+    rewrite ^/api(.*) $1 break;
+    proxy_pass http://pm-api_python:8181;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+  }
+
+  location = /backend {
+    return 301 /backend/;
+  }
+
+  location /backend/ {
+    auth_basic "Pencil&Me Admin";
+    auth_basic_user_file /etc/nginx/htpasswd/admin;
+    proxy_pass http://pm-backend_vue:80/;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+  }
+
+  location / {
+    proxy_pass http://pm-frontend_angular:80/;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+  }
+}

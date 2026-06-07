@@ -11,9 +11,9 @@ Browser
 pm-middlenginx (:8080)
    ├── /              → Angular-Frontend (öffentliche Portfolio-Seite)
    ├── /backend       → Vue-Admin-UI (Projekte, Kunden, Tech-Stack)
-   ├── /api2          → PHP REST API (Produktions-API fürs Frontend)
-   ├── /api           → Python Flask API (Alternative / Backend-CRUD)
-   └── /mailer        → PHP Mailer API (Kontaktformular per SMTP)
+   ├── /api2          → PHP REST API (Read + Mail-Proxy)
+   ├── /api           → Python Flask API (Admin-CRUD)
+   └── (mailer)       → PHP Mailer — nur Docker-intern, kein Gateway-Pfad
                               │
                               ▼
                          MySQL (portfolio_db)
@@ -24,9 +24,9 @@ pm-middlenginx (:8080)
 | Frontend | `pm-frontend_angular` | via Nginx | Angular 21, NgRx, Bootstrap |
 | Backend-UI | `pm-backend_vue` | via Nginx `/backend` | Vue 3, Vite, Vuex |
 | Gateway | `pm-middlenginx` | **8080** | Nginx |
-| PHP REST API | `pm-api_php` | 3003 (direkt) / `/api2` | PHP 8.1, Apache |
+| PHP REST API | `pm-api_php` | 3003 (Dev) / `/api2` | PHP 8.3, Apache |
 | Python API | `pm-api_python` | via Nginx `/api` | Flask, PyMySQL |
-| Mailer | `pm-mailer_php` | 3002 (direkt) / `/mailer` | PHP 8.1, PHPMailer |
+| Mailer | `pm-mailer_php` | 3002 (Dev) / intern | Docker DNS (REST → Mailer) |
 | Datenbank | `pm-db` | 3306 | MySQL 8 |
 | phpMyAdmin | `pm-phpmyadmin` | 8000 (nur mit `--profile dev`) | Web-UI für MySQL |
 
@@ -81,7 +81,8 @@ Details: [applications/frontend/README.md](applications/frontend/README.md)
 | `applications/php-mailer-api` | E-Mail-Versand für Kontaktformular | [README](applications/php-mailer-api/README.md) |
 | `applications/python-rest-api` | Alternative Flask-API (v. a. Backend-CRUD) | [README](applications/python-rest-api/README.md) |
 | `applications/db` | MySQL-Schema und Seed-Daten | [README](applications/db/README.md) |
-| `applications/frontend-test` | Minimaler Nginx/HTML-Container zum Testen | [README](applications/frontend-test/README.md) |
+| `deploy/` | Shared-Hosting-Build (FTP + PHP) | [README](deploy/README.md) |
+| `scripts/security/` | Security-Smoke-Tests (Auth, CORS) | siehe unten |
 
 ## Konfiguration
 
@@ -92,8 +93,9 @@ Zentrale Dateien:
 | `.env.example` | Master-Liste aller Compose-/Build-Variablen |
 | `docker-compose.yml` | Orchestrierung aller Services |
 | `docker-compose.override.yml.example` | Dev-Mounts für PHP (→ `docker-compose.override.yml`, gitignored) |
-| `docker-compose.prod.yml.example` | Production-Build-Args und `APP_ENV=production` |
-| `nginx.middle.conf` | Routing, gzip, Rate-Limit, Security-Headers |
+| `docker-compose.prod.yml.example` | Production: `APP_ENV`, Basic Auth Admin, keine Host-Ports DB/PHP |
+| `nginx.middle.conf` | Dev-Gateway: Routing, gzip, Rate-Limit, Security-Headers |
+| `nginx.prod.conf.example` | Prod-Gateway: + Basic Auth `/backend/` |
 
 Optional: `cp .env.example .env` und `docker compose --env-file .env up`.
 
@@ -104,20 +106,44 @@ Dieselben Werte an mehreren Stellen pflegen:
 | Variable | Wo setzen |
 |----------|-----------|
 | `API_KEY_FE` | Root `.env`, `php-rest-api/src/Inc/.env.dev`, `php-mailer-api/src/Inc/.env.dev`, Angular `environment.ts` |
-| `API_KEY_BE` | Root `.env`, `python-rest-api` (Compose-Env), Vue `.env` / Compose `VITE_API_KEY` |
+| `API_KEY_BE` | Root `.env`, `python-rest-api` (Compose-Env), Vue `.env` / Compose `VITE_API_KEY`, **`php-mailer-api`** (`API_KEY_BE` auf `/send_email`) |
+| `MAIL_API_KEY` | `php-rest-api/src/Inc/.env.dev` — muss **`API_KEY_BE`** entsprechen (REST → Mailer) |
 | `DB_*` | Root `.env`, Compose (Python), PHP `.env.dev` falls direkter DB-Zugriff |
 | `MAIL_*` | Root `.env`, Compose (Python), `php-mailer-api/src/Inc/.env.dev` |
 | `APP_ENV` | Root `.env`, Compose (`php_api`, `php_mailer`, `python_api`) |
+| `ALLOWED_ORIGINS` | Root `.env`, Compose (`python_api`) — CORS-Whitelist für Admin-API |
 
 API-Authentifizierung erfolgt über den Header `API-Key` (Frontend: `fe_key`, Backend: `be_key`).
 
-### Production (Hinweise)
+Der **Mailer** ist absichtlich nicht über Nginx erreichbar — nur `pm-api_php` ruft `pm-mailer_php` per Docker-DNS auf. Der `fe_key` im Angular-Bundle ist für Read-only-Zugriff akzeptiert; in Production eigene Keys setzen und bei Bedarf rotieren (siehe Doc 23).
+
+Security: [22-security-audit.md](docs/refactoring/22-security-audit.md) · [23-security-remediation.md](docs/refactoring/23-security-remediation.md)
+
+### Production (zwei Wege)
+
+#### A) Shared Hosting (FTP + PHP) — öffentliche Website
+
+Nur **Frontend**, **PHP REST API** und **Mailer** — ohne Docker, Python oder Vue-Admin.
+
+→ [deploy/README.md](deploy/README.md) · `.\deploy\build-shared-hosting.ps1` · `.\deploy\clean.ps1`
+
+#### B) Docker-Stack (Homelab / Full Stack)
 
 - `docker-compose.prod.yml.example` kopieren nach `docker-compose.prod.yml` und anpassen
 - Start: `docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d`
 - TLS am externen Reverse-Proxy (nicht im Repo-Stack)
 - phpMyAdmin nicht starten (kein `--profile dev`)
-- `APP_ENV=production` in PHP/Python; `.env`-Dateien mit Prod-Werten (nicht committen)
+- `nginx.prod.conf.example` + `secrets/nginx.htpasswd` für Admin Basic Auth
+- Nur Nginx-Port 8080 nach außen (DB/PHP-APIs ohne Host-Mapping in Prod-Override)
+
+### Security-Smoke-Tests (Docker-Stack)
+
+```powershell
+# Stack auf :8080 muss laufen
+.\scripts\security\smoke-auth.ps1
+```
+
+Prüft Auth (401), CORS-Whitelist, Mailer nicht öffentlich, Honeypot. Siehe [23-security-remediation.md](docs/refactoring/23-security-remediation.md).
 
 ## CI / Qualitätssicherung
 
@@ -126,14 +152,15 @@ Die Drone-Pipeline (`.drone.yml`) prüft Frontend und Backend-Services:
 | Step | Befehl | Inhalt |
 |------|--------|--------|
 | `frontend-quality` | `npm run quality:ci` | Prettier, ESLint, Stylelint, Unit-Tests + Coverage, Production-Build, Fallow |
-| `frontend-e2e` | `npm run e2e:ci` | Playwright E2E (9 Tests: Home, Nav, Theme, Projekte, Kontakt, API-Fehler) |
-| `php-rest-api-test` | `composer test` | PHPUnit (Router, BaseController) |
-| `php-mailer-api-test` | `composer test` | PHPUnit (Router, Health) |
-| `vue-admin-quality` | `npm run quality:ci` | ESLint (src/), vue-tsc, Vitest (35 Tests) |
-| `vue-admin-e2e` | `npm run test:e2e:ci` | Cypress E2E (6 Tests, API-Mocks) |
-| `python-api-smoke` | ruff + mypy + pytest | Python Admin API |
-| `openapi-lint` | `npm run openapi:lint` | Spectral — PHP + Python OpenAPI |
+| `frontend-e2e` | `npm run e2e:ci` | Playwright E2E |
+| `php-rest-api-test` | `composer test` + `composer audit` | PHPUnit, PHPStan |
+| `php-mailer-api-test` | `composer test` + `composer audit` | PHPUnit, PHPStan |
+| `vue-admin-quality` | `npm run quality:ci` + `npm audit` | ESLint, vue-tsc, Vitest |
+| `vue-admin-e2e` | `npm run test:e2e:ci` | Cypress E2E |
+| `python-api-smoke` | ruff + mypy + pytest + `pip-audit` | Python Admin API |
+| `openapi-lint` | `npm run openapi:lint` | Spectral |
 | `compose-config` | `docker compose config` | Compose-Syntax-Check |
+| `secret-scan` | gitleaks | Secrets im Repo (Allowlist für Dev-Beispielkeys) |
 
 Lokal dieselbe Qualitäts-Pipeline:
 

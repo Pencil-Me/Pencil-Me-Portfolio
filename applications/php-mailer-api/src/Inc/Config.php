@@ -5,33 +5,33 @@ namespace Inc;
 use Dotenv;
 
 /**
- * Holds the configuration information of our application.
- * Mainly, it holds the database credentials and allowed origins for CORS.
+ * Application configuration loaded from .env.dev / .env.prod.
  */
 class Config
 {
-    /** @var array $allowedOrigins An array of allowed CORS origins. */
+    /** @var array<int, string> */
     public static array $allowedOrigins = [];
 
-    /** @var array $apiKeys An array of API keys. */
+    /** @var array<string, string> */
     public static array $apiKeys = [];
 
-    /** @var string $mailHost The database host. */
     public static string $mailHost = '';
 
-    /** @var string $mailPort The database port. */
     public static string $mailPort = '';
 
-    /** @var string $mailUsername The database username. */
     public static string $mailUsername = '';
 
-    /** @var string $mailPassword The database password. */
     public static string $mailPassword = '';
 
+    public static string $mailSender = '';
+
+    public static string $mailFromName = '';
+
+    /** @var 'tls'|'ssl'|'' */
+    public static string $mailSmtpSecure = 'tls';
+
     /**
-     * Retrieves the allowed CORS origins.
-     *
-     * @return array An array of allowed CORS origins.
+     * @return array<int, string>
      */
     public static function getAllowedOrigins(): array
     {
@@ -39,26 +39,16 @@ class Config
     }
 
     /**
-     * Retrieves the API keys.
-     *
-     * @return array An array of API keys.
+     * @return array<string, string>
      */
     public static function getApiKeys(): array
     {
         return self::$apiKeys;
     }
 
-    /**
-     * Load configuration from external sources synchronously
-     * For example, loading from environment variables or configuration files
-     * This method should populate the configuration variables
-     */
     public static function loadConfig(bool $isProd = false): void
     {
-        $envName = '.env.dev';
-        if ($isProd) {
-            $envName = '.env.prod';
-        }
+        $envName = $isProd ? '.env.prod' : '.env.dev';
 
         $dotenv = Dotenv\Dotenv::createImmutable(__DIR__, $envName);
         $dotenv->load();
@@ -66,17 +56,17 @@ class Config
         self::$allowedOrigins = explode(',', $_ENV['ALLOWED_ORIGINS']);
         self::$apiKeys = [
             'fe_key' => $_ENV['API_KEY_FE'],
-            'be_key' => $_ENV['API_KEY_BE']
+            'be_key' => $_ENV['API_KEY_BE'],
         ];
         self::$mailHost = $_ENV['MAIL_HOST'];
         self::$mailPort = $_ENV['MAIL_PORT'];
         self::$mailUsername = $_ENV['MAIL_USERNAME'];
         self::$mailPassword = $_ENV['MAIL_PASSWORD'];
+        self::$mailSender = $_ENV['MAIL_SENDER'] ?? $_ENV['MAIL_USERNAME'];
+        self::$mailFromName = $_ENV['MAIL_FROM_NAME'] ?? '';
+        self::$mailSmtpSecure = strtolower((string) ($_ENV['MAIL_SMTP_SECURE'] ?? 'tls'));
     }
 
-    /**
-     * Resolves whether the application runs in production mode.
-     */
     public static function isProductionEnvironment(): bool
     {
         $appEnv = getenv('APP_ENV');

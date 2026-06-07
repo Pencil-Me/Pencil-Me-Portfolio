@@ -2,7 +2,9 @@ def test_unknown_route_returns_404(client):
     response = client.get('/does-not-exist', headers={'API-Key': 'test-be-key'})
 
     assert response.status_code == 404
-    assert 'message' in response.get_json()
+    payload = response.get_json()
+    assert payload['message'] == 'Not Found'
+    assert 'http' not in payload['message'].lower()
 
 
 def test_wrong_method_on_healthcheck_returns_405(client):

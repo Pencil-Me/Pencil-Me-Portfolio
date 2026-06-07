@@ -57,9 +57,7 @@ Read-Endpunkte haben keinen PHP-internen Limiter mehr (Option A, ADR-001). Konta
 
 ## Konfiguration
 
-Vorlage: `.env.example` im Projektroot.
-
-Kopieren nach **`src/Inc/.env.dev`** (Entwicklung) bzw. **`src/Inc/.env.prod`** (Production):
+Vorlage: `src/Inc/.env.example` — kopieren nach **`src/Inc/.env.dev`** (Entwicklung) bzw. **`src/Inc/.env.prod`** (Production):
 
 ```env
 APP_ENV=development
@@ -76,13 +74,17 @@ DB_PASSWORD=test
 BASE_URL=/
 
 MAIL_RECIPIENT=email@domain.com
-MAIL_ENDPOINT=http://pm-mailer_php/send_email
-MAIL_API_KEY=secretMailApiKey
+MAIL_ENDPOINT=http://pm-mailer_php/index.php/send_email
+# Server-to-server: gleicher Wert wie API_KEY_BE in php-mailer-api
+MAIL_API_KEY=secretApiBEkey
 
-HEALTH_ENDPOINT=http://pm-mailer_php/healthcheck
+HEALTH_ENDPOINT=http://pm-mailer_php/index.php/healthcheck
 ```
 
-`Config.php` lädt beim Start `.env.dev` oder `.env.prod` aus `src/Inc/` — gesteuert über `APP_ENV=production` (Docker/Server) bzw. `development` (Standard).
+**Docker:** `MAIL_ENDPOINT` nutzt Docker-DNS (`pm-mailer_php`).  
+**Shared Hosting:** volle URL zur Mailer-Subdomain, z. B. `https://mapi.example.com/index.php/send_email` — wird vom [Deploy-Skript](../../deploy/README.md) aus `mailerBaseUrl` gesetzt.
+
+`Config.php` lädt `.env.dev` oder `.env.prod` ausschließlich aus **`src/Inc/`** — gesteuert über `APP_ENV=production` (Docker/Server) bzw. `development` (Standard). In Production liefert `/` bzw. `/index.php` keine Welcome-Message mehr (404 JSON).
 
 ## Lokale Entwicklung
 
@@ -115,7 +117,15 @@ src/
 
 ## Docker
 
-Container: `pm-api_php` — Port **3003** direkt, im Stack über Nginx **`/api2`**.
+Container: `pm-api_php` — Port **3003** (Dev) direkt, im Stack über Nginx **`/api2`**.
+
+Compose mountet `src/Inc/.env.dev` und `public/` für Live-Reload.
+
+## Shared Hosting
+
+Teil des Deploy-Pakets `deploy/out/3-rest-api/` — siehe [deploy/README.md](../../deploy/README.md).
+
+Upload-Reihenfolge: DB → Mailer → REST API → Frontend.
 
 ## Autor
 

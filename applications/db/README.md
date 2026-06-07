@@ -75,6 +75,10 @@ Compose nutzt das Volume `data` für `/var/lib/mysql`. Beim ersten Start führt 
 
 Empfehlung: Schema-Änderungen zuerst in `dll.sql` dokumentieren und in Dev testen; Production per kontrolliertem SQL-Deploy ausrollen.
 
+## Shared Hosting
+
+Das Deploy-Skript exportiert `portfolio_db.sql` nach `deploy/out/1-database/` — Import per phpMyAdmin auf dem Hoster. Siehe [deploy/README.md](../../deploy/README.md).
+
 ## Backups (Production)
 
 - **Volume-Snapshot:** `docker run --rm -v pencil-me-portfolio_data:/data -v $(pwd):/backup alpine tar czf /backup/db-backup.tar.gz /data`

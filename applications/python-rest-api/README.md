@@ -51,6 +51,9 @@ cp .env.example .env
 | `DB_*` | MySQL-Verbindung |
 | `API_KEY_BE` | Admin-API-Key (Vue Admin) |
 | `BASE_URL` | leer = Root hinter Nginx `/api` |
+| `ALLOWED_ORIGINS` | CORS-Whitelist (kommagetrennt), z. B. `http://localhost:8080,https://www.example.de` |
+
+In Production nur die tatsächlichen Admin-Origins eintragen — kein `*`. Fehlende oder falsche Origins → Browser blockiert Admin-Requests (Doc 23).
 
 Docker setzt Defaults in `docker-compose.yml`; fuer Production `APP_ENV=production` und echte Secrets verwenden.
 

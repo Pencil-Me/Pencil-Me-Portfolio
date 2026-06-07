@@ -1,1 +1,0 @@
-{"version":2,"defects":{"HealthControllerTest::testGetHealthcheckReturnsOk":8,"RouterTest::testSendEmailRouteIsProtected":8,"RouterTest::testIsAuthenticatedRejectsMissingKey":8,"RouterTest::testIsAuthenticatedAcceptsValidKey":8},"times":{"HealthControllerTest::testGetHealthcheckReturnsOk":0.02}}

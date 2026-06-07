@@ -1,9 +1,9 @@
 import logging
 
 from flask import Flask, request
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 
-from configs.config import api_keys, baseurl, is_production
+from configs.config import allowed_origins, api_keys, baseurl, is_production
 from configs.logging_config import configure_logging
 from module.customers.customers_repository import CustomersRepository
 from module.helper.auth import require_api_key
@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__, static_url_path=baseurl)
 app.config['PROPAGATE_EXCEPTIONS'] = not is_production()
 
-CORS(app)
+CORS(app, origins=allowed_origins, supports_credentials=True)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 register_error_handlers(app)
@@ -30,7 +30,6 @@ require_be_key = require_api_key(api_keys, 'be_key')
 
 
 @app.route(baseurl + '/project', methods=['GET', 'POST'])
-@cross_origin()
 @require_be_key
 def project_route():
     if request.method == 'GET':
@@ -40,7 +39,6 @@ def project_route():
 
 
 @app.route(baseurl + '/customer', methods=['GET', 'POST'])
-@cross_origin()
 @require_be_key
 def customer_route():
     if request.method == 'GET':
@@ -50,7 +48,6 @@ def customer_route():
 
 
 @app.route(baseurl + '/techstack', methods=['GET', 'POST'])
-@cross_origin()
 @require_be_key
 def techstack_route():
     if request.method == 'GET':
@@ -60,21 +57,18 @@ def techstack_route():
 
 
 @app.route(baseurl + '/techstack_types', methods=['GET'])
-@cross_origin()
 @require_be_key
 def get_all_techstacktypes():
     return techstack.get_types()
 
 
 @app.route(baseurl + '/project_types', methods=['GET'])
-@cross_origin()
 @require_be_key
 def get_all_projecttypes():
     return project.get_types()
 
 
 @app.route(baseurl + '/customer/<id>', methods=['GET', 'PUT', 'DELETE'])
-@cross_origin()
 @require_be_key
 def get_customer(id):
     if request.method == 'GET':
@@ -85,7 +79,6 @@ def get_customer(id):
 
 
 @app.route(baseurl + '/project/<id>', methods=['GET', 'PUT', 'DELETE'])
-@cross_origin()
 @require_be_key
 def get_project(id):
     if request.method == 'GET':
@@ -96,7 +89,6 @@ def get_project(id):
 
 
 @app.route(baseurl + '/techstack/<id>', methods=['GET', 'PUT', 'DELETE'])
-@cross_origin()
 @require_be_key
 def get_techstack(id):
     if request.method == 'GET':
@@ -107,7 +99,6 @@ def get_techstack(id):
 
 
 @app.route(baseurl + '/healthcheck', methods=['GET'])
-@cross_origin()
 def healthcheck():
     from flask import jsonify
 

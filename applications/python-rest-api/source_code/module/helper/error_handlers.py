@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify
 
 
 def register_error_handlers(app: Flask) -> None:
@@ -16,7 +16,7 @@ def register_error_handlers(app: Flask) -> None:
 
     @app.errorhandler(404)
     def not_found(_error=None):
-        return jsonify({'message': 'Not Found: ' + request.url}), 404
+        return jsonify({'message': 'Not Found'}), 404
 
     @app.errorhandler(405)
     def method_not_allowed(_error=None):

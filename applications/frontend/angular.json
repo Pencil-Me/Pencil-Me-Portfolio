@@ -31,7 +31,13 @@
               {
                 "glob": "**/*",
                 "input": "src/assets/root",
-                "output": "assets/root"
+                "output": "assets/root",
+                "ignore": ["**/.htaccess"]
+              },
+              {
+                "glob": "*.{ico,png,svg,xml,txt,webmanifest}",
+                "input": "src/assets/root",
+                "output": "/"
               }
             ],
             "styles": ["src/sass/basics/_fonts.scss", "src/styles.scss"],
@@ -68,6 +74,27 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.docker.ts"
+                }
+              ]
+            },
+            "deploy": {
+              "outputHashing": "all",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.deploy.ts"
+                }
+              ],
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "1mb",
+                  "maximumError": "2mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "10kb",
+                  "maximumError": "16kb"
                 }
               ]
             },
@@ -119,7 +146,8 @@
               {
                 "glob": "**/*",
                 "input": "src/assets/root",
-                "output": "assets/root"
+                "output": "assets/root",
+                "ignore": ["**/.htaccess"]
               }
             ],
             "styles": ["src/sass/basics/_fonts.scss", "src/styles.scss"],

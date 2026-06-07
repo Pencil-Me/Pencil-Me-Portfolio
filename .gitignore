@@ -50,3 +50,20 @@ blob-report/
 # Docker local overrides (keep *.example templates)
 docker-compose.override.yml
 docker-compose.prod.yml
+
+# Security — local credentials (keep *.example templates)
+secrets/*
+!secrets/*.example
+
+# Shared-hosting deploy (deploy/build-shared-hosting.ps1)
+deploy/out/
+deploy/out/*.zip
+deploy/deploy.config.local.json
+**/environment.deploy.ts
+
+# PHP tooling caches (monorepo-wide)
+.phpunit.result.cache
+.phpunit.cache
+
+# PHP runtime logs (app-specific paths may also gitignore locally)
+**/src/logs/*.log

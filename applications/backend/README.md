@@ -76,6 +76,16 @@ docker build -t pm-backend \
 
 Im Compose-Stack erreichbar unter [http://localhost:8080/backend](http://localhost:8080/backend).
 
+## Production (Docker-Stack)
+
+Die öffentliche Website kann alternativ per [Shared Hosting](../../deploy/README.md) deployt werden — dann entfällt Vue-Admin live.
+
+Im Full-Stack-Prod-Override:
+
+- Admin-UI unter `/backend/` per **HTTP Basic Auth** (Nginx `auth_basic` + `secrets/nginx.htpasswd`)
+- Python-API weiterhin per `API-Key` (`be_key`) — CORS über `ALLOWED_ORIGINS`
+- Details: [23-security-remediation.md](../../docs/refactoring/23-security-remediation.md), Root-[README](../../README.md) Abschnitt „Production“
+
 ## IDE-Empfehlung
 
 VS Code mit [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (Vetur deaktivieren).

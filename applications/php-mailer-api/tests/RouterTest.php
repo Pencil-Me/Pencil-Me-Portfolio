@@ -8,22 +8,21 @@ use PHPUnit\Framework\TestCase;
 
 class RouterTest extends TestCase
 {
-    private const FE_KEY = 'test-fe-key';
+    private const BE_KEY = 'test-be-key';
 
+    /** @var array<string, array<string, bool|string>> */
     private array $protectedRoutes;
 
     protected function setUp(): void
     {
         Config::$apiKeys = [
-            'fe_key' => self::FE_KEY,
-            'be_key' => 'test-be-key',
+            'fe_key' => 'test-fe-key',
+            'be_key' => self::BE_KEY,
         ];
 
         $this->protectedRoutes = [
-            '/send_email' => ['POST' => true, 'required_key' => 'fe_key'],
+            '/send_email' => ['POST' => true, 'required_key' => 'be_key'],
         ];
-
-        require_once PROJECT_ROOT_PATH . 'Inc/Router.php';
     }
 
     public function testSendEmailRouteIsProtected(): void
@@ -36,14 +35,21 @@ class RouterTest extends TestCase
     public function testIsAuthenticatedRejectsMissingKey(): void
     {
         $this->assertFalse(
-            $this->invokePrivate('isAuthenticated', ['', 'fe_key'])
+            $this->invokePrivate('isAuthenticated', ['', 'be_key'])
         );
     }
 
-    public function testIsAuthenticatedAcceptsValidKey(): void
+    public function testIsAuthenticatedRejectsWrongKey(): void
+    {
+        $this->assertFalse(
+            $this->invokePrivate('isAuthenticated', ['wrong-key', 'be_key'])
+        );
+    }
+
+    public function testIsAuthenticatedAcceptsValidBeKey(): void
     {
         $this->assertTrue(
-            $this->invokePrivate('isAuthenticated', [self::FE_KEY, 'fe_key'])
+            $this->invokePrivate('isAuthenticated', [self::BE_KEY, 'be_key'])
         );
     }
 

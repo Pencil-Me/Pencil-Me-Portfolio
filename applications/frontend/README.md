@@ -38,9 +38,36 @@ npm install
 | -------------------- | ---------------------------- | ------------------------------------ | --------------------------- |
 | **Lokal (ng serve)** | `environment.development.ts` | `/api2`                              | `npm start`                 |
 | **Docker Compose**   | `environment.docker.ts`      | `/api2`                              | `docker compose up --build` |
-| **Production**       | `environment.production.ts`  | `https://api.pencil-me.eu/index.php` | `npm run build:prod`        |
+| **Production (Deploy-Skript)** | `environment.deploy.ts` (generiert) | aus `deploy.config.local.json` | `ng build --configuration deploy` via [deploy/](../../deploy/README.md) |
+| **Production (manuell)** | `environment.production.ts` | `https://api.pencil-me.eu/index.php` | `npm run build:prod` |
 
-`API_KEY` muss mit `API_KEY_FE` in der PHP-API übereinstimmen (lokal/Docker: `secretApiFEkey` in `php-rest-api/src/Inc/.env.dev` bzw. Root-`.env`). **Docker-Build:** Compose-Arg `API_KEY_FE` ersetzt den Wert in `environment.docker.ts`. **Production:** Wert in `environment.production.ts` vor Deploy setzen — committed nur Platzhalter `REPLACE_BEFORE_DEPLOY`; Vorlage `environment.example.ts`.
+`API_KEY` muss mit `API_KEY_FE` in der PHP-API übereinstimmen (lokal/Docker: `secretApiFEkey` in `php-rest-api/src/Inc/.env.dev`). **Docker-Build:** Compose-Arg `API_KEY_FE` ersetzt den Wert in `environment.docker.ts`. **Shared-Hosting:** Deploy-Skript setzt Key aus `src/Inc/.env.prod` — siehe [deploy/README.md](../../deploy/README.md).
+
+### Shared Hosting (Production)
+
+Empfohlen über das Repo-Deploy-Skript (setzt Keys automatisch):
+
+```powershell
+# Im Repo-Root
+.\deploy\build-shared-hosting.ps1
+```
+
+Manuell: `npx ng build --configuration deploy` (nutzt generiertes `environment.deploy.ts`).
+
+### Statische Root-Assets
+
+Dateien in `src/assets/root/` — Favicons, Manifest, SEO:
+
+| Im Document Root (`/`) | Beschreibung |
+|-----------------------|--------------|
+| `favicon.ico`, `favicon-16x16.png`, `favicon-32x32.png` | Browser-Icons |
+| `apple-touch-icon.png`, `android-chrome-*.png`, `mstile-150x150.png` | PWA / Tiles |
+| `site.webmanifest`, `browserconfig.xml`, `safari-pinned-tab.svg` | Manifest / Safari |
+| `robots.txt`, `sitemap.xml` | SEO |
+
+Weitere Assets (z. B. `utilitarian-graphics.webp`) bleiben unter `/assets/root/`. Der Angular-Build kopiert die Root-Dateien zusätzlich ins Build-Root (`angular.json`); das Deploy-Skript prüft die Vollständigkeit.
+
+`.htaccess` in `src/assets/root/` wird beim Shared-Hosting-Deploy ins Frontend-Root gelegt (HTTPS, SPA-Routing).
 
 ### Lokal entwickeln (`ng serve` :4200)
 
@@ -122,7 +149,11 @@ src/
 │   ├── environment.development.ts
 │   ├── environment.docker.ts
 │   ├── environment.production.ts
+│   ├── environment.deploy.ts       # generiert, gitignored
 │   └── environment.model.ts
+├── assets/
+│   ├── logos/
+│   └── root/                       # Favicons, robots, sitemap, .htaccess
 ├── proxy.conf.json
 └── styles.scss
 e2e/                         # Playwright E2E

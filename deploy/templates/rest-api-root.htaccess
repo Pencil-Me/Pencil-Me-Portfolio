@@ -1,0 +1,5 @@
+# Shared hosting: Production-Modus fuer Config (.env.prod)
+SetEnv APP_ENV production
+
+# Kein Verzeichnis-Listing
+Options -Indexes

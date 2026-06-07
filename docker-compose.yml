@@ -8,6 +8,7 @@ x-python-env: &python-env
   DB_DATABASE: ${DB_DATABASE:-portfolio_db}
   API_KEY_BE: ${API_KEY_BE:-secretApiBEkey}
   BASE_URL: ${BASE_URL:-}
+  ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost:8080,http://127.0.0.1:8080}
 
 services:
   frontend:

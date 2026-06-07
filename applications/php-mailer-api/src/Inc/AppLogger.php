@@ -23,6 +23,15 @@ class AppLogger
         self::write('ERROR', $message, $context);
     }
 
+    public static function debug(string $message, array $context = []): void
+    {
+        if (!self::shouldLog('DEBUG')) {
+            return;
+        }
+
+        self::write('DEBUG', $message, $context);
+    }
+
     private static function shouldLog(string $level): bool
     {
         $configured = Config::getLogLevel();

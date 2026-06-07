@@ -2,6 +2,10 @@
 /vendor/
 /src/vendor/
 
+# PHPUnit
+.phpunit.result.cache
+.phpunit.cache
+
 # Environment (template: src/Inc/.env.example)
 /src/Inc/.env
 /src/Inc/.env.*

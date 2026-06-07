@@ -16,7 +16,14 @@ require __DIR__ . '/../src/Inc/Bootstrap.php';
 
 // Check if the request is directly to index.php
 if ($_SERVER['REQUEST_URI'] === '/index.php' || $_SERVER['REQUEST_URI'] === '/') {
-    echo "Welcome to the API!";
+    $appEnv = getenv('APP_ENV') ?: ($_ENV['APP_ENV'] ?? $_SERVER['APP_ENV'] ?? 'development');
+    if ($appEnv !== 'production') {
+        echo "Welcome to the API!";
+    } else {
+        http_response_code(404);
+        header('Content-Type: application/json');
+        echo json_encode(['message' => 'Not Found']);
+    }
     exit;
 }
 

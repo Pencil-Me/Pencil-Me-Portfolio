@@ -1,0 +1,17 @@
+{
+  "apiBaseUrl": "https://api.pencil-me.eu/index.php",
+  "frontendDomain": "https://www.pencil-me.de",
+  "mailerBaseUrl": "https://mailer.pencil-me.eu/index.php",
+  "ftp": {
+    "enabled": false,
+    "host": "ftp.example.com",
+    "username": "your-user",
+    "password": "",
+    "useSsl": true,
+    "remotePaths": {
+      "frontend": "/public_html",
+      "restApi": "/api/public_html",
+      "mailer": "/mailer/public_html"
+    }
+  }
+}

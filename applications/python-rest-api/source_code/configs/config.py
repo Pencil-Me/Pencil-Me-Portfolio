@@ -39,3 +39,13 @@ baseurl = _optional('BASE_URL', '')
 
 def is_production() -> bool:
     return _optional('APP_ENV', 'development').lower() == 'production'
+
+
+def _parse_origins(value: str) -> list[str]:
+    if not value.strip():
+        return []
+    return [origin.strip() for origin in value.split(',') if origin.strip()]
+
+
+_default_origins = 'http://localhost:8080,http://127.0.0.1:8080'
+allowed_origins = _parse_origins(_optional('ALLOWED_ORIGINS', _default_origins))

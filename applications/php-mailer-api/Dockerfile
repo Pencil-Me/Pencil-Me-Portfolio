@@ -1,5 +1,5 @@
-# Use the official PHP 8.1 image as the base
-FROM php:8.1-apache
+# Use the official PHP 8.3 image as the base
+FROM php:8.3-apache
 
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
@@ -9,7 +9,10 @@ RUN apt-get update && apt-get install -y \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
+RUN a2enmod rewrite
+
 RUN sed -i 's|/var/www/html|/var/www/html/src|g' /etc/apache2/sites-available/000-default.conf
+RUN sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
 
 WORKDIR /var/www/html
 
