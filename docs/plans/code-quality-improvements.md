@@ -2,6 +2,7 @@
 
 **Branch:** `feature/code-quality-improvements`  
 **Stand:** 2026-06-08  
+**Status:** Phase A–C abgeschlossen — PR/Merge ausstehend  
 **Methode:** Fallow (`npx fallow`) + manuelle Codebase-Analyse + ADR/OpenAPI-Abgleich
 
 ---
@@ -158,10 +159,10 @@
 
 **Akzeptanzkriterien:**
 
-- [ ] Kurzer Abschnitt in `applications/php-rest-api/README.md` und `php-mailer-api/README.md`: Unterschiede REST (CORS, Sanitizer) vs Mailer
-- [ ] Mailer `jsonResponse`: `JSON_THROW_ON_ERROR` beibehalten; optional `http_response_code` Konsistenz prüfen
-- [ ] **Kein** Shared-Package in diesem Epic
-- [ ] Bestehende PHPUnit-Tests grün
+- [x] Kurzer Abschnitt in `applications/php-rest-api/README.md` und `php-mailer-api/README.md`: Unterschiede REST (CORS, Sanitizer) vs Mailer
+- [x] Mailer `jsonResponse`: `JSON_THROW_ON_ERROR` beibehalten; optional `http_response_code` Konsistenz prüfen
+- [x] **Kein** Shared-Package in diesem Epic
+- [x] Bestehende PHPUnit-Tests grün
 
 **Optional (wenn risikoarm):** Mailer `BaseController::__call` mit `#[NoReturn]` wie REST
 
@@ -175,8 +176,8 @@
 
 **Akzeptanzkriterien:**
 
-- [ ] Root-`README.md` oder `docs/plans/` Tabelle: Frontend `quality:ci` + Fallow, Backend `quality:ci`, PHP `vendor/bin/phpunit`, Python `pytest`
-- [ ] `API_KEY` vs `VITE_API_KEY` Konvention erklärt (kein Code-Change)
+- [x] Root-`README.md` oder `docs/plans/` Tabelle: Frontend `quality:ci` + Fallow, Backend `quality:ci`, PHP `vendor/bin/phpunit`, Python `pytest`
+- [x] `API_KEY` vs `VITE_API_KEY` Konvention erklärt (kein Code-Change)
 
 ---
 

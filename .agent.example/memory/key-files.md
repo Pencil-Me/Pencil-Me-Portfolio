@@ -44,6 +44,7 @@
 | Datei | Rolle |
 |-------|-------|
 | `.fallowrc.json` | Fallow: Entry, dupes, health |
+| `karma.conf.js` | Coverage-Thresholds (branches 78 %) |
 | `docs/plans/code-quality-improvements.md` | Spec-driven Quality-Epic |
 | `src/app/shared/constants/user-messages.ts` | Zentrale User-Messages |
 | `src/app/shared/utils/api-error.util.ts` | HTTP-Fehler → UI-String |

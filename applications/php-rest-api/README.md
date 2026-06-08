@@ -98,6 +98,20 @@ docker build -t pm-php-api .
 docker run -p 3003:80 -v ./public:/var/www/html/public pm-php-api
 ```
 
+## BaseController (REST)
+
+`src/Controller/Api/BaseController.php` — Basis für alle API-Controller.
+
+| Merkmal | REST API | Mailer (Vergleich) |
+|---------|----------|-------------------|
+| CORS | `CorsHeaders::apply()` in `jsonResponse` | Nicht nötig (intern) |
+| Input-Sanitizer | `sanitizeText`, Längenlimits | Nicht vorhanden |
+| Query-Limit | `getQueryLimit()` (max. 100) | Nicht vorhanden |
+| `jsonResponse` | CORS + `JSON_THROW_ON_ERROR` + `exit` | Gleiches JSON-Verhalten, ohne CORS |
+| `__call` | `#[NoReturn]` | Optional ohne Attribute |
+
+**Grund:** REST ist browser-facing (CORS, öffentliche Reads); Mailer nur Server-to-Server. Kein gemeinsames `php-shared/`-Package — Drift bewusst dokumentiert (siehe Mailer-README).
+
 ## Tests
 
 ```bash

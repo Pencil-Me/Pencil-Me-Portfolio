@@ -48,6 +48,20 @@ Fehler und Erfolg: `{"message": "..."}` + HTTP-Status.
 
 `src/logs/mail.log` — Level über `LOG_LEVEL` (`DEBUG` | `INFO` | `WARNING` | `ERROR`). Passwörter/API-Keys werden nicht geloggt. SMTP-Debug nur bei `LOG_LEVEL=DEBUG`.
 
+## BaseController (Mailer)
+
+`src/Controller/Api/BaseController.php` — schlanker als REST-`BaseController`.
+
+| Merkmal | Mailer | REST API (Vergleich) |
+|---------|--------|---------------------|
+| CORS | Nein — nicht browser-facing | `CorsHeaders` in `jsonResponse` |
+| Sanitizer / Query-Limit | Nein | Ja — öffentliche Input-Pfade |
+| `jsonResponse` | `http_response_code`, `JSON_THROW_ON_ERROR`, `exit` | Zusätzlich CORS-Header |
+| `sendErrorResponse` | Loggt via `AppLogger`, generische 500-Message | Controller-spezifisch |
+| `__call` | Ohne `#[NoReturn]` (optional angleichbar) | Mit `#[NoReturn]` |
+
+**Grund:** Mailer akzeptiert nur `be_key` vom REST-Gateway — kein Browser-Zugriff, daher kein CORS.
+
 ## Statische Analyse
 
 ```bash

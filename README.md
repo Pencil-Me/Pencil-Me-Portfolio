@@ -175,7 +175,23 @@ Prüft Auth (401), CORS-Whitelist, Mailer nicht öffentlich, Honeypot. Siehe [23
 
 ## CI / Qualitätssicherung
 
-Die Drone-Pipeline (`.drone.yml`) prüft Frontend und Backend-Services:
+### Quality Gates (lokal vor PR)
+
+| App | Befehl | Inhalt |
+|-----|--------|--------|
+| **Frontend** | `cd applications/frontend && npm run quality:ci` | Prettier, ESLint, Stylelint, **310** Unit-Tests, Coverage (branches ≥ **78 %**), Build, **Fallow** (`dead-code`, `dupes`) |
+| **Frontend E2E** | `npm run e2e:ci` | Playwright |
+| **PHP REST** | `cd applications/php-rest-api && composer test` | PHPUnit, PHPStan (`composer analyse`) |
+| **PHP Mailer** | `cd applications/php-mailer-api && composer test` | PHPUnit, PHPStan |
+| **Vue Admin** | `cd applications/backend && npm run quality:ci` | ESLint, vue-tsc, Vitest |
+| **Python API** | `cd applications/python-rest-api/source_code && pytest -q` | ruff, mypy (CI) |
+| **OpenAPI** | `npm run openapi:lint` | Spectral (Repo-Root) |
+
+**API-Key-Konvention (Frontend):** In `environment*.ts` heißt die Variable `API_KEY` (Build-Zeit). Angular/Vite-Projekte nutzen oft `VITE_*` — hier bewusst `API_KEY` via `fileReplacements` / Deploy-Skript, nicht `import.meta.env.VITE_API_KEY`.
+
+Details Frontend-Coverage: [applications/frontend/README.md](applications/frontend/README.md) · Epic-Plan: [docs/plans/code-quality-improvements.md](docs/plans/code-quality-improvements.md)
+
+### Drone CI (`.drone.yml`)
 
 | Step | Befehl | Inhalt |
 |------|--------|--------|

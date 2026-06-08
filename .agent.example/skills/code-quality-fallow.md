@@ -17,7 +17,10 @@ Projektspezifischer Workflow für `applications/frontend/`.
 | `npx fallow health --coverage coverage/portfolio/coverage-final.json` | Refactoring-Ziele, MI-Score |
 | `npm run ci-test` | Unit-Tests + Karma-Coverage |
 
-Config: `applications/frontend/.fallowrc.json`
+| Datei | Rolle |
+|-------|-------|
+| `.fallowrc.json` | Fallow Entry, dupes, health |
+| `karma.conf.js` | Coverage-Thresholds (branches 78 %) |
 
 ## Spec-driven Plan
 
@@ -26,8 +29,8 @@ Epic-Plan (committet): `docs/plans/code-quality-improvements.md`
 | Phase | Inhalt |
 |-------|--------|
 | A | Dead Code, Featured-Filter, zentrale User-Messages |
-| B | Branch-Coverage erhöhen |
-| C | Cross-stack Docs, Quality-Gates |
+| B | Branch-Coverage ≥ 78 %, Error-Pfad-Tests |
+| C | PHP BaseController-Docs, Quality-Gates in README |
 
 ## Patterns (empfohlen)
 
@@ -35,6 +38,7 @@ Epic-Plan (committet): `docs/plans/code-quality-improvements.md`
 2. Eine Filter-/Validierungsfunktion pro Business-Regel
 3. User-facing Strings in `shared/constants/user-messages.ts`
 4. Fallow `dead-code` vor jedem Quality-PR
+5. Branch-Gaps aus `coverage-final.json` priorisieren (Utils/Mapper zuerst)
 
 ## Verification
 

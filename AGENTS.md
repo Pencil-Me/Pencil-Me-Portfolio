@@ -76,6 +76,7 @@ Details: `.agent/memory/` (nicht committet).
 |---------|-----|
 | Coding / Testing allgemein | `.ai-brain/core/` |
 | Angular / PHP / Docker / Fallow Skill | `.ai-brain/skills/` |
+| Branch-Coverage-Gaps | `.ai-brain/skills/branch-coverage-gaps.md` |
 | Feature / Debug / Deploy SOP | `.ai-brain/sops/` |
 | Production deployen | `.agent/skills/deploy-shared-hosting.md` |
 | CORS / API | `.agent/skills/debug-rest-api-cors.md` |
