@@ -43,6 +43,12 @@
 
 | Datei | Rolle |
 |-------|-------|
+| `.fallowrc.json` | Fallow: Entry, dupes, health |
+| `docs/plans/code-quality-improvements.md` | Spec-driven Quality-Epic |
+| `src/app/shared/constants/user-messages.ts` | Zentrale User-Messages |
+| `src/app/shared/utils/api-error.util.ts` | HTTP-Fehler → UI-String |
+| `src/app/shared/models/load-status.model.ts` | LoadStatus + `toErrorMessage` |
+| `src/app/modules/projects/featured-projects.config.ts` | Featured-Filter + Mapping |
 | `src/app/core/services/api/api-client.service.ts` | HTTP + Query-Key |
 | `src/environments/environment.production.ts` | Manuelles Prod |
 | `src/environments/environment.deploy.ts` | Deploy-generiert (gitignored) |

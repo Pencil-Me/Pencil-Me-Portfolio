@@ -66,3 +66,12 @@ Kurzform. Ausführlicher: [docs/adr/](../docs/adr/), [docs/refactoring/](../docs
 - **Bootstrap:** `AGENTS.md`, `docs/adr/` committet; `docs/refactoring/` gitignored
 
 **Grund:** Wiederverwendbarkeit zwischen Projekten/AI-Tools; klare Trennung generisch vs. projektspezifisch.
+
+## D-13 — Spec-driven Code Quality mit Fallow
+
+**Entscheidung:**
+- Quality-Epics als committeter Plan unter `docs/plans/`
+- Fallow (`dead-code`, `dupes`, `health`) als Frontend-Quality-Gate
+- Kleine Phasen (Quick Wins → Coverage → Docs), kein Big-Bang-Refactor
+
+**Grund:** Messbare Akzeptanzkriterien; Fallow findet toten Code/Exports; Scope bleibt kontrolliert.

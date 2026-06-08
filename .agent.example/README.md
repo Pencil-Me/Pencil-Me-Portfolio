@@ -29,6 +29,7 @@ Persistenter **projektspezifischer** Kontext. Vor Deploy, CORS oder Architektur-
 | [skills/debug-contact-form.md](skills/debug-contact-form.md) | Workflow: Kontaktformular-Kette |
 | [skills/local-docker.md](skills/local-docker.md) | Gateway vs. Shared-Hosting-Sim |
 | [skills/secrets-and-git.md](skills/secrets-and-git.md) | Projekt-Pfade — generisch: `.ai-brain/sops/secrets-and-git.md` |
+| [skills/code-quality-fallow.md](skills/code-quality-fallow.md) | Fallow + spec-driven Quality-Epic |
 | [TEMPLATE-session-entry.md](TEMPLATE-session-entry.md) | Vorlage für Session-Log-Einträge |
 
 ## Einstiegspfade (Happy Paths)

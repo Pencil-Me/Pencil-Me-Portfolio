@@ -75,11 +75,12 @@ Details: `.agent/memory/` (nicht committet).
 | Anfrage | Ort |
 |---------|-----|
 | Coding / Testing allgemein | `.ai-brain/core/` |
-| Angular / PHP / Docker Skill | `.ai-brain/skills/` |
+| Angular / PHP / Docker / Fallow Skill | `.ai-brain/skills/` |
 | Feature / Debug / Deploy SOP | `.ai-brain/sops/` |
 | Production deployen | `.agent/skills/deploy-shared-hosting.md` |
 | CORS / API | `.agent/skills/debug-rest-api-cors.md` |
 | Kontaktformular | `.agent/skills/debug-contact-form.md` |
+| Frontend Code Quality / Fallow | `.agent/skills/code-quality-fallow.md` |
 | Architektur-Entscheidung | `docs/adr/` + `.agent/memory/decisions.md` |
 | Secrets / Commit | `.ai-brain/sops/secrets-and-git.md` |
 

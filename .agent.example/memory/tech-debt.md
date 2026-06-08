@@ -37,6 +37,19 @@ Kern aus Roadmap 2026-05-29 — Status ✅ = abgearbeitet laut Docs.
 - ✅ Schlankes REST-Paket (~41 Dateien)
 - ✅ `.env.dev` nicht in `deploy/out`
 
+## Code Quality Epic
+
+| Item | Status | Priorität |
+|------|--------|-----------|
+| Phase A: Dead Code, Featured-Filter, `DEFAULT_LOAD_ERROR` | siehe Plan | — |
+| Phase B: Branch-Coverage ≥ 78 % | offen | mittel |
+| Phase C: PHP BaseController-Docs, Quality-Gates | offen | niedrig |
+| PHP `BaseController`-Drift (REST vs Mailer) | offen | niedrig |
+| Fallow nur Frontend | offen | niedrig |
+
+Plan: `docs/plans/code-quality-improvements.md`  
+Skill: `.agent/skills/code-quality-fallow.md`
+
 ## Bei neuer Schuld
 
 1. Eintrag hier (1 Zeile + Priorität)

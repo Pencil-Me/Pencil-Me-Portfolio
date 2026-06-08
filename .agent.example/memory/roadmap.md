@@ -7,6 +7,12 @@
 - [ ] Diagnose-Dateien vom API-Server entfernen
 - [ ] Kontaktformular E2E auf Production
 
+## Code Quality (Frontend)
+
+- [ ] Phase A: Fallow dead-code, Featured-Filter, zentrale Error-Konstante
+- [ ] Phase B: Branch-Coverage ≥ 78 %
+- [ ] Phase C: PHP BaseController-Doku + Quality-Gates
+
 ## Mittelfristig
 
 - [ ] API-Key-Rotation (nach Git-Historie-Review)
