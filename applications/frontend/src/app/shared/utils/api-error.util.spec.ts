@@ -1,5 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 
+import { DEFAULT_LOAD_ERROR } from '@app/shared/constants/user-messages';
+
 import { mapApiError } from './api-error.util';
 
 describe('mapApiError', () => {
@@ -53,7 +55,7 @@ describe('mapApiError', () => {
   });
 
   it('should return default message for unknown errors', () => {
-    expect(mapApiError({ code: 42 })).toBe('Daten konnten nicht geladen werden.');
+    expect(mapApiError({ code: 42 })).toBe(DEFAULT_LOAD_ERROR);
   });
 
   it('should ignore object bodies without string message', () => {

@@ -1,8 +1,7 @@
+import { DEFAULT_LOAD_ERROR } from '@app/shared/constants/user-messages';
 import type { DomainLoadStatus } from '@app/shared/domain/portfolio-domain';
 
 export type LoadStatus = DomainLoadStatus;
-
-const DEFAULT_LOAD_ERROR = 'Daten konnten nicht geladen werden.';
 
 export function isLoadingStatus(status: LoadStatus | null | undefined): boolean {
   return status === 'PENDING' || status === 'LOADING';

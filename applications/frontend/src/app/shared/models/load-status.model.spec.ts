@@ -1,3 +1,5 @@
+import { DEFAULT_LOAD_ERROR } from '@app/shared/constants/user-messages';
+
 import {
   hasLoadError,
   isLoadingStatus,
@@ -56,12 +58,12 @@ describe('load-status.model', () => {
     });
 
     it('should return default message for empty error', () => {
-      expect(toErrorMessage(null)).toBe('Daten konnten nicht geladen werden.');
-      expect(toErrorMessage('')).toBe('Daten konnten nicht geladen werden.');
+      expect(toErrorMessage(null)).toBe(DEFAULT_LOAD_ERROR);
+      expect(toErrorMessage('')).toBe(DEFAULT_LOAD_ERROR);
     });
 
     it('should return default message for unsupported error shapes', () => {
-      expect(toErrorMessage({ status: 500 })).toBe('Daten konnten nicht geladen werden.');
+      expect(toErrorMessage({ status: 500 })).toBe(DEFAULT_LOAD_ERROR);
     });
   });
 

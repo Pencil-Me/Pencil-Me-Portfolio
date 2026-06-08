@@ -1,10 +1,7 @@
 import type { CUSTOMER, PROJECT, TECHSTACK } from '@core/models/portfolio-api.models';
-import type { PROJECTTITLE, TECHTITLE } from '@app/shared/domain/portfolio-domain';
 import type { LoadStatus } from '@app/shared/models/load-status.model';
 
 export type { CUSTOMER, DATE, PROJECT, TECH, TECHSTACK } from '@core/models/portfolio-api.models';
-
-export type { PROJECTTITLE, TECHTITLE };
 
 /**
  * Type definition for the state of a single data object.

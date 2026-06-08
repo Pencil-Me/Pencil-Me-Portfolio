@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 
-const DEFAULT_API_ERROR = 'Daten konnten nicht geladen werden.';
+import { DEFAULT_LOAD_ERROR } from '@app/shared/constants/user-messages';
 
 function readStringBody(body: unknown): string | null {
   return typeof body === 'string' && body.trim() ? body : null;
@@ -50,5 +50,5 @@ export function mapApiError(error: unknown): string {
     return error.message;
   }
 
-  return DEFAULT_API_ERROR;
+  return DEFAULT_LOAD_ERROR;
 }

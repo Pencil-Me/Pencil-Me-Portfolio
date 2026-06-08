@@ -20,7 +20,7 @@ export function resolveFeaturedProjects(categories: IProjectsCategory[]): IFeatu
   const allProjects = categories.flatMap((category) => category.data);
 
   return allProjects
-    .filter((project) => project.featured_rank != null && project.featured_rank > 0)
+    .filter(isFeaturedProject)
     .sort((a, b) => (a.featured_rank ?? 0) - (b.featured_rank ?? 0))
     .map((project) => ({
       ...project,
