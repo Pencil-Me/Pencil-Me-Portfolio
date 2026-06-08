@@ -8,7 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "test:unit": "vitest",
-    "test:unit:ci": "vitest run",
+    "test:unit:ci": "vitest run --coverage",
     "test:e2e": "start-server-and-test preview http://localhost:4173/backend/ \"cypress run --e2e\"",
     "test:e2e:ci": "npm run build && start-server-and-test preview http://localhost:4173/backend/ \"cypress run --e2e\"",
     "test:e2e:dev": "start-server-and-test \"vite dev --port 4173\" http://localhost:4173/backend/ \"cypress open --e2e\"",
@@ -20,6 +20,8 @@
     "lint:files": "eslint --fix --max-warnings 0",
     "format": "prettier --write src/",
     "format:files": "prettier --write",
+    "fallow:analyze": "fallow dead-code && fallow dupes && fallow health --coverage coverage/coverage-final.json --fail-on-issues",
+    "fallow": "fallow",
     "quality:ci": "npm run lint:ci && npm run type-check:ci && npm run test:unit:ci"
   },
   "dependencies": {
@@ -33,6 +35,7 @@
     "@tsconfig/node20": "^20.1.2",
     "@types/jsdom": "^21.1.6",
     "@types/node": "^20.11.10",
+    "@vitest/coverage-v8": "^3.2.4",
     "@vitejs/plugin-vue": "^5.0.3",
     "@vue/eslint-config-prettier": "^8.0.0",
     "@vue/eslint-config-typescript": "^12.0.0",
@@ -43,6 +46,7 @@
     "eslint": "^8.49.0",
     "eslint-plugin-cypress": "^2.15.1",
     "eslint-plugin-vue": "^9.17.0",
+    "fallow": "^2.89.0",
     "jsdom": "^24.0.0",
     "npm-run-all2": "^6.1.1",
     "postcss": "^8.5.6",

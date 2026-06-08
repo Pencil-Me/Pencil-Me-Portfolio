@@ -17,7 +17,12 @@ describe('cloneProject', () => {
       customer: '',
       dates: [{ start_date: '2024-01-01', end_date: '2024-06-01' }],
       tech: [{ id: 't1', name: 'Vue', type: '1', expertise_level: '5', flag_important: false }],
-      customers: [{ id: 'c1', name: 'ACME', location: 'Berlin' }]
+      customers: [{ id: 'c1', name: 'ACME', location: 'Berlin' }],
+      featured_rank: 0,
+      featured_tag: '',
+      featured_problem: '',
+      featured_role: '',
+      featured_outcome: ''
     }
 
     const cloned = cloneProject(source)

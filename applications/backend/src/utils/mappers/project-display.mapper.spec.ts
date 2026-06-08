@@ -21,7 +21,12 @@ describe('mapProjectsForListDisplay', () => {
           { start_date: '2024-01-01', end_date: '2024-06-01' }
         ],
         customers: [],
-        tech: []
+        tech: [],
+        featured_rank: 0,
+        featured_tag: '',
+        featured_problem: '',
+        featured_role: '',
+        featured_outcome: ''
       }
     ]
 

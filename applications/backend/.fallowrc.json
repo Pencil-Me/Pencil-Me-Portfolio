@@ -1,0 +1,18 @@
+{
+  "$schema": "https://raw.githubusercontent.com/fallow-rs/fallow/main/schema.json",
+  "entry": [
+    "src/main.ts",
+    "vitest.config.ts",
+    "cypress.config.ts",
+    "src/**/*.spec.ts",
+    "cypress/e2e/**/*.ts",
+    "cypress/support/**/*.ts"
+  ],
+  "ignoreDependencies": ["eslint-plugin-cypress", "@vue/eslint-config-prettier"],
+  "duplicates": {
+    "minOccurrences": 3
+  },
+  "health": {
+    "ignore": ["**/*.vue", "**/*.spec.ts"]
+  }
+}

@@ -35,7 +35,12 @@ describe('useProjectsStore', () => {
         customer: '',
         dates: [],
         customers: [],
-        tech: []
+        tech: [],
+        featured_rank: 0,
+        featured_tag: '',
+        featured_problem: '',
+        featured_role: '',
+        featured_outcome: ''
       }
     ])
 

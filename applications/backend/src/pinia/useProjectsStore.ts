@@ -19,7 +19,12 @@ const emptyProject = (): TProject => ({
   customer: '',
   dates: [],
   customers: [],
-  tech: []
+  tech: [],
+  featured_rank: 0,
+  featured_tag: '',
+  featured_problem: '',
+  featured_role: '',
+  featured_outcome: ''
 })
 
 export const useProjectsStore = defineStore('projects', {
