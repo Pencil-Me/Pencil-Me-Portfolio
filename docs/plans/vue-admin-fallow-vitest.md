@@ -31,10 +31,10 @@
 
 | Metrik | Ist |
 |--------|-----|
-| Vitest Spec-Dateien | 16 |
-| Vitest Tests | **35** passed |
-| Vitest Coverage | **konfiguriert** (Scope: utils/services/pinia/types; lines **69,8 %**, branches **58,2 %**) |
-| Fallow | `.fallowrc.json` angelegt; Baseline: **4** unused files, **7** unused exports |
+| Vitest Spec-Dateien | 19 |
+| Vitest Tests | **55** passed |
+| Vitest Coverage | **konfiguriert** (Scope: utils/services/pinia/types; lines **73,2 %**, branches **66,2 %**) |
+| Fallow | `.fallowrc.json` angelegt; Baseline: **4** unused files, **6** unused exports |
 | `quality:ci` | lint + type-check + `test:unit:ci` **mit Coverage** (Fallow → Phase 2 / SPEC-07) |
 | Drone `vue-admin-quality` | wie `quality:ci` |
 
@@ -76,12 +76,12 @@ Erster Lauf `npx fallow dead-code` ohne `.fallowrc.json` meldet u. a.:
 
 ### Fallow-Baseline (nach SPEC-01, 2026-05-29)
 
-Mit Entry-Points: **4** unused files, **7** unused exports (kein unused devDependency nach `ignoreDependencies`):
+Mit Entry-Points: **4** unused files, **6** unused exports (kein unused devDependency nach `ignoreDependencies`):
 
 | Kategorie | Fund |
 |-----------|------|
 | Unused files | `composables/formatDate.ts`, `formatIsoDate.ts`, `useFormatDate.ts`, `pinia/index.ts` |
-| Unused exports | `parseDate`, `normalizeProject`, `getProjectLastEndDate`, Send-Mapper-Helfer, deprecated `convertTCustomerToSendPayload` |
+| Unused exports | `normalizeProject`, `getProjectLastEndDate`, Send-Mapper-Helfer, deprecated `convertTCustomerToSendPayload` |
 
 → **SPEC-06** (Phase 2): bereinigen oder `fallow-ignore`; danach `fallow:analyze` in `quality:ci`.
 
@@ -196,11 +196,11 @@ npm run test:unit          # Vitest watch — bleibt offen während Entwicklung
 
 **Akzeptanzkriterien (TDD):**
 
-- [ ] **RED:** `date.spec.ts` mit Tests für `parseDate(null)`, invalid string, gültiges ISO
-- [ ] **RED:** Tests für `formatDate` / `formatIsoDate` de-DE bzw. `YYYY-MM-DD`
-- [ ] **GREEN:** Implementierung in `date.ts` erfüllt alle Tests (ggf. bereits vorhanden — Tests trotzdem explizit schreiben)
-- [ ] **REFACTOR:** Doppelte `parseDate`-Logik in Composables nur re-exportieren
-- [ ] Fallow: `parseDate` nicht mehr als dead export (wenn genutzt)
+- [x] **RED:** `date.spec.ts` mit Tests für `parseDate(null)`, invalid string, gültiges ISO
+- [x] **RED:** Tests für `formatDate` / `formatIsoDate` de-DE bzw. `YYYY-MM-DD`
+- [x] **GREEN:** Implementierung in `date.ts` erfüllt alle Tests (ggf. bereits vorhanden — Tests trotzdem explizit schreiben)
+- [x] **REFACTOR:** Doppelte `parseDate`-Logik in Composables nur re-exportieren
+- [x] Fallow: `parseDate` nicht mehr als dead export (wenn genutzt)
 
 **Dateien:** `src/utils/date.ts`, `src/utils/date.spec.ts` (neu)
 
@@ -214,11 +214,11 @@ npm run test:unit          # Vitest watch — bleibt offen während Entwicklung
 
 **Akzeptanzkriterien (TDD):**
 
-- [ ] **RED:** Test `normalizeCustomer` mit fehlenden `id`/`name`/`location` → `''`
-- [ ] **RED:** Test `normalizeCustomers` für Arrays
-- [ ] **RED:** Test `cloneCustomer` erzeugt shallow copy
-- [ ] **GREEN:** Minimalcode; keine Verhaltensänderung gegenüber Ist ohne Tests
-- [ ] `customer.mapper.spec.ts` neu
+- [x] **RED:** Test `normalizeCustomer` mit fehlenden `id`/`name`/`location` → `''`
+- [x] **RED:** Test `normalizeCustomers` für Arrays
+- [x] **RED:** Test `cloneCustomer` erzeugt shallow copy
+- [x] **GREEN:** Minimalcode; keine Verhaltensänderung gegenüber Ist ohne Tests
+- [x] `customer.mapper.spec.ts` neu
 
 ---
 
@@ -230,10 +230,10 @@ npm run test:unit          # Vitest watch — bleibt offen während Entwicklung
 
 **Akzeptanzkriterien (TDD):**
 
-- [ ] **RED/GREEN:** Tests für `normalizeTechStack` / `normalizeTechStacks`
-- [ ] **RED/GREEN:** Test für `mapTechStackTypesToSelectOptions` (Pinia-Consumer)
-- [ ] `techstack.mapper.spec.ts` neu
-- [ ] Bestehende `techstack-send.mapper.spec.ts` bleibt grün
+- [x] **RED/GREEN:** Tests für `normalizeTechStack` / `normalizeTechStacks`
+- [x] **RED/GREEN:** Test für `mapTechStackTypesToSelectOptions` (Pinia-Consumer)
+- [x] `techstack.mapper.spec.ts` neu
+- [x] Bestehende `techstack-send.mapper.spec.ts` bleibt grün
 
 ---
 
