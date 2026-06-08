@@ -191,6 +191,20 @@ Prüft Auth (401), CORS-Whitelist, Mailer nicht öffentlich, Honeypot. Siehe [23
 
 Details Frontend-Coverage: [applications/frontend/README.md](applications/frontend/README.md) · Epic-Plan: [docs/plans/code-quality-improvements.md](docs/plans/code-quality-improvements.md)
 
+### NPM-Script-Konvention (`:ci`-Suffix)
+
+CI-taugliche Skripte nutzen **`:ci`** oder **`quality:ci`** als Orchestrator. Historische Namen bleiben — keine Umbenennung nötig.
+
+| App | Tests (CI) | Lint/Analyse (CI) | Volle CI-Pipeline |
+|-----|------------|-------------------|-------------------|
+| Frontend | `npm run ci-test` | `format:check`, `lint` | `npm run quality:ci` (+ Fallow) |
+| Vue Admin | `npm run test:unit:ci` | `lint:ci`, `type-check:ci` | `npm run quality:ci` |
+| PHP REST / Mailer | `composer test` | `composer analyse` | Drone-Steps separat |
+| Python API | `pytest -q` | `ruff`, `mypy` | Drone `python-api-smoke` |
+| Repo-Root | — | — | `npm run openapi:lint` |
+
+`ci-test` (Angular/Karma) und `test:unit:ci` (Vue/Vitest) erfüllen dieselbe Rolle.
+
 ### Drone CI (`.drone.yml`)
 
 | Step | Befehl | Inhalt |

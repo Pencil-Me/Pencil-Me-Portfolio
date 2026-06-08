@@ -15,7 +15,7 @@
 - Fallow-Befunde auf 0 (dead files/exports)
 - Branch-Coverage Frontend stabil ≥ 78 %
 - Klare Konventionen für Fehlerbehandlung, Barrel-Exports und PHP-Controller-Basisklassen
-- Keine funktionalen Regressionen (290 Unit-Tests + E2E grün)
+- Keine funktionalen Regressionen (**310** Unit-Tests + E2E grün)
 
 ### Nicht-Ziele (dieser Plan)
 
@@ -28,54 +28,74 @@
 
 ## 2. Analyse-Ergebnisse
 
-### 2.1 Fallow — Angular Frontend
+### 2.1 Ausgangslage (vor Epic)
 
-| Check | Ergebnis |
-|-------|----------|
+| Check | Ergebnis (Start) |
+|-------|------------------|
 | `fallow dead-code` | 1 unused file, 2 unused type re-exports |
 | `fallow dupes` (min 3) | Keine Duplikat-Cluster |
 | `fallow health` | Score **100 A**, MI 92.0 |
 | Coverage (Karma) | Statements 94.5 %, **Branches 75.4 %**, Functions 94.4 %, Lines 95.3 % |
+| Unit-Tests | 290 |
 
-**Dead Code (verifiziert):**
+### 2.2 Ist nach Epic (Verifikation 2026-06-08)
 
-| Artefakt | Pfad | Empfehlung |
-|----------|------|------------|
-| Unused barrel | `src/app/core/models/index.ts` | Entfernen oder Imports umstellen |
-| Unused re-exports | `knowledge.models.ts` → `PROJECTTITLE`, `TECHTITLE` | Re-Export entfernen; direkt aus `portfolio-domain` importieren |
+| Check | Ergebnis (aktuell) |
+|-------|-------------------|
+| `fallow dead-code` | **0** files, **0** type exports |
+| `fallow dupes` (min 3) | Keine Duplikat-Cluster |
+| `fallow health --fail-on-issues` | MI **92.0**, 0 above threshold |
+| Coverage (Karma) | Statements **95.2 %**, Branches **78.4 %**, Functions **94.6 %**, Lines **96.0 %** |
+| Unit-Tests | **310** SUCCESS |
+| Karma `branches` threshold | **78 %** (war 74 %) |
 
-**Fallow Refactoring Targets:**
+**Noch optionale Branch-Lücken:** `project.mapper.ts` (~69 %), `tech-stack.mapper.ts` (~72 %) — nicht Epic-blockierend.
+
+**Fallow Refactoring Targets (unverändert relevant bei Änderungen):**
 
 | Datei | Grund | Fan-in |
 |-------|-------|--------|
 | `shared/utils/api-error.util.ts` | Hohe Kopplung, Fehler-Normalisierung zentral | 4 |
 | `shared/models/load-status.model.ts` | Legacy-Fallback-Logik, viele Consumer | 10 |
 | `state/knowledge/mappers/project.mapper.ts` | Komplexität + Fan-out | 6 fan-out |
-| `modules/projects/featured-projects.config.ts` | Doppelte Featured-Filter-Logik | — |
 
-### 2.2 Manuelle Befunde (priorisiert)
+### 2.3 Manuelle Befunde — Status
 
 #### P1 — Inkonsistenz / Wartbarkeit
 
-| ID | Befund | Dateien | Vorschlag |
-|----|--------|---------|-----------|
-| Q-01 | Doppelte Featured-Filter-Logik | `featured-projects.config.ts` | `resolveFeaturedProjects` nutzt `isFeaturedProject()` |
-| Q-02 | Doppelte Default-Fehlermeldung | `api-error.util.ts`, `load-status.model.ts` | Eine Konstante `DEFAULT_USER_ERROR` in `shared/constants/` |
-| Q-03 | Ungenutzter Core-Models-Barrel | `core/models/index.ts` | Löschen; Imports zeigen bereits auf `portfolio-api.models` |
-| Q-04 | Type-Re-Export-Leichen | `knowledge.models.ts` | `PROJECTTITLE`/`TECHTITLE` Re-Export entfernen |
-| Q-05 | PHP `BaseController`-Drift | REST vs Mailer `BaseController.php` | REST: CORS in `jsonResponse`, Sanitizer, Limits; Mailer: schlanker — **Spec:** gemeinsame minimale Basis + optionale Traits dokumentieren |
-| Q-06 | Branch-Coverage knapp | `karma.conf.js` threshold 74 %, Ist 75.4 % | Tests für Error-Pfade in Mappern/Effects ergänzen |
-| Q-07 | NPM-Script-Naming | `frontend` vs `backend/package.json` | Konvention dokumentieren (`:ci`-Suffix); keine Massenumbenennung in Phase 1 |
+| ID | Befund | Status |
+|----|--------|--------|
+| Q-01 | Doppelte Featured-Filter-Logik | ✅ SPEC-02 |
+| Q-02 | Doppelte Default-Fehlermeldung | ✅ SPEC-03 |
+| Q-03 | Ungenutzter Core-Models-Barrel | ✅ SPEC-01 |
+| Q-04 | Type-Re-Export-Leichen | ✅ SPEC-01 |
+| Q-05 | PHP `BaseController`-Drift | ✅ SPEC-05 (dokumentiert) |
+| Q-06 | Branch-Coverage knapp | ✅ SPEC-04 |
+| Q-07 | NPM-Script-Naming | ✅ dokumentiert (siehe §2.4) |
 
 #### P2 — DX / Repo-weit
 
-| ID | Befund | Vorschlag |
-|----|--------|-----------|
-| Q-08 | Fallow nur Frontend | Backend: Vitest coverage + optional Fallow; PHP: PHPUnit-Coverage-Report in CI |
-| Q-09 | `VITE_API_KEY` vs `API_KEY` | Bewusst (Vite) — in `AGENTS.md` / README als Konvention dokumentieren, kein Rename |
-| Q-10 | Mailer ohne `ApiKeyResolver` | Akzeptabel (nur Header); REST-Spec in ADR belassen |
-| Q-11 | OpenAPI-Lint nur Root-Script | In `quality:ci` Backend/PHP optional anbinden (bereits `openapi:lint` im Root) |
-| Q-12 | Deploy-PS Logging | `Write-Host` vereinheitlichen — kleines `Write-DeployLog` Helper (optional Phase 3) |
+| ID | Befund | Status |
+|----|--------|--------|
+| Q-08 | Fallow nur Frontend | ⏸️ Future Epic |
+| Q-09 | `VITE_API_KEY` vs `API_KEY` | ✅ Root-README |
+| Q-10 | Mailer ohne `ApiKeyResolver` | ⏸️ akzeptiert (ADR) |
+| Q-11 | OpenAPI-Lint | ✅ Drone `openapi-lint` |
+| Q-12 | Deploy-PS Logging | ⏸️ optional |
+
+### 2.4 NPM-Script-Konvention (`:ci`-Suffix)
+
+CI-taugliche Befehle nutzen **`:ci`** oder heißen **`quality:ci`** (Orchestrator). Keine Massenumbenennung — nur Konvention dokumentieren.
+
+| App | CI-Tests | CI-Lint/Format | CI-Orchestrator |
+|-----|----------|----------------|-----------------|
+| **Frontend** (Angular/Karma) | `npm run ci-test` | `format:check`, `lint` | `npm run quality:ci` |
+| **Vue Admin** (Vitest) | `npm run test:unit:ci` | `lint:ci`, `type-check:ci` | `npm run quality:ci` |
+| **PHP REST / Mailer** | `composer test` | `composer analyse` | (einzeln in Drone) |
+| **Python API** | `pytest -q` | `ruff`, `mypy` | (Drone `python-api-smoke`) |
+| **Repo-Root** | — | — | `npm run openapi:lint` |
+
+**Merksatz:** `ci-test` (Frontend) ≡ `test:unit:ci` (Vue) — gleiche Rolle, historisch unterschiedliche Namen.
 
 #### Bewusst nicht angegangen
 
@@ -255,4 +275,5 @@ npm run openapi:lint
 - Fallow Config: `applications/frontend/.fallowrc.json`
 - ADR API-Rollen: `docs/adr/001-api-responsibilities.md`
 - Karma Thresholds: `applications/frontend/karma.conf.js`
-- Bestehende Tests: 290 SUCCESS (Chrome Headless)
+- Unit-Tests: 310 SUCCESS (Chrome Headless)
+- Epic-Plan: dieser Abschnitt; Quality Gates: Root-`README.md` § CI

@@ -124,9 +124,20 @@ Vorlage für eigene Werte: `environment.example.ts`
 
 ## Code-Qualität
 
-**Coverage-Schwellen** (`karma.conf.js`): Statements/Lines/Functions ≥ 90 %, Branches ≥ 74 %.
+**Coverage-Schwellen** (`karma.conf.js`) — bei `npm run ci-test` erzwungen:
 
-**Refactoring-Plan:** [docs/refactoring/20-angular-frontend-quality.md](../../docs/refactoring/20-angular-frontend-quality.md)
+| Metrik | Threshold | Ist (Stand Epic) |
+|--------|-----------|------------------|
+| Statements | ≥ 90 % | ~95 % |
+| Branches | ≥ **78 %** | ~78 % |
+| Functions | ≥ 90 % | ~95 % |
+| Lines | ≥ 90 % | ~96 % |
+
+Report: `coverage/portfolio/coverage-final.json` (nach `ci-test`).
+
+**Quality Epic:** [docs/plans/code-quality-improvements.md](../../docs/plans/code-quality-improvements.md) (Phase A–C abgeschlossen).
+
+**Refactoring-Plan (historisch):** [docs/refactoring/20-angular-frontend-quality.md](../../docs/refactoring/20-angular-frontend-quality.md)
 
 **Domain-Enums:** Kanonische Werte in [applications/shared/domain/README.md](../../shared/domain/README.md) (`portfolio-domain.json`).
 
