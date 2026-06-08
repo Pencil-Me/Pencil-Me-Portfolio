@@ -29,6 +29,11 @@ out/
 .cursor/
 .ws-context
 
+# AI knowledge layers (Option C)
+.ai-brain/
+.agent/
+docs/refactoring/
+
 # ESLint
 .eslintcache
 

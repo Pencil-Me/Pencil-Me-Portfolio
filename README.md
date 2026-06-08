@@ -2,6 +2,8 @@
 
 Monorepo für die Portfolio-Website von **Pencil&Me**: öffentliches Frontend, Admin-Backend und mehrere API-Schichten hinter einem zentralen Nginx-Gateway.
 
+**KI-Agenten:** [AGENTS.md](AGENTS.md) · Portable [.ai-brain/](.ai-brain/) (→ `~/.ai-brain`) · Project [.agent.example/](.agent.example/) (Klon → `.agent/`)
+
 ## Architektur
 
 ```
