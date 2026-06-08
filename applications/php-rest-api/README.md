@@ -5,7 +5,8 @@ REST-Gateway für das **öffentliche Frontend**. Liefert Projekte, Tech-Stack un
 ## Tech-Stack
 
 - **PHP 8.3** + Apache
-- Composer: Guzzle, phpdotenv, Monolog
+- Composer-Autoload nur (keine Runtime-Deps — Shared-Hosting Dateilimit)
+- Inc: EnvLoader, AppLogger, HttpClient (curl), CorsHeaders
 - **PHPUnit 11** (Tests)
 - PDO/MySQL
 
@@ -24,7 +25,7 @@ Alle Pfade relativ zur API-Basis (lokal: `http://localhost:8080/api2` oder direk
 
 ### Authentifizierung
 
-Header: `API-Key: <wert von API_KEY_FE>`
+Auth (Frontend): `API-Key`-Header (Same-Origin `/api2`) **oder** `?api_key=` / Form-Feld `api_key` (Cross-Origin, kein OPTIONS-Preflight)
 
 Geschützte Routen erwarten den Frontend-Key (`fe_key`).
 
@@ -51,7 +52,7 @@ Read-Endpunkte haben keinen PHP-internen Limiter mehr (Option A, ADR-001). Konta
 
 ## Logging & Analyse
 
-- Logs: `src/logs/app.log` (Monolog), Level via `LOG_LEVEL`
+- Logs: `src/logs/app.log` (AppLogger), Level via `LOG_LEVEL`
 - Statische Analyse: `composer analyse` (PHPStan Level 5)
 - Dev-Mounts: Root-`docker-compose.override.yml.example`
 
@@ -86,6 +87,8 @@ HEALTH_ENDPOINT=http://pm-mailer_php/index.php/healthcheck
 
 `Config.php` lädt `.env.dev` oder `.env.prod` ausschließlich aus **`src/Inc/`** — gesteuert über `APP_ENV=production` (Docker/Server) bzw. `development` (Standard). In Production liefert `/` bzw. `/index.php` keine Welcome-Message mehr (404 JSON).
 
+**CORS (Production):** `ALLOWED_ORIGINS` muss die exakte Frontend-Origin enthalten, z. B. `https://pencil-me.de,https://www.pencil-me.de`. Beim Shared-Hosting-Deploy setzt `build-shared-hosting.ps1` den Wert aus `frontendDomain` in `deploy.config.local.json` (inkl. www/apex-Paar). Nach Änderung REST-API neu deployen.
+
 ## Lokale Entwicklung
 
 ```bash
@@ -112,12 +115,18 @@ src/
 ├── Controller/Api/       # Projects, Customers, Techstack, Mail, Health
 ├── Model/                # PDO-Datenzugriff
 ├── Inc/                  # Bootstrap, Router, Config, CORS
-└── logs/                 # Monolog (app.log)
+└── logs/                 # AppLogger (app.log, wird bei erstem Log angelegt)
 ```
 
 ## Docker
 
 Container: `pm-api_php` — Port **3003** (Dev) direkt, im Stack über Nginx **`/api2`**.
+
+### Shared-Hosting Deploy (Dateilimit)
+
+Production-Paket `deploy/out/3-rest-api/` hat **~40 Dateien** (kein Guzzle/Monolog/Dotenv-vendor).
+
+Diagnose: `ping.php` (Kurzcheck), `test.php?format=json` (vollstaendig). Nach Analyse vom Server loeschen.
 
 Compose mountet `src/Inc/.env.dev` und `public/` für Live-Reload.
 

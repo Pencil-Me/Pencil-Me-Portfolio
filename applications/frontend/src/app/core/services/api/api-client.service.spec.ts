@@ -139,6 +139,36 @@ describe('ApiClientService', () => {
       expect(response).toEqual(testData);
     });
 
-    expectHttpJsonResponse(httpMock, 'https://example.com/api/test/', 'GET', testData);
+    expectHttpJsonResponse(
+      httpMock,
+      'https://example.com/api/test/?api_key=secretApiFEkey',
+      'GET',
+      testData,
+      (req: TestRequest) => {
+        expect(req.request.headers.has('API-Key')).toBe(false);
+      },
+    );
+  });
+
+  it('should send api_key in POST body for cross-origin base URL', () => {
+    service.baseUrl = 'https://api.example.com/index.php';
+    const testData: ApiMessage = { message: 'ok' };
+    const path = 'send_email';
+    const postData = { name: 'Jane' };
+
+    service.post<ApiMessage>(path, postData).subscribe((response) => {
+      expect(response).toEqual(testData);
+    });
+
+    expectHttpJsonResponse(
+      httpMock,
+      'https://api.example.com/index.php/send_email',
+      'POST',
+      testData,
+      (req: TestRequest) => {
+        expect(req.request.headers.has('API-Key')).toBe(false);
+        expect(req.request.body).toBe('name=Jane&api_key=secretApiFEkey');
+      },
+    );
   });
 });

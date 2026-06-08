@@ -123,21 +123,27 @@ class Router
 
     private static function routeNotFound(): void
     {
+        CorsHeaders::apply();
         http_response_code(404);
+        header('Content-Type: application/json; charset=utf-8');
         echo json_encode(['message' => 'Requested Route Not Found']);
         exit;
     }
 
     private static function controllerNotFound(): void
     {
+        CorsHeaders::apply();
         http_response_code(404);
+        header('Content-Type: application/json; charset=utf-8');
         echo json_encode(['message' => 'Controller or Method Not Found']);
         exit;
     }
 
     private static function unauthorized(): void
     {
+        CorsHeaders::apply();
         http_response_code(401);
+        header('Content-Type: application/json; charset=utf-8');
         echo json_encode(['message' => 'Unauthorized']);
         exit;
     }

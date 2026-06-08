@@ -10,4 +10,5 @@ export const environment: Environment = {
   production: true,
   API_KEY: 'REPLACE_BEFORE_DEPLOY',
   API_BASE_URL: 'https://api.pencil-me.eu/index.php',
+  API_KEY_IN_QUERY: true,
 };

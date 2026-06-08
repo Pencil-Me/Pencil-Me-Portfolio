@@ -76,6 +76,7 @@ Compose nutzt das Volume `data` für `/var/lib/mysql`. Beim ersten Start führt 
 | `002-project-featured-fields-seed.sql` | Highlight-Texte (UTF-8, nach 002) |
 | `003-project-detail-content-seed.sql` | Kurz- und Langtexte für Projektdetail |
 | `005-project-story-fields-10y.sql` | Story-Felder (Tag, Ausgangslage, Rolle, Ergebnis) ab 2016 |
+| `006-projects-text-columns.sql` | Große Textspalten auf `TEXT` (Fix MySQL #1118 / Shared Hosting) |
 
 **Migration unter Windows:** SQL nicht per `Get-Content | docker exec` pipen (Umlaute werden zu `?`). Stattdessen `docker cp` + `mysql --default-character-set=utf8mb4 … source /tmp/….sql` (Kommentare in den Migrationsdateien).
 

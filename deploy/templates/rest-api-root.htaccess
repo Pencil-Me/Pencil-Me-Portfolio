@@ -1,5 +1,5 @@
-# Shared hosting: Production-Modus fuer Config (.env.prod)
-SetEnv APP_ENV production
-
-# Kein Verzeichnis-Listing
-Options -Indexes
+# Shared-hosting-safe: nur Rewrite, kein Header/SetEnv/Options
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [QSA,L]

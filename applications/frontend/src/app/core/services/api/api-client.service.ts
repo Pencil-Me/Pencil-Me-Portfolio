@@ -13,16 +13,31 @@ export class ApiClientService {
   apiKey: string = environment.API_KEY;
 
   /**
+   * Cross-Origin ohne Custom-Header -> kein OPTIONS-Preflight (Shared Hosting).
+   * Relativ (/api2) oder explizit false: weiterhin Header API-Key.
+   */
+  private useQueryKey(): boolean {
+    if (environment.API_KEY_IN_QUERY === true) {
+      return true;
+    }
+    if (environment.API_KEY_IN_QUERY === false) {
+      return false;
+    }
+    return /^https?:\/\//i.test(this.baseUrl);
+  }
+
+  /**
    * Wrapper for GET method of HTTPClient with composed URL
    * @param path of API
    * @param options the HTTP options to send with the request.
    * @returns Observable of generic T
    */
   public get<T>(path: string, options?: Record<string, unknown>): Observable<T> {
-    const headers = new HttpHeaders()
-      .set('API-Key', this.apiKey)
-      .set('Content-Type', 'application/x-www-form-urlencoded');
-    return this.http.get<T>(this.composeApiUrl(path), { headers, ...options });
+    const url = this.useQueryKey()
+      ? this.appendApiKeyToUrl(this.composeApiUrl(path))
+      : this.composeApiUrl(path);
+    const headers = this.useQueryKey() ? undefined : new HttpHeaders().set('API-Key', this.apiKey);
+    return this.http.get<T>(url, { ...(headers ? { headers } : {}), ...options });
   }
 
   /**
@@ -33,10 +48,12 @@ export class ApiClientService {
    * @returns Observable of generic T
    */
   public post<T>(path: string, data?: object, options?: Record<string, unknown>): Observable<T> {
-    const headers = new HttpHeaders()
-      .set('API-Key', this.apiKey)
-      .set('Content-Type', 'application/x-www-form-urlencoded');
-    const body = this.encodeFormData(data);
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    if (!this.useQueryKey()) {
+      headers = headers.set('API-Key', this.apiKey);
+    }
+    const payload = this.useQueryKey() ? { ...data, api_key: this.apiKey } : data;
+    const body = this.encodeFormData(payload);
     return this.http.post<T>(this.composeApiUrl(path), body, { headers, ...options });
   }
 
@@ -69,10 +86,14 @@ export class ApiClientService {
    */
   public put<T>(path: string, data: object, options?: Record<string, unknown>): Observable<T> {
     if (options === undefined) options = {};
-    const headers = new HttpHeaders()
-      .set('API-Key', this.apiKey)
-      .set('Content-Type', 'application/x-www-form-urlencoded');
-    return this.http.put<T>(this.composeApiUrl(path), data, { headers, ...options });
+    const url = this.useQueryKey()
+      ? this.appendApiKeyToUrl(this.composeApiUrl(path))
+      : this.composeApiUrl(path);
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    if (!this.useQueryKey()) {
+      headers = headers.set('API-Key', this.apiKey);
+    }
+    return this.http.put<T>(url, data, { headers, ...options });
   }
 
   /**
@@ -82,10 +103,11 @@ export class ApiClientService {
    * @returns Observable of generic
    */
   public delete<T>(path: string, options?: Record<string, unknown>): Observable<T> {
-    const headers = new HttpHeaders()
-      .set('API-Key', this.apiKey)
-      .set('Content-Type', 'application/x-www-form-urlencoded');
-    return this.http.delete<T>(this.composeApiUrl(path), { headers, ...options });
+    const url = this.useQueryKey()
+      ? this.appendApiKeyToUrl(this.composeApiUrl(path))
+      : this.composeApiUrl(path);
+    const headers = this.useQueryKey() ? undefined : new HttpHeaders().set('API-Key', this.apiKey);
+    return this.http.delete<T>(url, { ...(headers ? { headers } : {}), ...options });
   }
 
   /**
@@ -98,5 +120,10 @@ export class ApiClientService {
     const base = this.baseUrl.replace(/\/+$/, '');
     const route = path.replace(/^\/+/, '');
     return `${base}/${route}`;
+  }
+
+  private appendApiKeyToUrl(url: string): string {
+    const separator = url.includes('?') ? '&' : '?';
+    return `${url}${separator}api_key=${encodeURIComponent(this.apiKey)}`;
   }
 }

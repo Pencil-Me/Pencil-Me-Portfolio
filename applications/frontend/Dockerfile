@@ -16,7 +16,7 @@ RUN npm ci
 COPY . .
 # API_KEY_FE aus Compose (.env) — muss mit php-rest-api/src/Inc/.env.dev uebereinstimmen
 RUN sed -i "s|API_KEY: 'secretApiFEkey'|API_KEY: '${API_KEY_FE}'|g" src/environments/environment.docker.ts
-# docker = lokaler Compose-Stack (/api2), production = externe Prod-API
+# docker = Gateway-Stack (/api2), docker-shared-hosting = getrennte Ports (Shared-Hosting-Sim)
 RUN npm run build -- --configuration ${BUILD_CONFIGURATION}
 
 # Stage 2: Serve it using Ngnix

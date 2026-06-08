@@ -1,0 +1,48 @@
+# Shared-Hosting Simulation
+# =========================
+# Frontend, REST-API und Mailer auf getrennten Host-Ports — kein Nginx-/api2-Gateway.
+# Entspricht: www.example.de | api.example.eu | mapi.example.eu
+#
+# Start (nur relevante Services):
+#   docker compose -f docker-compose.yml -f docker-compose.shared-hosting-sim.yml up --build frontend php_api php_mailer db
+#
+# URLs:
+#   Frontend   http://localhost:8080
+#   REST API   http://localhost:3003/index.php/all_projects
+#   Mailer     http://localhost:3002/index.php/healthcheck
+#
+# Logs:
+#   docker compose -f docker-compose.yml -f docker-compose.shared-hosting-sim.yml logs -f frontend php_api php_mailer
+#
+# Gateway-Stack (mit /api2): docker compose up --build
+# oder explizit: docker compose --profile gateway up --build
+
+services:
+  nginx:
+    profiles: [gateway]
+
+  backend:
+    profiles: [gateway]
+
+  python_api:
+    profiles: [gateway]
+
+  frontend:
+    ports:
+      - "${FRONTEND_PORT:-8080}:80"
+    build:
+      args:
+        BUILD_CONFIGURATION: docker-shared-hosting
+        API_KEY_FE: ${API_KEY_FE:-secretApiFEkey}
+
+  php_api:
+    ports:
+      - "${REST_API_PORT:-3003}:80"
+    volumes:
+      - ./docker/shared-hosting-sim/php-rest-api.env:/var/www/html/src/Inc/.env.dev:ro
+
+  php_mailer:
+    ports:
+      - "${MAILER_PORT:-3002}:80"
+    volumes:
+      - ./docker/shared-hosting-sim/php-mailer.env:/var/www/html/src/Inc/.env.dev:ro

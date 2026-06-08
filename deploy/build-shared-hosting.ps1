@@ -179,10 +179,13 @@ function Sync-RestEnvFromConfig {
 function Build-FrontendPackage {
     param(
         [Parameter(Mandatory)][string]$ApiKeyFe,
-        [Parameter(Mandatory)][string]$ApiBaseUrl
+        [Parameter(Mandatory)][string]$ApiBaseUrl,
+        [string]$ApiBackendUrl = '',
+        [string]$FrontendDomain = ''
     )
 
     $envDeployPath = Join-Path $paths.Frontend 'src/environments/environment.deploy.ts'
+    $apiKeyInQuery = if ($ApiBaseUrl -match '^/') { 'false' } else { 'true' }
     $envContent = @"
 import type { Environment } from './environment.model';
 
@@ -191,6 +194,7 @@ export const environment: Environment = {
   production: true,
   API_KEY: '$ApiKeyFe',
   API_BASE_URL: '$ApiBaseUrl',
+  API_KEY_IN_QUERY: $apiKeyInQuery,
 };
 "@
     Set-Content -Path $envDeployPath -Value $envContent -Encoding UTF8 -NoNewline
@@ -210,9 +214,13 @@ export const environment: Environment = {
 
     Copy-FrontendRootAssets -FrontendOutDir $out.Frontend -AssetsRootSource (Join-Path $paths.Frontend 'src/assets/root')
 
-    $htaccessSrc = Join-Path $paths.Frontend 'src/assets/root/.htaccess'
-    if (Test-Path $htaccessSrc) {
-        Copy-Item $htaccessSrc (Join-Path $out.Frontend '.htaccess') -Force
+    $htaccessContent = New-FrontendRootHtaccess `
+        -FrontendDomain $(if ($FrontendDomain) { $FrontendDomain } else { $config.frontendDomain }) `
+        -ApiBaseUrl $ApiBaseUrl `
+        -ApiBackendUrl $ApiBackendUrl
+    Set-Content -Path (Join-Path $out.Frontend '.htaccess') -Value $htaccessContent -Encoding ASCII -NoNewline
+    if ($ApiBaseUrl -match '^/' -and -not [string]::IsNullOrWhiteSpace($ApiBackendUrl)) {
+        Write-Host "Frontend .htaccess: Proxy $ApiBaseUrl -> $ApiBackendUrl" -ForegroundColor Green
     }
 
     Assert-FrontendDeployPackage -FrontendOutDir $out.Frontend
@@ -227,28 +235,32 @@ export const environment: Environment = {
 function Build-RestApiPackage {
     if (-not $SkipComposer) {
         Invoke-External -Name 'composer' -WorkingDirectory $paths.RestApi -Arguments @(
-            'install', '--no-dev', '--optimize-autoloader', '--no-interaction'
+            'install', '--no-dev', '--prefer-dist', '--optimize-autoloader', '--classmap-authoritative', '--no-interaction'
         )
     }
 
     Reset-Directory -Path $out.RestApi
 
     Copy-Item (Join-Path $paths.RestApi 'public/index.php') (Join-Path $out.RestApi 'index.php') -Force
+    Copy-Item (Join-Path $paths.RestApi 'public/ping.php') (Join-Path $out.RestApi 'ping.php') -Force
+    Copy-Item (Join-Path $paths.RestApi 'public/test.php') (Join-Path $out.RestApi 'test.php') -Force
     Copy-Tree -Source (Join-Path $paths.RestApi 'vendor') -Destination (Join-Path $out.RestApi 'vendor')
-    Copy-Tree -Source (Join-Path $paths.RestApi 'src') -Destination (Join-Path $out.RestApi 'src') -ExcludeNames @('.env.dev', '.env.example')
+    Copy-PhpSourceForDeploy `
+        -Source (Join-Path $paths.RestApi 'src') `
+        -Destination (Join-Path $out.RestApi 'src') `
+        -EnvProdFile $paths.RestEnvProd
+    Assert-DeployPackageHasNoEnvDev -PackageRoots @($out.RestApi) -PackageLabel 'REST-API-Paket'
 
-    $indexPath = Join-Path $out.RestApi 'index.php'
-    $indexPhp = Get-Content $indexPath -Raw
-    $indexPhp = $indexPhp.Replace("__DIR__ . '/../vendor", "__DIR__ . '/vendor")
-    $indexPhp = $indexPhp.Replace("__DIR__ . '/../src", "__DIR__ . '/src")
-    Set-Content -Path $indexPath -Value $indexPhp -Encoding UTF8 -NoNewline
-
-    Copy-Item (Join-Path $paths.Templates 'rest-api-root.htaccess') (Join-Path $out.RestApi '.htaccess') -Force
+    $frontendOrigins = Get-DeployFrontendOrigins -FrontendDomain $config.frontendDomain
+    $htaccessContent = New-RestApiRootHtaccess -AllowedOrigins $frontendOrigins
+    Set-Content -Path (Join-Path $out.RestApi '.htaccess') -Value ($htaccessContent + "`r`n") -Encoding ASCII -NoNewline
+    Write-Host 'REST: .htaccess (Rewrite only, shared-hosting-safe)' -ForegroundColor Green
     Copy-Item (Join-Path $paths.Templates 'src-deny.htaccess') (Join-Path $out.RestApi 'src/.htaccess') -Force
 
-    $logsDir = Join-Path $out.RestApi 'src/logs'
-    New-Item -ItemType Directory -Path $logsDir -Force | Out-Null
-    Set-Content -Path (Join-Path $logsDir '.gitkeep') -Value '' -Encoding UTF8
+    $fileCount = (Get-ChildItem $out.RestApi -Recurse -File).Count
+    Write-Host "REST-API: $fileCount Dateien (schlank, ohne Guzzle/Monolog/Dotenv)" -ForegroundColor Green
+    Write-Host 'REST-API: Diagnose: ping.php / test.php?format=json' -ForegroundColor Green
+    Write-Host "REST-API: CORS-Origins: $($frontendOrigins -join ', ')" -ForegroundColor Green
 
     Write-Host "REST-API-Paket: $($out.RestApi)" -ForegroundColor Green
 }
@@ -262,8 +274,12 @@ function Build-MailerPackage {
 
     Reset-Directory -Path $out.Mailer
 
-    Copy-Tree -Source (Join-Path $paths.Mailer 'src') -Destination $out.Mailer -ExcludeNames @('.env.dev', '.env.example')
+    Copy-PhpSourceForDeploy `
+        -Source (Join-Path $paths.Mailer 'src') `
+        -Destination $out.Mailer `
+        -EnvProdFile $paths.MailerEnvProd
     Copy-Tree -Source (Join-Path $paths.Mailer 'vendor') -Destination (Join-Path $out.Mailer 'vendor')
+    Assert-DeployPackageHasNoEnvDev -PackageRoots @($out.Mailer) -PackageLabel 'Mailer-Paket'
 
     $indexPath = Join-Path $out.Mailer 'index.php'
     $indexPhp = Get-Content $indexPath -Raw
@@ -385,13 +401,20 @@ if (-not $SkipRestApi) {
 }
 
 if (-not $SkipFrontend) {
-    Build-FrontendPackage -ApiKeyFe $keys.ApiKeyFe -ApiBaseUrl $config.apiBaseUrl
+    $apiBackend = if ($config.PSObject.Properties.Name -contains 'apiBackendUrl') { $config.apiBackendUrl } else { '' }
+    Build-FrontendPackage `
+        -ApiKeyFe $keys.ApiKeyFe `
+        -ApiBaseUrl $config.apiBaseUrl `
+        -ApiBackendUrl $apiBackend `
+        -FrontendDomain $config.frontendDomain
 }
 
 $masked = if ($keys.ApiKeyFe.Length -gt 6) { $keys.ApiKeyFe.Substring(0, 4) + '...' } else { '***' }
+$manifestApiBackend = if ($config.PSObject.Properties.Name -contains 'apiBackendUrl') { $config.apiBackendUrl } else { '' }
 Write-DeployManifest -OutDir $out.Root -Info @{
     frontendDomain = $config.frontendDomain
     apiBaseUrl     = $config.apiBaseUrl
+    apiBackendUrl  = $manifestApiBackend
     mailerBaseUrl  = $config.mailerBaseUrl
     apiKeyFeMasked = $masked
 }

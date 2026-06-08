@@ -117,16 +117,16 @@ CREATE TABLE `projects` (
   `name` varchar(255) NOT NULL,
   `location` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
   `position` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
-  `content` varchar(4000) DEFAULT NULL,
-  `content_long` varchar(4000) DEFAULT NULL,
-  `content_short` varchar(4000) DEFAULT NULL,
+  `content` text DEFAULT NULL,
+  `content_long` text DEFAULT NULL,
+  `content_short` text DEFAULT NULL,
   `type` int NOT NULL,
   `public` int DEFAULT NULL,
   `featured_rank` tinyint UNSIGNED DEFAULT NULL COMMENT '1-3 Highlight Startseite',
   `featured_tag` varchar(128) DEFAULT NULL,
-  `featured_problem` varchar(2000) DEFAULT NULL,
-  `featured_role` varchar(2000) DEFAULT NULL,
-  `featured_outcome` varchar(2000) DEFAULT NULL
+  `featured_problem` text DEFAULT NULL,
+  `featured_role` text DEFAULT NULL,
+  `featured_outcome` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --

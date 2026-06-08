@@ -2,22 +2,21 @@
 
 namespace Controller\Api;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
 use Inc\Config;
+use Inc\HttpClient;
+use Inc\HttpResponse;
 use JetBrains\PhpStorm\NoReturn;
-use Psr\Http\Message\ResponseInterface;
 
 /**
  * Mail controller class responsible for formating and forwarding data to Email API endpoint.
  */
 class MailController extends BaseController
 {
-    private Client $httpClient;
+    private HttpClient $httpClient;
 
-    public function __construct(?Client $httpClient = null)
+    public function __construct(?HttpClient $httpClient = null)
     {
-        $this->httpClient = $httpClient ?? new Client();
+        $this->httpClient = $httpClient ?? new HttpClient();
     }
 
     public function sendEmail(): void
@@ -43,22 +42,19 @@ class MailController extends BaseController
                 return;
             }
 
-            $endpoint = Config::$mailEndpoint;
-            $postData = [
-                'headers' => [
-                    'API-Key' => Config::$mailApiKey,
-                ],
-                'form_params' => [
+            $response = $this->httpClient->postForm(
+                Config::$mailEndpoint,
+                ['API-Key' => Config::$mailApiKey],
+                [
                     'sender' => $email,
                     'recipient' => $recipient,
                     'subject' => $subject,
                     'message' => "EMAIL FROM CONTACT FORM\n\nNAME:\n$name\n\nEMAIL:\n$email\n\nMESSAGE:\n$message",
-                ],
-            ];
+                ]
+            );
 
-            $response = $this->httpClient->post($endpoint, $postData);
             $this->sendResponse($response);
-        } catch (GuzzleException $exception) {
+        } catch (\Throwable $exception) {
             $this->sendErrorResponse($exception);
         }
     }
@@ -68,16 +64,16 @@ class MailController extends BaseController
         return $_POST[$key] ?? null;
     }
 
-    #[NoReturn] private function sendResponse(ResponseInterface $response): void
+    #[NoReturn] private function sendResponse(HttpResponse $response): void
     {
-        $statusCode = $response->getStatusCode();
+        $statusCode = $response->statusCode;
 
         if ($statusCode === 200) {
             $this->sendSuccessResponse(['message' => 'Data forwarded successfully']);
         }
 
         $responseMessage = 'Error in forwarding data';
-        $responseData = json_decode((string) $response->getBody(), true);
+        $responseData = json_decode($response->body, true);
         if (is_array($responseData) && isset($responseData['message'])) {
             $responseMessage = (string) $responseData['message'];
         }

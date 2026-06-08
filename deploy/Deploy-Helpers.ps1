@@ -58,6 +58,58 @@ function Reset-Directory {
     New-Item -ItemType Directory -Path $Path -Force | Out-Null
 }
 
+function Get-DeployPhpEnvExcludeNames {
+    return @('.env.dev', '.env.example', '.env.prod', 'logs')
+}
+
+<#
+    Kopiert PHP-src ohne Env-Dateien; .env.prod nur explizit aus dem validierten Quellpfad.
+#>
+function Copy-PhpSourceForDeploy {
+    param(
+        [Parameter(Mandatory)][string]$Source,
+        [Parameter(Mandatory)][string]$Destination,
+        [Parameter(Mandatory)][string]$EnvProdFile,
+        [string]$EnvProdRelative = 'Inc/.env.prod'
+    )
+
+    if (-not (Test-Path $EnvProdFile)) {
+        throw ".env.prod fehlt: $EnvProdFile"
+    }
+
+    Copy-Tree -Source $Source -Destination $Destination -ExcludeNames (Get-DeployPhpEnvExcludeNames)
+
+    $envDest = Join-Path $Destination $EnvProdRelative
+    $envDestDir = Split-Path $envDest -Parent
+    if (-not (Test-Path $envDestDir)) {
+        New-Item -ItemType Directory -Path $envDestDir -Force | Out-Null
+    }
+    Copy-Item -Path $EnvProdFile -Destination $envDest -Force
+}
+
+function Assert-DeployPackageHasNoEnvDev {
+    param(
+        [Parameter(Mandatory)][string[]]$PackageRoots,
+        [Parameter(Mandatory)][string]$PackageLabel
+    )
+
+    foreach ($root in $PackageRoots) {
+        if (-not (Test-Path $root)) {
+            continue
+        }
+        $found = @(Get-ChildItem -Path $root -Recurse -Force -Filter '.env.dev' -File -ErrorAction SilentlyContinue)
+        if ($found.Count -eq 0) {
+            continue
+        }
+        $rel = $found | ForEach-Object {
+            $_.FullName.Substring($root.Length).TrimStart('\', '/')
+        }
+        throw "$PackageLabel enthaelt .env.dev (verboten): $($rel -join ', ')"
+    }
+
+    Write-Host "${PackageLabel}: .env.dev nicht enthalten (OK)" -ForegroundColor Green
+}
+
 function Copy-Tree {
     param(
         [Parameter(Mandatory)][string]$Source,
@@ -79,6 +131,75 @@ function Copy-Tree {
             Copy-Item -Path $_.FullName -Destination $target -Force
         }
     }
+}
+
+function Get-DeployFrontendOrigins {
+    param([Parameter(Mandatory)][string]$FrontendDomain)
+
+    $origins = @($FrontendDomain.TrimEnd('/'))
+    if ($FrontendDomain -match '^https://www\.(.+)$') {
+        $origins += "https://$($Matches[1])"
+    } elseif ($FrontendDomain -match '^https://([^/]+)$') {
+        $origins += "https://www.$($Matches[1])"
+    }
+
+    return @($origins | Select-Object -Unique)
+}
+
+function New-RestApiRootHtaccess {
+    param([Parameter(Mandatory)][string[]]$AllowedOrigins)
+
+    # Shared-Hosting-safe: nur RewriteEngine/RewriteRule (kein Header, SetEnv, Options).
+    return @(
+        'RewriteEngine On'
+        'RewriteCond %{REQUEST_FILENAME} !-f'
+        'RewriteCond %{REQUEST_FILENAME} !-d'
+        'RewriteRule ^ index.php [QSA,L]'
+    ) -join "`r`n"
+}
+
+function New-FrontendRootHtaccess {
+    param(
+        [Parameter(Mandatory)][string]$FrontendDomain,
+        [Parameter(Mandatory)][string]$ApiBaseUrl,
+        [string]$ApiBackendUrl = ''
+    )
+
+    $canonicalHost = $FrontendDomain.TrimEnd('/')
+    if ($canonicalHost -notmatch '^https://') {
+        throw "frontendDomain muss mit https:// beginnen: $FrontendDomain"
+    }
+
+    $lines = @(
+        'RewriteEngine On'
+        'RewriteBase /'
+        '# Redirection to HTTPS:'
+        'RewriteCond %{SERVER_PORT} !=443'
+        "RewriteRule ^(.*)$ $canonicalHost/`$1 [R=301,L]"
+        ''
+    )
+
+    $useProxy = ($ApiBaseUrl -match '^/') -and (-not [string]::IsNullOrWhiteSpace($ApiBackendUrl))
+    if ($useProxy) {
+        $prefix = $ApiBaseUrl.Trim('/').Replace('/', '\/')
+        $backend = $ApiBackendUrl.TrimEnd('/')
+        $lines += @(
+            '# REST-API Proxy (gleiche Origin - kein Browser-CORS auf separater API-Subdomain)'
+            "RewriteRule ^$prefix/(.*)$ $backend/`$1 [P,L,NC]"
+            ''
+        )
+    }
+
+    $lines += @(
+        '# Redirection of requests to index.html'
+        'RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -f [OR]'
+        'RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -d'
+        'RewriteRule ^.*$ - [NC,L]'
+        '# Redirect all non-file routes to index.html'
+        'RewriteRule ^(?!.*\.).*$ /index.html [NC,L]'
+    )
+
+    return ($lines -join "`r`n") + "`r`n"
 }
 
 function Get-FrontendRootAssetNames {
@@ -173,13 +294,23 @@ function Write-DeployManifest {
         "  REST API:     $($Info.apiBaseUrl)"
         "  Mailer:       $($Info.mailerBaseUrl)"
         "  API_KEY_FE:   $($Info.apiKeyFeMasked)"
+    )
+    if ($Info.apiBackendUrl) {
+        $lines += "  API Backend:  $($Info.apiBackendUrl)"
+    }
+    $lines += ''
+    $lines += 'Smoke-Tests nach Upload:'
+    $lines += "  curl $($Info.mailerBaseUrl)/healthcheck"
+    if ($Info.apiBaseUrl -match '^/') {
+        $lines += "  curl -H `"API-Key: <API_KEY_FE>`" $($Info.frontendDomain)$($Info.apiBaseUrl)/all_projects"
+    } else {
+        $lines += "  curl -H `"API-Key: <API_KEY_FE>`" $($Info.apiBaseUrl)/all_projects"
+    }
+    $lines += "  Browser: $($Info.frontendDomain)"
+    $lines += @(
         ''
-        'Smoke-Tests nach Upload:'
-        "  curl $($Info.mailerBaseUrl)/healthcheck"
-        "  curl -H `"API-Key: <API_KEY_FE>`" $($Info.apiBaseUrl)/all_projects"
-        "  Browser: $($Info.frontendDomain)"
-        ''
-        'Hinweis: .env.prod liegt in rest-api/src/Inc bzw. mailer/Inc - nicht oeffentlich verlinken.'
+        'Hinweis: Nur .env.prod im Paket (.env.dev wird nie nach deploy/out kopiert).'
+        '         rest-api: src/Inc/.env.prod | mailer: Inc/.env.prod - nicht oeffentlich verlinken.'
     )
 
     Set-Content -Path (Join-Path $OutDir 'MANIFEST.txt') -Value ($lines -join "`r`n") -Encoding UTF8

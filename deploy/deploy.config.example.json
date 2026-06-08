@@ -1,5 +1,6 @@
 {
-  "apiBaseUrl": "https://api.pencil-me.eu/index.php",
+  "apiBaseUrl": "/api2",
+  "apiBackendUrl": "https://api.pencil-me.eu/index.php",
   "frontendDomain": "https://www.pencil-me.de",
   "mailerBaseUrl": "https://mailer.pencil-me.eu/index.php",
   "ftp": {

@@ -3,9 +3,8 @@
 require_once __DIR__ . '/bootstrap.php';
 
 use Controller\Api\BaseController;
+use Inc\AppLogger;
 use Inc\Bootstrap;
-use Monolog\Handler\NullHandler;
-use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
 
 class BaseControllerTest extends TestCase
@@ -15,8 +14,7 @@ class BaseControllerTest extends TestCase
     protected function setUp(): void
     {
         require_once PROJECT_ROOT_PATH . 'Inc/Bootstrap.php';
-        Bootstrap::$logger = new Logger('test');
-        Bootstrap::$logger->pushHandler(new NullHandler());
+        Bootstrap::$logger = new AppLogger(sys_get_temp_dir() . '/pm-base-test.log', 'ERROR');
 
         $this->controller = new TestableBaseController();
     }

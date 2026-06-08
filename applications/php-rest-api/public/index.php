@@ -4,15 +4,33 @@
  * The entry-point of our application. It acts as a front-controller.
  */
 
+use Inc\ApiKeyResolver;
 use Inc\Router;
 use Inc\Bootstrap;
+use Inc\CorsHeaders;
 use Inc\RequestPath;
+use Inc\EarlyCors;
 
-// Include the autoloader
-require __DIR__ . '/../vendor/autoload.php';
+// Shared hosting: index.php im API-Root (src/ daneben). Docker: public/index.php (../src).
+$apiRoot = is_dir(__DIR__ . '/src') ? __DIR__ : dirname(__DIR__);
+$incDir = $apiRoot . '/src/Inc';
 
-// Include the Bootstrap file
-require __DIR__ . '/../src/Inc/Bootstrap.php';
+$corsHeadersFile = $incDir . '/CorsHeaders.php';
+$earlyCorsFile = $incDir . '/EarlyCors.php';
+if (is_file($incDir . '/EnvLoader.php')) {
+    require_once $incDir . '/EnvLoader.php';
+}
+if (is_file($corsHeadersFile)) {
+    require_once $corsHeadersFile;
+    CorsHeaders::bootstrapFromEnvDir($incDir);
+    CorsHeaders::rejectDisallowedExplicitOrigin();
+} elseif (is_file($earlyCorsFile)) {
+    require_once $earlyCorsFile;
+    EarlyCors::handle($incDir);
+}
+
+require $apiRoot . '/vendor/autoload.php';
+require $incDir . '/Bootstrap.php';
 
 // Check if the request is directly to index.php
 if ($_SERVER['REQUEST_URI'] === '/index.php' || $_SERVER['REQUEST_URI'] === '/') {
@@ -47,7 +65,7 @@ $protectedRoutes = [
 try {
     $method = $_SERVER['REQUEST_METHOD'] ?? null;
     $path = RequestPath::parse($_SERVER['REQUEST_URI']);
-    $api_key = $_SERVER['HTTP_API_KEY'] ?? '';
+    $api_key = ApiKeyResolver::resolve();
 
     if ($method === null || $path === null) {
         throw new Exception('Required fields are undefined.');
@@ -61,6 +79,8 @@ try {
         'ip' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
     ]);
 
+    CorsHeaders::apply();
     http_response_code(500);
+    header('Content-Type: application/json; charset=utf-8');
     echo json_encode(['message' => 'An unexpected error occurred. Please try again later.']);
 }

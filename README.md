@@ -34,6 +34,8 @@ pm-middlenginx (:8080)
 
 Voraussetzungen: [Docker](https://www.docker.com/) und Docker Compose.
 
+### Gateway-Stack (Standard — alles über Nginx :8080, `/api2`)
+
 ```bash
 # Im Repo-Root
 cp .env.example .env          # optional: zentrale Compose-Variablen
@@ -48,6 +50,29 @@ Danach erreichbar:
 - Portfolio: [http://localhost:8080](http://localhost:8080)
 - Admin-UI: [http://localhost:8080/backend](http://localhost:8080/backend)
 - phpMyAdmin: [http://localhost:8000](http://localhost:8000) (nur mit `docker compose --profile dev up phpmyadmin`)
+
+### Shared-Hosting-Simulation (getrennte Ports, Cross-Origin, kein `/api2`-Gateway)
+
+Entspricht Production: Frontend, REST-API und Mailer laufen **ohne** vereinenden Nginx — eigene Origins, Cross-Origin wie auf Shared Hosting.
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.shared-hosting-sim.yml up --build frontend php_api php_mailer db
+```
+
+| Service | URL |
+|---------|-----|
+| Frontend | [http://localhost:8080](http://localhost:8080) |
+| REST API | [http://localhost:3003/index.php/all_projects](http://localhost:3003/index.php/all_projects) |
+| Mailer | [http://localhost:3002/index.php/healthcheck](http://localhost:3002/index.php/healthcheck) |
+
+Logs (CORS, API, Mailer getrennt):
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.shared-hosting-sim.yml logs -f frontend php_api php_mailer
+```
+
+Env-Dateien: `docker/shared-hosting-sim/php-rest-api.env`, `docker/shared-hosting-sim/php-mailer.env`  
+Frontend-Build: `environment.docker-shared-hosting.ts` (`API_BASE_URL: http://localhost:3003/index.php`).
 
 Vor dem ersten Start die Umgebungsvariablen konfigurieren (siehe unten). API-Keys müssen zwischen Frontend, Backend und APIs übereinstimmen.
 
@@ -67,7 +92,8 @@ Jede Anwendung kann einzeln gestartet werden. Typischer Ablauf:
 |-------|----------|----------|
 | `npm start` (ng serve) | [localhost:4200](http://localhost:4200) | `/api2` via Proxy → Nginx :8080 |
 | `docker compose up` | [localhost:8080](http://localhost:8080) | `/api2` (gleiche Origin) |
-| Production-Build | pencil-me.de | `https://api.pencil-me.eu/index.php` |
+| **Shared-Hosting-Sim** (`docker-compose.shared-hosting-sim.yml`) | [localhost:8080](http://localhost:8080) | `http://localhost:3003/index.php` (Cross-Origin) |
+| Production-Build | pencil-me.de | `/api2`-Proxy oder `https://api.pencil-me.eu/index.php` |
 
 Details: [applications/frontend/README.md](applications/frontend/README.md)
 

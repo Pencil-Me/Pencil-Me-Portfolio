@@ -4,6 +4,7 @@ namespace Controller\Api;
 
 use JetBrains\PhpStorm\NoReturn;
 use Inc\Bootstrap;
+use Inc\CorsHeaders;
 
 /**
  * Base controller class holding common utility methods.
@@ -39,6 +40,7 @@ class BaseController
     #[NoReturn] protected function jsonResponse(mixed $payload, int $status = 200): void
     {
         $this->clearCookies();
+        CorsHeaders::apply();
         http_response_code($status);
         header('Content-Type: application/json; charset=utf-8');
         echo json_encode($payload, JSON_THROW_ON_ERROR);

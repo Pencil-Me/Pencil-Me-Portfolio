@@ -7,6 +7,7 @@
     "build": "ng build --configuration production",
     "build:prod": "ng build --configuration production",
     "build:docker": "ng build --configuration docker",
+    "build:docker-shared-hosting": "ng build --configuration docker-shared-hosting",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "ci-test": "ng test --no-watch --no-progress --browsers=ChromeHeadless --code-coverage",

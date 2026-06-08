@@ -8,8 +8,7 @@ use Model\CustomersModel;
 use Model\DatesModel;
 use Model\ProjectsModel;
 use Model\TechstackModel;
-use Monolog\Handler\NullHandler;
-use Monolog\Logger;
+use Inc\AppLogger;
 use PHPUnit\Framework\TestCase;
 
 class ProjectsControllerTest extends TestCase
@@ -21,8 +20,7 @@ class ProjectsControllerTest extends TestCase
     protected function setUp(): void
     {
         require_once PROJECT_ROOT_PATH . 'Inc/Bootstrap.php';
-        Bootstrap::$logger = new Logger('test');
-        Bootstrap::$logger->pushHandler(new NullHandler());
+        Bootstrap::$logger = new AppLogger(sys_get_temp_dir() . '/pm-projects-test.log', 'ERROR');
         $_SERVER['REQUEST_METHOD'] = 'GET';
         $_SERVER['QUERY_STRING'] = '';
     }

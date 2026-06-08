@@ -1,3 +1,5 @@
+# Basis-Vorlage fuer lokale Entwicklung (ng serve + Proxy).
+# Production: deploy/build-shared-hosting.ps1 erzeugt 4-frontend/.htaccess inkl. api2-Proxy.
 RewriteEngine On
 RewriteBase /
 # Redirection to HTTPS:

@@ -3,13 +3,10 @@
 require_once __DIR__ . '/bootstrap.php';
 
 use Controller\Api\MailController;
-use GuzzleHttp\Client;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Response;
+use Inc\AppLogger;
 use Inc\Bootstrap;
-use Monolog\Handler\NullHandler;
-use Monolog\Logger;
+use Inc\HttpClient;
+use Inc\HttpResponse;
 use PHPUnit\Framework\TestCase;
 
 class MailControllerTest extends TestCase
@@ -17,8 +14,7 @@ class MailControllerTest extends TestCase
     protected function setUp(): void
     {
         require_once PROJECT_ROOT_PATH . 'Inc/Bootstrap.php';
-        Bootstrap::$logger = new Logger('test');
-        Bootstrap::$logger->pushHandler(new NullHandler());
+        Bootstrap::$logger = new AppLogger(sys_get_temp_dir() . '/pm-mail-test.log', 'ERROR');
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_POST = [];
     }
@@ -32,7 +28,7 @@ class MailControllerTest extends TestCase
             'message' => 'Hello',
         ];
 
-        $controller = new TestableMailController(new Client());
+        $controller = new TestableMailController(new StubHttpClient(new HttpResponse(200, '{}')));
         try {
             $controller->sendEmail();
         } catch (TestResponseSentException) {
@@ -48,7 +44,7 @@ class MailControllerTest extends TestCase
             'name' => 'Jane',
         ];
 
-        $controller = new TestableMailController(new Client());
+        $controller = new TestableMailController(new StubHttpClient(new HttpResponse(200, '{}')));
         try {
             $controller->sendEmail();
         } catch (TestResponseSentException) {
@@ -66,12 +62,9 @@ class MailControllerTest extends TestCase
             'message' => 'Hello from the contact form',
         ];
 
-        $mock = new MockHandler([
-            new Response(200, [], json_encode(['message' => 'ok'])),
-        ]);
-        $client = new Client(['handler' => HandlerStack::create($mock)]);
-
-        $controller = new TestableMailController($client);
+        $controller = new TestableMailController(
+            new StubHttpClient(new HttpResponse(200, json_encode(['message' => 'ok'])))
+        );
         try {
             $controller->sendEmail();
         } catch (TestResponseSentException) {
@@ -79,6 +72,18 @@ class MailControllerTest extends TestCase
 
         $this->assertSame(['message' => 'Data forwarded successfully'], $controller->lastResponse);
         $this->assertSame(200, $controller->lastStatus);
+    }
+}
+
+final class StubHttpClient extends HttpClient
+{
+    public function __construct(private readonly HttpResponse $response)
+    {
+    }
+
+    public function postForm(string $url, array $headers, array $form): HttpResponse
+    {
+        return $this->response;
     }
 }
 

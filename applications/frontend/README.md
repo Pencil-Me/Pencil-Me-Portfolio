@@ -38,6 +38,7 @@ npm install
 | -------------------- | ---------------------------- | ------------------------------------ | --------------------------- |
 | **Lokal (ng serve)** | `environment.development.ts` | `/api2`                              | `npm start`                 |
 | **Docker Compose**   | `environment.docker.ts`      | `/api2`                              | `docker compose up --build` |
+| **Docker Shared-Hosting-Sim** | `environment.docker-shared-hosting.ts` | `http://localhost:3003/index.php`   | siehe [Root-README](../../README.md#shared-hosting-simulation-getrennte-ports-cross-origin-kein-api2-gateway) |
 | **Production (Deploy-Skript)** | `environment.deploy.ts` (generiert) | aus `deploy.config.local.json` | `ng build --configuration deploy` via [deploy/](../../deploy/README.md) |
 | **Production (manuell)** | `environment.production.ts` | `https://api.pencil-me.eu/index.php` | `npm run build:prod` |
 
@@ -81,6 +82,16 @@ Proxy-Konfiguration: `proxy.conf.json`
 
 Frontend-Image wird mit `BUILD_CONFIGURATION=docker` gebaut und nutzt relative URL `/api2` über dasselbe Nginx-Gateway.
 
+### Docker Shared-Hosting-Simulation (getrennte Ports)
+
+Cross-Origin wie Production — kein Nginx-`/api2`-Proxy:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.shared-hosting-sim.yml up --build frontend php_api php_mailer db
+```
+
+Build-Profil: `docker-shared-hosting` (`npm run build:docker-shared-hosting`). Browser: [http://localhost:8080](http://localhost:8080), API: [http://localhost:3003/index.php](http://localhost:3003/index.php).
+
 ### Production
 
 ```bash
@@ -97,7 +108,8 @@ Vorlage für eigene Werte: `environment.example.ts`
 |--------|--------------|
 | `npm start` | Dev-Server [http://localhost:4200](http://localhost:4200) + API-Proxy |
 | `npm run build` / `build:prod` | Production-Build |
-| `npm run build:docker` | Build für lokalen Docker-Stack |
+| `npm run build:docker` | Build für lokalen Docker-Gateway-Stack |
+| `npm run build:docker-shared-hosting` | Build für Shared-Hosting-Sim (Cross-Origin :3003) |
 | `npm test` | Unit-Tests (Karma, interaktiv) |
 | `npm run ci-test` | Tests headless mit Coverage (Schwellen in `karma.conf.js`) |
 | `npm run lint` | ESLint + Stylelint |
