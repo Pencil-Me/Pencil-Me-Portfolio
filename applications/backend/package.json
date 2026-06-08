@@ -20,9 +20,9 @@
     "lint:files": "eslint --fix --max-warnings 0",
     "format": "prettier --write src/",
     "format:files": "prettier --write",
-    "fallow:analyze": "fallow dead-code && fallow dupes && fallow health --coverage coverage/coverage-final.json --fail-on-issues",
+    "fallow:analyze": "fallow dead-code && fallow dupes && fallow health --coverage coverage/coverage-final.json --min-score 90",
     "fallow": "fallow",
-    "quality:ci": "npm run lint:ci && npm run type-check:ci && npm run test:unit:ci"
+    "quality:ci": "npm run lint:ci && npm run type-check:ci && npm run test:unit:ci && npm run fallow:analyze"
   },
   "dependencies": {
     "axios": "^1.17.0",

@@ -183,7 +183,7 @@ Prüft Auth (401), CORS-Whitelist, Mailer nicht öffentlich, Honeypot. Siehe [23
 | **Frontend E2E** | `npm run e2e:ci` | Playwright |
 | **PHP REST** | `cd applications/php-rest-api && composer test` | PHPUnit, PHPStan (`composer analyse`) |
 | **PHP Mailer** | `cd applications/php-mailer-api && composer test` | PHPUnit, PHPStan |
-| **Vue Admin** | `cd applications/backend && npm run quality:ci` | ESLint, vue-tsc, Vitest |
+| **Vue Admin** | `cd applications/backend && npm run quality:ci` | ESLint, vue-tsc, **55** Unit-Tests, Coverage (lines ≥ **70 %**), **Fallow** |
 | **Python API** | `cd applications/python-rest-api/source_code && pytest -q` | ruff, mypy (CI) |
 | **OpenAPI** | `npm run openapi:lint` | Spectral (Repo-Root) |
 
@@ -198,7 +198,7 @@ CI-taugliche Skripte nutzen **`:ci`** oder **`quality:ci`** als Orchestrator. Hi
 | App | Tests (CI) | Lint/Analyse (CI) | Volle CI-Pipeline |
 |-----|------------|-------------------|-------------------|
 | Frontend | `npm run ci-test` | `format:check`, `lint` | `npm run quality:ci` (+ Fallow) |
-| Vue Admin | `npm run test:unit:ci` | `lint:ci`, `type-check:ci` | `npm run quality:ci` |
+| Vue Admin | `npm run test:unit:ci` | `lint:ci`, `type-check:ci` | `npm run quality:ci` (+ Fallow) |
 | PHP REST / Mailer | `composer test` | `composer analyse` | Drone-Steps separat |
 | Python API | `pytest -q` | `ruff`, `mypy` | Drone `python-api-smoke` |
 | Repo-Root | — | — | `npm run openapi:lint` |
@@ -213,7 +213,7 @@ CI-taugliche Skripte nutzen **`:ci`** oder **`quality:ci`** als Orchestrator. Hi
 | `frontend-e2e` | `npm run e2e:ci` | Playwright E2E |
 | `php-rest-api-test` | `composer test` + `composer audit` | PHPUnit, PHPStan |
 | `php-mailer-api-test` | `composer test` + `composer audit` | PHPUnit, PHPStan |
-| `vue-admin-quality` | `npm run quality:ci` + `npm audit` | ESLint, vue-tsc, Vitest |
+| `vue-admin-quality` | `npm run quality:ci` + `npm audit` | ESLint, vue-tsc, Vitest + Coverage, Fallow |
 | `vue-admin-e2e` | `npm run test:e2e:ci` | Cypress E2E |
 | `python-api-smoke` | ruff + mypy + pytest + `pip-audit` | Python Admin API |
 | `openapi-lint` | `npm run openapi:lint` | Spectral |

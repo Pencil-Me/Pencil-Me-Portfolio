@@ -1,30 +1,14 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-
-const mockGet = vi.fn()
-const mockPost = vi.fn()
-const mockPut = vi.fn()
-const mockDelete = vi.fn()
-
-vi.mock('./http-client', () => ({
-  apiClient: {
-    get: mockGet,
-    post: mockPost,
-    put: mockPut,
-    delete: mockDelete
-  }
-}))
+import { mockApiGet, resetApiClientMocks } from '@/testing/api-client.mock'
 
 describe('ProjectsService', () => {
   beforeEach(() => {
-    mockGet.mockReset()
-    mockPost.mockReset()
-    mockPut.mockReset()
-    mockDelete.mockReset()
+    resetApiClientMocks()
     vi.resetModules()
   })
 
   it('loads projects from the API', async () => {
-    mockGet.mockResolvedValueOnce({
+    mockApiGet.mockResolvedValueOnce({
       data: [
         {
           uuid: '11111111-2222-3333-4444-555555555555',
@@ -47,21 +31,21 @@ describe('ProjectsService', () => {
     const { default: projectsService } = await import('./projects.service')
     const projects = await projectsService.getProjects()
 
-    expect(mockGet).toHaveBeenCalledWith('project')
+    expect(mockApiGet).toHaveBeenCalledWith('project')
     expect(projects).toHaveLength(1)
     expect(projects[0].name).toBe('Portfolio')
     expect(projects[0].show).toBe(1)
   })
 
   it('loads project types from the API', async () => {
-    mockGet.mockResolvedValueOnce({
+    mockApiGet.mockResolvedValueOnce({
       data: [{ id: '1', type: 'Festanstellung' }]
     })
 
     const { default: projectsService } = await import('./projects.service')
     const types = await projectsService.getProjectTypes()
 
-    expect(mockGet).toHaveBeenCalledWith('project_types')
+    expect(mockApiGet).toHaveBeenCalledWith('project_types')
     expect(types[0].type).toBe('Festanstellung')
   })
 })

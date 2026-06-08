@@ -15,6 +15,3 @@ export function convertICustomerToTCustomer(payload: ICustomer): TCustomer {
     location: payload.location ?? ''
   }
 }
-
-/** @deprecated Import from `@/utils/mappers/customer-send.mapper` */
-export { convertTCustomerToSendPayload } from '@/utils/mappers/customer-send.mapper'

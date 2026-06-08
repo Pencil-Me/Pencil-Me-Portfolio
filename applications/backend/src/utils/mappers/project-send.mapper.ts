@@ -1,13 +1,13 @@
 import type { TCustomer, TDates, TProject, TTech } from '@/types'
 
-export function convertTDatesToSendPayload(payload: TDates) {
+function convertTDatesToSendPayload(payload: TDates) {
   return {
     start_date: payload.start_date ?? new Date(),
     end_date: payload.end_date ?? undefined
   }
 }
 
-export function convertTTechToSendPayload(payload: TTech) {
+function convertTTechToSendPayload(payload: TTech) {
   return {
     id: payload.id,
     name: payload.name ?? '',
@@ -16,7 +16,7 @@ export function convertTTechToSendPayload(payload: TTech) {
   }
 }
 
-export function convertTCustomerToSendPayloadNested(payload: TCustomer) {
+function convertTCustomerToSendPayloadNested(payload: TCustomer) {
   return {
     id: payload.id,
     name: payload.name ?? '',

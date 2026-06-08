@@ -77,7 +77,7 @@
 
 | ID | Befund | Status |
 |----|--------|--------|
-| Q-08 | Fallow nur Frontend | 🔄 [vue-admin-fallow-vitest.md](./vue-admin-fallow-vitest.md) |
+| Q-08 | Fallow nur Frontend | ✅ [vue-admin-fallow-vitest.md](./vue-admin-fallow-vitest.md) |
 | Q-09 | `VITE_API_KEY` vs `API_KEY` | ✅ Root-README |
 | Q-10 | Mailer ohne `ApiKeyResolver` | ⏸️ akzeptiert (ADR) |
 | Q-11 | OpenAPI-Lint | ✅ Drone `openapi-lint` |
@@ -264,7 +264,7 @@ npm run openapi:lint
 | Thema | ADR nötig? |
 |-------|------------|
 | `applications/php-shared/` für BaseController, ApiKeyResolver | Ja |
-| Fallow/Vitest für Vue Admin | Nein — siehe [vue-admin-fallow-vitest.md](./vue-admin-fallow-vitest.md) |
+| Fallow/Vitest für Vue Admin | ✅ abgeschlossen — [vue-admin-fallow-vitest.md](./vue-admin-fallow-vitest.md) |
 | Mapper-Logik in `applications/shared/domain/` (TS) | Ja |
 | PHPStan Level 5+ REST + Mailer | Nein |
 

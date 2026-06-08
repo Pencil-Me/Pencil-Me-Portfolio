@@ -33,9 +33,9 @@
 |--------|-----|
 | Vitest Spec-Dateien | 19 |
 | Vitest Tests | **55** passed |
-| Vitest Coverage | **konfiguriert** (Scope: utils/services/pinia/types; lines **73,2 %**, branches **66,2 %**) |
-| Fallow | `.fallowrc.json` angelegt; Baseline: **4** unused files, **6** unused exports |
-| `quality:ci` | lint + type-check + `test:unit:ci` **mit Coverage** (Fallow → Phase 2 / SPEC-07) |
+| Vitest Coverage | **konfiguriert** (Scope: utils/services/pinia/types; lines **75,7 %**, branches **67,0 %**) |
+| Fallow | `dead-code` **0/0** (nach SPEC-06) |
+| `quality:ci` | lint + type-check + `test:unit:ci` (Coverage) + `fallow:analyze` |
 | Drone `vue-admin-quality` | wie `quality:ci` |
 
 ### Vitest — bestehende Specs
@@ -74,16 +74,9 @@ Erster Lauf `npx fallow dead-code` ohne `.fallowrc.json` meldet u. a.:
 
 → **SPEC-01** zuerst: `.fallowrc.json` mit `main.ts`, `vitest.config.ts`, `src/**/*.spec.ts`, `cypress/**` als Entry.
 
-### Fallow-Baseline (nach SPEC-01, 2026-05-29)
+### Fallow (nach SPEC-06, 2026-05-29)
 
-Mit Entry-Points: **4** unused files, **6** unused exports (kein unused devDependency nach `ignoreDependencies`):
-
-| Kategorie | Fund |
-|-----------|------|
-| Unused files | `composables/formatDate.ts`, `formatIsoDate.ts`, `useFormatDate.ts`, `pinia/index.ts` |
-| Unused exports | `normalizeProject`, `getProjectLastEndDate`, Send-Mapper-Helfer, deprecated `convertTCustomerToSendPayload` |
-
-→ **SPEC-06** (Phase 2): bereinigen oder `fallow-ignore`; danach `fallow:analyze` in `quality:ci`.
+`fallow dead-code` und `fallow dupes`: **0 Issues**. Health-Score: **98 A** (Gate: `--min-score 90`).
 
 ---
 
@@ -245,10 +238,10 @@ npm run test:unit          # Vitest watch — bleibt offen während Entwicklung
 
 **Akzeptanzkriterien:**
 
-- [ ] `types/customer.ts` deprecated Re-Export: Consumer auf `@/utils/mappers/customer-send.mapper` umstellen, Re-Export entfernen
-- [ ] Ungenutzte Exports in Mappern bereinigen **oder** mit Spec abdecken (TDD bevorzugt)
-- [ ] `npx fallow dead-code` → 0 files, 0 types (nach SPEC-01)
-- [ ] `@vue/eslint-config-prettier`: prüfen ob wirklich ungenutzt — ggf. in ESLint-Config nutzen oder aus package.json
+- [x] `types/customer.ts` deprecated Re-Export: Consumer auf `@/utils/mappers/customer-send.mapper` umstellen, Re-Export entfernen
+- [x] Ungenutzte Exports in Mappern bereinigen **oder** mit Spec abdecken (TDD bevorzugt)
+- [x] `npx fallow dead-code` → 0 files, 0 types (nach SPEC-01)
+- [x] `@vue/eslint-config-prettier`: in `.eslintrc.cjs` genutzt — `ignoreDependencies` in `.fallowrc.json`
 
 **Reihenfolge:** Erst SPEC-03–05 (Tests), dann bereinigen — nicht blind löschen.
 
@@ -262,11 +255,11 @@ npm run test:unit          # Vitest watch — bleibt offen während Entwicklung
 
 **Akzeptanzkriterien:**
 
-- [ ] `package.json`: `fallow:analyze`, `test:unit:ci` mit Coverage
-- [ ] `quality:ci` = lint + type-check + test:unit:ci + fallow:analyze
-- [ ] Drone `vue-admin-quality` unverändert kompatibel (`npm run quality:ci`)
-- [ ] Root-`README.md` Quality-Gates-Tabelle um Fallow/Coverage ergänzt
-- [ ] `applications/backend/README.md` aktualisiert
+- [x] `package.json`: `fallow:analyze`, `test:unit:ci` mit Coverage
+- [x] `quality:ci` = lint + type-check + test:unit:ci + fallow:analyze
+- [x] Drone `vue-admin-quality` unverändert kompatibel (`npm run quality:ci`)
+- [x] Root-`README.md` Quality-Gates-Tabelle um Fallow/Coverage ergänzt
+- [x] `applications/backend/README.md` aktualisiert
 
 ---
 
@@ -274,9 +267,9 @@ npm run test:unit          # Vitest watch — bleibt offen während Entwicklung
 
 **Akzeptanzkriterien:**
 
-- [ ] `.agent.example/skills/vue-admin-quality.md` (neu) oder Erweiterung `code-quality-fallow.md`
-- [ ] `code-quality-improvements.md` Q-08 → „in Arbeit / abgeschlossen“ verlinken
-- [ ] Optional global: `.ai-brain/skills/vue.md` — Vitest + Fallow Abschnitt
+- [x] `.agent.example/skills/vue-admin-quality.md` (neu) oder Erweiterung `code-quality-fallow.md`
+- [x] `code-quality-improvements.md` Q-08 → abgeschlossen verlinken
+- [ ] Optional global: `.ai-brain/skills/vue.md` — Vitest + Fallow Abschnitt (Follow-up)
 
 ---
 
@@ -318,7 +311,7 @@ npm run type-check:ci
 npm run test:unit:ci          # mit Coverage
 npx fallow dead-code
 npx fallow dupes
-npx fallow health --coverage coverage/coverage-final.json --fail-on-issues
+npx fallow health --coverage coverage/coverage-final.json --min-score 90
 npm run quality:ci
 ```
 

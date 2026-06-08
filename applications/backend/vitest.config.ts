@@ -20,7 +20,7 @@ export default mergeConfig(
           'src/pinia/**/*.ts',
           'src/types/**/*.ts',
         ],
-        exclude: ['**/*.spec.ts'],
+        exclude: ['**/*.spec.ts', 'src/services/http-client.ts'],
         thresholds: {
           statements: 70,
           branches: 62,

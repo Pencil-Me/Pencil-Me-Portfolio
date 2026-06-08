@@ -43,7 +43,7 @@ export function cloneProject(project: TProject): TProject {
   }
 }
 
-export function normalizeProject(project: TProject): TProject {
+function normalizeProject(project: TProject): TProject {
   const content = project.content ?? ''
   return {
     ...project,
@@ -77,7 +77,7 @@ export function mapProjectTypesToSelectOptions(types: TProjectType[]): TSelectOp
   }))
 }
 
-export function getProjectLastEndDate(project: TProject): string | null {
+function getProjectLastEndDate(project: TProject): string | null {
   const sorted = sortDates(project.dates)
   const last = sorted[sorted.length - 1]
   return last?.end_date ?? last?.start_date ?? null

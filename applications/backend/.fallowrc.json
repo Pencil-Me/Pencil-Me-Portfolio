@@ -5,6 +5,7 @@
     "vitest.config.ts",
     "cypress.config.ts",
     "src/**/*.spec.ts",
+    "src/testing/**/*.ts",
     "cypress/e2e/**/*.ts",
     "cypress/support/**/*.ts"
   ],
