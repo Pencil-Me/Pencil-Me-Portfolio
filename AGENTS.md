@@ -74,7 +74,9 @@ Details: `.agent/memory/` (nicht committet).
 
 | Anfrage | Ort |
 |---------|-----|
-| Coding / Testing allgemein | `.ai-brain/core/` |
+| Coding / Lesbarkeit / Standards | `.ai-brain/core/coding-standards.md` |
+| Colocation / SOLID / Discover-first | `.ai-brain/core/architecture.md` |
+| Testing allgemein | `.ai-brain/core/testing.md` |
 | Angular / PHP / Docker / Fallow Skill | `.ai-brain/skills/` |
 | Branch-Coverage-Gaps | `.ai-brain/skills/branch-coverage-gaps.md` |
 | Feature / Debug / Deploy SOP | `.ai-brain/sops/` |
@@ -82,8 +84,20 @@ Details: `.agent/memory/` (nicht committet).
 | CORS / API | `.agent/skills/debug-rest-api-cors.md` |
 | Kontaktformular | `.agent/skills/debug-contact-form.md` |
 | Frontend Code Quality / Fallow | `.agent/skills/code-quality-fallow.md` |
+| Frontend layout/view/feature | `.agent/skills/frontend-architecture.md` |
+| Vue Admin Quality / Fallow | `.agent/skills/vue-admin-quality.md` |
+| Spec-driven Epic / Phasenende | `.ai-brain/sops/spec-driven-plans.md` |
+| Ideen-Backlog (nächste Schritte) | `docs/ideas/index.md` · `IDEA-NNN-*.md` · `.ai-brain/sops/ideas-backlog.md` |
+| Commit-Message (English, bullets) | `.ai-brain/sops/commits.md` |
 | Architektur-Entscheidung | `docs/adr/` + `.agent/memory/decisions.md` |
 | Secrets / Commit | `.ai-brain/sops/secrets-and-git.md` |
+
+## Agent-Verhalten (hart)
+
+1. **Plan-Phasenende:** Verification → Plan sync → Ideen in [docs/ideas/](docs/ideas/index.md) (eine Datei pro IDEA, [spec-driven-plans](.ai-brain/sops/spec-driven-plans.md), [ideas-backlog](.ai-brain/sops/ideas-backlog.md))
+2. **Commit-Message:** **nur vorschlagen** — Englisch, Stichpunkte ([commits](.ai-brain/sops/commits.md))
+3. **Git:** Agent führt **niemals** `git commit`, `git push` oder Staging für den User aus — Commits nur manuell durch den Menschen
+4. **Code:** Discover-first, Colocation, SOLID/DRY, Lesbarkeit, **Third-party-Facade** ([coding-standards](.ai-brain/core/coding-standards.md), [architecture](.ai-brain/core/architecture.md)); **Frontend:** layout · view · feature · core · shared ([frontend-architecture](.agent/skills/frontend-architecture.md))
 
 ## Self-Improvement (nach Änderungen)
 

@@ -48,3 +48,9 @@ Epic-Plan (committet): `docs/plans/vue-admin-fallow-vitest.md`
 cd applications/backend
 npm run quality:ci
 ```
+
+Erwartung: 55 Tests, Coverage lines ≥ 70 %, Fallow dead-code/dupes 0/0, Health ≥ 90.
+
+## Phasenabschluss (Agent)
+
+Siehe `.ai-brain/sops/spec-driven-plans.md` — nach jeder Phase: Verify-Tabelle, Plan-Checkboxen, nächste Schritte mit Risk.

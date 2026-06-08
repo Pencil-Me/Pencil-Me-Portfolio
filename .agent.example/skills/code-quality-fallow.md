@@ -44,7 +44,9 @@ Epic-Plan (committet): `docs/plans/code-quality-improvements.md`
 
 ```powershell
 cd applications/frontend
-npm run ci-test
-npx fallow dead-code
-npx fallow dupes
+npm run quality:ci
 ```
+
+## Phasenabschluss
+
+Portable SOP: `.ai-brain/sops/spec-driven-plans.md` · Commits: `.ai-brain/sops/commits.md` (English, bullets).

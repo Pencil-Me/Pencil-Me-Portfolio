@@ -29,7 +29,10 @@ Persistenter **projektspezifischer** Kontext. Vor Deploy, CORS oder Architektur-
 | [skills/debug-contact-form.md](skills/debug-contact-form.md) | Workflow: Kontaktformular-Kette |
 | [skills/local-docker.md](skills/local-docker.md) | Gateway vs. Shared-Hosting-Sim |
 | [skills/secrets-and-git.md](skills/secrets-and-git.md) | Projekt-Pfade — generisch: `.ai-brain/sops/secrets-and-git.md` |
-| [skills/code-quality-fallow.md](skills/code-quality-fallow.md) | Fallow + spec-driven Quality-Epic |
+| [skills/frontend-architecture.md](skills/frontend-architecture.md) | layout · view · feature · core · shared |
+| [skills/code-quality-fallow.md](skills/code-quality-fallow.md) | Fallow + spec-driven Quality-Epic (Frontend) |
+| [skills/vue-admin-quality.md](skills/vue-admin-quality.md) | Fallow + Vitest (Vue Admin) |
+| [skills/spec-driven-plans.md](skills/spec-driven-plans.md) | Epic-Phasenende, Verification, Commits |
 | [TEMPLATE-session-entry.md](TEMPLATE-session-entry.md) | Vorlage für Session-Log-Einträge |
 
 ## Einstiegspfade (Happy Paths)

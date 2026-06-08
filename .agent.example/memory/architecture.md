@@ -41,6 +41,29 @@ pm-middlenginx (:8080)
 - `applications/shared/domain/portfolio-domain.json` — kanonische Enums
 - OpenAPI: `applications/php-rest-api/openapi.yaml`, Python analog
 
+## Frontend-Schichten (Angular)
+
+**layout · view · feature · core · shared** — siehe `.agent/skills/frontend-architecture.md`
+
+| Schicht | Pfad (Ist) |
+|---------|------------|
+| layout | `src/app/layout/` |
+| view | `src/app/modules/` (Ziel: `views/`) |
+| feature | z. B. `modules/projects/details`, `shared/components/featured-projects` |
+| core | `src/app/core/`, `src/app/state/` |
+| shared | `src/app/shared/` |
+
+## Code-Platzierung (Colocation)
+
+| Reichweite | Ort (Portfolio) |
+|------------|-----------------|
+| View-only Feature | `modules/<view>/…` oder `views/<view>/features/` |
+| 2+ Views | `features/` oder `shared/components/` |
+| Vue Admin | `views/<Feature>/` + `src/utils/` bei Mehrfachnutzung |
+| Cross-App | `applications/shared/domain/` |
+
+Vor neuem Code: **suchen**. Details: `.ai-brain/core/architecture.md#colocation-and-reuse`
+
 ## Portable Patterns
 
 Generische Architektur: `.ai-brain/core/architecture.md`

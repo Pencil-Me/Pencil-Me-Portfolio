@@ -5,6 +5,8 @@
 | Pfad | Inhalt |
 |------|--------|
 | [adr/](adr/) | Architecture Decision Records (verbindlich) |
+| [plans/](plans/) | Spec-driven Epics (aktive Arbeit) |
+| [ideas/](ideas/) | Agent-Ideen-Backlog (nächste Schritte, Follow-ups) |
 
 ## Lokal / gitignored
 

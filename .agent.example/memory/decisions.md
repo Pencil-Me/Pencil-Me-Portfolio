@@ -75,3 +75,85 @@ Kurzform. Ausführlicher: [docs/adr/](../docs/adr/), [docs/refactoring/](../docs
 - Kleine Phasen (Quick Wins → Coverage → Docs), kein Big-Bang-Refactor
 
 **Grund:** Messbare Akzeptanzkriterien; Fallow findet toten Code/Exports; Scope bleibt kontrolliert.
+
+## D-14 — Agent-Antwort am Plan-Phasenende
+
+**Entscheidung:** Nach jeder Epic-Phase muss der Agent (1) Verification-Befehle ausführen und tabellarisch melden, (2) Plan-Checkboxen/Baseline aktualisieren, (3) **3–5 nächste Schritte** hierarchisiert (P0–P2) mit Impact + Risk liefern.
+
+**Grund:** Reproduzierbare Abschlüsse; User sieht sofort CI-Risiko und Prioritäten ohne Nachfragen.
+
+**Portable:** `.ai-brain/sops/spec-driven-plans.md`, `.ai-brain/core/ai-workflows.md`
+
+## D-15 — Commit-Messages (Repo-Konvention)
+
+**Entscheidung:** Commit-Messages **Englisch**, Body **stichpunktartig** (`type(scope): summary` + `-` bullets). Vorlage aus Epic-Commits: `feat(backend)`, `test(backend)`, `chore(backend)`, `docs`.
+
+**Grund:** Einheitliche Git-Historie; Agent **schlägt nur Text vor**, führt **keine** Git-Commit-Befehle aus (User committet selbst).
+
+**Portable:** `.ai-brain/sops/commits.md`
+
+## D-16 — Vue Admin Fallow + Vitest
+
+**Entscheidung:** `applications/backend` mit Fallow + Vitest-Coverage in `quality:ci`; Health-Gate `--min-score 90`; TDD auf utils/mappers; interne Mapper-Helfer nicht exportieren.
+
+**Grund:** Parität zum Frontend-Quality-Gate; Vitest-v8-Coverage JSON inkompatibel mit striktem Fallow-CRAP-Gate.
+
+**Plan:** `docs/plans/vue-admin-fallow-vitest.md` · Skill: `.agent/skills/vue-admin-quality.md`
+
+## D-17 — Lesbarkeit und kognitive Last (enforced)
+
+**Entscheidung:** Code muss **human-readable** sein mit **geringer kognitiver Last**. Self-documenting durch **klare Funktions- und Variablennamen**; JSDoc/Kommentare nur wenn Namen+Types die Absicht nicht tragen (nicht jede Funktion dokumentieren).
+
+**Enforcement:** Agent und Review prüfen Namen, Funktionsgröße, Verschachtelung, Konsistenz mit Repo — Lint allein reicht nicht.
+
+**Portable:** `.ai-brain/core/coding-standards.md`, `.ai-brain/sops/code-review.md`
+
+**Ergänzungen (enforced):**
+- **Guard functions / guard clauses** statt tiefer Verschachtelung
+- **Keine Magic Numbers** — Konstanten, Enums, Design-Tokens
+- **CSS/SCSS:** Frontend `sass/helpers/`, `--pm-*`; Vue Admin `tailwind.config.js` — nicht hardcoded in Komponenten
+
+## D-18 — Discover-first, Colocation, SOLID/DRY
+
+**Entscheidung:**
+1. **Immer zuerst suchen** — bestehende Funktionen/Typen/Mapper erweitern, nicht parallel neu schreiben
+2. **Colocation** — ausgelagerte Logik so nah wie möglich an der Einsatzstelle (Feature-Service neben Feature)
+3. **Mehrfach genutzt** → `utils/`, `shared/` (Angular: `shared/constants/`, Vue: `src/utils/`)
+4. **SOLID + OCP + DRY** — erweitern statt monolithische Module aufblähen; DRY erst ab zweitem Call-Site
+
+**Portfolio-Beispiele:**
+- Frontend: `shared/constants/user-messages.ts`, Feature-Services unter `modules/<feature>/`
+- Vue Admin: `src/utils/mappers/`, `src/services/` — feature-spezifisch erst lokal, dann Mapper-Layer
+- Cross-App: `applications/shared/domain/portfolio-domain.json`
+
+**Portable:** `.ai-brain/core/architecture.md`, `.ai-brain/core/coding-standards.md`
+
+## D-19 — Frontend: layout · view · feature · core · shared
+
+**Entscheidung:** Angular-Portfolio trennt fünf Schichten:
+
+| Schicht | Inhalt |
+|---------|--------|
+| **layout** | Shell (Nav, Footer, Outlet) |
+| **view** | Route-Seite, dünn (`modules/` = Ist, Ziel `views/`) |
+| **feature** | Domänen-UI-Slices, colocated oder `features/` |
+| **core** | API, Guards, Routing |
+| **shared** | Utils, Constants, generische UI |
+
+Views komponieren Features; Layout kennt keine Feature-Fachlogik. Details: `.agent/skills/frontend-architecture.md`, `.ai-brain/skills/angular.md`
+
+## D-20 — Third-party facade pattern
+
+**Entscheidung:** Drittparty-Komponenten und -Libs werden **wenn möglich** von App-eigenen Facades umschlossen (`shared/components/pm-*`, `core/services/*`), damit Vendor jederzeit austauschbar ist.
+
+**Regeln:** Views/Features importieren nur Facades — nicht `ng-bootstrap`, Chart-Libs etc. direkt. Ausnahme: Framework-Core (Angular/Vue/Router).
+
+**Portable:** `.ai-brain/core/coding-standards.md#third-party-facade-swap-friendly`
+
+## D-21 — Ideas in `docs/ideas/`
+
+**Entscheidung:** Agent-Ideen landen in **`docs/ideas/IDEA-NNN-<slug>.md`** (eine Datei pro Idee; Index in `index.md`) — nicht monolithisch, nicht nur im Chat.
+
+**Lifecycle:** `open` → `in-plan` (Link zu `docs/plans/`) → `done` / `dropped`.
+
+**Portable:** `.ai-brain/sops/ideas-backlog.md`
