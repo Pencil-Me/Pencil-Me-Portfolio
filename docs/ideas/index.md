@@ -1,13 +1,12 @@
 # Ideas Index
 
-Eine Datei pro Idee: `IDEA-NNN-<slug>.md`. Zusammenhängende Ideen: eine Datei mit mehreren Abschnitten oder Verweis unter „Verwandt“.
+Eine Datei pro **offenen** Idee: `IDEA-NNN-<slug>.md`. Erledigte Ideen werden in die Ziel-Doku überführt und **hier entfernt** (siehe [README](README.md#lifecycle)).
 
 Stand: 2026-05-29
 
 | ID | P | Status | Titel |
 |----|---|--------|-------|
 | [001](IDEA-001-merge-vue-admin-fallow-vitest.md) | P0 | open | Merge `feature/vue-admin-fallow-vitest` |
-| [002](IDEA-002-commit-agent-knowledge.md) | P1 | open | Commit Agent-Wissen (D-14–D-21) |
 | [003](IDEA-003-tdd-project-mapper.md) | P1 | open | TDD `project.mapper` |
 | [004](IDEA-004-ng-bootstrap-facades.md) | P2 | open | ng-bootstrap Facades |
 | [005](IDEA-005-modules-to-views.md) | P2 | open | `modules/` → `views/` |

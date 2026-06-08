@@ -94,7 +94,7 @@ Details: `.agent/memory/` (nicht committet).
 
 ## Agent-Verhalten (hart)
 
-1. **Plan-Phasenende:** Verification → Plan sync → Ideen in [docs/ideas/](docs/ideas/index.md) (eine Datei pro IDEA, [spec-driven-plans](.ai-brain/sops/spec-driven-plans.md), [ideas-backlog](.ai-brain/sops/ideas-backlog.md))
+1. **Plan-Phasenende:** Verification → Plan sync → offene Ideen in [docs/ideas/](docs/ideas/index.md); erledigte in Ziel-Doku überführen und aus `ideas/` entfernen ([spec-driven-plans](.ai-brain/sops/spec-driven-plans.md), [ideas-backlog](.ai-brain/sops/ideas-backlog.md))
 2. **Commit-Message:** **nur vorschlagen** — Englisch, Stichpunkte ([commits](.ai-brain/sops/commits.md))
 3. **Git:** Agent führt **niemals** `git commit`, `git push` oder Staging für den User aus — Commits nur manuell durch den Menschen
 4. **Code:** Discover-first, Colocation, SOLID/DRY, Lesbarkeit, **Third-party-Facade** ([coding-standards](.ai-brain/core/coding-standards.md), [architecture](.ai-brain/core/architecture.md)); **Frontend:** layout · view · feature · core · shared ([frontend-architecture](.agent/skills/frontend-architecture.md))

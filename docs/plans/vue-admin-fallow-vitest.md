@@ -316,11 +316,13 @@ npm run quality:ci
 ```
 
 ```powershell
-# E2E unverändert grün (optional vor Merge)
+# E2E unverändert grün (vor Merge)
 npm run test:e2e:ci
 ```
 
 **Erfolg:** Alle Befehle exit 0; Fallow dead-code 0/0; Coverage ≥ gesetzte Thresholds; mindestens **+15** neue Unit-Tests aus TDD-Specs 03–05.
+
+**Verifiziert 2026-05-29:** `quality:ci` grün; `test:e2e:ci` — **6/6** Tests grün.
 
 ---
 

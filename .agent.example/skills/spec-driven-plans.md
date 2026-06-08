@@ -21,7 +21,7 @@ Projekt-Anwendung des portable SOP: `.ai-brain/sops/spec-driven-plans.md`
 
 1. Befehle **ausführen**, Ergebnis tabellarisch melden
 2. Plan-Checkboxen + Baseline-Zahlen aktualisieren
-3. **`docs/ideas/IDEA-NNN-*.md`** + **`index.md`** pflegen — `.ai-brain/sops/ideas-backlog.md`
+3. Offene Ideen in **`docs/ideas/IDEA-NNN-*.md`** + **`index.md`**; erledigte in Ziel-Doku überführen und aus `ideas/` entfernen — `.ai-brain/sops/ideas-backlog.md`
 4. Commit-Message **vorschlagen** (nie `git commit`) — `.ai-brain/sops/commits.md`
 
 ## Commit-Vorlage (dieses Repo)

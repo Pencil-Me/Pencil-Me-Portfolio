@@ -6,7 +6,7 @@
 |------|--------|
 | [adr/](adr/) | Architecture Decision Records (verbindlich) |
 | [plans/](plans/) | Spec-driven Epics (aktive Arbeit) |
-| [ideas/](ideas/) | Agent-Ideen-Backlog (nächste Schritte, Follow-ups) |
+| [ideas/](ideas/) | Offene Agent-Ideen (P0–P3); erledigt → Plans/Decisions/Session-Log |
 
 ## Lokal / gitignored
 

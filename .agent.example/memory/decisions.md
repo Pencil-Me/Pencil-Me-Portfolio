@@ -150,10 +150,10 @@ Views komponieren Features; Layout kennt keine Feature-Fachlogik. Details: `.age
 
 **Portable:** `.ai-brain/core/coding-standards.md#third-party-facade-swap-friendly`
 
-## D-21 — Ideas in `docs/ideas/`
+## D-21 — Ideas in `docs/ideas/` (nur offen)
 
 **Entscheidung:** Agent-Ideen landen in **`docs/ideas/IDEA-NNN-<slug>.md`** (eine Datei pro Idee; Index in `index.md`) — nicht monolithisch, nicht nur im Chat.
 
-**Lifecycle:** `open` → `in-plan` (Link zu `docs/plans/`) → `done` / `dropped`.
+**Lifecycle:** `open` → `in-plan` → bei Abschluss Inhalt in Ziel-Doku (`plans/`, `decisions.md`, `session-log.md`, Skills) → **IDEA-Datei löschen**, Index bereinigen. `ideas/` enthält **keine** erledigten Einträge.
 
 **Portable:** `.ai-brain/sops/ideas-backlog.md`

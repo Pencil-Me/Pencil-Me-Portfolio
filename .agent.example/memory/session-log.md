@@ -42,4 +42,19 @@ Chronik wichtiger Sessions — kurz, für Kontinuität zwischen Chats.
 
 ---
 
+## 2026-05-29 — Agent-Standards & Ideas-Backlog (IDEA-002 erledigt)
+
+### Umgesetzt (Commit `7cf4228`)
+- `AGENTS.md`: harte Regeln (Phasenende, Commits nur vorschlagen, Colocation, FE-Schichten)
+- Entscheidungen **D-14–D-21** in `memory/decisions.md`
+- Skills: `frontend-architecture`, `spec-driven-plans`, `vue-admin-quality` erweitert
+- `docs/ideas/`: eine Datei pro Idee; erledigte Ideen wandern in Doku (nicht im Backlog)
+
+### Verwandte Doku
+- [AGENTS.md](../../AGENTS.md)
+- [docs/ideas/README.md](../../docs/ideas/README.md)
+- [vue-admin-fallow-vitest.md](../../docs/plans/vue-admin-fallow-vitest.md) — Epic Phase 0–2 ✅
+
+---
+
 <!-- Neue Sessions oben eintragen (neueste zuerst) -->
