@@ -91,4 +91,25 @@ describe('mapApiError', () => {
   it('should handle Error instances', () => {
     expect(mapApiError(new Error('Timeout'))).toBe('Timeout');
   });
+
+  it('should prefer HttpErrorResponse message when body has no extractable text', () => {
+    const error = new HttpErrorResponse({
+      status: 503,
+      statusText: 'Service Unavailable',
+      error: null,
+    });
+
+    expect(mapApiError(error)).toBe(error.message);
+  });
+
+  it('should fall back to HTTP status when message is empty', () => {
+    const error = new HttpErrorResponse({
+      status: 418,
+      statusText: 'I am a teapot',
+      error: null,
+    });
+    Object.defineProperty(error, 'message', { value: '' });
+
+    expect(mapApiError(error)).toBe('HTTP 418');
+  });
 });

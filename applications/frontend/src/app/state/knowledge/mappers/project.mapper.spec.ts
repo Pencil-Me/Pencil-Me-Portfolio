@@ -1,4 +1,6 @@
-import { createSampleProject } from '../../../../testing/knowledge.fixtures';
+import type { PROJECT } from '@app/state/knowledge/knowledge.models';
+
+import { createSampleCustomer, createSampleProject } from '../../../../testing/knowledge.fixtures';
 import { convertProject, convertProjects, sortProjects } from './project.mapper';
 
 describe('project.mapper', () => {
@@ -72,6 +74,94 @@ describe('project.mapper', () => {
     expect(projects[0].title).toBe('Projekte als Auftragnehmer');
     expect(projects[0].data.length).toBe(1);
     expect(projects[0].data[0].label).toBe('Project 1');
+  });
+
+  it('should decode HTML entities in customer names', () => {
+    const project = convertProject({
+      ...projectBasic,
+      customers: [createSampleCustomer({ name: 'Foo &amp; Bar', location: 'Berlin' })],
+    });
+
+    expect(project.customer).toBe('Foo & Bar');
+  });
+
+  it('should deduplicate locations from multiple customers', () => {
+    const project = convertProject({
+      ...projectBasic,
+      customers: [
+        createSampleCustomer({ name: 'A', location: 'Berlin' }),
+        createSampleCustomer({ name: 'B', location: 'Berlin' }),
+        createSampleCustomer({ name: 'C', location: 'Hamburg' }),
+      ],
+    });
+
+    expect(project.location).toBe('Berlin, Hamburg');
+  });
+
+  it('should handle missing customers and tech gracefully', () => {
+    const project = convertProject({
+      ...projectBasic,
+      customers: undefined,
+      tech: undefined as unknown as PROJECT['tech'],
+    });
+
+    expect(project.customer).toBe('');
+    expect(project.location).toBe('');
+    expect(project.tech).toEqual([]);
+  });
+
+  it('should format position slashes with spaces', () => {
+    const project = convertProject({
+      ...projectBasic,
+      position: 'Lead/Dev',
+    });
+
+    expect(project.position).toBe('Lead / Dev');
+  });
+
+  it('should keep provided content_short instead of deriving from bullets', () => {
+    const project = convertProject({
+      ...projectBasic,
+      content: '•Ignored bullet',
+      content_short: 'Provided short text',
+    });
+
+    expect(project.content_short).toBe('Provided short text');
+  });
+
+  it('should merge multiple projects into the same category', () => {
+    const secondProject = {
+      ...projectBasic,
+      uuid: '2',
+      name: 'Project 2',
+    };
+
+    const categories = convertProjects([projectBasic, secondProject]);
+
+    expect(categories.length).toBe(1);
+    expect(categories[0].data.length).toBe(2);
+  });
+
+  it('should pick the latest end date when multiple ranges exist', () => {
+    const project = convertProject({
+      ...projectBasic,
+      dates: [
+        { start_date: new Date('2018-01-01'), end_date: new Date('2019-01-01') },
+        { start_date: new Date('2020-01-01'), end_date: new Date('2022-06-01') },
+      ],
+    });
+
+    const sorted = sortProjects([
+      convertProject({
+        ...projectBasic,
+        uuid: 'older',
+        name: 'Older',
+        dates: [{ start_date: new Date('2018-01-01'), end_date: new Date('2019-01-01') }],
+      }),
+      project,
+    ]);
+
+    expect(sorted[0].label).toBe('Project 1');
   });
 
   it('should sort projects by latest end date descending', () => {

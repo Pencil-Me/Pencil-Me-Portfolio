@@ -41,10 +41,18 @@ describe('load-status.model', () => {
 
     it('should return false for COMPLETED without error', () => {
       expect(hasLoadError('COMPLETED', null)).toBeFalse();
+      expect(hasLoadError('COMPLETED', '')).toBeFalse();
     });
 
     it('should return false while loading', () => {
       expect(hasLoadError('LOADING', null)).toBeFalse();
+      expect(hasLoadError('PENDING', null)).toBeFalse();
+    });
+
+    it('should return false for undefined status', () => {
+      expect(hasLoadError(undefined, 'Fehler')).toBeFalse();
+      expect(isLoadingStatus(undefined)).toBeFalse();
+      expect(isLoadSuccessful(undefined)).toBeFalse();
     });
   });
 

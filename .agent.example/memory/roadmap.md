@@ -10,7 +10,7 @@
 ## Code Quality (Frontend)
 
 - [ ] Phase A: Fallow dead-code, Featured-Filter, zentrale Error-Konstante
-- [ ] Phase B: Branch-Coverage ≥ 78 %
+- [x] Phase B: Branch-Coverage ≥ 78 %
 - [ ] Phase C: PHP BaseController-Doku + Quality-Gates
 
 ## Mittelfristig

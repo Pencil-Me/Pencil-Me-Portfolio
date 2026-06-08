@@ -55,11 +55,23 @@ describe('formatYear', () => {
   it('should return only the calendar year', () => {
     expect(formatYear(new Date('2023-02-05'))).toBe('2023');
   });
+
+  it('should return em dash for invalid dates', () => {
+    expect(formatYear('invalid-date')).toBe('—');
+  });
 });
 
 describe('yearsSince', () => {
   it('should calculate full-year difference', () => {
     expect(yearsSince(new Date('2020-01-01'), new Date('2024-06-01'))).toBe(4);
+  });
+
+  it('should use reference year when value is undefined', () => {
+    expect(yearsSince(undefined, new Date('2024-06-01'))).toBe(0);
+  });
+
+  it('should return zero when value cannot be parsed', () => {
+    expect(yearsSince('invalid-date', new Date('2024-06-01'))).toBe(0);
   });
 });
 
@@ -74,5 +86,9 @@ describe('mapProjectDates', () => {
     expect(
       mapProjectDates([{ start_date: new Date('2022-01-01'), end_date: null as unknown as Date }]),
     ).toEqual([{ start_date: 'Jan.2022', end_date: 'heute' }]);
+  });
+
+  it('should return empty array when dates are undefined', () => {
+    expect(mapProjectDates(undefined)).toEqual([]);
   });
 });

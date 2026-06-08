@@ -42,7 +42,7 @@ Kern aus Roadmap 2026-05-29 — Status ✅ = abgearbeitet laut Docs.
 | Item | Status | Priorität |
 |------|--------|-----------|
 | Phase A: Dead Code, Featured-Filter, `DEFAULT_LOAD_ERROR` | siehe Plan | — |
-| Phase B: Branch-Coverage ≥ 78 % | offen | mittel |
+| Phase B: Branch-Coverage ≥ 78 % | ✅ | — |
 | Phase C: PHP BaseController-Docs, Quality-Gates | offen | niedrig |
 | PHP `BaseController`-Drift (REST vs Mailer) | offen | niedrig |
 | Fallow nur Frontend | offen | niedrig |

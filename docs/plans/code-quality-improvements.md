@@ -142,9 +142,9 @@
 
 **Akzeptanzkriterien:**
 
-- [ ] Karma `coverageReporter.check.global.branches` auf **78** (von 74)
-- [ ] `npm run ci-test` grün mit neuem Threshold
-- [ ] Mindestens 2 neue Tests für bisher ungetestete Branches (z. B. `mapApiError` Object-Shapes, `hasLoadError` Legacy-Pfad)
+- [x] Karma `coverageReporter.check.global.branches` auf **78** (von 74)
+- [x] `npm run ci-test` grün mit neuem Threshold
+- [x] Mindestens 2 neue Tests für bisher ungetestete Branches (z. B. `mapApiError` Object-Shapes, `hasLoadError` Legacy-Pfad)
 
 **Kandidaten:** `api-error.util.spec.ts`, `load-status.model.spec.ts`, `project.mapper.spec.ts`
 
