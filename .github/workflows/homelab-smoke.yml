@@ -1,0 +1,19 @@
+# Copy into an App-Repo as .github/workflows/homelab-smoke.yml
+# Requires Self-Hosted Runner label "homelab" (docker-lab-hl1).
+# Do NOT use as merge-blocker. HomeLabServices (Ops-IaC) stays on Ops-PC (CD variant D).
+name: Homelab smoke
+
+on:
+  workflow_dispatch:
+
+jobs:
+  runner-alive:
+    runs-on: [self-hosted, homelab]
+    steps:
+      - name: Identity
+        run: |
+          set -euo pipefail
+          hostname
+          uname -a
+          docker version
+          echo "OK homelab runner"
